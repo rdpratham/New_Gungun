@@ -12,13 +12,13 @@ class ElectionModel {
     public static function getActiveForConstituency(int $constituencyId): ?array {
         $db   = Database::getConnection();
         $stmt = $db->prepare(
-            'SELECT e.* FROM elections e
+            "SELECT e.* FROM elections e
              JOIN constituencies c ON c.election_id = e.election_id
              WHERE c.constituency_id = ?
-               AND e.status = "active"
-               AND e.start_time <= NOW()
-               AND e.end_time   >= NOW()
-             LIMIT 1'
+               AND e.status = 'active'
+               AND e.start_time <= datetime('now')
+               AND e.end_time   >= datetime('now')
+             LIMIT 1"
         );
         $stmt->execute([$constituencyId]);
         return $stmt->fetch() ?: null;

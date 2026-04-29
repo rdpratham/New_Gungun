@@ -11,14 +11,15 @@ class OtpModel {
         $db->prepare('UPDATE otp_tokens SET used = 1 WHERE user_id = ?')
            ->execute([$userId]);
 
+        $expiresAt = date('Y-m-d H:i:s', time() + OTP_EXPIRY);
         $stmt = $db->prepare(
             'INSERT INTO otp_tokens (user_id, otp_hash, expires_at)
-             VALUES (?, ?, DATE_ADD(NOW(), INTERVAL ? SECOND))'
+             VALUES (?, ?, ?)'
         );
         $stmt->execute([
             $userId,
             password_hash($otp, PASSWORD_BCRYPT),
-            OTP_EXPIRY,
+            $expiresAt,
         ]);
         return $otp;
     }
@@ -26,9 +27,9 @@ class OtpModel {
     public static function verify(int $userId, string $submittedOtp): bool {
         $db   = Database::getConnection();
         $stmt = $db->prepare(
-            'SELECT * FROM otp_tokens
-             WHERE user_id = ? AND used = 0 AND expires_at > NOW()
-             ORDER BY otp_id DESC LIMIT 1'
+            "SELECT * FROM otp_tokens
+             WHERE user_id = ? AND used = 0 AND expires_at > datetime('now')
+             ORDER BY otp_id DESC LIMIT 1"
         );
         $stmt->execute([$userId]);
         $row = $stmt->fetch();

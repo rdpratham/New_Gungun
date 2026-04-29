@@ -4,13 +4,17 @@
 // -------------------------------------------------------
 define('APP_NAME',    'Online Voting System');
 define('APP_VERSION', '1.0.0');
-define('BASE_URL',    'http://localhost/New_Gungun');
+define('BASE_URL',    'http://localhost:8080');
 
-// Database
+// Database — SQLite (file-based, no server needed)
+define('DB_DRIVER', 'sqlite');
+define('DB_PATH',   __DIR__ . '/../database/voting.db');
+
+// MySQL fallback (unused in this environment)
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'online_voting');
 define('DB_USER', 'root');
-define('DB_PASS', '');          // Change to your MySQL root password
+define('DB_PASS', '');
 define('DB_PORT', 3306);
 
 // Session
