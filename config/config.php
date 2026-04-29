@@ -4,18 +4,24 @@
 // -------------------------------------------------------
 define('APP_NAME',    'Online Voting System');
 define('APP_VERSION', '1.0.0');
-define('BASE_URL',    'http://localhost:8080');
 
-// Database — SQLite (file-based, no server needed)
-define('DB_DRIVER', 'sqlite');
-define('DB_PATH',   __DIR__ . '/../database/voting.db');
+// ── Change this to your actual domain after deploying ──
+define('BASE_URL', 'http://yourdomain.infinityfreeapp.com');
 
-// MySQL fallback (unused in this environment)
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'online_voting');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+// ── Database ──
+// Set DB_DRIVER to 'sqlite' for local testing
+// Set DB_DRIVER to 'mysql'  for InfinityFree / any live host
+define('DB_DRIVER', 'mysql');   // 'mysql' or 'sqlite'
+
+// MySQL credentials (fill these from InfinityFree cPanel)
+define('DB_HOST', 'sql200.infinityfree.com');  // from InfinityFree cPanel
+define('DB_NAME', 'if0_xxxxxxxx_voting');       // from InfinityFree cPanel
+define('DB_USER', 'if0_xxxxxxxx');              // from InfinityFree cPanel
+define('DB_PASS', 'your_db_password');          // from InfinityFree cPanel
 define('DB_PORT', 3306);
+
+// SQLite path (used only when DB_DRIVER = 'sqlite')
+define('DB_PATH', __DIR__ . '/../database/voting.db');
 
 // Session
 define('SESSION_TIMEOUT', 1800);  // 30 minutes
@@ -29,7 +35,7 @@ define('UPLOAD_DIR', __DIR__ . '/../uploads/candidates/');
 define('UPLOAD_URL', BASE_URL . '/uploads/candidates/');
 define('MAX_FILE_SIZE', 2 * 1024 * 1024); // 2 MB
 
-// Email (PHPMailer) — set DEV_MODE=true to skip real email and show OTP on screen
+// Email — set DEV_MODE=true to show OTP on screen (for testing)
 define('DEV_MODE', true);
 define('SMTP_HOST', 'smtp.gmail.com');
 define('SMTP_PORT', 587);
