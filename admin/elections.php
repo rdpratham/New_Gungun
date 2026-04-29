@@ -57,6 +57,21 @@ if ($action === 'delete' && $id) {
     header('Location: ' . BASE_URL . '/admin/elections.php'); exit;
 }
 
+// Reset all votes for an election (useful for testing / re-runs)
+if ($action === 'reset_votes' && $id) {
+    $db = Database::getConnection();
+    $db->prepare('DELETE FROM votes WHERE election_id = ?')->execute([$id]);
+    $db->prepare(
+        'UPDATE voters SET has_voted = 0
+         WHERE constituency_id IN (
+             SELECT constituency_id FROM constituencies WHERE election_id = ?
+         )'
+    )->execute([$id]);
+    AuditModel::log(currentUserId(), 'VOTES_RESET', "Election ID:{$id}");
+    flashSet('success', 'All votes reset. Voters can vote again.');
+    header('Location: ' . BASE_URL . '/admin/elections.php'); exit;
+}
+
 $elections = ElectionModel::getAll();
 $editing   = ($action === 'edit' && $id) ? ElectionModel::findById($id) : null;
 
@@ -161,6 +176,11 @@ require_once __DIR__ . '/../includes/header.php';
                 <a href="<?= BASE_URL ?>/results.php?id=<?= $e['election_id'] ?>"
                    class="btn btn-outline-primary" title="Results">
                   <i class="bi bi-bar-chart"></i>
+                </a>
+                <a href="?action=reset_votes&id=<?= $e['election_id'] ?>"
+                   class="btn btn-outline-warning" title="Reset all votes"
+                   onclick="return confirm('Reset ALL votes for this election? Voters will be able to vote again.')">
+                  <i class="bi bi-arrow-counterclockwise"></i>
                 </a>
                 <a href="?action=delete&id=<?= $e['election_id'] ?>"
                    class="btn btn-outline-danger"
