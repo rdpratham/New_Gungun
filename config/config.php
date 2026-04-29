@@ -6,11 +6,14 @@
 define('APP_NAME',    'Online Voting System');
 define('APP_VERSION', '1.0.0');
 
-// BASE_URL — Railway sets RAILWAY_PUBLIC_DOMAIN automatically
+// BASE_URL — auto-detect from request or Railway env
 if (getenv('RAILWAY_PUBLIC_DOMAIN')) {
     define('BASE_URL', 'https://' . getenv('RAILWAY_PUBLIC_DOMAIN'));
+} elseif (!empty($_SERVER['HTTP_HOST'])) {
+    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    define('BASE_URL', $scheme . '://' . $_SERVER['HTTP_HOST']);
 } else {
-    define('BASE_URL', 'http://localhost:8080');  // local dev
+    define('BASE_URL', 'http://localhost:8080');
 }
 
 // ── Database Driver ──
