@@ -1,0 +1,157 @@
+/* Online Voting System – Custom Styles */
+:root {
+  --ovs-primary: #1a56db;
+  --ovs-success: #057a55;
+  --ovs-warning: #c27803;
+}
+
+body {
+  background-color: #f0f4f8;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* ── Auth pages ── */
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a56db 0%, #0e7490 100%);
+  padding: 1.5rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+
+.auth-logo {
+  font-size: 3rem;
+  color: var(--ovs-primary);
+}
+
+/* ── KPI Cards ── */
+.kpi-card {
+  border: none;
+  border-radius: .75rem;
+  transition: transform .2s;
+}
+.kpi-card:hover { transform: translateY(-4px); }
+.kpi-icon {
+  font-size: 2.5rem;
+  opacity: .85;
+}
+
+/* ── Candidate ballot cards ── */
+.candidate-card {
+  border: 2px solid transparent;
+  border-radius: .75rem;
+  cursor: pointer;
+  transition: border-color .2s, box-shadow .2s, transform .15s;
+}
+.candidate-card:hover {
+  border-color: var(--ovs-primary);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(26,86,219,.15);
+}
+.candidate-card.selected {
+  border-color: var(--ovs-primary);
+  background: #eff6ff;
+  box-shadow: 0 6px 20px rgba(26,86,219,.2);
+}
+.candidate-photo {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #e5e7eb;
+}
+.candidate-photo-placeholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #dbeafe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: var(--ovs-primary);
+  border: 3px solid #e5e7eb;
+}
+
+/* ── OTP input ── */
+.otp-input {
+  letter-spacing: .5rem;
+  font-size: 1.6rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* ── Tables ── */
+.table th {
+  background-color: #f8fafc;
+  font-weight: 600;
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: #6b7280;
+}
+
+/* ── Results bar ── */
+.result-bar-wrap {
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+  height: 22px;
+}
+.result-bar {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1a56db, #3b82f6);
+  transition: width .8s ease;
+  display: flex;
+  align-items: center;
+  padding-left: .5rem;
+  color: #fff;
+  font-size: .75rem;
+  font-weight: 700;
+  min-width: 2.5rem;
+}
+.winner-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  background: #fef3c7;
+  color: #92400e;
+  border: 1.5px solid #fbbf24;
+  border-radius: 999px;
+  padding: .15rem .65rem;
+  font-size: .8rem;
+  font-weight: 700;
+}
+
+/* ── Confirmation page ── */
+.success-icon {
+  font-size: 5rem;
+  color: var(--ovs-success);
+  animation: pop .4s cubic-bezier(.175,.885,.32,1.275);
+}
+@keyframes pop {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ── OTP timer ── */
+#otp-timer { font-variant-numeric: tabular-nums; }
+
+/* ── Navbar tweak ── */
+.navbar-brand { letter-spacing: .5px; }
+
+/* ── Responsive ── */
+@media (max-width: 576px) {
+  .candidate-photo,
+  .candidate-photo-placeholder { width: 60px; height: 60px; }
+}
