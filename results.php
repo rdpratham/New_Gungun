@@ -4,6 +4,7 @@ require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/models/ElectionModel.php';
 require_once __DIR__ . '/models/CandidateModel.php';
 require_once __DIR__ . '/models/VoteModel.php';
+require_once __DIR__ . '/services/GeminiService.php';
 
 requireLogin();
 
@@ -20,6 +21,38 @@ $totalVotes = $selId ? VoteModel::countForElection($selId) : 0;
 $byConstituency = [];
 foreach ($results as $r) {
     $byConstituency[$r['constituency_name']][] = $r;
+}
+
+// AI analysis (only for closed elections with votes)
+$aiSummary      = null;
+$aiError        = null;
+$aiQuotaExceeded = false;
+
+$geminiKey = getenv('GEMINI_API_KEY');
+if ($geminiKey && $election && $election['status'] === 'closed' && $totalVotes > 0) {
+    // Build a compact results snapshot for the prompt
+    $lines = [];
+    foreach ($byConstituency as $cName => $candidates) {
+        $total = array_sum(array_column($candidates, 'vote_count'));
+        foreach ($candidates as $c) {
+            $pct    = $total > 0 ? round($c['vote_count'] / $total * 100, 1) : 0;
+            $lines[] = "- {$c['name']} ({$c['party']}), {$cName}: {$c['vote_count']} votes ({$pct}%)";
+        }
+    }
+    $snapshot = implode("\n", $lines);
+    $prompt   = "You are an election analyst. Briefly summarise (3-5 sentences) the key highlights, "
+              . "winning trends, and notable observations from these election results:\n\n$snapshot";
+
+    try {
+        $gemini    = new GeminiService($geminiKey);
+        $aiSummary = $gemini->generate($prompt);
+    } catch (GeminiQuotaException $e) {
+        $aiQuotaExceeded = true;
+        $aiError = 'AI analysis is temporarily unavailable — Gemini API quota exceeded. '
+                 . 'Please check your usage at https://ai.dev/rate-limit.';
+    } catch (GeminiApiException $e) {
+        $aiError = 'AI analysis could not be loaded: ' . htmlspecialchars($e->getMessage());
+    }
 }
 
 $pageTitle = 'Election Results – ' . APP_NAME;
@@ -77,6 +110,30 @@ require_once __DIR__ . '/includes/header.php';
         </div>
       </div>
     </div>
+
+    <?php if ($aiSummary || $aiError): ?>
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header fw-semibold bg-light py-3">
+          <i class="bi bi-robot text-primary me-2"></i>AI Analysis
+          <span class="badge bg-primary ms-2 small">Powered by Gemini</span>
+        </div>
+        <div class="card-body">
+          <?php if ($aiSummary): ?>
+            <p class="mb-0 text-secondary"><?= nl2br(htmlspecialchars($aiSummary)) ?></p>
+          <?php elseif ($aiQuotaExceeded): ?>
+            <div class="alert alert-warning mb-0 py-2">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              <?= htmlspecialchars($aiError) ?>
+            </div>
+          <?php else: ?>
+            <div class="alert alert-danger mb-0 py-2">
+              <i class="bi bi-x-circle me-2"></i>
+              <?= htmlspecialchars($aiError) ?>
+            </div>
+          <?php endif; ?>
+        </div>
+      </div>
+    <?php endif; ?>
 
     <?php foreach ($byConstituency as $cName => $candidates): ?>
       <?php

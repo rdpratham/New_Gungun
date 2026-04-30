@@ -52,3 +52,7 @@ define('SMTP_USER', getenv('SMTP_USER') ?: '');
 define('SMTP_PASS', getenv('SMTP_PASS') ?: '');
 define('FROM_EMAIL', 'noreply@voting.local');
 define('FROM_NAME',  APP_NAME);
+
+// Gemini AI — set GEMINI_API_KEY env var to enable AI election analysis on results page.
+// Leave unset (or empty) to disable the feature entirely.
+// Get a key at https://ai.google.dev/gemini-api/docs/api-key
