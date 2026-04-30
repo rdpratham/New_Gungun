@@ -4,7 +4,7 @@ import re
 from datetime import datetime
 from flask import Flask, request, jsonify, render_template, send_file, Response, stream_with_context
 from flask_cors import CORS
-import anthropic
+import google.generativeai as genai
 from docx import Document
 from docx.shared import Pt, RGBColor, Inches
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -12,7 +12,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 app = Flask(__name__)
 CORS(app)
 
-ANTHROPIC_API_KEY = os.environ.get('ANTHROPIC_API_KEY', '')
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
 
 MOM_PROMPT = """You are an expert corporate meeting minutes writer. Generate a detailed, professional Minutes of Meeting (MOM) document from the transcript below.
 
@@ -93,26 +93,24 @@ def parse_uploaded_file(file):
         raise ValueError('Unsupported file format. Please upload a .txt or .docx file.')
 
 
-def call_claude(prompt, max_tokens=4096):
-    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
-    message = client.messages.create(
-        model='claude-sonnet-4-6',
-        max_tokens=max_tokens,
-        messages=[{'role': 'user', 'content': prompt}]
+def get_gemini():
+    genai.configure(api_key=GEMINI_API_KEY)
+    return genai.GenerativeModel(
+        model_name='gemini-2.0-flash',
+        generation_config=genai.types.GenerationConfig(
+            temperature=0.2,
+            max_output_tokens=4096,
+        )
     )
-    return message.content[0].text
 
 
-def stream_claude(prompt, max_tokens=4096):
-    """Yield text chunks from Claude using the streaming API."""
-    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
-    with client.messages.stream(
-        model='claude-sonnet-4-6',
-        max_tokens=max_tokens,
-        messages=[{'role': 'user', 'content': prompt}]
-    ) as stream:
-        for text in stream.text_stream:
-            yield text
+def stream_gemini(prompt, max_tokens=4096):
+    """Yield text chunks from Gemini using the streaming API."""
+    model = get_gemini()
+    response = model.generate_content(prompt, stream=True)
+    for chunk in response:
+        if chunk.text:
+            yield chunk.text
 
 
 @app.route('/')
@@ -140,8 +138,8 @@ def generate_mom():
         return jsonify({'error': 'Date is required.'}), 400
     if not subject:
         return jsonify({'error': 'Subject is required.'}), 400
-    if not ANTHROPIC_API_KEY:
-        return jsonify({'error': 'ANTHROPIC_API_KEY is not configured on the server.'}), 500
+    if not GEMINI_API_KEY:
+        return jsonify({'error': 'GEMINI_API_KEY is not configured on the server.'}), 500
 
     prompt = MOM_PROMPT.format(
         date=date,
@@ -153,12 +151,9 @@ def generate_mom():
 
     def generate():
         try:
-            for chunk in stream_claude(prompt, max_tokens=4096):
-                # Server-Sent Events format so the browser can read chunks progressively
+            for chunk in stream_gemini(prompt):
                 yield f"data: {chunk}\n\n"
             yield "data: [DONE]\n\n"
-        except anthropic.AuthenticationError:
-            yield "data: [ERROR] Invalid Anthropic API key.\n\n"
         except Exception as e:
             yield f"data: [ERROR] {str(e)}\n\n"
 
@@ -176,7 +171,7 @@ def generate_summary():
 
     def generate():
         try:
-            for chunk in stream_claude(prompt, max_tokens=1024):
+            for chunk in stream_gemini(prompt):
                 yield f"data: {chunk}\n\n"
             yield "data: [DONE]\n\n"
         except Exception as e:
