@@ -11,7 +11,7 @@ function hide(id)  { $(id).classList.add('hidden'); }
 function showError(msg) {
   $('errorText').textContent = msg;
   show('errorAlert');
-  setTimeout(() => hide('errorAlert'), 8000);
+  setTimeout(() => hide('errorAlert'), 10000);
 }
 function hideError() { hide('errorAlert'); }
 
@@ -40,7 +40,6 @@ uploadZone.addEventListener('click', e => {
 fileInput.addEventListener('change', () => {
   if (fileInput.files[0]) handleFile(fileInput.files[0]);
 });
-
 $('clearFile').addEventListener('click', e => {
   e.stopPropagation();
   uploadedFile = null;
@@ -57,8 +56,36 @@ function handleFile(file) {
   uploadedFile = file;
   $('fileName').textContent = file.name;
   show('fileSelected');
-  // Clear paste area to avoid confusion
   $('transcript').value = '';
+}
+
+// ── Stream helper ── //
+// Reads a Server-Sent Events response and calls onChunk(text) for each chunk,
+// then onDone(fullText) when [DONE] arrives, and onError(msg) on [ERROR].
+async function readSSEStream(response, onChunk, onDone, onError) {
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  let full = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop(); // keep incomplete line
+
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      const data = line.slice(6);
+      if (data === '[DONE]') { onDone(full); return; }
+      if (data.startsWith('[ERROR]')) { onError(data.slice(8)); return; }
+      full += data;
+      onChunk(data);
+    }
+  }
+  onDone(full);
 }
 
 // ── Generate MOM ── //
@@ -71,11 +98,13 @@ async function generateMOM() {
   const mode    = $('mode').value.trim();
   const paste   = $('transcript').value.trim();
 
-  if (!date) { showError('Please enter the date of the call.'); return; }
+  if (!date)    { showError('Please enter the date of the call.'); return; }
   if (!subject) { showError('Please enter the subject/topic of the meeting.'); return; }
-  if (!uploadedFile && !paste) { showError('Please upload a transcript file or paste the transcript text.'); return; }
+  if (!uploadedFile && !paste) {
+    showError('Please upload a transcript file or paste the transcript text.');
+    return;
+  }
 
-  // Build form data
   const formData = new FormData();
   formData.append('date', formatDate(date));
   formData.append('time', formatTime(time));
@@ -87,26 +116,41 @@ async function generateMOM() {
     formData.append('transcript', paste);
   }
 
-  // UI state
+  // Reset UI
   hide('momSection');
   hide('summarySection');
   hide('summaryLoading');
+  currentMOM = '';
+  currentSummary = '';
   show('loading');
   $('generateBtn').disabled = true;
 
   try {
     const res = await fetch('/generate-mom', { method: 'POST', body: formData });
-    const data = await res.json();
 
-    if (!res.ok || !data.success) {
-      showError(data.error || 'Something went wrong. Please try again.');
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Request failed.' }));
+      showError(err.error || 'Generation failed.');
       return;
     }
 
-    currentMOM = data.mom;
-    $('momOutput').textContent = data.mom;
+    // Show output panel and start streaming into it
+    $('momOutput').textContent = '';
     show('momSection');
-    $('momSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    await readSSEStream(
+      res,
+      chunk => {
+        currentMOM += chunk;
+        $('momOutput').textContent = currentMOM;
+      },
+      full => {
+        currentMOM = full;
+        $('momOutput').textContent = full;
+        $('momSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      },
+      errMsg => showError(errMsg || 'Generation failed.')
+    );
 
   } catch (err) {
     showError('Network error. Please check your connection and try again.');
@@ -122,6 +166,7 @@ async function generateSummary() {
 
   hide('summarySection');
   show('summaryLoading');
+  currentSummary = '';
   $('summaryBtn').disabled = true;
 
   try {
@@ -130,17 +175,29 @@ async function generateSummary() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ mom: currentMOM })
     });
-    const data = await res.json();
 
-    if (!res.ok || !data.success) {
-      showError(data.error || 'Summary generation failed.');
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Request failed.' }));
+      showError(err.error || 'Summary generation failed.');
       return;
     }
 
-    currentSummary = data.summary;
-    $('summaryOutput').textContent = data.summary;
+    $('summaryOutput').textContent = '';
     show('summarySection');
-    $('summarySection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    await readSSEStream(
+      res,
+      chunk => {
+        currentSummary += chunk;
+        $('summaryOutput').textContent = currentSummary;
+      },
+      full => {
+        currentSummary = full;
+        $('summaryOutput').textContent = full;
+        $('summarySection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      },
+      errMsg => showError(errMsg || 'Summary failed.')
+    );
 
   } catch (err) {
     showError('Network error. Please check your connection.');
@@ -165,7 +222,7 @@ async function downloadDoc(type, format) {
     });
 
     if (!res.ok) {
-      const err = await res.json();
+      const err = await res.json().catch(() => ({}));
       showError(err.error || 'Download failed.');
       return;
     }
@@ -174,7 +231,8 @@ async function downloadDoc(type, format) {
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
     a.href     = url;
-    a.download = res.headers.get('Content-Disposition')?.split('filename=')[1]?.replace(/"/g, '')
+    a.download = res.headers.get('Content-Disposition')
+                   ?.split('filename=')[1]?.replace(/"/g, '')
                  || `${type === 'mom' ? 'MOM' : 'Summary'}.${format}`;
     document.body.appendChild(a);
     a.click();

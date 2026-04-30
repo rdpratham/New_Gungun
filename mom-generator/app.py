@@ -2,7 +2,7 @@ import os
 import io
 import re
 from datetime import datetime
-from flask import Flask, request, jsonify, render_template, send_file
+from flask import Flask, request, jsonify, render_template, send_file, Response, stream_with_context
 from flask_cors import CORS
 import anthropic
 from docx import Document
@@ -93,14 +93,26 @@ def parse_uploaded_file(file):
         raise ValueError('Unsupported file format. Please upload a .txt or .docx file.')
 
 
-def call_claude(prompt):
+def call_claude(prompt, max_tokens=4096):
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
     message = client.messages.create(
         model='claude-sonnet-4-6',
-        max_tokens=4096,
+        max_tokens=max_tokens,
         messages=[{'role': 'user', 'content': prompt}]
     )
     return message.content[0].text
+
+
+def stream_claude(prompt, max_tokens=4096):
+    """Yield text chunks from Claude using the streaming API."""
+    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    with client.messages.stream(
+        model='claude-sonnet-4-6',
+        max_tokens=max_tokens,
+        messages=[{'role': 'user', 'content': prompt}]
+    ) as stream:
+        for text in stream.text_stream:
+            yield text
 
 
 @app.route('/')
@@ -110,59 +122,68 @@ def index():
 
 @app.route('/generate-mom', methods=['POST'])
 def generate_mom():
-    try:
-        date = request.form.get('date', '').strip()
-        time_val = request.form.get('time', '').strip()
-        subject = request.form.get('subject', '').strip()
-        mode = request.form.get('mode', '').strip()
-        transcript = request.form.get('transcript', '').strip()
+    date = request.form.get('date', '').strip()
+    time_val = request.form.get('time', '').strip()
+    subject = request.form.get('subject', '').strip()
+    mode = request.form.get('mode', '').strip()
+    transcript = request.form.get('transcript', '').strip()
 
-        if 'file' in request.files and request.files['file'].filename:
-            try:
-                transcript = parse_uploaded_file(request.files['file'])
-            except ValueError as e:
-                return jsonify({'error': str(e)}), 400
+    if 'file' in request.files and request.files['file'].filename:
+        try:
+            transcript = parse_uploaded_file(request.files['file'])
+        except ValueError as e:
+            return jsonify({'error': str(e)}), 400
 
-        if not transcript:
-            return jsonify({'error': 'Please provide a transcript — either paste it or upload a file.'}), 400
-        if not date:
-            return jsonify({'error': 'Date is required.'}), 400
-        if not subject:
-            return jsonify({'error': 'Subject is required.'}), 400
+    if not transcript:
+        return jsonify({'error': 'Please provide a transcript — either paste it or upload a file.'}), 400
+    if not date:
+        return jsonify({'error': 'Date is required.'}), 400
+    if not subject:
+        return jsonify({'error': 'Subject is required.'}), 400
+    if not ANTHROPIC_API_KEY:
+        return jsonify({'error': 'ANTHROPIC_API_KEY is not configured on the server.'}), 500
 
-        if not ANTHROPIC_API_KEY:
-            return jsonify({'error': 'ANTHROPIC_API_KEY is not configured on the server.'}), 500
+    prompt = MOM_PROMPT.format(
+        date=date,
+        time=time_val or 'Not specified',
+        mode=mode or 'Not specified',
+        subject=subject,
+        transcript=transcript
+    )
 
-        prompt = MOM_PROMPT.format(
-            date=date,
-            time=time_val or 'Not specified',
-            mode=mode or 'Not specified',
-            subject=subject,
-            transcript=transcript
-        )
+    def generate():
+        try:
+            for chunk in stream_claude(prompt, max_tokens=4096):
+                # Server-Sent Events format so the browser can read chunks progressively
+                yield f"data: {chunk}\n\n"
+            yield "data: [DONE]\n\n"
+        except anthropic.AuthenticationError:
+            yield "data: [ERROR] Invalid Anthropic API key.\n\n"
+        except Exception as e:
+            yield f"data: [ERROR] {str(e)}\n\n"
 
-        mom_content = call_claude(prompt)
-        return jsonify({'mom': mom_content, 'success': True})
-
-    except anthropic.AuthenticationError:
-        return jsonify({'error': 'Invalid Anthropic API key. Please check server configuration.'}), 500
-    except Exception as e:
-        return jsonify({'error': f'Generation failed: {str(e)}'}), 500
+    return Response(stream_with_context(generate()), mimetype='text/event-stream',
+                    headers={'Cache-Control': 'no-cache', 'X-Accel-Buffering': 'no'})
 
 
 @app.route('/generate-summary', methods=['POST'])
 def generate_summary():
-    try:
-        mom_content = request.json.get('mom', '').strip()
-        if not mom_content:
-            return jsonify({'error': 'No MOM content provided.'}), 400
+    mom_content = request.json.get('mom', '').strip()
+    if not mom_content:
+        return jsonify({'error': 'No MOM content provided.'}), 400
 
-        prompt = SUMMARY_PROMPT.format(mom=mom_content)
-        summary = call_claude(prompt)
-        return jsonify({'summary': summary, 'success': True})
+    prompt = SUMMARY_PROMPT.format(mom=mom_content)
 
-    except Exception as e:
-        return jsonify({'error': f'Summary generation failed: {str(e)}'}), 500
+    def generate():
+        try:
+            for chunk in stream_claude(prompt, max_tokens=1024):
+                yield f"data: {chunk}\n\n"
+            yield "data: [DONE]\n\n"
+        except Exception as e:
+            yield f"data: [ERROR] {str(e)}\n\n"
+
+    return Response(stream_with_context(generate()), mimetype='text/event-stream',
+                    headers={'Cache-Control': 'no-cache', 'X-Accel-Buffering': 'no'})
 
 
 def build_docx(content, title='Document'):
