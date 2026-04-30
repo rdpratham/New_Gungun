@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Custom QR Code Generator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo-mark">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="36" height="36" rx="8" fill="#6C63FF"/>
+          <rect x="6" y="6" width="10" height="10" rx="1" fill="white"/>
+          <rect x="20" y="6" width="10" height="10" rx="1" fill="white"/>
+          <rect x="6" y="20" width="10" height="10" rx="1" fill="white"/>
+          <rect x="8" y="8" width="6" height="6" fill="#6C63FF"/>
+          <rect x="22" y="8" width="6" height="6" fill="#6C63FF"/>
+          <rect x="8" y="22" width="6" height="6" fill="#6C63FF"/>
+          <rect x="21" y="21" width="3" height="3" fill="white"/>
+          <rect x="26" y="21" width="3" height="3" fill="white"/>
+          <rect x="21" y="26" width="3" height="3" fill="white"/>
+          <rect x="26" y="26" width="3" height="3" fill="white"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="site-title">Custom QR Code Generator</h1>
+        <p class="site-subtitle">Create branded, custom QR codes — free, open source, no sign-up.</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main layout -->
+  <main class="main-container">
+
+    <!-- LEFT: Form panel -->
+    <section class="form-panel" aria-label="QR Configuration">
+
+      <form id="qr-form" enctype="multipart/form-data" novalidate>
+
+        <!-- QR Content -->
+        <div class="card">
+          <h2 class="card-title">
+            <span class="step-badge">1</span>
+            QR Content
+          </h2>
+
+          <div class="field-group">
+            <label for="data-input">Text / URL / Data</label>
+            <textarea
+              id="data-input"
+              name="data"
+              rows="3"
+              placeholder="https://example.com  |  Wi-Fi: SSID · vCard · plain text…"
+              required
+            >{{ last.get('data', '') }}</textarea>
+            <span class="field-hint">Up to 4,296 alphanumeric characters supported.</span>
+          </div>
+
+          <!-- QR type quick-fill -->
+          <div class="quick-fill">
+            <span class="quick-label">Quick fill:</span>
+            <button type="button" class="chip" data-tpl="https://">URL</button>
+            <button type="button" class="chip" data-tpl="mailto:">Email</button>
+            <button type="button" class="chip" data-tpl="tel:+91">Phone</button>
+            <button type="button" class="chip" data-tpl="WIFI:T:WPA;S:MyNetwork;P:MyPassword;;">Wi-Fi</button>
+            <button type="button" class="chip" data-tpl="BEGIN:VCARD&#10;VERSION:3.0&#10;FN:Full Name&#10;TEL:+91&#10;EMAIL:you@email.com&#10;END:VCARD">vCard</button>
+          </div>
+        </div>
+
+        <!-- Customisation -->
+        <div class="card">
+          <h2 class="card-title">
+            <span class="step-badge">2</span>
+            Customise
+          </h2>
+
+          <!-- Colours row -->
+          <div class="two-col">
+            <div class="field-group">
+              <label for="fg-colour">Foreground colour</label>
+              <div class="colour-row">
+                <input type="color" id="fg-colour-picker" value="{{ last.get('fg_colour', '#000000') }}" />
+                <input type="text"  id="fg-colour" name="fg_colour" value="{{ last.get('fg_colour', '#000000') }}" class="hex-input" maxlength="7" pattern="^#[0-9A-Fa-f]{6}$" />
+              </div>
+            </div>
+            <div class="field-group">
+              <label for="bg-colour">Background colour</label>
+              <div class="colour-row">
+                <input type="color" id="bg-colour-picker" value="{{ last.get('bg_colour', '#ffffff') }}" />
+                <input type="text"  id="bg-colour" name="bg_colour" value="{{ last.get('bg_colour', '#ffffff') }}" class="hex-input" maxlength="7" pattern="^#[0-9A-Fa-f]{6}$" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Contrast warning -->
+          <div id="contrast-warn" class="alert alert-warn hidden">
+            Low contrast between foreground and background — QR may be hard to scan.
+          </div>
+
+          <!-- Size slider -->
+          <div class="field-group">
+            <label for="size-range">
+              Output size:
+              <strong id="size-label">{{ last.get('size', 300) }}px</strong>
+            </label>
+            <input type="range" id="size-range" name="size"
+              min="100" max="1000" step="50"
+              value="{{ last.get('size', 300) }}" />
+            <div class="range-markers">
+              <span>100px</span><span>500px</span><span>1000px</span>
+            </div>
+          </div>
+
+          <!-- Border padding -->
+          <div class="field-group">
+            <label for="border-range">
+              Border (quiet zone):
+              <strong id="border-label">{{ last.get('border', 4) }}</strong>
+            </label>
+            <input type="range" id="border-range" name="border"
+              min="0" max="10" step="1"
+              value="{{ last.get('border', 4) }}" />
+          </div>
+
+          <!-- ECC + Format row -->
+          <div class="two-col">
+            <div class="field-group">
+              <label for="ecc-level">Error correction</label>
+              <select id="ecc-level" name="ecc_level">
+                {% set ecc = last.get('ecc_level', 'H') %}
+                <option value="L" {{ 'selected' if ecc=='L' }}>L — Low (~7%)</option>
+                <option value="M" {{ 'selected' if ecc=='M' }}>M — Medium (~15%)</option>
+                <option value="Q" {{ 'selected' if ecc=='Q' }}>Q — Quartile (~25%)</option>
+                <option value="H" {{ 'selected' if ecc=='H' else 'selected' }}>H — High (~30%)</option>
+              </select>
+              <span class="field-hint">Use <strong>H</strong> when embedding a logo.</span>
+            </div>
+
+            <div class="field-group">
+              <label>Export format</label>
+              <div class="radio-group">
+                {% set fmt = last.get('format', 'png') %}
+                <label class="radio-label">
+                  <input type="radio" name="format" value="png" {{ 'checked' if fmt=='png' else 'checked' if fmt not in ('svg','both') }} /> PNG
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="format" value="svg" {{ 'checked' if fmt=='svg' }} /> SVG
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="format" value="both" {{ 'checked' if fmt=='both' }} /> Both
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Logo -->
+        <div class="card">
+          <h2 class="card-title">
+            <span class="step-badge">3</span>
+            Logo / Image <span class="badge-optional">optional</span>
+          </h2>
+
+          <div id="logo-wrap" class="field-group">
+            <label for="logo-upload">Upload logo (PNG / JPG / SVG / WebP)</label>
+            <div class="file-drop-zone" id="drop-zone">
+              <input type="file" id="logo-upload" name="logo"
+                accept="image/png,image/jpeg,image/svg+xml,image/webp" />
+              <div class="drop-hint">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <span>Click or drag &amp; drop an image</span>
+                <span class="drop-sub">Max 5 MB · auto-sized to 28% of QR area</span>
+              </div>
+              <div id="logo-preview-wrap" class="hidden">
+                <img id="logo-preview-img" src="" alt="Logo preview" />
+                <button type="button" id="remove-logo" class="btn-icon" title="Remove logo">✕</button>
+              </div>
+            </div>
+            <div id="logo-ecc-warn" class="alert alert-info hidden">
+              Logo embedding requires <strong>H (High)</strong> error correction — switching automatically.
+            </div>
+          </div>
+        </div>
+
+        <!-- Generate button -->
+        <button type="submit" class="btn-generate" id="btn-generate">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5 9 2 12 5 15"/><polyline points="9 5 12 2 15 5"/><polyline points="20 9 23 12 20 15"/><polyline points="15 19 12 22 9 19"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg>
+          Generate QR Code
+        </button>
+
+      </form>
+    </section>
+
+    <!-- RIGHT: Preview panel -->
+    <aside class="preview-panel" aria-label="QR Preview">
+      <div class="preview-card" id="preview-card">
+
+        <div class="preview-header">
+          <h2 class="card-title" style="margin:0">Live Preview</h2>
+          <div class="preview-badges">
+            <span class="badge" id="badge-ecc">H ECC</span>
+            <span class="badge" id="badge-size">300 px</span>
+          </div>
+        </div>
+
+        <!-- QR display area -->
+        <div class="qr-display" id="qr-display">
+          <div class="qr-placeholder" id="qr-placeholder">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" opacity="0.25">
+              <rect x="4" y="4"  width="28" height="28" rx="3" stroke="#555" stroke-width="3"/>
+              <rect x="48" y="4" width="28" height="28" rx="3" stroke="#555" stroke-width="3"/>
+              <rect x="4" y="48" width="28" height="28" rx="3" stroke="#555" stroke-width="3"/>
+              <rect x="11" y="11" width="14" height="14" fill="#555"/>
+              <rect x="55" y="11" width="14" height="14" fill="#555"/>
+              <rect x="11" y="55" width="14" height="14" fill="#555"/>
+              <rect x="48" y="48" width="6" height="6" fill="#555"/>
+              <rect x="56" y="48" width="6" height="6" fill="#555"/>
+              <rect x="48" y="56" width="6" height="6" fill="#555"/>
+              <rect x="58" y="58" width="14" height="14" fill="#555" rx="2"/>
+            </svg>
+            <p>Enter data and click<br/><strong>Generate QR Code</strong></p>
+          </div>
+          <img id="qr-img" src="" alt="Generated QR Code" class="hidden" />
+          <div id="qr-spinner" class="spinner hidden"></div>
+        </div>
+
+        <!-- Error/success -->
+        <div id="gen-error" class="alert alert-error hidden"></div>
+
+        <!-- Download buttons -->
+        <div class="download-row" id="download-row">
+          <button type="button" class="btn-download" id="btn-dl-png" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download PNG
+          </button>
+          <button type="button" class="btn-download btn-svg" id="btn-dl-svg" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download SVG
+          </button>
+        </div>
+
+        <!-- Stats row -->
+        <div class="stats-row hidden" id="stats-row">
+          <div class="stat">
+            <span class="stat-label">Characters</span>
+            <span class="stat-val" id="stat-chars">—</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">ECC Level</span>
+            <span class="stat-val" id="stat-ecc">—</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Output Size</span>
+            <span class="stat-val" id="stat-size">—</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Logo</span>
+            <span class="stat-val" id="stat-logo">None</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Feature blurbs -->
+      <div class="feature-list">
+        <div class="feature-item">
+          <span class="fi-icon">🎨</span>
+          <div>
+            <strong>Full colour control</strong>
+            <p>Any hex foreground + background colour combination.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="fi-icon">🖼️</span>
+          <div>
+            <strong>Logo embedding</strong>
+            <p>Auto-sized to 28% of QR area with white padding. Requires H-level ECC.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="fi-icon">📐</span>
+          <div>
+            <strong>PNG + SVG export</strong>
+            <p>Pixel-perfect raster or infinitely scalable vector — your choice.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="fi-icon">🔒</span>
+          <div>
+            <strong>100% private</strong>
+            <p>Generated server-side with no data stored or shared.</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Custom QR Code Generator · Built with Flask, qrcode &amp; Pillow · Open Source · Free forever</p>
+    <p style="margin-top:4px;font-size:0.75rem;opacity:0.6;">
+      Sanskriti University BCA Project · Suraj Kumar Chauhan · 2026
+    </p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

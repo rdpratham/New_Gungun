@@ -1,5 +1,8 @@
 [phases.setup]
-nixPkgs = ["php83", "php83Extensions.pdo", "php83Extensions.pdo_mysql", "php83Extensions.pdo_sqlite", "php83Extensions.mbstring", "php83Extensions.fileinfo"]
+nixPkgs = ["python311", "zlib", "libjpeg", "libpng", "freetype", "lcms2", "libwebp", "openjpeg", "libtiff"]
+
+[phases.install]
+cmds = ["pip install -r requirements.txt"]
 
 [start]
-cmd = "php -S 0.0.0.0:$PORT -t /app"
+cmd = "gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 60"
