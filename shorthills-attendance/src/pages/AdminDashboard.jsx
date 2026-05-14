@@ -231,12 +231,12 @@ export default function AdminDashboard({ user }) {
                   <div key={rec.id} className="card hover:border-electric-500/40 transition-all duration-200">
                     <div className="flex items-start gap-4">
                       {/* Photo */}
-                      {rec.photoURL && (
+                      {(rec.photoBase64 || rec.photoURL) && (
                         <img
-                          src={rec.photoURL}
+                          src={rec.photoBase64 || rec.photoURL}
                           alt={rec.employeeName}
                           className="w-16 h-16 rounded-xl object-cover flex-shrink-0 cursor-pointer border border-navy-700 hover:border-electric-500 transition-colors"
-                          onClick={() => setExpandedPhoto(rec.photoURL)}
+                          onClick={() => setExpandedPhoto(rec.photoBase64 || rec.photoURL)}
                           title="Click to enlarge"
                         />
                       )}

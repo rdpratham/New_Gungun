@@ -228,12 +228,12 @@ export default function EmployeeAttendance({ user }) {
                 <div className="space-y-3">
                   {recentRecords.map((rec) => (
                     <div key={rec.id} className="flex items-start gap-4 bg-navy-900 rounded-xl p-4">
-                      {rec.photoURL && (
+                      {(rec.photoBase64 || rec.photoURL) && (
                         <img
-                          src={rec.photoURL}
+                          src={rec.photoBase64 || rec.photoURL}
                           alt="Attendance"
                           className="w-14 h-14 rounded-lg object-cover flex-shrink-0 border border-navy-700 cursor-pointer"
-                          onClick={() => window.open(rec.photoURL, '_blank')}
+                          onClick={() => window.open(rec.photoBase64 || rec.photoURL, '_blank')}
                         />
                       )}
                       <div className="flex-1 min-w-0">

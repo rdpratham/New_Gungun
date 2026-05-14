@@ -1,16 +1,36 @@
 import { useState } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useNavigate } from 'react-router-dom';
-import { auth, db, storage } from '../firebase';
+import { auth, db } from '../firebase';
 import Navbar from '../components/Navbar';
+
+// Compress image to base64 (no Firebase Storage needed)
+function fileToCompressedBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const maxW = 300;
+        const ratio = Math.min(1, maxW / img.width);
+        canvas.width = Math.round(img.width * ratio);
+        canvas.height = Math.round(img.height * ratio);
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL('image/jpeg', 0.6));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
 
 export default function AddEmployee() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({
-    employeeId: '', name: '', email: '', password: '',
-  });
+  const [form, setForm] = useState({ employeeId: '', name: '', email: '', password: '' });
   const [photoFile, setPhotoFile] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -25,14 +45,8 @@ export default function AddEmployee() {
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    if (!file.type.startsWith('image/')) {
-      setError('Please select an image file.');
-      return;
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      setError('Photo must be under 5MB.');
-      return;
-    }
+    if (!file.type.startsWith('image/')) { setError('Please select an image file.'); return; }
+    if (file.size > 5 * 1024 * 1024) { setError('Photo must be under 5MB.'); return; }
     setPhotoFile(file);
     setPhotoPreview(URL.createObjectURL(file));
     setError('');
@@ -43,49 +57,34 @@ export default function AddEmployee() {
     setError('');
     setSuccess('');
 
-    if (!photoFile) {
-      setError('Please upload an employee photo.');
-      return;
-    }
-    if (form.password.length < 6) {
-      setError('Password must be at least 6 characters.');
-      return;
-    }
+    if (!photoFile) { setError('Please upload an employee photo.'); return; }
+    if (form.password.length < 6) { setError('Password must be at least 6 characters.'); return; }
 
     setLoading(true);
-
-    // Save current admin auth — we'll need to re-authenticate after creating user
-    const currentAdmin = auth.currentUser;
-
     try {
-      // 1. Create Firebase Auth user
+      // 1. Compress photo to base64
+      const photoBase64 = await fileToCompressedBase64(photoFile);
+
+      // 2. Create Firebase Auth user
       const { user: newUser } = await createUserWithEmailAndPassword(auth, form.email, form.password);
 
-      // 2. Upload photo to Storage
-      const photoRef = ref(storage, `employees/${form.employeeId}/profile.jpg`);
-      await uploadBytes(photoRef, photoFile, { contentType: photoFile.type });
-      const photoURL = await getDownloadURL(photoRef);
-
       // 3. Update display name
-      await updateProfile(newUser, { displayName: form.name, photoURL });
+      await updateProfile(newUser, { displayName: form.name });
 
-      // 4. Save to Firestore (keyed by uid)
+      // 4. Save to Firestore with base64 photo (no Storage needed)
       await setDoc(doc(db, 'employees', newUser.uid), {
         employeeId: form.employeeId.trim(),
         name: form.name.trim(),
         email: form.email.trim().toLowerCase(),
-        photoURL,
+        photoURL: photoBase64,
         createdAt: serverTimestamp(),
       });
 
-      setSuccess(`Employee "${form.name}" added successfully! They can now log in.`);
+      setSuccess(`Employee "${form.name}" added successfully!`);
       setForm({ employeeId: '', name: '', email: '', password: '' });
       setPhotoFile(null);
       setPhotoPreview(null);
 
-      // Note: Creating a new Firebase user signs them in — admin must log back in
-      // In production, use Admin SDK from a backend to avoid this. For now, sign out
-      // the new user and the admin refreshes.
       await auth.signOut();
       navigate('/admin/login');
     } catch (err) {
@@ -151,12 +150,7 @@ export default function AddEmployee() {
                       </svg>
                       Upload Photo
                     </div>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handlePhotoChange}
-                      className="hidden"
-                    />
+                    <input type="file" accept="image/*" onChange={handlePhotoChange} className="hidden" />
                   </label>
                   <p className="text-xs text-gray-500 mt-2">JPG, PNG up to 5MB</p>
                   {photoFile && <p className="text-xs text-electric-400 mt-1">{photoFile.name}</p>}
@@ -167,56 +161,27 @@ export default function AddEmployee() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="label">Employee ID <span className="text-red-400">*</span></label>
-                <input
-                  type="text"
-                  name="employeeId"
-                  value={form.employeeId}
-                  onChange={handleChange}
-                  placeholder="e.g. EMP001"
-                  required
-                  className="input-field"
-                />
+                <input type="text" name="employeeId" value={form.employeeId} onChange={handleChange}
+                  placeholder="e.g. EMP001" required className="input-field" />
               </div>
               <div>
                 <label className="label">Full Name <span className="text-red-400">*</span></label>
-                <input
-                  type="text"
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  placeholder="John Doe"
-                  required
-                  className="input-field"
-                />
+                <input type="text" name="name" value={form.name} onChange={handleChange}
+                  placeholder="John Doe" required className="input-field" />
               </div>
             </div>
 
             <div>
               <label className="label">Work Email <span className="text-red-400">*</span></label>
-              <input
-                type="email"
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-                placeholder="john@shorthillsai.com"
-                required
-                className="input-field"
-              />
+              <input type="email" name="email" value={form.email} onChange={handleChange}
+                placeholder="john@shorthillsai.com" required className="input-field" />
             </div>
 
             <div>
               <label className="label">Password <span className="text-red-400">*</span></label>
-              <input
-                type="password"
-                name="password"
-                value={form.password}
-                onChange={handleChange}
-                placeholder="Minimum 6 characters"
-                required
-                minLength={6}
-                className="input-field"
-              />
-              <p className="text-xs text-gray-500 mt-1">Share this password with the employee. They can change it later.</p>
+              <input type="password" name="password" value={form.password} onChange={handleChange}
+                placeholder="Minimum 6 characters" required minLength={6} className="input-field" />
+              <p className="text-xs text-gray-500 mt-1">Share this password with the employee.</p>
             </div>
 
             {error && (
@@ -231,16 +196,12 @@ export default function AddEmployee() {
 
             <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg px-4 py-3">
               <p className="text-yellow-400 text-xs">
-                ⚠️ After adding, you will be redirected to login again. This is a Firebase limitation when creating users from the client side.
+                ⚠️ After adding an employee, you will be redirected to login again. This is normal — just log back in.
               </p>
             </div>
 
             <div className="flex gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => navigate('/admin/dashboard')}
-                className="btn-secondary flex-1"
-              >
+              <button type="button" onClick={() => navigate('/admin/dashboard')} className="btn-secondary flex-1">
                 Cancel
               </button>
               <button type="submit" disabled={loading} className="btn-primary flex-1 flex items-center justify-center gap-2">

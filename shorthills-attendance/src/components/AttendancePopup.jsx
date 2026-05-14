@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { storage, db } from '../firebase';
+import { db } from '../firebase';
 import WebcamCapture from './WebcamCapture';
 
 const MIN_SUMMARY_LENGTH = 50;
@@ -11,6 +10,25 @@ function getISTDateString() {
     timeZone: 'Asia/Kolkata',
     year: 'numeric', month: '2-digit', day: '2-digit',
   }).format(new Date());
+}
+
+// Compress image to small base64 so it fits in Firestore (max 1MB per doc)
+function compressImage(dataURL) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      // Resize to max 400px wide
+      const maxW = 400;
+      const ratio = Math.min(1, maxW / img.width);
+      canvas.width = Math.round(img.width * ratio);
+      canvas.height = Math.round(img.height * ratio);
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      resolve(canvas.toDataURL('image/jpeg', 0.5));
+    };
+    img.src = dataURL;
+  });
 }
 
 export default function AttendancePopup({ user, employeeData, onSubmitted }) {
@@ -28,7 +46,7 @@ export default function AttendancePopup({ user, employeeData, onSubmitted }) {
   const handleSubmit = async () => {
     setError('');
 
-    if (!capturedPhoto?.blob) {
+    if (!capturedPhoto?.dataURL) {
       setError('Please capture your photo first.');
       return;
     }
@@ -42,12 +60,9 @@ export default function AttendancePopup({ user, employeeData, onSubmitted }) {
       const dateStr = getISTDateString();
       const employeeId = employeeData?.employeeId || user.uid;
 
-      // Upload photo to Firebase Storage
-      const photoRef = ref(storage, `attendance/${employeeId}/${dateStr}.jpg`);
-      await uploadBytes(photoRef, capturedPhoto.blob, { contentType: 'image/jpeg' });
-      const photoURL = await getDownloadURL(photoRef);
+      // Compress photo and store as base64 directly in Firestore (no Storage needed)
+      const compressedPhoto = await compressImage(capturedPhoto.dataURL);
 
-      // Save attendance record to Firestore
       await addDoc(collection(db, 'attendance'), {
         employeeId,
         employeeUid: user.uid,
@@ -55,7 +70,7 @@ export default function AttendancePopup({ user, employeeData, onSubmitted }) {
         date: dateStr,
         submittedAt: serverTimestamp(),
         workSummary: workSummary.trim(),
-        photoURL,
+        photoBase64: compressedPhoto,
       });
 
       setSuccess(true);
@@ -102,10 +117,8 @@ export default function AttendancePopup({ user, employeeData, onSubmitted }) {
         </div>
 
         <div className="space-y-6">
-          {/* Webcam section */}
           <WebcamCapture onCapture={handleCapture} onError={(msg) => setError(msg)} />
 
-          {/* Work summary */}
           <div>
             <label className="label">
               What did you work on today?
@@ -127,7 +140,6 @@ export default function AttendancePopup({ user, employeeData, onSubmitted }) {
             </div>
           </div>
 
-          {/* Error message */}
           {error && (
             <div className="flex items-start gap-2 bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-3">
               <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -138,7 +150,6 @@ export default function AttendancePopup({ user, employeeData, onSubmitted }) {
             </div>
           )}
 
-          {/* Submit button */}
           <button
             onClick={handleSubmit}
             disabled={submitting || !capturedPhoto}
