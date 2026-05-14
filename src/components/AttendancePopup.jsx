@@ -1,10 +1,18 @@
 import { useRef, useState } from 'react'
-import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
-import { auth, db, storage } from '../firebase'
+import { auth, db } from '../firebase'
 import WebcamCapture from './WebcamCapture'
 
 const MIN_SUMMARY_LENGTH = 50
+
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = reject
+    reader.readAsDataURL(blob)
+  })
+}
 
 export default function AttendancePopup({ employee, today, onSubmitted, dismissible, onClose }) {
   const webcamRef = useRef(null)
@@ -32,10 +40,9 @@ export default function AttendancePopup({ employee, today, onSubmitted, dismissi
     setLoading(true)
     try {
       const user = auth.currentUser
-      const path = `attendance/${user.uid}/${today}.jpg`
-      const sRef = storageRef(storage, path)
-      await uploadBytes(sRef, capturedBlob)
-      const photoURL = await getDownloadURL(sRef)
+
+      // Convert photo to base64 and store directly in Firestore (no Storage needed)
+      const photoBase64 = await blobToBase64(capturedBlob)
 
       const record = {
         employeeId: user.uid,
@@ -43,7 +50,7 @@ export default function AttendancePopup({ employee, today, onSubmitted, dismissi
         date: today,
         submittedAt: serverTimestamp(),
         workSummary: workSummary.trim(),
-        photoURL,
+        photoURL: photoBase64,
       }
 
       const docRef = await addDoc(collection(db, 'attendance'), record)
@@ -95,7 +102,6 @@ export default function AttendancePopup({ employee, today, onSubmitted, dismissi
             </div>
 
             <div className="p-6 space-y-6">
-              {/* Info banner (non-dismissible) */}
               {!dismissible && (
                 <div className="bg-electric-500/10 border border-electric-500/20 rounded-lg px-4 py-3 text-sm text-electric-300 flex items-start gap-2.5">
                   <svg className="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

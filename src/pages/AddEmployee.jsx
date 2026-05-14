@@ -1,11 +1,19 @@
 import { useState } from 'react'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { useNavigate } from 'react-router-dom'
-import { auth, db, storage } from '../firebase'
+import { auth, db } from '../firebase'
 import Navbar from '../components/Navbar'
 import { signOut } from 'firebase/auth'
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = reject
+    reader.readAsDataURL(file)
+  })
+}
 
 export default function AddEmployee() {
   const [form, setForm] = useState({
@@ -62,14 +70,12 @@ export default function AddEmployee() {
     const adminEmail = adminUser.email
 
     try {
-      // 1. Create Firebase Auth user for employee
+      // 1. Convert photo to base64 (no Storage needed)
+      const photoURL = await fileToBase64(photo)
+
+      // 2. Create Firebase Auth user for employee
       const cred = await createUserWithEmailAndPassword(auth, form.email, form.password)
       const empUid = cred.user.uid
-
-      // 2. Upload photo to Firebase Storage
-      const storageRef = ref(storage, `employees/${form.employeeId}/profile.jpg`)
-      await uploadBytes(storageRef, photo)
-      const photoURL = await getDownloadURL(storageRef)
 
       // 3. Save employee data to Firestore using their UID as the document ID
       await setDoc(doc(db, 'employees', empUid), {
