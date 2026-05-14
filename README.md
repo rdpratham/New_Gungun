@@ -1,164 +1,191 @@
-# Online Voting System (OVS)
+# Shorthills AI — Attendance Management System
 
-**Developed by:** Gungun Gupta (Enrolment No: 2302309063)  
-**Under supervision of:** Mr. Atul Rathor, Assistant Professor, SOEIT  
-**Institution:** Sanskriti University, Mathura, U.P.  
-**Academic Year:** 2025-26
+A full-stack employee attendance management system built with React + Vite + Firebase, deployed to GitHub Pages for free.
+
+---
+
+## Features
+
+- **Admin panel** — manage employees, view attendance reports with photo evidence
+- **Employee portal** — daily attendance submission with webcam selfie + work summary
+- **Automated popup** — appears at 1:45 AM IST after every shift ends
+- **Firebase backend** — Auth, Firestore, Storage (all free tier)
+- **Mobile responsive** — works on phones with front camera
 
 ---
 
 ## Tech Stack
 
 | Layer | Technology |
-|-------|-----------|
-| Backend | PHP 8.1+ |
-| Database | MySQL 8.0+ |
-| Server | Apache (WAMP/LAMP/XAMPP) |
-| Frontend | HTML5, CSS3, Bootstrap 5.3, JavaScript |
-| Security | bcrypt, SHA-256, CSRF tokens, session management |
+|-------|------------|
+| Frontend | React 18 + Vite |
+| Styling | Tailwind CSS |
+| Routing | React Router v6 |
+| Auth | Firebase Authentication |
+| Database | Firebase Firestore |
+| File storage | Firebase Storage |
+| Hosting | GitHub Pages |
 
 ---
 
-## Quick Start (WAMP / XAMPP)
+## Setup Guide
 
-### 1. Copy files
-Place the `New_Gungun` folder inside your web root:
-- **WAMP:** `C:\wamp64\www\New_Gungun\`
-- **XAMPP:** `C:\xampp\htdocs\New_Gungun\`
+### 1. Create a Firebase Project
 
-### 2. Configure database
-Edit `config/config.php`:
-```php
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'online_voting');
-define('DB_USER', 'root');
-define('DB_PASS', '');          // Your MySQL root password
+1. Go to [Firebase Console](https://console.firebase.google.com) → **Add project**
+2. Name it (e.g. `shorthills-attendance`) → Continue through setup
+
+### 2. Enable Firebase Services
+
+**Authentication:**
+- Go to **Build → Authentication → Get started**
+- Enable **Email/Password** sign-in method
+
+**Firestore Database:**
+- Go to **Build → Firestore Database → Create database**
+- Start in **production mode** (you'll add rules below)
+- Choose a region close to your users
+
+**Storage:**
+- Go to **Build → Storage → Get started**
+- Start in **production mode**
+
+### 3. Get Firebase Config Keys
+
+- Go to **Project Settings** (gear icon) → **Your apps** → **Web app** (or add one)
+- Copy the config values
+
+### 4. Set Firestore Security Rules
+
+In Firestore → **Rules**, paste:
+
+```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /employees/{uid} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.token.email == 'admin@shorthillsai.com';
+    }
+    match /attendance/{docId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+  }
+}
 ```
 
-### 3. Run the setup wizard
-Open your browser and visit:
-```
-http://localhost/New_Gungun/setup.php
-```
-Click **Run Setup** — this creates the database, tables, and seeds demo data.
+Replace `admin@shorthillsai.com` with your actual admin email.
 
-### 4. Login
+### 5. Set Firebase Storage Rules
+
+In Storage → **Rules**, paste:
+
 ```
-http://localhost/New_Gungun/login.php
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /employees/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+    match /attendance/{employeeId}/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == employeeId;
+    }
+  }
+}
+```
+
+### 6. Create the Admin Account
+
+In Firebase Console → **Authentication → Users → Add user**:
+- Email: `admin@shorthillsai.com` (or your chosen admin email)
+- Password: strong password of your choice
+
+### 7. Local Development
+
+```bash
+# Install dependencies
+npm install
+
+# Create .env from template
+cp .env.example .env
+# Fill in your Firebase values in .env
+
+# Start dev server
+npm run dev
+```
+
+Open `http://localhost:5173/new_gungun/`
+
+### 8. Deploy to GitHub Pages
+
+**Add GitHub Secrets** — go to repo Settings → Secrets and variables → Actions → New repository secret. Add each:
+
+| Secret name | Value |
+|-------------|-------|
+| `VITE_FIREBASE_API_KEY` | Your Firebase API key |
+| `VITE_FIREBASE_AUTH_DOMAIN` | `your-project.firebaseapp.com` |
+| `VITE_FIREBASE_PROJECT_ID` | `your-project-id` |
+| `VITE_FIREBASE_STORAGE_BUCKET` | `your-project.appspot.com` |
+| `VITE_FIREBASE_MESSAGING_SENDER_ID` | Sender ID from Firebase |
+| `VITE_FIREBASE_APP_ID` | App ID from Firebase |
+| `VITE_ADMIN_EMAIL` | `admin@shorthillsai.com` |
+
+**Enable GitHub Pages:**
+- Go to repo Settings → Pages → Source: **GitHub Actions**
+
+**Deploy:**
+- Push to `main` branch → GitHub Actions builds and deploys automatically
+
+---
+
+## Usage
+
+### Admin
+1. Go to `/admin/login`
+2. Log in with the admin email and password
+3. Add employees from the dashboard (creates Firebase Auth account + Firestore record)
+4. View attendance reports with filters by date and employee name
+
+### Employee
+1. Go to `/login`
+2. Log in with credentials provided by admin
+3. At 1:45 AM IST, a popup appears automatically after shift ends
+4. Take a webcam selfie and write a work summary (min 50 characters)
+5. Submit — record is saved with photo to Firebase
+
+---
+
+## Firestore Data Structure
+
+```
+employees/
+  {uid}/
+    employeeId: string
+    name: string
+    email: string
+    photoURL: string
+    createdAt: timestamp
+
+attendance/
+  {docId}/
+    employeeId: string       (Firebase Auth UID)
+    employeeName: string
+    date: string             (YYYY-MM-DD in IST)
+    submittedAt: timestamp
+    workSummary: string
+    photoURL: string
 ```
 
 ---
 
-## Default Accounts
+## Cost
 
-| Role | Username | Password |
-|------|----------|----------|
-| Election Commission Admin | `admin` | `Admin@123` |
-| Demo Voter (Science Faculty) | `voter1` | `Admin@123` |
-
-> **OTP in Dev Mode:** Since `DEV_MODE = true` in config, the OTP is displayed on-screen instead of being sent via email. You can copy it directly.
-
----
-
-## Features
-
-### Voter
-- Secure login with two-factor authentication (password + OTP)
-- View active election ballot for their constituency
-- Cast exactly one vote (enforced at DB level with transactions)
-- View election results after polls close
-- Vote confirmation page
-
-### Election Commission Admin
-- Dashboard with live KPIs (voters, votes cast, turnout %)
-- Create and manage elections (draft → active → closed)
-- Manage constituencies per election
-- Register and manage voter accounts
-- Register candidates with photo upload
-- Full audit log of all system events
-
----
-
-## Directory Structure
-
-```
-New_Gungun/
-├── config/
-│   ├── config.php          ← App & DB configuration
-│   └── database.php        ← PDO singleton
-├── models/
-│   ├── UserModel.php
-│   ├── VoterModel.php
-│   ├── ElectionModel.php
-│   ├── ConstituencyModel.php
-│   ├── CandidateModel.php
-│   ├── VoteModel.php
-│   ├── OtpModel.php
-│   └── AuditModel.php
-├── includes/
-│   ├── auth.php            ← Session & auth helpers
-│   ├── header.php          ← Shared navbar/head
-│   └── footer.php          ← Shared footer
-├── admin/
-│   ├── index.php           ← Admin dashboard
-│   ├── elections.php       ← Election CRUD
-│   ├── constituencies.php  ← Constituency CRUD
-│   ├── voters.php          ← Voter management
-│   ├── candidates.php      ← Candidate management
-│   └── audit_log.php       ← Audit trail viewer
-├── assets/
-│   ├── css/style.css
-│   └── js/main.js
-├── uploads/candidates/     ← Candidate photos
-├── index.php               ← Entry point (redirect)
-├── login.php               ← Login page
-├── verify_otp.php          ← OTP verification
-├── ballot.php              ← Voting ballot
-├── submit_vote.php         ← Vote processing
-├── confirmation.php        ← Vote confirmation
-├── results.php             ← Election results
-├── logout.php
-├── setup.php               ← One-time DB setup wizard
-├── database.sql            ← Full DB schema + seed data
-└── .htaccess               ← Security rules
-```
-
----
-
-## Database Schema
-
-| Table | Purpose |
-|-------|---------|
-| `users` | All accounts (admin, voter) |
-| `elections` | Election events |
-| `constituencies` | Constituencies per election |
-| `voters` | Voter-specific data & constituency assignment |
-| `candidates` | Candidates per election + constituency |
-| `votes` | Vote records (voter_hash for ballot secrecy) |
-| `otp_tokens` | OTP storage with expiry |
-| `audit_log` | Immutable event log |
-
----
-
-## Security Features
-
-- **bcrypt** password hashing (cost factor 12)
-- **SHA-256 voter hash** in votes table (ballot secrecy)
-- **CSRF tokens** on all vote submission forms
-- **Two-factor auth** (password + time-limited OTP)
-- **Database transactions** for atomic vote recording (prevents race conditions)
-- **Session regeneration** after login
-- **Session timeout** (30 minutes of inactivity)
-- **Prepared statements** everywhere (SQL injection prevention)
-- **Role-based access control** (ec_admin / constituency_admin / voter)
-- **Audit log** for all system events
-
----
-
-## Production Notes
-
-1. Set `DEV_MODE = false` in `config/config.php` and configure PHPMailer for real OTP delivery
-2. Enable HTTPS and uncomment HSTS in `.htaccess`
-3. Delete or password-protect `setup.php` after first run
-4. Set appropriate file permissions on `uploads/` directory
-5. Configure a strong MySQL password in `config/config.php`
+**₹0 forever** on Firebase free (Spark) plan:
+- 50,000 Firestore reads/day
+- 20,000 writes/day
+- 1 GB Storage
+- GitHub Pages: free
