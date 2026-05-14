@@ -1,65 +1,30 @@
 <?php
 require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/config/database.php';
-require_once __DIR__ . '/models/UserModel.php';
-require_once __DIR__ . '/models/VoterModel.php';
-require_once __DIR__ . '/models/OtpModel.php';
-require_once __DIR__ . '/models/AuditModel.php';
+require_once __DIR__ . '/models/EmployeeModel.php';
 
-// Redirect if already logged in
 if (isLoggedIn()) {
-    header('Location: ' . BASE_URL . (isAdmin() ? '/admin/' : '/ballot.php'));
+    header('Location: ' . (isAdmin() ? '/admin/' : '/dashboard.php'));
     exit;
 }
 
-$error   = '';
-$devOtp  = '';
+$error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username'] ?? '');
+    $email    = trim($_POST['email']    ?? '');
     $password = $_POST['password'] ?? '';
 
-    if (empty($username) || empty($password)) {
-        $error = 'Please enter both username and password.';
+    if (empty($email) || empty($password)) {
+        $error = 'Please enter your email and password.';
     } else {
-        $user = UserModel::findByUsername($username);
+        $emp = EmployeeModel::findByEmail($email);
 
-        if ($user && $user['is_active'] && password_verify($password, $user['password_hash'])) {
-            $role = $user['role'];
-
-            // Admins skip OTP
-            if ($role === 'ec_admin' || $role === 'constituency_admin') {
-                session_regenerate_id(true);
-                $_SESSION['user_id']    = $user['user_id'];
-                $_SESSION['username']   = $user['username'];
-                $_SESSION['full_name']  = $user['full_name'];
-                $_SESSION['role']       = $role;
-                $_SESSION['last_active'] = time();
-                AuditModel::log($user['user_id'], 'ADMIN_LOGIN', 'Role: ' . $role);
-                header('Location: ' . BASE_URL . '/admin/');
-                exit;
-            }
-
-            // Voter → OTP
-            $otp = OtpModel::generate((int) $user['user_id']);
-            $_SESSION['pending_user_id']  = $user['user_id'];
-            $_SESSION['pending_username'] = $user['username'];
-            $_SESSION['pending_name']     = $user['full_name'];
-            $_SESSION['otp_attempts']     = 0;
-            AuditModel::log($user['user_id'], 'LOGIN_OTP_SENT', 'Voter login attempt');
-
-            if (DEV_MODE) {
-                $devOtp = $otp;  // Show on screen in dev mode
-            }
-            // TODO: send email/SMS via PHPMailer in production
-
-            if (empty($devOtp)) {
-                header('Location: ' . BASE_URL . '/verify_otp.php');
-                exit;
-            }
+        if ($emp && $emp['is_active'] && password_verify($password, $emp['password_hash'])) {
+            loginEmployee($emp);
+            header('Location: ' . (isAdmin() ? '/admin/' : '/dashboard.php'));
+            exit;
         } else {
-            $error = 'Invalid credentials or account is inactive.';
-            AuditModel::log(null, 'LOGIN_FAILED', 'Username: ' . htmlspecialchars($username));
+            $error = 'Invalid email or password, or your account is inactive.';
         }
     }
 }
@@ -72,69 +37,84 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <title>Login – <?= APP_NAME ?></title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body class="auth-wrapper">
-<div class="auth-card card p-4 p-md-5">
-  <div class="text-center mb-4">
-    <div class="auth-logo mb-2"><i class="bi bi-shield-lock-fill"></i></div>
-    <h2 class="fw-bold mb-0"><?= APP_NAME ?></h2>
-    <p class="text-muted small mt-1">Sanskriti University, Mathura</p>
-  </div>
 
-  <?php if ($error): ?>
-    <div class="alert alert-danger py-2"><i class="bi bi-exclamation-circle me-1"></i><?= htmlspecialchars($error) ?></div>
-  <?php endif; ?>
-  <?php if (isset($_GET['timeout'])): ?>
-    <div class="alert alert-warning py-2"><i class="bi bi-clock me-1"></i>Your session expired. Please login again.</div>
-  <?php endif; ?>
-  <?php if (isset($_GET['denied'])): ?>
-    <div class="alert alert-danger py-2"><i class="bi bi-ban me-1"></i>Access denied. Insufficient permissions.</div>
-  <?php endif; ?>
+<div class="auth-card card shadow-lg">
+  <div class="card-body p-4 p-md-5">
 
-  <?php if ($devOtp): ?>
-    <div class="alert alert-info py-2">
-      <strong><i class="bi bi-info-circle me-1"></i>DEV MODE OTP:</strong>
-      <span class="fs-4 fw-bold ms-2 font-monospace"><?= htmlspecialchars($devOtp) ?></span>
-      <a href="<?= BASE_URL ?>/verify_otp.php" class="btn btn-sm btn-outline-primary ms-3">Continue →</a>
+    <div class="text-center mb-4">
+      <div class="auth-logo mb-3">
+        <i class="bi bi-clock-history"></i>
+      </div>
+      <h2 class="fw-bold mb-1"><?= APP_NAME ?></h2>
+      <p class="text-muted small">Sign in to continue</p>
     </div>
-  <?php endif; ?>
 
-  <form method="POST" action="">
-    <div class="mb-3">
-      <label class="form-label fw-semibold">Username / Voter ID</label>
-      <div class="input-group">
-        <span class="input-group-text"><i class="bi bi-person"></i></span>
-        <input type="text" name="username" class="form-control" required
-               value="<?= htmlspecialchars($_POST['username'] ?? '') ?>"
-               placeholder="Enter username" autocomplete="username">
+    <?php if ($error): ?>
+      <div class="alert alert-danger py-2 mb-3">
+        <i class="bi bi-exclamation-circle me-1"></i><?= h($error) ?>
+      </div>
+    <?php endif; ?>
+
+    <?php if (isset($_GET['logout'])): ?>
+      <div class="alert alert-success py-2 mb-3">
+        <i class="bi bi-check-circle me-1"></i>Logged out successfully.
+      </div>
+    <?php endif; ?>
+
+    <form method="POST" action="" novalidate>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Work Email</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+          <input type="email" name="email" class="form-control" required
+                 value="<?= h($_POST['email'] ?? '') ?>"
+                 placeholder="you@shorthill.ai" autocomplete="email">
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label fw-semibold">Password</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-lock"></i></span>
+          <input type="password" name="password" id="pwdField" class="form-control"
+                 required placeholder="Password" autocomplete="current-password">
+          <button type="button" class="btn btn-outline-secondary toggle-pwd" data-target="pwdField">
+            <i class="bi bi-eye"></i>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
+        <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+      </button>
+    </form>
+
+    <hr class="my-4">
+    <div class="demo-creds p-3 rounded">
+      <p class="fw-semibold small mb-2 text-muted">Demo credentials:</p>
+      <div class="d-flex flex-column gap-1 small font-monospace">
+        <span><strong>Admin:</strong> admin@shorthill.ai</span>
+        <span><strong>Employee:</strong> rahul@shorthill.ai</span>
+        <span><strong>Password:</strong> Admin@123 / Emp@1234</span>
       </div>
     </div>
-    <div class="mb-4">
-      <label class="form-label fw-semibold">Password</label>
-      <div class="input-group">
-        <span class="input-group-text"><i class="bi bi-lock"></i></span>
-        <input type="password" name="password" id="passwordField" class="form-control"
-               required placeholder="Enter password" autocomplete="current-password">
-        <button type="button" class="btn btn-outline-secondary"
-                onclick="let f=document.getElementById('passwordField');f.type=f.type==='password'?'text':'password'">
-          <i class="bi bi-eye"></i>
-        </button>
-      </div>
-    </div>
-    <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
-      <i class="bi bi-box-arrow-in-right me-2"></i>Login
-    </button>
-  </form>
 
-  <hr class="my-4">
-  <div class="text-center text-muted small">
-    <i class="bi bi-shield-check text-success me-1"></i>Secured with HTTPS &amp; two-factor authentication
-  </div>
-  <div class="text-center mt-2">
-    <small class="text-muted">Demo: admin / voter1 &mdash; Password: <code>Admin@123</code></small>
   </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.querySelectorAll('.toggle-pwd').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const f = document.getElementById(btn.dataset.target);
+    const icon = btn.querySelector('i');
+    f.type = f.type === 'password' ? 'text' : 'password';
+    icon.className = f.type === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';
+  });
+});
+</script>
 </body>
 </html>

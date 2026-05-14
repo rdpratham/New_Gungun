@@ -1,54 +1,39 @@
 <?php
-// -------------------------------------------------------
-// Application Configuration
-// Auto-detects Railway environment or falls back to local
-// -------------------------------------------------------
-define('APP_NAME',    'Online Voting System');
+// ── App ──────────────────────────────────────────────────────────────────────
+define('APP_NAME',    'Shorthills AI Attendance');
 define('APP_VERSION', '1.0.0');
 
-// BASE_URL — Railway sets RAILWAY_PUBLIC_DOMAIN automatically
-if (getenv('RAILWAY_PUBLIC_DOMAIN')) {
-    define('BASE_URL', 'https://' . getenv('RAILWAY_PUBLIC_DOMAIN'));
-} else {
-    define('BASE_URL', 'http://localhost:8080');  // local dev
-}
+// ── Timezone ─────────────────────────────────────────────────────────────────
+define('APP_TIMEZONE', 'Asia/Kolkata');
+date_default_timezone_set(APP_TIMEZONE);
 
-// ── Database Driver ──
-// 'mysql'  → for Railway (MySQL plugin) or InfinityFree
-// 'sqlite' → for local testing (no server needed)
-if (getenv('MYSQL_URL') || getenv('DB_HOST')) {
+// ── Session ──────────────────────────────────────────────────────────────────
+define('SESSION_LIFETIME', 28800);   // 8 hours
+define('SESSION_NAME',     'shai_attend');
+
+// ── Attendance rules ─────────────────────────────────────────────────────────
+define('DEFAULT_SHIFT_START',   '09:00');
+define('DEFAULT_SHIFT_END',     '18:00');
+define('LATE_GRACE_MINUTES',    15);    // minutes after shift_start before "Late"
+define('HALF_DAY_HOURS',        4.0);  // work_hours below this → Half-Day
+define('FULL_DAY_HOURS',        8.0);
+
+// ── Database ─────────────────────────────────────────────────────────────────
+// Auto-detects Railway MySQL or falls back to local SQLite
+if (getenv('MYSQL_URL') || getenv('MYSQLHOST')) {
     define('DB_DRIVER', 'mysql');
+    define('DB_HOST',   getenv('MYSQLHOST')     ?: 'localhost');
+    define('DB_PORT',   (int)(getenv('MYSQLPORT') ?: 3306));
+    define('DB_NAME',   getenv('MYSQLDATABASE') ?: 'attendance');
+    define('DB_USER',   getenv('MYSQLUSER')     ?: 'root');
+    define('DB_PASS',   getenv('MYSQLPASSWORD') ?: '');
+    define('DB_PATH',   '');
 } else {
     define('DB_DRIVER', 'sqlite');
+    define('DB_PATH',   __DIR__ . '/../database/attendance.db');
+    define('DB_HOST',   '');
+    define('DB_PORT',   3306);
+    define('DB_NAME',   '');
+    define('DB_USER',   '');
+    define('DB_PASS',   '');
 }
-
-// MySQL — Railway injects these automatically via MySQL plugin
-define('DB_HOST', getenv('MYSQLHOST')     ?: getenv('DB_HOST') ?: 'localhost');
-define('DB_NAME', getenv('MYSQLDATABASE') ?: getenv('DB_NAME') ?: 'online_voting');
-define('DB_USER', getenv('MYSQLUSER')     ?: getenv('DB_USER') ?: 'root');
-define('DB_PASS', getenv('MYSQLPASSWORD') ?: getenv('DB_PASS') ?: '');
-define('DB_PORT', (int)(getenv('MYSQLPORT') ?: getenv('DB_PORT') ?: 3306));
-
-// SQLite path (local only)
-define('DB_PATH', __DIR__ . '/../database/voting.db');
-
-// Session
-define('SESSION_TIMEOUT', 1800);
-
-// OTP
-define('OTP_EXPIRY',      600);
-define('OTP_MAX_ATTEMPTS', 5);
-
-// Uploads
-define('UPLOAD_DIR', __DIR__ . '/../uploads/candidates/');
-define('UPLOAD_URL', BASE_URL . '/uploads/candidates/');
-define('MAX_FILE_SIZE', 2 * 1024 * 1024);
-
-// Dev mode — shows OTP on screen instead of sending email
-define('DEV_MODE', true);
-define('SMTP_HOST', getenv('SMTP_HOST') ?: 'smtp.gmail.com');
-define('SMTP_PORT', 587);
-define('SMTP_USER', getenv('SMTP_USER') ?: '');
-define('SMTP_PASS', getenv('SMTP_PASS') ?: '');
-define('FROM_EMAIL', 'noreply@voting.local');
-define('FROM_NAME',  APP_NAME);

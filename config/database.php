@@ -30,94 +30,93 @@ class Database {
         return self::$instance;
     }
 
-    // Auto-init for SQLite (local dev only)
     private static function initSQLite(PDO $pdo): void {
-        $exists = $pdo->query("SELECT name FROM sqlite_master WHERE type='table' AND name='users'")->fetch();
+        $exists = $pdo->query("SELECT name FROM sqlite_master WHERE type='table' AND name='employees'")->fetch();
         if ($exists) return;
 
         $pdo->exec("
-        CREATE TABLE users (
-            user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL,
-            full_name TEXT NOT NULL, email TEXT NOT NULL UNIQUE,
-            mobile TEXT NOT NULL,
-            role TEXT NOT NULL DEFAULT 'voter' CHECK(role IN ('ec_admin','constituency_admin','voter')),
-            is_active INTEGER NOT NULL DEFAULT 1,
-            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+        CREATE TABLE employees (
+            employee_id   INTEGER PRIMARY KEY AUTOINCREMENT,
+            employee_code TEXT    NOT NULL UNIQUE,
+            full_name     TEXT    NOT NULL,
+            email         TEXT    NOT NULL UNIQUE,
+            password_hash TEXT    NOT NULL,
+            department    TEXT    NOT NULL,
+            designation   TEXT    NOT NULL,
+            mobile        TEXT,
+            join_date     TEXT    NOT NULL DEFAULT (date('now')),
+            role          TEXT    NOT NULL DEFAULT 'employee'
+                                  CHECK(role IN ('admin','hr','employee')),
+            shift_start   TEXT    NOT NULL DEFAULT '09:00',
+            shift_end     TEXT    NOT NULL DEFAULT '18:00',
+            is_active     INTEGER NOT NULL DEFAULT 1,
+            created_at    TEXT    NOT NULL DEFAULT (datetime('now'))
         );
-        CREATE TABLE elections (
-            election_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT NOT NULL, description TEXT,
-            start_time TEXT NOT NULL, end_time TEXT NOT NULL,
-            status TEXT NOT NULL DEFAULT 'draft' CHECK(status IN ('draft','active','closed')),
-            created_by INTEGER NOT NULL REFERENCES users(user_id),
-            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+
+        CREATE TABLE attendance (
+            attendance_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            employee_id   INTEGER NOT NULL REFERENCES employees(employee_id) ON DELETE CASCADE,
+            date          TEXT    NOT NULL DEFAULT (date('now')),
+            check_in      TEXT,
+            check_out     TEXT,
+            status        TEXT    NOT NULL DEFAULT 'present'
+                                  CHECK(status IN ('present','absent','late','half_day','on_leave','holiday')),
+            work_hours    REAL    NOT NULL DEFAULT 0,
+            notes         TEXT,
+            created_at    TEXT    NOT NULL DEFAULT (datetime('now')),
+            UNIQUE(employee_id, date)
         );
-        CREATE TABLE constituencies (
-            constituency_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            election_id INTEGER NOT NULL REFERENCES elections(election_id) ON DELETE CASCADE,
-            managed_by INTEGER REFERENCES users(user_id) ON DELETE SET NULL
+
+        CREATE TABLE leaves (
+            leave_id      INTEGER PRIMARY KEY AUTOINCREMENT,
+            employee_id   INTEGER NOT NULL REFERENCES employees(employee_id) ON DELETE CASCADE,
+            leave_type    TEXT    NOT NULL CHECK(leave_type IN ('sick','casual','earned','unpaid')),
+            start_date    TEXT    NOT NULL,
+            end_date      TEXT    NOT NULL,
+            days_count    INTEGER NOT NULL DEFAULT 1,
+            reason        TEXT    NOT NULL,
+            status        TEXT    NOT NULL DEFAULT 'pending'
+                                  CHECK(status IN ('pending','approved','rejected')),
+            reviewed_by   INTEGER REFERENCES employees(employee_id),
+            reviewer_note TEXT,
+            reviewed_at   TEXT,
+            created_at    TEXT    NOT NULL DEFAULT (datetime('now'))
         );
-        CREATE TABLE voters (
-            voter_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL UNIQUE REFERENCES users(user_id) ON DELETE CASCADE,
-            voter_card_no TEXT NOT NULL UNIQUE,
-            constituency_id INTEGER NOT NULL REFERENCES constituencies(constituency_id) ON DELETE CASCADE,
-            has_voted INTEGER NOT NULL DEFAULT 0
-        );
-        CREATE TABLE candidates (
-            candidate_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL, party TEXT, bio TEXT, photo TEXT,
-            constituency_id INTEGER NOT NULL REFERENCES constituencies(constituency_id) ON DELETE CASCADE,
-            election_id INTEGER NOT NULL REFERENCES elections(election_id) ON DELETE CASCADE,
-            created_at TEXT NOT NULL DEFAULT (datetime('now'))
-        );
-        CREATE TABLE votes (
-            vote_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            voter_hash TEXT NOT NULL,
-            candidate_id INTEGER NOT NULL REFERENCES candidates(candidate_id) ON DELETE CASCADE,
-            election_id INTEGER NOT NULL REFERENCES elections(election_id) ON DELETE CASCADE,
-            voted_at TEXT NOT NULL DEFAULT (datetime('now')),
-            UNIQUE(voter_hash, election_id)
-        );
-        CREATE TABLE audit_log (
-            log_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER, action TEXT NOT NULL, details TEXT,
-            ip_address TEXT NOT NULL,
-            created_at TEXT NOT NULL DEFAULT (datetime('now'))
-        );
-        CREATE TABLE otp_tokens (
-            otp_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-            otp_hash TEXT NOT NULL, expires_at TEXT NOT NULL,
-            used INTEGER NOT NULL DEFAULT 0,
-            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+
+        CREATE TABLE holidays (
+            holiday_id    INTEGER PRIMARY KEY AUTOINCREMENT,
+            holiday_date  TEXT    NOT NULL UNIQUE,
+            name          TEXT    NOT NULL,
+            created_at    TEXT    NOT NULL DEFAULT (datetime('now'))
         );
         ");
 
-        $hash = password_hash('Admin@123', PASSWORD_BCRYPT, ['cost' => 12]);
+        // Seed admin + demo employees
+        $adminHash = password_hash('Admin@123', PASSWORD_BCRYPT, ['cost' => 12]);
+        $empHash   = password_hash('Emp@1234',  PASSWORD_BCRYPT, ['cost' => 12]);
+
         $pdo->exec("
-        INSERT INTO users (username,password_hash,full_name,email,mobile,role)
-          VALUES ('admin','{$hash}','Election Commission Admin','admin@voting.local','9999999999','ec_admin');
-        INSERT INTO elections (title,description,start_time,end_time,status,created_by)
-          VALUES ('Student Council Election 2026','Annual election 2025-26.',
-                  datetime('now'), datetime('now','+7 days'),'active',1);
-        INSERT INTO constituencies (name,election_id) VALUES ('Science Faculty',1),('Arts Faculty',1),('Commerce Faculty',1);
-        INSERT INTO candidates (name,party,bio,constituency_id,election_id) VALUES
-          ('Ravi Sharma','Progress Party','Innovation champion.',1,1),
-          ('Priya Mehta','Unity Alliance','Student welfare advocate.',1,1),
-          ('Amit Verma','Independent','Digital campus enthusiast.',1,1),
-          ('Sunita Rao','Progress Party','Cultural committee head.',2,1),
-          ('Deepak Joshi','Unity Alliance','Drama and debate champion.',2,1),
-          ('Kavya Nair','Progress Party','Finance club president.',3,1),
-          ('Rohit Gupta','Independent','Entrepreneurship cell founder.',3,1);
-        INSERT INTO users (username,password_hash,full_name,email,mobile,role)
-          VALUES ('voter1','{$hash}','Demo Voter','voter1@voting.local','8888888888','voter');
-        INSERT INTO voters (user_id,voter_card_no,constituency_id) VALUES (2,'VOTE2026001',1);
+        INSERT INTO employees
+            (employee_code, full_name, email, password_hash, department, designation, mobile, role)
+        VALUES
+            ('EMP001','Admin User',     'admin@shorthill.ai', '{$adminHash}',
+             'Management',  'HR Manager',      '9999999999', 'admin'),
+            ('EMP002','Rahul Sharma',   'rahul@shorthill.ai', '{$empHash}',
+             'Engineering', 'Software Engineer','9876543210', 'employee'),
+            ('EMP003','Priya Mehta',    'priya@shorthill.ai', '{$empHash}',
+             'Engineering', 'Frontend Developer','9876543211','employee'),
+            ('EMP004','Amit Verma',     'amit@shorthill.ai',  '{$empHash}',
+             'Design',      'UI/UX Designer',  '9876543212', 'employee'),
+            ('EMP005','Sunita Rao',     'sunita@shorthill.ai','{$empHash}',
+             'Marketing',   'Marketing Lead',  '9876543213', 'employee');
+
+        INSERT INTO holidays (holiday_date, name) VALUES
+            ('2026-01-26','Republic Day'),
+            ('2026-08-15','Independence Day'),
+            ('2026-10-02','Gandhi Jayanti');
         ");
     }
 
     private function __construct() {}
-    private function __clone() {}
+    private function __clone()   {}
 }

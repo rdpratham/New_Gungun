@@ -1,157 +1,171 @@
-/* Online Voting System – Custom Styles */
+/* ── Shorthills AI Attendance – Custom Styles ── */
 :root {
-  --ovs-primary: #1a56db;
-  --ovs-success: #057a55;
-  --ovs-warning: #c27803;
+  --shai-primary:   #0d6efd;
+  --shai-dark:      #1a1f36;
+  --shai-success:   #198754;
+  --shai-warning:   #ffc107;
+  --shai-danger:    #dc3545;
+  --shai-info:      #0dcaf0;
+  --shai-bg:        #f4f6fb;
+  --shai-card-bg:   #ffffff;
+  --shai-border:    #e2e8f0;
+  --shai-text-mute: #64748b;
 }
 
+/* ── Base ── */
 body {
-  background-color: #f0f4f8;
+  background-color: var(--shai-bg);
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: #1e293b;
 }
 
-/* ── Auth pages ── */
+/* ── Navbar ── */
+.navbar {
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.brand-badge {
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.navbar-dark .navbar-nav .nav-link {
+  color: rgba(255,255,255,.75);
+  padding: 0.45rem 0.85rem;
+  border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
+}
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link.active {
+  background: rgba(255,255,255,.1);
+  color: #fff;
+}
+.avatar-sm {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+/* ── Auth page ── */
 .auth-wrapper {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1a56db 0%, #0e7490 100%);
-  padding: 1.5rem;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, var(--shai-dark) 0%, #0f3460 60%, #16213e 100%);
 }
-
 .auth-card {
   width: 100%;
-  max-width: 420px;
+  max-width: 440px;
   border: none;
-  border-radius: 1rem;
-  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+  border-radius: 1.25rem;
+  box-shadow: 0 25px 60px rgba(0,0,0,.35);
 }
-
 .auth-logo {
-  font-size: 3rem;
-  color: var(--ovs-primary);
+  font-size: 3.5rem;
+  background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.demo-creds {
+  background: #f8fafc;
+  border: 1px dashed var(--shai-border);
 }
 
-/* ── KPI Cards ── */
+/* ── Cards / KPI ── */
+.card {
+  border: 1px solid var(--shai-border);
+  border-radius: 0.875rem;
+}
+.card-header {
+  border-radius: 0.875rem 0.875rem 0 0 !important;
+  background: #fff;
+  font-size: 0.95rem;
+}
 .kpi-card {
-  border: none;
-  border-radius: .75rem;
-  transition: transform .2s;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: default;
 }
-.kpi-card:hover { transform: translateY(-4px); }
-.kpi-icon {
-  font-size: 2.5rem;
-  opacity: .85;
-}
-
-/* ── Candidate ballot cards ── */
-.candidate-card {
-  border: 2px solid transparent;
-  border-radius: .75rem;
+a .kpi-card {
   cursor: pointer;
-  transition: border-color .2s, box-shadow .2s, transform .15s;
 }
-.candidate-card:hover {
-  border-color: var(--ovs-primary);
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(26,86,219,.15);
-}
-.candidate-card.selected {
-  border-color: var(--ovs-primary);
-  background: #eff6ff;
-  box-shadow: 0 6px 20px rgba(26,86,219,.2);
-}
-.candidate-photo {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 3px solid #e5e7eb;
-}
-.candidate-photo-placeholder {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: #dbeafe;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  color: var(--ovs-primary);
-  border: 3px solid #e5e7eb;
+.kpi-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(13,110,253,.12) !important;
 }
 
-/* ── OTP input ── */
-.otp-input {
-  letter-spacing: .5rem;
-  font-size: 1.6rem;
-  text-align: center;
-  font-weight: 700;
-}
-
-/* ── Tables ── */
-.table th {
-  background-color: #f8fafc;
-  font-weight: 600;
-  font-size: .85rem;
-  text-transform: uppercase;
-  letter-spacing: .04em;
-  color: #6b7280;
-}
-
-/* ── Results bar ── */
-.result-bar-wrap {
-  background: #e5e7eb;
-  border-radius: 999px;
-  overflow: hidden;
-  height: 22px;
-}
-.result-bar {
-  height: 100%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #1a56db, #3b82f6);
-  transition: width .8s ease;
-  display: flex;
-  align-items: center;
-  padding-left: .5rem;
+/* ── Welcome card ── */
+.welcome-card {
+  background: linear-gradient(135deg, #1a1f36 0%, #0f3460 100%);
   color: #fff;
-  font-size: .75rem;
-  font-weight: 700;
-  min-width: 2.5rem;
+  border: none !important;
 }
-.winner-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: .3rem;
-  background: #fef3c7;
-  color: #92400e;
-  border: 1.5px solid #fbbf24;
-  border-radius: 999px;
-  padding: .15rem .65rem;
-  font-size: .8rem;
-  font-weight: 700;
-}
+.welcome-card .text-muted { color: rgba(255,255,255,.65) !important; }
+.welcome-card h4 { color: #fff; }
 
-/* ── Confirmation page ── */
-.success-icon {
-  font-size: 5rem;
-  color: var(--ovs-success);
-  animation: pop .4s cubic-bezier(.175,.885,.32,1.275);
+/* ── Table ── */
+.table thead th {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  color: var(--shai-text-mute);
+  border-top: none;
 }
-@keyframes pop {
-  0% { transform: scale(0); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+.table-hover tbody tr:hover { background: #f0f5ff; }
+.table > :not(caption) > * > * { padding: 0.75rem 1rem; }
+
+/* ── Footer ── */
+.footer-bar {
+  background: #f8fafc;
+  border-top: 1px solid var(--shai-border);
 }
 
-/* ── OTP timer ── */
-#otp-timer { font-variant-numeric: tabular-nums; }
+/* ── Badges ── */
+.badge { font-size: 0.75rem; font-weight: 500; }
 
-/* ── Navbar tweak ── */
-.navbar-brand { letter-spacing: .5px; }
+/* ── Buttons ── */
+.btn { border-radius: 0.5rem; }
+.btn-primary  { background: var(--shai-primary); }
+.btn-lg       { font-size: 0.95rem; }
 
-/* ── Responsive ── */
-@media (max-width: 576px) {
-  .candidate-photo,
-  .candidate-photo-placeholder { width: 60px; height: 60px; }
+/* ── Progress bars ── */
+.progress { border-radius: 999px; background: #e9ecef; }
+.progress-bar { border-radius: 999px; }
+
+/* ── Responsive table wrapper ── */
+.table-responsive { border-radius: 0 0 0.875rem 0.875rem; }
+
+/* ── Forms ── */
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--shai-primary);
+  box-shadow: 0 0 0 .2rem rgba(13,110,253,.15);
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+/* ── Print ── */
+@media print {
+  .navbar, .footer-bar, button, .btn, form { display: none !important; }
+  body { background: white; }
+  .card { box-shadow: none !important; border: 1px solid #ddd !important; }
 }
