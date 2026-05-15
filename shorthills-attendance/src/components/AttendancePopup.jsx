@@ -185,7 +185,7 @@ export default function AttendancePopup({ user, employeeData, attendanceType = '
       <div className="card max-w-2xl w-full my-4 animate-slide-up">
 
         {/* Header */}
-        <div className="flex items-center gap-3 mb-6 pb-5 border-b border-white/8">
+        <div className="flex items-center gap-3 mb-6 pb-5 border-b border-white/10">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold shadow-lg"
                style={{ background: 'linear-gradient(135deg, #7c3aed, #3b82f6)' }}>
             G

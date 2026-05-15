@@ -176,7 +176,7 @@ export default function EmployeeAttendance({ user }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Sign In */}
               <div className={`card border-2 transition-all duration-300 ${
-                signInRecord ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-white/8'
+                signInRecord ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-white/10'
               }`}>
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
@@ -215,7 +215,7 @@ export default function EmployeeAttendance({ user }) {
               {/* Sign Out */}
               <div className={`card border-2 transition-all duration-300 ${
                 signOutRecord ? 'border-emerald-500/30 bg-emerald-500/5' :
-                signInRecord ? 'border-white/8' : 'border-white/5 opacity-60'
+                signInRecord ? 'border-white/10' : 'border-white/5 opacity-60'
               }`}>
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
