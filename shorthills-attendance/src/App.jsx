@@ -14,11 +14,18 @@ const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL;
 
 function LoadingScreen() {
   return (
-    <div className="min-h-screen bg-navy-900 flex items-center justify-center">
+    <div className="min-h-screen bg-navy-950 flex items-center justify-center">
       <div className="text-center animate-fade-in">
-        <div className="text-4xl font-bold text-electric-500 mb-2">Attendance-US</div>
-        <div className="text-gray-400 mb-6">Attendance System</div>
-        <div className="w-8 h-8 border-4 border-electric-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5 text-white text-2xl font-bold animate-glow"
+             style={{ background: 'linear-gradient(135deg, #7c3aed, #3b82f6)' }}>
+          G
+        </div>
+        <div className="text-2xl font-bold bg-clip-text text-transparent mb-1"
+             style={{ backgroundImage: 'linear-gradient(135deg, #a78bfa, #60a5fa)' }}>
+          Garvix AI
+        </div>
+        <div className="text-gray-500 text-sm mb-6">Attendance System</div>
+        <div className="w-6 h-6 border-2 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
       </div>
     </div>
   );
@@ -65,7 +72,6 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        {/* Root redirect */}
         <Route
           path="/"
           element={
@@ -74,12 +80,8 @@ export default function App() {
               : <Navigate to="/login" replace />
           }
         />
-
-        {/* Admin routes */}
         <Route path="/admin/login" element={
-          user && role === 'admin'
-            ? <Navigate to="/admin/dashboard" replace />
-            : <AdminLogin />
+          user && role === 'admin' ? <Navigate to="/admin/dashboard" replace /> : <AdminLogin />
         } />
         <Route path="/admin/dashboard" element={
           <ProtectedRoute user={user} role={role} requiredRole="admin">
@@ -91,20 +93,14 @@ export default function App() {
             <AddEmployee />
           </ProtectedRoute>
         } />
-
-        {/* Employee routes */}
         <Route path="/login" element={
-          user && role === 'employee'
-            ? <Navigate to="/attendance" replace />
-            : <EmployeeLogin />
+          user && role === 'employee' ? <Navigate to="/attendance" replace /> : <EmployeeLogin />
         } />
         <Route path="/attendance" element={
           <ProtectedRoute user={user} role={role} requiredRole="employee">
             <EmployeeAttendance user={user} />
           </ProtectedRoute>
         } />
-
-        {/* Catch all */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

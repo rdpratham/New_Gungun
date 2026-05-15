@@ -11,33 +11,39 @@ export default function Navbar({ user, role }) {
   };
 
   return (
-    <nav className="bg-navy-800 border-b border-navy-700 sticky top-0 z-40">
+    <nav className="sticky top-0 z-40 border-b border-white/5"
+         style={{ background: 'rgba(7, 13, 26, 0.85)', backdropFilter: 'blur(20px)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-electric-500 rounded-lg flex items-center justify-center font-bold text-white text-sm">
-              S
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-white text-base shadow-lg animate-glow"
+                 style={{ background: 'linear-gradient(135deg, #7c3aed, #3b82f6)' }}>
+              G
             </div>
             <div>
-              <span className="text-white font-bold text-lg leading-none">Attendance-US</span>
-              <div className="text-electric-400 text-xs">Attendance System</div>
+              <span className="font-bold text-lg leading-none bg-clip-text text-transparent"
+                    style={{ backgroundImage: 'linear-gradient(135deg, #a78bfa, #60a5fa)' }}>
+                Garvix AI
+              </span>
+              <div className="text-gray-500 text-xs mt-0.5">Attendance System</div>
             </div>
           </div>
 
-          {/* Right side */}
-          <div className="flex items-center gap-4">
+          {/* Right */}
+          <div className="flex items-center gap-3">
             {user && (
               <>
                 <div className="hidden sm:block text-right">
                   <div className="text-sm text-white font-medium truncate max-w-[180px]">
                     {user.displayName || user.email}
                   </div>
-                  <div className="text-xs text-electric-400 capitalize">{role}</div>
+                  <div className="text-xs text-violet-400 capitalize">{role}</div>
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 bg-navy-700 hover:bg-red-600 text-gray-300 hover:text-white
+                  className="flex items-center gap-2 bg-white/5 hover:bg-red-500/20 border border-white/10
+                             hover:border-red-500/40 text-gray-300 hover:text-red-300
                              px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

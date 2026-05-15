@@ -40,15 +40,17 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-navy-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-navy-950 flex items-center justify-center p-4">
       <div className="w-full max-w-md animate-fade-in">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-electric-500 rounded-2xl flex items-center justify-center mx-auto mb-4 text-white text-3xl font-bold shadow-lg shadow-electric-500/30">
-            S
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 text-white text-3xl font-bold animate-glow"
+               style={{ background: 'linear-gradient(135deg, #7c3aed, #3b82f6)' }}>
+            G
           </div>
-          <h1 className="text-3xl font-bold text-white">Attendance-US</h1>
-          <p className="text-gray-400 mt-1">Admin Portal</p>
+          <h1 className="text-3xl font-bold bg-clip-text text-transparent"
+              style={{ backgroundImage: 'linear-gradient(135deg, #a78bfa, #60a5fa)' }}>Garvix AI</h1>
+          <p className="text-gray-500 mt-1">Admin Portal</p>
         </div>
 
         <div className="card">
@@ -61,7 +63,7 @@ export default function AdminLogin() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@shorthillsai.com"
+                placeholder="admin@garvix.ai"
                 required
                 autoComplete="email"
                 className="input-field"
@@ -130,7 +132,7 @@ export default function AdminLogin() {
         </div>
 
         <p className="text-center text-gray-600 text-xs mt-6">
-          Made with ♥ by Pratham Jain &nbsp;|&nbsp; Attendance-US © {new Date().getFullYear()}
+          Made with ♥ by Pratham Jain &nbsp;|&nbsp; Garvix AI © {new Date().getFullYear()}
         </p>
       </div>
     </div>

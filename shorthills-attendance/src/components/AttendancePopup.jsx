@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import WebcamCapture from './WebcamCapture';
 import { getDescriptorFromDataURL, isFaceMatch } from '../utils/faceRecognition';
+import { getCurrentLocation, isWithinOffice } from '../utils/locationVerification';
 
 const MIN_SUMMARY_LENGTH = 50;
 
@@ -29,85 +30,118 @@ function compressImage(dataURL) {
   });
 }
 
-// faceStatus: null | 'verifying' | 'verified' | 'mismatch' | 'no_face'
-export default function AttendancePopup({ user, employeeData, onSubmitted }) {
-  const [capturedPhoto, setCapturedPhoto] = useState(null);
-  const [workSummary, setWorkSummary] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
-  const [faceStatus, setFaceStatus] = useState(null);
+// locationStatus: 'checking' | 'ok' | 'outside' | 'error'
+// faceStatus:     'waiting'  | 'verifying' | 'ok' | 'mismatch' | 'noface'
+export default function AttendancePopup({ user, employeeData, attendanceType = 'signin', onSubmitted }) {
+  const [locationStatus, setLocationStatus] = useState('checking');
+  const [locationInfo, setLocationInfo]     = useState(null);
+  const [locationError, setLocationError]   = useState('');
+
+  const [capturedPhoto, setCapturedPhoto]   = useState(null);
+  const [faceStatus, setFaceStatus]         = useState('waiting');
+  const [faceError, setFaceError]           = useState('');
+
+  const [workSummary, setWorkSummary]       = useState('');
+  const [submitting, setSubmitting]         = useState(false);
+  const [error, setError]                   = useState('');
+  const [success, setSuccess]               = useState(false);
+
+  const isSignIn = attendanceType === 'signin';
+
+  // Auto-check location on mount
+  useEffect(() => {
+    let cancelled = false;
+    getCurrentLocation()
+      .then((coords) => {
+        if (cancelled) return;
+        const result = isWithinOffice(coords.lat, coords.lng);
+        setLocationInfo({ ...coords, ...result });
+        setLocationStatus(result.withinRange ? 'ok' : 'outside');
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        setLocationError(err.message);
+        setLocationStatus('error');
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  const retryLocation = () => {
+    setLocationStatus('checking');
+    setLocationError('');
+    setLocationInfo(null);
+    getCurrentLocation()
+      .then((coords) => {
+        const result = isWithinOffice(coords.lat, coords.lng);
+        setLocationInfo({ ...coords, ...result });
+        setLocationStatus(result.withinRange ? 'ok' : 'outside');
+      })
+      .catch((err) => {
+        setLocationError(err.message);
+        setLocationStatus('error');
+      });
+  };
 
   const handleCapture = async (photoData) => {
+    if (!photoData) { setCapturedPhoto(null); setFaceStatus('waiting'); return; }
     setCapturedPhoto(photoData);
-    setError('');
     setFaceStatus('verifying');
+    setFaceError('');
 
     try {
       const capturedDescriptor = await getDescriptorFromDataURL(photoData.dataURL);
-
       if (!capturedDescriptor) {
-        setFaceStatus('no_face');
+        setFaceStatus('noface');
         setCapturedPhoto(null);
-        setError('No face detected. Please look directly at the camera and retake.');
+        setFaceError('No face detected. Look directly at the camera with good lighting and retake.');
         return;
       }
-
-      const storedDescriptor = employeeData?.faceDescriptor;
-      if (!storedDescriptor?.length) {
-        // No stored descriptor — allow submission without face check (legacy employees)
-        setFaceStatus('verified');
+      const stored = employeeData?.faceDescriptor;
+      if (!stored?.length) {
+        setFaceStatus('ok');
         return;
       }
-
-      const matched = isFaceMatch(storedDescriptor, capturedDescriptor);
-      if (matched) {
-        setFaceStatus('verified');
+      if (isFaceMatch(stored, capturedDescriptor)) {
+        setFaceStatus('ok');
       } else {
         setFaceStatus('mismatch');
         setCapturedPhoto(null);
-        setError('Face does not match our records. Please ensure good lighting and look directly at the camera, then retake.');
+        setFaceError('Face does not match our records. Ensure good lighting, face the camera directly, and retake.');
       }
     } catch {
-      // On error, allow submission to avoid blocking employees
-      setFaceStatus('verified');
+      setFaceStatus('ok'); // allow on error to avoid blocking
     }
   };
 
   const handleSubmit = async () => {
     setError('');
-
-    if (!capturedPhoto?.dataURL) {
-      setError('Please capture your photo first.');
-      return;
-    }
-    if (faceStatus !== 'verified') {
-      setError('Face verification required before submitting.');
-      return;
-    }
+    if (locationStatus !== 'ok') { setError('Location verification required.'); return; }
+    if (!capturedPhoto?.dataURL || faceStatus !== 'ok') { setError('Face verification required.'); return; }
     if (workSummary.trim().length < MIN_SUMMARY_LENGTH) {
-      setError(`Work summary must be at least ${MIN_SUMMARY_LENGTH} characters. Currently: ${workSummary.trim().length}`);
+      setError(`Please write at least ${MIN_SUMMARY_LENGTH} characters. (${workSummary.trim().length} so far)`);
       return;
     }
 
     setSubmitting(true);
     try {
-      const dateStr = getISTDateString();
-      const employeeId = employeeData?.employeeId || user.uid;
       const compressedPhoto = await compressImage(capturedPhoto.dataURL);
-
       await addDoc(collection(db, 'attendance'), {
-        employeeId,
-        employeeUid: user.uid,
+        employeeId:   employeeData?.employeeId || user.uid,
+        employeeUid:  user.uid,
         employeeName: employeeData?.name || user.displayName || user.email,
-        date: dateStr,
-        submittedAt: serverTimestamp(),
-        workSummary: workSummary.trim(),
-        photoBase64: compressedPhoto,
+        date:         getISTDateString(),
+        type:         attendanceType,
+        submittedAt:  serverTimestamp(),
+        workSummary:  workSummary.trim(),
+        photoBase64:  compressedPhoto,
+        location: {
+          lat: locationInfo?.lat,
+          lng: locationInfo?.lng,
+          accuracy: locationInfo?.accuracy,
+        },
       });
-
       setSuccess(true);
-      setTimeout(() => onSubmitted?.(), 2000);
+      setTimeout(() => onSubmitted?.(), 2500);
     } catch (err) {
       console.error(err);
       setError('Submission failed. Please check your connection and try again.');
@@ -116,93 +150,185 @@ export default function AttendancePopup({ user, employeeData, onSubmitted }) {
     }
   };
 
+  const canSubmit = locationStatus === 'ok' && faceStatus === 'ok' &&
+                    workSummary.trim().length >= MIN_SUMMARY_LENGTH && !submitting;
+
   if (success) {
     return (
-      <div className="fixed inset-0 bg-navy-900/95 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div className="card max-w-md w-full text-center animate-fade-in">
-          <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-10 h-10 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+           style={{ background: 'rgba(4, 8, 15, 0.97)', backdropFilter: 'blur(20px)' }}>
+        <div className="card max-w-sm w-full text-center animate-slide-up">
+          <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-5"
+               style={{ background: 'linear-gradient(135deg, #7c3aed22, #3b82f622)', border: '2px solid #34d39940' }}>
+            <svg className="w-10 h-10 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">Attendance Submitted!</h2>
-          <p className="text-gray-400">Your attendance for today has been recorded successfully.</p>
-          <p className="text-electric-400 text-sm mt-2">Great work today! See you tomorrow.</p>
+          <h2 className="text-2xl font-bold text-white mb-2">
+            {isSignIn ? 'Signed In!' : 'Signed Out!'}
+          </h2>
+          <p className="text-gray-400 text-sm">
+            {isSignIn ? 'Have a great shift!' : 'See you tomorrow — great work!'}
+          </p>
+          <div className="mt-4 status-badge-green mx-auto w-fit">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span>
+            Attendance recorded
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="fixed inset-0 bg-navy-900/97 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-      <div className="card max-w-2xl w-full my-4 animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto"
+         style={{ background: 'rgba(4, 8, 15, 0.97)', backdropFilter: 'blur(20px)' }}>
+      <div className="card max-w-2xl w-full my-4 animate-slide-up">
+
         {/* Header */}
-        <div className="flex items-center gap-3 mb-6 pb-4 border-b border-navy-700">
-          <div className="w-10 h-10 bg-electric-500 rounded-lg flex items-center justify-center text-white font-bold">S</div>
-          <div>
-            <h2 className="text-xl font-bold text-white">Daily Attendance Check-In</h2>
-            <p className="text-sm text-electric-400">
-              Shift: 5:00 PM – 1:30 AM IST &nbsp;|&nbsp; {new Intl.DateTimeFormat('en-IN', {
+        <div className="flex items-center gap-3 mb-6 pb-5 border-b border-white/8">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold shadow-lg"
+               style={{ background: 'linear-gradient(135deg, #7c3aed, #3b82f6)' }}>
+            G
+          </div>
+          <div className="flex-1">
+            <h2 className="text-lg font-bold text-white">
+              {isSignIn ? 'Sign In — Start of Shift' : 'Sign Out — End of Shift'}
+            </h2>
+            <p className="text-xs text-gray-500">
+              {new Intl.DateTimeFormat('en-IN', {
                 timeZone: 'Asia/Kolkata', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
               }).format(new Date())}
             </p>
           </div>
+          <div className={isSignIn ? 'status-badge-violet' : 'status-badge-yellow'}>
+            {isSignIn ? '5:00 PM' : '1:45 AM'}
+          </div>
         </div>
 
-        <div className="space-y-6">
-          <div>
-            <WebcamCapture onCapture={handleCapture} onError={(msg) => setError(msg)} />
+        {/* Verification Steps */}
+        <div className="space-y-2 mb-6">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Verification</p>
 
-            {/* Face verification status */}
-            {faceStatus === 'verifying' && (
-              <div className="flex items-center gap-2 mt-3 text-yellow-400 text-sm">
-                <div className="w-4 h-4 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin flex-shrink-0"></div>
-                Verifying your face, please wait...
-              </div>
-            )}
-            {faceStatus === 'verified' && (
-              <div className="flex items-center gap-2 mt-3 text-green-400 text-sm">
-                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          {/* Step 1 — Location */}
+          <div className={`verify-step ${
+            locationStatus === 'checking' ? 'verify-step-checking' :
+            locationStatus === 'ok'       ? 'verify-step-ok' :
+            'verify-step-fail'
+          }`}>
+            <div className="flex-shrink-0">
+              {locationStatus === 'checking' && (
+                <div className="w-4 h-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
+              )}
+              {locationStatus === 'ok' && (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
-                Face verified — you may submit attendance
-              </div>
-            )}
-            {(faceStatus === 'mismatch' || faceStatus === 'no_face') && (
-              <div className="flex items-center gap-2 mt-3 text-red-400 text-sm">
-                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12" />
+              )}
+              {(locationStatus === 'outside' || locationStatus === 'error') && (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
-                {faceStatus === 'mismatch' ? 'Face mismatch — please retake' : 'No face detected — please retake'}
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="font-medium text-sm">
+                {locationStatus === 'checking' && 'Checking your location...'}
+                {locationStatus === 'ok' && `Location verified — ${locationInfo?.office?.name}`}
+                {locationStatus === 'outside' && `Outside office (${locationInfo?.distance}m away)`}
+                {locationStatus === 'error' && 'Location check failed'}
               </div>
+              {locationStatus === 'ok' && locationInfo?.accuracy && (
+                <div className="text-xs opacity-70 mt-0.5">GPS accuracy: ±{locationInfo.accuracy}m</div>
+              )}
+              {(locationStatus === 'outside') && (
+                <div className="text-xs opacity-80 mt-0.5">
+                  You must be at Ambience Mall, Gurugram to submit attendance.
+                </div>
+              )}
+              {locationStatus === 'error' && (
+                <div className="text-xs opacity-80 mt-0.5">{locationError}</div>
+              )}
+            </div>
+            {(locationStatus === 'outside' || locationStatus === 'error') && (
+              <button onClick={retryLocation}
+                      className="flex-shrink-0 text-xs bg-white/10 hover:bg-white/20 px-3 py-1 rounded-lg transition-colors">
+                Retry
+              </button>
             )}
           </div>
 
+          {/* Step 2 — Face */}
+          <div className={`verify-step ${
+            faceStatus === 'waiting'    ? 'verify-step-pending' :
+            faceStatus === 'verifying'  ? 'verify-step-checking' :
+            faceStatus === 'ok'         ? 'verify-step-ok' :
+            'verify-step-fail'
+          }`}>
+            <div className="flex-shrink-0">
+              {faceStatus === 'waiting' && (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M10 12a2 2 0 100-4 2 2 0 000 4zm6 0a2 2 0 100-4 2 2 0 000 4zM4 20c0-4 3.6-7 8-7s8 3 8 7" />
+                </svg>
+              )}
+              {faceStatus === 'verifying' && (
+                <div className="w-4 h-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
+              )}
+              {faceStatus === 'ok' && (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              )}
+              {(faceStatus === 'mismatch' || faceStatus === 'noface') && (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="font-medium text-sm">
+                {faceStatus === 'waiting'   && 'Face scan — capture photo below'}
+                {faceStatus === 'verifying' && 'Verifying your face...'}
+                {faceStatus === 'ok'        && 'Face verified'}
+                {faceStatus === 'mismatch'  && 'Face mismatch — retake photo'}
+                {faceStatus === 'noface'    && 'No face detected — retake photo'}
+              </div>
+              {faceError && <div className="text-xs opacity-80 mt-0.5">{faceError}</div>}
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-5">
+          {/* Camera */}
+          <WebcamCapture onCapture={handleCapture} onError={(msg) => setFaceError(msg)} />
+
+          {/* Work summary */}
           <div>
             <label className="label">
-              What did you work on today?
+              {isSignIn ? 'What are you planning to work on today?' : 'What did you work on today?'}
               <span className="text-red-400 ml-1">*</span>
             </label>
             <textarea
               value={workSummary}
               onChange={(e) => { setWorkSummary(e.target.value); setError(''); }}
-              rows={5}
-              placeholder="e.g. Completed API integration, fixed 3 bugs in dashboard, attended standup, reviewed 2 PRs..."
+              rows={4}
+              placeholder={isSignIn
+                ? 'e.g. Planning to work on API integration, code review for PR #42, standup at 5:30 PM...'
+                : 'e.g. Completed API integration, fixed 3 bugs in dashboard, attended standup, reviewed 2 PRs...'}
               className="input-field resize-none"
               maxLength={2000}
             />
-            <div className="flex justify-between mt-1">
-              <span className={`text-xs ${workSummary.trim().length < MIN_SUMMARY_LENGTH ? 'text-red-400' : 'text-green-400'}`}>
-                {workSummary.trim().length}/{MIN_SUMMARY_LENGTH} minimum characters
+            <div className="flex justify-between mt-1.5">
+              <span className={`text-xs ${workSummary.trim().length < MIN_SUMMARY_LENGTH ? 'text-red-400' : 'text-emerald-400'}`}>
+                {workSummary.trim().length}/{MIN_SUMMARY_LENGTH} min chars
               </span>
-              <span className="text-xs text-gray-500">{workSummary.length}/2000</span>
+              <span className="text-xs text-gray-600">{workSummary.length}/2000</span>
             </div>
           </div>
 
           {error && (
-            <div className="flex items-start gap-2 bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-3">
-              <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-start gap-2 bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3">
+              <svg className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -212,13 +338,13 @@ export default function AttendancePopup({ user, employeeData, onSubmitted }) {
 
           <button
             onClick={handleSubmit}
-            disabled={submitting || !capturedPhoto || faceStatus !== 'verified'}
+            disabled={!canSubmit}
             className="btn-primary w-full flex items-center justify-center gap-2 py-3 text-base"
           >
             {submitting ? (
               <>
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                Submitting Attendance...
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                Submitting...
               </>
             ) : (
               <>
@@ -226,12 +352,12 @@ export default function AttendancePopup({ user, employeeData, onSubmitted }) {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Submit Attendance
+                {isSignIn ? 'Submit Sign In' : 'Submit Sign Out'}
               </>
             )}
           </button>
 
-          <p className="text-center text-xs text-gray-500">
+          <p className="text-center text-xs text-gray-600">
             This popup cannot be dismissed without submitting attendance.
           </p>
         </div>

@@ -74,7 +74,7 @@ export default function AdminDashboard({ user }) {
   });
 
   return (
-    <div className="min-h-screen bg-navy-900">
+    <div className="min-h-screen bg-navy-950">
       <Navbar user={user} role="admin" />
 
       {/* Photo lightbox */}
@@ -243,7 +243,7 @@ export default function AdminDashboard({ user }) {
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap items-center gap-2 mb-1">
                           <span className="font-semibold text-white">{rec.employeeName}</span>
-                          <span className="text-xs text-green-400 bg-green-400/10 px-2 py-0.5 rounded-full">Submitted</span>
+                          {rec.type === 'signin' ? <span className="text-xs text-violet-400 bg-violet-400/10 border border-violet-500/20 px-2 py-0.5 rounded-full">Sign In</span> : rec.type === 'signout' ? <span className="text-xs text-emerald-400 bg-emerald-400/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">Sign Out</span> : <span className="text-xs text-green-400 bg-green-400/10 px-2 py-0.5 rounded-full">Submitted</span>}
                           <span className="text-xs text-gray-500">ID: {rec.employeeId}</span>
                         </div>
                         <div className="text-sm text-electric-400 mb-2">
@@ -260,7 +260,7 @@ export default function AdminDashboard({ user }) {
         )}
 
         <p className="text-center text-gray-700 text-xs mt-10 pb-4">
-          Made with ♥ by Pratham Jain &nbsp;|&nbsp; Attendance-US © {new Date().getFullYear()}
+          Made with ♥ by Pratham Jain &nbsp;|&nbsp; Garvix AI © {new Date().getFullYear()}
         </p>
       </div>
     </div>

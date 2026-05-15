@@ -39,15 +39,17 @@ export default function EmployeeLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-navy-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-navy-950 flex items-center justify-center p-4">
       <div className="w-full max-w-md animate-fade-in">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-electric-500 rounded-2xl flex items-center justify-center mx-auto mb-4 text-white text-3xl font-bold shadow-lg shadow-electric-500/30">
-            S
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 text-white text-3xl font-bold animate-glow"
+               style={{ background: 'linear-gradient(135deg, #7c3aed, #3b82f6)' }}>
+            G
           </div>
-          <h1 className="text-3xl font-bold text-white">Attendance-US</h1>
-          <p className="text-gray-400 mt-1">Employee Attendance Portal</p>
+          <h1 className="text-3xl font-bold bg-clip-text text-transparent"
+              style={{ backgroundImage: 'linear-gradient(135deg, #a78bfa, #60a5fa)' }}>Garvix AI</h1>
+          <p className="text-gray-500 mt-1">Employee Attendance Portal</p>
         </div>
 
         <div className="card">
@@ -60,7 +62,7 @@ export default function EmployeeLogin() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="yourname@shorthillsai.com"
+                placeholder="yourname@garvix.ai"
                 required
                 autoComplete="email"
                 className="input-field"
@@ -120,13 +122,15 @@ export default function EmployeeLogin() {
             </button>
           </form>
 
-          <div className="mt-4 bg-electric-500/10 border border-electric-500/20 rounded-lg px-4 py-3">
-            <p className="text-electric-400 text-sm text-center">
-              🕐 Shift Hours: <span className="font-semibold">5:00 PM – 1:30 AM IST</span>
+          <div className="mt-4 rounded-xl px-4 py-3 border border-violet-500/20 bg-violet-500/10">
+            <p className="text-violet-300 text-sm text-center font-medium">
+              Shift: 5:00 PM – 1:30 AM IST
             </p>
-            <p className="text-gray-500 text-xs text-center mt-1">
-              Attendance check-in opens at 1:45 AM IST
-            </p>
+            <div className="flex justify-center gap-4 mt-1.5 text-xs text-gray-500">
+              <span>Sign In: 4:30 – 5:30 PM</span>
+              <span>·</span>
+              <span>Sign Out: 1:30 – 2:30 AM</span>
+            </div>
           </div>
 
           <div className="mt-4 pt-4 border-t border-navy-700 text-center">
@@ -137,7 +141,7 @@ export default function EmployeeLogin() {
         </div>
 
         <p className="text-center text-gray-600 text-xs mt-6">
-          Made with ♥ by Pratham Jain &nbsp;|&nbsp; Attendance-US © {new Date().getFullYear()}
+          Made with ♥ by Pratham Jain &nbsp;|&nbsp; Garvix AI © {new Date().getFullYear()}
         </p>
       </div>
     </div>

@@ -212,7 +212,7 @@ export default function AddEmployee() {
         </div>
 
         <p className="text-center text-gray-700 text-xs mt-6">
-          Made with ♥ by Pratham Jain &nbsp;|&nbsp; Attendance-US © {new Date().getFullYear()}
+          Made with ♥ by Pratham Jain &nbsp;|&nbsp; Garvix AI © {new Date().getFullYear()}
         </p>
       </div>
     </div>
