@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { createUserWithEmailAndPassword, deleteUser } from 'firebase/auth';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
-import { auth, db } from '../firebase';
+import { auth, secondaryAuth, db } from '../firebase';
 import Navbar from '../components/Navbar';
 
 export default function AddEmployee() {
@@ -27,7 +27,8 @@ export default function AddEmployee() {
     setLoading(true);
     let newUser = null;
     try {
-      const credential = await createUserWithEmailAndPassword(auth, form.email, form.password);
+      // Use secondary auth so admin session is not replaced by new employee session
+      const credential = await createUserWithEmailAndPassword(secondaryAuth, form.email, form.password);
       newUser = credential.user;
 
       await setDoc(doc(db, 'employees', newUser.uid), {
@@ -37,12 +38,14 @@ export default function AddEmployee() {
         createdAt: serverTimestamp(),
       });
 
+      await secondaryAuth.signOut();
       setSuccess(`Employee account created! Code: ${form.employeeCode} — They must complete profile setup on first login.`);
       setForm({ employeeCode: '', email: '', password: '' });
     } catch (err) {
       if (newUser && err.code !== 'auth/email-already-in-use') {
         try { await deleteUser(newUser); } catch {}
       }
+      await secondaryAuth.signOut();
       const msgs = {
         'auth/email-already-in-use': 'An account with this email already exists.',
         'auth/invalid-email': 'Invalid email address.',

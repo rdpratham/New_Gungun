@@ -14,3 +14,7 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+
+// Secondary app — creates employee accounts without signing out the admin
+const secondaryApp = initializeApp(firebaseConfig, 'secondary');
+export const secondaryAuth = getAuth(secondaryApp);
