@@ -159,7 +159,7 @@ export default function EmployeeAttendance({ user }) {
                 <p className="text-violet-400 text-xs mt-1">ID: {employeeData?.employeeId}</p>
                 <div className="mt-3 inline-flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
                   <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-                  <span className="text-gray-400 text-xs">Shift: 5:00 PM – 1:30 AM IST</span>
+                  <span className="text-gray-400 text-xs">Shift: 5:00 PM – 2:00 AM IST</span>
                 </div>
               </div>
               <div className="text-center">
