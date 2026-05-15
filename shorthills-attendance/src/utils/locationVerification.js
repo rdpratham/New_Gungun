@@ -3,7 +3,7 @@ const OFFICE = {
   lat: 28.5027,
   lng: 77.0929,
   name: 'Ambience Mall, Gurugram',
-  radiusMeters: 350,
+  radiusMeters: 700,
 }
 
 function haversineDistance(lat1, lng1, lat2, lng2) {

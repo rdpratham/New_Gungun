@@ -115,7 +115,8 @@ export default function AttendancePopup({ user, employeeData, attendanceType = '
 
   const handleSubmit = async () => {
     setError('');
-    if (locationStatus !== 'ok') { setError('Location verification required.'); return; }
+    if (locationStatus === 'outside') { setError('You must be at Ambience Mall, Gurugram to submit attendance.'); return; }
+    if (locationStatus === 'checking') { setError('Location check still in progress, please wait.'); return; }
     if (!capturedPhoto?.dataURL || faceStatus !== 'ok') { setError('Face verification required.'); return; }
     if (workSummary.trim().length < MIN_SUMMARY_LENGTH) {
       setError(`Please write at least ${MIN_SUMMARY_LENGTH} characters. (${workSummary.trim().length} so far)`);
@@ -150,7 +151,9 @@ export default function AttendancePopup({ user, employeeData, attendanceType = '
     }
   };
 
-  const canSubmit = locationStatus === 'ok' && faceStatus === 'ok' &&
+  // Allow submission if location is ok OR unavailable (error/no GPS) — only block if confirmed outside
+  const locationOk = locationStatus === 'ok' || locationStatus === 'error';
+  const canSubmit = locationOk && faceStatus === 'ok' &&
                     workSummary.trim().length >= MIN_SUMMARY_LENGTH && !submitting;
 
   if (success) {
@@ -213,6 +216,7 @@ export default function AttendancePopup({ user, employeeData, attendanceType = '
           <div className={`verify-step ${
             locationStatus === 'checking' ? 'verify-step-checking' :
             locationStatus === 'ok'       ? 'verify-step-ok' :
+            locationStatus === 'error'    ? 'verify-step-checking' :
             'verify-step-fail'
           }`}>
             <div className="flex-shrink-0">
@@ -235,7 +239,7 @@ export default function AttendancePopup({ user, employeeData, attendanceType = '
                 {locationStatus === 'checking' && 'Checking your location...'}
                 {locationStatus === 'ok' && `Location verified — ${locationInfo?.office?.name}`}
                 {locationStatus === 'outside' && `Outside office (${locationInfo?.distance}m away)`}
-                {locationStatus === 'error' && 'Location check failed'}
+                {locationStatus === 'error' && 'GPS unavailable — location unverified'}
               </div>
               {locationStatus === 'ok' && locationInfo?.accuracy && (
                 <div className="text-xs opacity-70 mt-0.5">GPS accuracy: ±{locationInfo.accuracy}m</div>
@@ -246,7 +250,7 @@ export default function AttendancePopup({ user, employeeData, attendanceType = '
                 </div>
               )}
               {locationStatus === 'error' && (
-                <div className="text-xs opacity-80 mt-0.5">{locationError}</div>
+                <div className="text-xs opacity-80 mt-0.5">Device GPS not available. Submission is still allowed — admin can verify attendance manually.</div>
               )}
             </div>
             {(locationStatus === 'outside' || locationStatus === 'error') && (
