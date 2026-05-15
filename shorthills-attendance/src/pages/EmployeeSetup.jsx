@@ -123,7 +123,11 @@ export default function EmployeeSetup({ user, onComplete }) {
         {/* Header */}
         <div className="text-center mb-8 animate-fade-in relative">
           <button
-            onClick={() => signOut(auth)}
+            onClick={() => {
+              try { localStorage.clear(); } catch {}
+              try { sessionStorage.clear(); } catch {}
+              signOut(auth).catch(() => {}).finally(() => window.location.replace('/login'));
+            }}
             className="absolute right-0 top-0 flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg transition-all duration-200"
             style={{ background: 'var(--surface-s)', border: '1px solid var(--border)', color: 'var(--text-3)' }}
             onMouseEnter={e => { e.currentTarget.style.color = '#fca5a5'; e.currentTarget.style.borderColor = 'rgba(239,68,68,0.4)'; }}

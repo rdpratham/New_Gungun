@@ -33,10 +33,20 @@ function LoadingScreen() {
   );
 }
 
-// Clears session and redirects to login
+// Hard reset — wipes localStorage + signs out + redirects to login
 function LogoutRoute() {
-  useEffect(() => { signOut(auth); }, []);
-  return <Navigate to="/login" replace />;
+  useEffect(() => {
+    try { localStorage.clear(); } catch {}
+    try { sessionStorage.clear(); } catch {}
+    signOut(auth).catch(() => {}).finally(() => {
+      window.location.replace('/login');
+    });
+  }, []);
+  return (
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#070d1a', color: '#fff', fontSize: 14 }}>
+      Signing out…
+    </div>
+  );
 }
 
 function ProtectedRoute({ user, role, requiredRole, children }) {
