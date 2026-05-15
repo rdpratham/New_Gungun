@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
+import { updatePassword, EmailAuthProvider, reauthenticateWithCredential, signOut } from 'firebase/auth';
 import { db, auth } from '../firebase';
 import WebcamCapture from '../components/WebcamCapture';
 import { getDescriptorFromDataURL } from '../utils/faceRecognition';
@@ -121,7 +121,20 @@ export default function EmployeeSetup({ user, onComplete }) {
       <div className="max-w-lg mx-auto px-4 py-8">
 
         {/* Header */}
-        <div className="text-center mb-8 animate-fade-in">
+        <div className="text-center mb-8 animate-fade-in relative">
+          <button
+            onClick={() => signOut(auth)}
+            className="absolute right-0 top-0 flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg transition-all duration-200"
+            style={{ background: 'var(--surface-s)', border: '1px solid var(--border)', color: 'var(--text-3)' }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#fca5a5'; e.currentTarget.style.borderColor = 'rgba(239,68,68,0.4)'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-3)'; e.currentTarget.style.borderColor = 'var(--border)'; }}
+          >
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            Logout
+          </button>
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 text-white text-xl font-bold"
                style={{ background: 'linear-gradient(135deg, #7c3aed, #3b82f6)' }}>
             G

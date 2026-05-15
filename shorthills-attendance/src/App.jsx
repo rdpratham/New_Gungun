@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from './firebase';
 import { ThemeProvider } from './context/ThemeContext';
@@ -33,6 +33,12 @@ function LoadingScreen() {
   );
 }
 
+// Clears session and redirects to login
+function LogoutRoute() {
+  useEffect(() => { signOut(auth); }, []);
+  return <Navigate to="/login" replace />;
+}
+
 function ProtectedRoute({ user, role, requiredRole, children }) {
   if (!user) return <Navigate to={requiredRole === 'admin' ? '/admin/login' : '/login'} replace />;
   if (role && role !== requiredRole) {
@@ -50,24 +56,32 @@ export default function App() {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        setUser(firebaseUser);
+        // Admin is identified purely by email — never treat admin as employee
         if (firebaseUser.email === ADMIN_EMAIL) {
+          setUser(firebaseUser);
           setRole('admin');
           setProfileComplete(true);
-        } else {
-          try {
-            const empSnap = await getDoc(doc(db, 'employees', firebaseUser.uid));
-            if (empSnap.exists()) {
-              setRole('employee');
-              setProfileComplete(empSnap.data().profileComplete !== false);
-            } else {
-              setRole(null);
-              setProfileComplete(true);
-            }
-          } catch {
+          setLoading(false);
+          return;
+        }
+
+        try {
+          const empSnap = await getDoc(doc(db, 'employees', firebaseUser.uid));
+          if (empSnap.exists()) {
+            setUser(firebaseUser);
+            setRole('employee');
+            setProfileComplete(empSnap.data().profileComplete !== false);
+          } else {
+            // Unknown user — sign them out immediately so they can't linger
+            await signOut(auth);
+            setUser(null);
             setRole(null);
             setProfileComplete(true);
           }
+        } catch {
+          setUser(firebaseUser);
+          setRole(null);
+          setProfileComplete(true);
         }
       } else {
         setUser(null);
@@ -85,18 +99,24 @@ export default function App() {
     <ThemeProvider>
       <Router>
         <Routes>
+          {/* Emergency logout — clears any stuck session */}
+          <Route path="/logout" element={<LogoutRoute />} />
+
           <Route
             path="/"
             element={
               user
                 ? role === 'admin'
                   ? <Navigate to="/admin/dashboard" replace />
-                  : profileComplete
-                  ? <Navigate to="/attendance" replace />
-                  : <Navigate to="/setup" replace />
+                  : role === 'employee'
+                  ? profileComplete
+                    ? <Navigate to="/attendance" replace />
+                    : <Navigate to="/setup" replace />
+                  : <Navigate to="/login" replace />
                 : <Navigate to="/login" replace />
             }
           />
+
           <Route path="/admin/login" element={
             user && role === 'admin' ? <Navigate to="/admin/dashboard" replace /> : <AdminLogin />
           } />
@@ -110,9 +130,12 @@ export default function App() {
               <AddEmployee />
             </ProtectedRoute>
           } />
+
           <Route path="/login" element={
             user && role === 'employee'
-              ? profileComplete ? <Navigate to="/attendance" replace /> : <Navigate to="/setup" replace />
+              ? profileComplete
+                ? <Navigate to="/attendance" replace />
+                : <Navigate to="/setup" replace />
               : <EmployeeLogin />
           } />
           <Route path="/setup" element={
@@ -128,6 +151,7 @@ export default function App() {
               }
             </ProtectedRoute>
           } />
+
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
