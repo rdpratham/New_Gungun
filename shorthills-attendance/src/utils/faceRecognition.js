@@ -41,7 +41,7 @@ export async function getDescriptorFromDataURL(dataURL) {
 }
 
 // Compare two face descriptors — returns true if same person
-export function isFaceMatch(storedDescriptor, newDescriptor, threshold = 0.55) {
+export function isFaceMatch(storedDescriptor, newDescriptor, threshold = 0.65) {
   if (!storedDescriptor?.length || !newDescriptor?.length) return false
   const dist = faceapi.euclideanDistance(
     new Float32Array(storedDescriptor),

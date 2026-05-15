@@ -303,8 +303,32 @@ export default function AttendancePopup({ user, employeeData, attendanceType = '
         </div>
 
         <div className="space-y-5">
-          {/* Camera */}
-          <WebcamCapture onCapture={handleCapture} onError={(msg) => setFaceError(msg)} />
+          {/* Camera + inline face status */}
+          <div>
+            <WebcamCapture onCapture={handleCapture} onError={(msg) => setFaceError(msg)} />
+            {faceStatus === 'verifying' && (
+              <div className="flex items-center gap-2 mt-2 text-amber-400 text-sm bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-2">
+                <div className="w-4 h-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin flex-shrink-0" />
+                Verifying face, please wait...
+              </div>
+            )}
+            {faceStatus === 'ok' && (
+              <div className="flex items-center gap-2 mt-2 text-emerald-400 text-sm bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-4 py-2">
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                Face verified — you can submit
+              </div>
+            )}
+            {(faceStatus === 'mismatch' || faceStatus === 'noface') && (
+              <div className="flex items-start gap-2 mt-2 text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-2">
+                <svg className="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                <span>{faceError || (faceStatus === 'mismatch' ? 'Face does not match — retake photo' : 'No face detected — retake photo')}</span>
+              </div>
+            )}
+          </div>
 
           {/* Work summary */}
           <div>
