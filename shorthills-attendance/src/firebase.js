@@ -1,5 +1,5 @@
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { initializeApp, getApp } from "firebase/app";
+import { getAuth, inMemoryPersistence, setPersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -15,6 +15,9 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
-// Secondary app — creates employee accounts without signing out the admin
-const secondaryApp = initializeApp(firebaseConfig, 'secondary');
-export const secondaryAuth = getAuth(secondaryApp);
+// Secondary app — creates employee accounts without signing out the admin.
+// Uses in-memory persistence so it never saves anything to localStorage.
+let _secondaryApp;
+try { _secondaryApp = getApp('secondary'); } catch { _secondaryApp = initializeApp(firebaseConfig, 'secondary'); }
+export const secondaryAuth = getAuth(_secondaryApp);
+setPersistence(secondaryAuth, inMemoryPersistence);
