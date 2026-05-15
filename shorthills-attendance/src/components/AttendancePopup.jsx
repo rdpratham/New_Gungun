@@ -208,99 +208,49 @@ export default function AttendancePopup({ user, employeeData, attendanceType = '
           </div>
         </div>
 
-        {/* Verification Steps */}
-        <div className="space-y-2 mb-6">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Verification</p>
 
-          {/* Step 1 — Location */}
-          <div className={`verify-step ${
-            locationStatus === 'checking' ? 'verify-step-checking' :
-            locationStatus === 'ok'       ? 'verify-step-ok' :
-            locationStatus === 'error'    ? 'verify-step-checking' :
-            'verify-step-fail'
+        <div className="space-y-5">
+
+          {/* Location banner — always visible */}
+          <div className={`flex items-center gap-3 rounded-xl px-4 py-3 border text-sm font-medium ${
+            locationStatus === 'checking' ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' :
+            locationStatus === 'ok'       ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' :
+            locationStatus === 'outside'  ? 'bg-red-500/10 border-red-500/30 text-red-400' :
+                                            'bg-amber-500/10 border-amber-500/30 text-amber-400'
           }`}>
             <div className="flex-shrink-0">
-              {locationStatus === 'checking' && (
-                <div className="w-4 h-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
-              )}
+              {locationStatus === 'checking' && <div className="w-4 h-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />}
               {locationStatus === 'ok' && (
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               )}
-              {(locationStatus === 'outside' || locationStatus === 'error') && (
+              {locationStatus === 'outside' && (
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              )}
+              {locationStatus === 'error' && (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="font-medium text-sm">
-                {locationStatus === 'checking' && 'Detecting your location…'}
-                {locationStatus === 'ok'       && '✓ You are at the right location'}
-                {locationStatus === 'outside'  && `✗ You are not at the office (${locationInfo?.distance}m away)`}
-                {locationStatus === 'error'    && '⚠ Location unavailable'}
-              </div>
-              {locationStatus === 'ok' && locationInfo?.accuracy && (
-                <div className="text-xs opacity-70 mt-0.5">{locationInfo.office?.name} · GPS ±{locationInfo.accuracy}m</div>
-              )}
-              {locationStatus === 'outside' && (
-                <div className="text-xs opacity-80 mt-0.5">You must be at Ambience Mall, Gurugram to submit attendance.</div>
-              )}
-              {locationStatus === 'error' && (
-                <div className="text-xs opacity-80 mt-0.5">GPS not available on this device. Submission allowed — admin can verify manually.</div>
-              )}
+              {locationStatus === 'checking' && 'Detecting your location…'}
+              {locationStatus === 'ok'       && `✓ You are at the right location — ${locationInfo?.office?.name}`}
+              {locationStatus === 'outside'  && `✗ You are not at the office · ${locationInfo?.distance}m away`}
+              {locationStatus === 'error'    && '⚠ GPS unavailable — location unverified, submission still allowed'}
             </div>
             {(locationStatus === 'outside' || locationStatus === 'error') && (
               <button onClick={retryLocation}
-                      className="flex-shrink-0 text-xs bg-white/10 hover:bg-white/20 px-3 py-1 rounded-lg transition-colors">
+                      className="flex-shrink-0 text-xs bg-white/10 hover:bg-white/20 px-2 py-1 rounded-lg transition-colors">
                 Retry
               </button>
             )}
           </div>
 
-          {/* Step 2 — Face */}
-          <div className={`verify-step ${
-            faceStatus === 'waiting'    ? 'verify-step-pending' :
-            faceStatus === 'verifying'  ? 'verify-step-checking' :
-            faceStatus === 'ok'         ? 'verify-step-ok' :
-            'verify-step-fail'
-          }`}>
-            <div className="flex-shrink-0">
-              {faceStatus === 'waiting' && (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M10 12a2 2 0 100-4 2 2 0 000 4zm6 0a2 2 0 100-4 2 2 0 000 4zM4 20c0-4 3.6-7 8-7s8 3 8 7" />
-                </svg>
-              )}
-              {faceStatus === 'verifying' && (
-                <div className="w-4 h-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
-              )}
-              {faceStatus === 'ok' && (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              )}
-              {(faceStatus === 'mismatch' || faceStatus === 'noface') && (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              )}
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="font-medium text-sm">
-                {faceStatus === 'waiting'   && 'Face scan — capture photo below'}
-                {faceStatus === 'verifying' && 'Verifying your face...'}
-                {faceStatus === 'ok'        && 'Face verified'}
-                {faceStatus === 'mismatch'  && 'Face mismatch — retake photo'}
-                {faceStatus === 'noface'    && 'No face detected — retake photo'}
-              </div>
-              {faceError && <div className="text-xs opacity-80 mt-0.5">{faceError}</div>}
-            </div>
-          </div>
-        </div>
-
-        <div className="space-y-5">
           {/* Camera + inline face status */}
           <div>
             <WebcamCapture onCapture={handleCapture} onError={(msg) => setFaceError(msg)} />
