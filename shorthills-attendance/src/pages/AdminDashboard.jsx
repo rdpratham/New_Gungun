@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import Navbar from '../components/Navbar';
 import EmployeeCard from '../components/EmployeeCard';
+import EditEmployeeModal from '../components/EditEmployeeModal';
 
 function formatIST(ts) {
   if (!ts) return '—';
@@ -25,14 +26,14 @@ function formatDate(dateStr) {
 
 export default function AdminDashboard({ user }) {
   const navigate = useNavigate();
-  const [tab, setTab] = useState('employees'); // 'employees' | 'attendance'
+  const [tab, setTab] = useState('employees');
   const [employees, setEmployees] = useState([]);
   const [attendance, setAttendance] = useState([]);
   const [loadingEmp, setLoadingEmp] = useState(true);
   const [loadingAtt, setLoadingAtt] = useState(false);
   const [expandedPhoto, setExpandedPhoto] = useState(null);
+  const [editingEmployee, setEditingEmployee] = useState(null);
 
-  // Filters
   const [filterDate, setFilterDate] = useState('');
   const [filterName, setFilterName] = useState('');
 
@@ -76,6 +77,22 @@ export default function AdminDashboard({ user }) {
   return (
     <div className="min-h-screen bg-navy-950">
       <Navbar user={user} role="admin" />
+
+      {/* Edit / Manage Employee Modal */}
+      {editingEmployee && (
+        <EditEmployeeModal
+          employee={editingEmployee}
+          onClose={() => setEditingEmployee(null)}
+          onUpdated={(updated) => {
+            setEmployees(prev => prev.map(e => e.id === updated.id ? updated : e));
+            setEditingEmployee(null);
+          }}
+          onDeleted={(id) => {
+            setEmployees(prev => prev.filter(e => e.id !== id));
+            setEditingEmployee(null);
+          }}
+        />
+      )}
 
       {/* Photo lightbox */}
       {expandedPhoto && (
@@ -172,7 +189,7 @@ export default function AdminDashboard({ user }) {
                   <EmployeeCard
                     key={emp.id}
                     employee={emp}
-                    onDeleted={(id) => setEmployees(prev => prev.filter(e => e.id !== id))}
+                    onClick={(e) => setEditingEmployee(e)}
                   />
                 ))}
               </div>
