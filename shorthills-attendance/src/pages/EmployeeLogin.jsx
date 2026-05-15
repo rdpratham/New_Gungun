@@ -130,7 +130,7 @@ export default function EmployeeLogin() {
           </div>
 
           <div className="mt-4 pt-4 border-t border-navy-700 text-center">
-            <a href="/shorthills-attendance/admin/login" className="text-electric-400 hover:text-electric-300 text-sm transition-colors">
+            <a href="/admin/login" className="text-electric-400 hover:text-electric-300 text-sm transition-colors">
               Admin login →
             </a>
           </div>

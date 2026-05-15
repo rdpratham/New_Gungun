@@ -63,7 +63,7 @@ export default function App() {
   if (loading) return <LoadingScreen />;
 
   return (
-    <Router basename="/shorthills-attendance">
+    <Router>
       <Routes>
         {/* Root redirect */}
         <Route

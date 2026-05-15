@@ -123,7 +123,7 @@ export default function AdminLogin() {
           </form>
 
           <div className="mt-6 pt-4 border-t border-navy-700 text-center">
-            <a href="/shorthills-attendance/login" className="text-electric-400 hover:text-electric-300 text-sm transition-colors">
+            <a href="/login" className="text-electric-400 hover:text-electric-300 text-sm transition-colors">
               Employee login →
             </a>
           </div>
