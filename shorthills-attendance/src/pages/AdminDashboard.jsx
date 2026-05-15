@@ -169,7 +169,11 @@ export default function AdminDashboard({ user }) {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {employees.map(emp => (
-                  <EmployeeCard key={emp.id} employee={emp} />
+                  <EmployeeCard
+                    key={emp.id}
+                    employee={emp}
+                    onDeleted={(id) => setEmployees(prev => prev.filter(e => e.id !== id))}
+                  />
                 ))}
               </div>
             )}
