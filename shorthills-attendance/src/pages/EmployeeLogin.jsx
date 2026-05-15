@@ -129,7 +129,7 @@ export default function EmployeeLogin() {
             <div className="flex justify-center gap-4 mt-1.5 text-xs text-gray-500">
               <span>Sign In: 4:30 – 5:30 PM</span>
               <span>·</span>
-              <span>Sign Out: 1:30 – 2:30 AM IST</span>
+              <span>Sign Out: 2:00 AM IST</span>
             </div>
           </div>
 

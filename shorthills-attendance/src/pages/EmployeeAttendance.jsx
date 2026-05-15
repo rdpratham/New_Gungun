@@ -235,7 +235,7 @@ export default function EmployeeAttendance({ user }) {
                     <div>
                       <div className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Sign Out</div>
                       <div className="text-xs text-gray-500">
-                        {signOutRecord ? formatTime(signOutRecord.submittedAt?.toDate?.() || new Date()) : 'Window: 1:30 – 2:30 AM IST'}
+                        {signOutRecord ? formatTime(signOutRecord.submittedAt?.toDate?.() || new Date()) : 'Window: 2:00 AM IST'}
                       </div>
                     </div>
                   </div>
