@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile, deleteUser } from 'firebase/auth';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase';
@@ -34,6 +34,7 @@ export default function AddEmployee() {
     if (form.password.length < 6) { setError('Password must be at least 6 characters.'); return; }
 
     setLoading(true);
+    let newUser = null;
     try {
       // 1. Extract face descriptor for recognition
       const faceDescriptor = await getDescriptorFromDataURL(capturedPhoto.dataURL);
@@ -47,7 +48,8 @@ export default function AddEmployee() {
       const compressedPhoto = await compressDataURL(capturedPhoto.dataURL);
 
       // 3. Create Firebase Auth user
-      const { user: newUser } = await createUserWithEmailAndPassword(auth, form.email, form.password);
+      const credential = await createUserWithEmailAndPassword(auth, form.email, form.password);
+      newUser = credential.user;
 
       // 4. Update display name
       await updateProfile(newUser, { displayName: form.name });
@@ -69,10 +71,16 @@ export default function AddEmployee() {
       await auth.signOut();
       navigate('/admin/login');
     } catch (err) {
+      // If auth user was created but Firestore write failed, delete the orphaned auth user
+      // so admin can retry without "email already exists" error
+      if (newUser && err.code !== 'auth/email-already-in-use') {
+        try { await deleteUser(newUser); } catch {}
+      }
       const msgs = {
         'auth/email-already-in-use': 'An account with this email already exists.',
         'auth/invalid-email': 'Invalid email address.',
         'auth/weak-password': 'Password must be at least 6 characters.',
+        'permission-denied': 'Firestore permission denied. Please update your Firestore security rules.',
       };
       setError(msgs[err.code] || `Error: ${err.message}`);
     } finally {
