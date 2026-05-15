@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { auth } from '../firebase';
 
 const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL;
@@ -123,9 +123,9 @@ export default function AdminLogin() {
           </form>
 
           <div className="mt-6 pt-4 border-t border-navy-700 text-center">
-            <a href="/login" className="text-electric-400 hover:text-electric-300 text-sm transition-colors">
+            <Link to="/login" className="text-electric-400 hover:text-electric-300 text-sm transition-colors">
               Employee login →
-            </a>
+            </Link>
           </div>
         </div>
 

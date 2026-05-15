@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { auth, db } from '../firebase';
 
 export default function EmployeeLogin() {
@@ -130,9 +130,9 @@ export default function EmployeeLogin() {
           </div>
 
           <div className="mt-4 pt-4 border-t border-navy-700 text-center">
-            <a href="/admin/login" className="text-electric-400 hover:text-electric-300 text-sm transition-colors">
+            <Link to="/admin/login" className="text-electric-400 hover:text-electric-300 text-sm transition-colors">
               Admin login →
-            </a>
+            </Link>
           </div>
         </div>
 
