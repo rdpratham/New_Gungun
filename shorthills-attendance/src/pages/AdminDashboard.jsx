@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import { collection, getDocs, query, orderBy, where } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, where, doc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import Navbar from '../components/Navbar';
 import EmployeeCard from '../components/EmployeeCard';
 import EditEmployeeModal from '../components/EditEmployeeModal';
+import ProfileModal from '../components/ProfileModal';
 
 function formatIST(ts) {
   if (!ts) return '—';
@@ -33,6 +34,8 @@ export default function AdminDashboard({ user }) {
   const [loadingAtt, setLoadingAtt] = useState(false);
   const [expandedPhoto, setExpandedPhoto] = useState(null);
   const [editingEmployee, setEditingEmployee] = useState(null);
+  const [showProfile, setShowProfile]         = useState(false);
+  const [adminProfile, setAdminProfile]       = useState(null);
 
   const [filterDate, setFilterDate] = useState('');
   const [filterName, setFilterName] = useState('');
@@ -62,6 +65,15 @@ export default function AdminDashboard({ user }) {
   }, []);
 
   useEffect(() => { fetchEmployees(); }, [fetchEmployees]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const snap = await getDoc(doc(db, 'adminProfile', user.uid));
+        if (snap.exists()) setAdminProfile(snap.data());
+      } catch {}
+    })();
+  }, [user.uid]);
   useEffect(() => {
     if (tab === 'attendance' && attendance.length === 0) fetchAttendance();
   }, [tab, attendance.length, fetchAttendance]);
@@ -76,7 +88,10 @@ export default function AdminDashboard({ user }) {
 
   return (
     <div className="min-h-screen bg-navy-950">
-      <Navbar user={user} role="admin" />
+      <Navbar user={user} role="admin" avatarSrc={adminProfile?.photoURL} onViewProfile={() => setShowProfile(true)} />
+      {showProfile && (
+        <ProfileModal user={user} role="admin" onClose={() => setShowProfile(false)} />
+      )}
 
       {/* Edit / Manage Employee Modal */}
       {editingEmployee && (
@@ -281,7 +296,7 @@ export default function AdminDashboard({ user }) {
         )}
 
         <p className="text-center text-gray-700 text-xs mt-10 pb-4">
-          Made with ♥ by Pratham Jain &nbsp;|&nbsp; Garvix AI © {new Date().getFullYear()}
+          Made with ♥ by Pratham Jain &nbsp;|&nbsp; Garvix Ops © {new Date().getFullYear()}
         </p>
       </div>
     </div>

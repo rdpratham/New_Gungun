@@ -24,9 +24,9 @@ function LoadingScreen() {
         </div>
         <div className="text-2xl font-bold bg-clip-text text-transparent mb-1"
              style={{ backgroundImage: 'linear-gradient(135deg, #a78bfa, #60a5fa)' }}>
-          Garvix AI
+          Garvix Ops
         </div>
-        <div className="text-sm mb-6" style={{ color: 'var(--text-3)' }}>Attendance System</div>
+        <div className="text-sm mb-6" style={{ color: 'var(--text-3)' }}>Daily Task Buddy</div>
         <div className="w-6 h-6 border-2 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
       </div>
     </div>

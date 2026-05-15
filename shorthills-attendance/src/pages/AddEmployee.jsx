@@ -170,7 +170,7 @@ export default function AddEmployee() {
         </div>
 
         <p className="text-center text-xs mt-6" style={{ color: 'var(--text-3)' }}>
-          Made with ♥ by Pratham Jain &nbsp;|&nbsp; Garvix AI © {new Date().getFullYear()}
+          Made with ♥ by Pratham Jain &nbsp;|&nbsp; Garvix Ops © {new Date().getFullYear()}
         </p>
       </div>
     </div>

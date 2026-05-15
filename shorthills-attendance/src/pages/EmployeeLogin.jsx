@@ -48,7 +48,7 @@ export default function EmployeeLogin() {
             G
           </div>
           <h1 className="text-3xl font-bold bg-clip-text text-transparent"
-              style={{ backgroundImage: 'linear-gradient(135deg, #a78bfa, #60a5fa)' }}>Garvix AI</h1>
+              style={{ backgroundImage: 'linear-gradient(135deg, #a78bfa, #60a5fa)' }}>Garvix Ops</h1>
           <p className="text-gray-500 mt-1">Employee Attendance Portal</p>
         </div>
 
@@ -141,7 +141,7 @@ export default function EmployeeLogin() {
         </div>
 
         <p className="text-center text-gray-600 text-xs mt-6">
-          Made with ♥ by Pratham Jain &nbsp;|&nbsp; Garvix AI © {new Date().getFullYear()}
+          Made with ♥ by Pratham Jain &nbsp;|&nbsp; Garvix Ops © {new Date().getFullYear()}
         </p>
       </div>
     </div>

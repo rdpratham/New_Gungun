@@ -3,6 +3,7 @@ import { doc, getDoc, collection, query, where, orderBy, getDocs, limit } from '
 import { db } from '../firebase';
 import Navbar from '../components/Navbar';
 import AttendancePopup from '../components/AttendancePopup';
+import ProfileModal from '../components/ProfileModal';
 
 function getISTDateString() {
   return new Intl.DateTimeFormat('en-CA', {
@@ -44,6 +45,7 @@ export default function EmployeeAttendance({ user }) {
   const [showPopup, setShowPopup]         = useState(false);
   const [popupType, setPopupType]         = useState('signin');
   const [currentTime, setCurrentTime]     = useState(new Date());
+  const [showProfile, setShowProfile]     = useState(false);
 
   const fetchData = useCallback(async () => {
     if (!user) return;
@@ -119,7 +121,14 @@ export default function EmployeeAttendance({ user }) {
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
-      <Navbar user={user} role="employee" />
+      <Navbar user={user} role="employee" avatarSrc={employeeData?.photoURL} onViewProfile={() => setShowProfile(true)} />
+      {showProfile && (
+        <ProfileModal
+          user={user} role="employee" employeeData={employeeData}
+          onClose={() => setShowProfile(false)}
+          onUpdated={(updated) => setEmployeeData(updated)}
+        />
+      )}
 
       {showPopup && (
         <AttendancePopup
@@ -316,7 +325,7 @@ export default function EmployeeAttendance({ user }) {
             </div>
 
             <p className="text-center text-gray-700 text-xs pb-4">
-              Made with ♥ by Pratham Jain &nbsp;|&nbsp; Garvix AI © {new Date().getFullYear()}
+              Made with ♥ by Pratham Jain &nbsp;|&nbsp; Garvix Ops © {new Date().getFullYear()}
             </p>
           </div>
         )}

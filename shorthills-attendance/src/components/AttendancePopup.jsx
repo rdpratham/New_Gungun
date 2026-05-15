@@ -236,21 +236,19 @@ export default function AttendancePopup({ user, employeeData, attendanceType = '
             </div>
             <div className="flex-1 min-w-0">
               <div className="font-medium text-sm">
-                {locationStatus === 'checking' && 'Checking your location...'}
-                {locationStatus === 'ok' && `Location verified — ${locationInfo?.office?.name}`}
-                {locationStatus === 'outside' && `Outside office (${locationInfo?.distance}m away)`}
-                {locationStatus === 'error' && 'GPS unavailable — location unverified'}
+                {locationStatus === 'checking' && 'Detecting your location…'}
+                {locationStatus === 'ok'       && '✓ You are at the right location'}
+                {locationStatus === 'outside'  && `✗ You are not at the office (${locationInfo?.distance}m away)`}
+                {locationStatus === 'error'    && '⚠ Location unavailable'}
               </div>
               {locationStatus === 'ok' && locationInfo?.accuracy && (
-                <div className="text-xs opacity-70 mt-0.5">GPS accuracy: ±{locationInfo.accuracy}m</div>
+                <div className="text-xs opacity-70 mt-0.5">{locationInfo.office?.name} · GPS ±{locationInfo.accuracy}m</div>
               )}
-              {(locationStatus === 'outside') && (
-                <div className="text-xs opacity-80 mt-0.5">
-                  You must be at Ambience Mall, Gurugram to submit attendance.
-                </div>
+              {locationStatus === 'outside' && (
+                <div className="text-xs opacity-80 mt-0.5">You must be at Ambience Mall, Gurugram to submit attendance.</div>
               )}
               {locationStatus === 'error' && (
-                <div className="text-xs opacity-80 mt-0.5">Device GPS not available. Submission is still allowed — admin can verify attendance manually.</div>
+                <div className="text-xs opacity-80 mt-0.5">GPS not available on this device. Submission allowed — admin can verify manually.</div>
               )}
             </div>
             {(locationStatus === 'outside' || locationStatus === 'error') && (
