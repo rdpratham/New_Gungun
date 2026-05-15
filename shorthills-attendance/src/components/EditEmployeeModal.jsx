@@ -1,24 +1,6 @@
 import { useState } from 'react';
 import { doc, updateDoc, deleteDoc, collection, query, where, getDocs, writeBatch } from 'firebase/firestore';
 import { db } from '../firebase';
-import WebcamCapture from './WebcamCapture';
-import { getDescriptorFromDataURL } from '../utils/faceRecognition';
-
-function compressDataURL(dataURL) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const maxW = 400;
-      const ratio = Math.min(1, maxW / img.width);
-      canvas.width = Math.round(img.width * ratio);
-      canvas.height = Math.round(img.height * ratio);
-      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-      resolve(canvas.toDataURL('image/jpeg', 0.5));
-    };
-    img.src = dataURL;
-  });
-}
 
 export default function EditEmployeeModal({ employee, onClose, onUpdated, onDeleted }) {
   const [form, setForm] = useState({
@@ -27,9 +9,6 @@ export default function EditEmployeeModal({ employee, onClose, onUpdated, onDele
     joiningDate:employee.joiningDate|| '',
     team:       employee.team       || 'Sales Team',
   });
-  const [newPhoto, setNewPhoto]         = useState(null);
-  const [retakingPhoto, setRetakingPhoto] = useState(false);
-  const [faceStatus, setFaceStatus]     = useState(null);
   const [saving, setSaving]             = useState(false);
   const [deleting, setDeleting]         = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -39,26 +18,6 @@ export default function EditEmployeeModal({ employee, onClose, onUpdated, onDele
   const handleChange = (e) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
     setError('');
-  };
-
-  const handleCapture = async (photoData) => {
-    if (!photoData) { setNewPhoto(null); setFaceStatus(null); return; }
-    setFaceStatus('detecting');
-    setError('');
-    try {
-      const descriptor = await getDescriptorFromDataURL(photoData.dataURL);
-      if (!descriptor) {
-        setFaceStatus('noface');
-        setError('No face detected. Please retake with the face clearly visible.');
-        setNewPhoto(null);
-        return;
-      }
-      setNewPhoto({ ...photoData, descriptor });
-      setFaceStatus('ok');
-    } catch {
-      setNewPhoto(photoData);
-      setFaceStatus('ok');
-    }
   };
 
   const handleSave = async () => {
@@ -72,11 +31,6 @@ export default function EditEmployeeModal({ employee, onClose, onUpdated, onDele
         joiningDate: form.joiningDate,
         team:        form.team.trim() || 'Sales Team',
       };
-      if (newPhoto?.descriptor) {
-        const compressed = await compressDataURL(newPhoto.dataURL);
-        updates.photoURL       = compressed;
-        updates.faceDescriptor = newPhoto.descriptor;
-      }
       await updateDoc(doc(db, 'employees', employee.id), updates);
       setSuccess('Employee updated successfully!');
       onUpdated?.({ ...employee, ...updates });
@@ -107,7 +61,7 @@ export default function EditEmployeeModal({ employee, onClose, onUpdated, onDele
     }
   };
 
-  const photoSrc = newPhoto?.dataURL || employee.photoURL;
+  const photoSrc = employee.photoURL;
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center p-4 overflow-y-auto"
@@ -170,39 +124,7 @@ export default function EditEmployeeModal({ employee, onClose, onUpdated, onDele
                   )}
                 </div>
               </div>
-              <button
-                onClick={() => { setRetakingPhoto(v => !v); setNewPhoto(null); setFaceStatus(null); }}
-                className="flex-shrink-0 flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg transition-all duration-200"
-                style={{ background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-2)' }}
-              >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                {retakingPhoto ? 'Cancel' : 'Retake Face'}
-              </button>
             </div>
-
-            {/* Webcam retake */}
-            {retakingPhoto && (
-              <div className="rounded-xl overflow-hidden border" style={{ borderColor: 'var(--border)' }}>
-                <WebcamCapture onCapture={handleCapture} onError={(m) => setError(m)} />
-                {faceStatus === 'detecting' && (
-                  <div className="flex items-center gap-2 px-4 py-2 text-amber-400 text-xs">
-                    <div className="w-3 h-3 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
-                    Detecting face...
-                  </div>
-                )}
-                {faceStatus === 'ok' && (
-                  <div className="flex items-center gap-2 px-4 py-2 text-emerald-400 text-xs">
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    Face detected — ready to save
-                  </div>
-                )}
-              </div>
-            )}
 
             {/* Editable fields */}
             <div>
