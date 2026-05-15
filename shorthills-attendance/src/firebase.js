@@ -1,5 +1,5 @@
 import { initializeApp, getApp } from "firebase/app";
-import { getAuth, initializeAuth, inMemoryPersistence } from "firebase/auth";
+import { initializeAuth, inMemoryPersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -12,15 +12,16 @@ const firebaseConfig = {
 };
 
 export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+// No persistence — session lives in memory only, cleared on every refresh/new tab
+export const auth = initializeAuth(app, { persistence: inMemoryPersistence });
 export const db = getFirestore(app);
 
-// Purge any stale secondary-app session that old code may have written to localStorage
-Object.keys(localStorage).forEach((key) => {
-  if (key.includes('firebase:authUser') && key.includes('[secondary]')) {
-    localStorage.removeItem(key);
-  }
-});
+// Purge ALL stale Firebase auth sessions from localStorage (old code used local persistence)
+try {
+  Object.keys(localStorage).forEach((key) => {
+    if (key.startsWith('firebase:')) localStorage.removeItem(key);
+  });
+} catch {}
 
 // Secondary app — persistence is set to inMemoryPersistence at init time
 // so it NEVER reads from or writes to localStorage/IndexedDB.
