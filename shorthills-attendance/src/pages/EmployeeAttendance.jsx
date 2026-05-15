@@ -118,7 +118,7 @@ export default function EmployeeAttendance({ user }) {
   }).format(ts instanceof Date ? ts : ts?.toDate?.() || new Date());
 
   return (
-    <div className="min-h-screen bg-navy-950">
+    <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
       <Navbar user={user} role="employee" />
 
       {showPopup && (
@@ -154,8 +154,8 @@ export default function EmployeeAttendance({ user }) {
                 )}
               </div>
               <div className="text-center sm:text-left flex-1">
-                <h1 className="text-xl font-bold text-white">{employeeData?.name || 'Employee'}</h1>
-                <p className="text-gray-500 text-sm">{user.email}</p>
+                <h1 className="text-xl font-bold" style={{ color: 'var(--text)' }}>{employeeData?.name || employeeData?.employeeId || 'Employee'}</h1>
+                <p className="text-sm" style={{ color: 'var(--text-3)' }}>{user.email}</p>
                 <p className="text-violet-400 text-xs mt-1">ID: {employeeData?.employeeId}</p>
                 <div className="mt-3 inline-flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
                   <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
@@ -194,7 +194,7 @@ export default function EmployeeAttendance({ user }) {
                       )}
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-white">Sign In</div>
+                      <div className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Sign In</div>
                       <div className="text-xs text-gray-500">
                         {signInRecord ? formatTime(signInRecord.submittedAt?.toDate?.() || new Date()) : 'Window: 4:30 – 5:30 PM'}
                       </div>
@@ -233,7 +233,7 @@ export default function EmployeeAttendance({ user }) {
                       )}
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-white">Sign Out</div>
+                      <div className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Sign Out</div>
                       <div className="text-xs text-gray-500">
                         {signOutRecord ? formatTime(signOutRecord.submittedAt?.toDate?.() || new Date()) : 'Window: 1:30 – 2:30 AM'}
                       </div>
@@ -274,7 +274,7 @@ export default function EmployeeAttendance({ user }) {
 
             {/* Recent Records */}
             <div className="card">
-              <h2 className="text-base font-semibold text-white mb-4">Recent Attendance</h2>
+              <h2 className="text-base font-semibold mb-4" style={{ color: 'var(--text)' }}>Recent Attendance</h2>
               {recentRecords.length === 0 ? (
                 <div className="text-center py-10 text-gray-600">
                   <svg className="w-10 h-10 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -286,18 +286,19 @@ export default function EmployeeAttendance({ user }) {
               ) : (
                 <div className="space-y-2">
                   {recentRecords.map((rec) => (
-                    <div key={rec.id} className="flex items-start gap-3 bg-navy-900/60 border border-white/5 rounded-xl p-4">
+                    <div key={rec.id} className="flex items-start gap-3 rounded-xl p-4 border" style={{ background: 'var(--surface-s)', borderColor: 'var(--border-s)' }}>
                       {(rec.photoBase64 || rec.photoURL) && (
                         <img
                           src={rec.photoBase64 || rec.photoURL}
                           alt="Attendance"
-                          className="w-12 h-12 rounded-lg object-cover flex-shrink-0 border border-white/10 cursor-pointer hover:opacity-80"
+                          className="w-12 h-12 rounded-lg object-cover flex-shrink-0 cursor-pointer hover:opacity-80"
+                          style={{ border: '1px solid var(--border)' }}
                           onClick={() => window.open(rec.photoBase64 || rec.photoURL, '_blank')}
                         />
                       )}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-medium text-white text-sm">{formatDate(rec.date)}</span>
+                          <span className="font-medium text-sm" style={{ color: 'var(--text)' }}>{formatDate(rec.date)}</span>
                           {rec.type === 'signin'
                             ? <span className="status-badge-violet">Sign In</span>
                             : rec.type === 'signout'

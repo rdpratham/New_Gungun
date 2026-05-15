@@ -3,18 +3,20 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from './firebase';
+import { ThemeProvider } from './context/ThemeContext';
 
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import AddEmployee from './pages/AddEmployee';
 import EmployeeLogin from './pages/EmployeeLogin';
 import EmployeeAttendance from './pages/EmployeeAttendance';
+import EmployeeSetup from './pages/EmployeeSetup';
 
 const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL;
 
 function LoadingScreen() {
   return (
-    <div className="min-h-screen bg-navy-950 flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
       <div className="text-center animate-fade-in">
         <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5 text-white text-2xl font-bold animate-glow"
              style={{ background: 'linear-gradient(135deg, #7c3aed, #3b82f6)' }}>
@@ -24,7 +26,7 @@ function LoadingScreen() {
              style={{ backgroundImage: 'linear-gradient(135deg, #a78bfa, #60a5fa)' }}>
           Garvix AI
         </div>
-        <div className="text-gray-500 text-sm mb-6">Attendance System</div>
+        <div className="text-sm mb-6" style={{ color: 'var(--text-3)' }}>Attendance System</div>
         <div className="w-6 h-6 border-2 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
       </div>
     </div>
@@ -42,6 +44,7 @@ function ProtectedRoute({ user, role, requiredRole, children }) {
 export default function App() {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
+  const [profileComplete, setProfileComplete] = useState(true);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -50,59 +53,84 @@ export default function App() {
         setUser(firebaseUser);
         if (firebaseUser.email === ADMIN_EMAIL) {
           setRole('admin');
+          setProfileComplete(true);
         } else {
           try {
             const empSnap = await getDoc(doc(db, 'employees', firebaseUser.uid));
-            setRole(empSnap.exists() ? 'employee' : null);
+            if (empSnap.exists()) {
+              setRole('employee');
+              setProfileComplete(empSnap.data().profileComplete !== false);
+            } else {
+              setRole(null);
+              setProfileComplete(true);
+            }
           } catch {
             setRole(null);
+            setProfileComplete(true);
           }
         }
       } else {
         setUser(null);
         setRole(null);
+        setProfileComplete(true);
       }
       setLoading(false);
     });
     return unsub;
   }, []);
 
-  if (loading) return <LoadingScreen />;
+  if (loading) return <ThemeProvider><LoadingScreen /></ThemeProvider>;
 
   return (
-    <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            user
-              ? <Navigate to={role === 'admin' ? '/admin/dashboard' : '/attendance'} replace />
-              : <Navigate to="/login" replace />
-          }
-        />
-        <Route path="/admin/login" element={
-          user && role === 'admin' ? <Navigate to="/admin/dashboard" replace /> : <AdminLogin />
-        } />
-        <Route path="/admin/dashboard" element={
-          <ProtectedRoute user={user} role={role} requiredRole="admin">
-            <AdminDashboard user={user} />
-          </ProtectedRoute>
-        } />
-        <Route path="/admin/add-employee" element={
-          <ProtectedRoute user={user} role={role} requiredRole="admin">
-            <AddEmployee />
-          </ProtectedRoute>
-        } />
-        <Route path="/login" element={
-          user && role === 'employee' ? <Navigate to="/attendance" replace /> : <EmployeeLogin />
-        } />
-        <Route path="/attendance" element={
-          <ProtectedRoute user={user} role={role} requiredRole="employee">
-            <EmployeeAttendance user={user} />
-          </ProtectedRoute>
-        } />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              user
+                ? role === 'admin'
+                  ? <Navigate to="/admin/dashboard" replace />
+                  : profileComplete
+                  ? <Navigate to="/attendance" replace />
+                  : <Navigate to="/setup" replace />
+                : <Navigate to="/login" replace />
+            }
+          />
+          <Route path="/admin/login" element={
+            user && role === 'admin' ? <Navigate to="/admin/dashboard" replace /> : <AdminLogin />
+          } />
+          <Route path="/admin/dashboard" element={
+            <ProtectedRoute user={user} role={role} requiredRole="admin">
+              <AdminDashboard user={user} />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/add-employee" element={
+            <ProtectedRoute user={user} role={role} requiredRole="admin">
+              <AddEmployee />
+            </ProtectedRoute>
+          } />
+          <Route path="/login" element={
+            user && role === 'employee'
+              ? profileComplete ? <Navigate to="/attendance" replace /> : <Navigate to="/setup" replace />
+              : <EmployeeLogin />
+          } />
+          <Route path="/setup" element={
+            <ProtectedRoute user={user} role={role} requiredRole="employee">
+              <EmployeeSetup user={user} onComplete={() => setProfileComplete(true)} />
+            </ProtectedRoute>
+          } />
+          <Route path="/attendance" element={
+            <ProtectedRoute user={user} role={role} requiredRole="employee">
+              {profileComplete
+                ? <EmployeeAttendance user={user} />
+                : <Navigate to="/setup" replace />
+              }
+            </ProtectedRoute>
+          } />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }
