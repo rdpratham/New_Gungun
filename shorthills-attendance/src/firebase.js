@@ -1,5 +1,5 @@
 import { initializeApp, getApp } from "firebase/app";
-import { getAuth, inMemoryPersistence, setPersistence } from "firebase/auth";
+import { getAuth, initializeAuth, inMemoryPersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -15,9 +15,16 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
-// Secondary app — creates employee accounts without signing out the admin.
-// Uses in-memory persistence so it never saves anything to localStorage.
+// Purge any stale secondary-app session that old code may have written to localStorage
+Object.keys(localStorage).forEach((key) => {
+  if (key.includes('firebase:authUser') && key.includes('[secondary]')) {
+    localStorage.removeItem(key);
+  }
+});
+
+// Secondary app — persistence is set to inMemoryPersistence at init time
+// so it NEVER reads from or writes to localStorage/IndexedDB.
 let _secondaryApp;
 try { _secondaryApp = getApp('secondary'); } catch { _secondaryApp = initializeApp(firebaseConfig, 'secondary'); }
-export const secondaryAuth = getAuth(_secondaryApp);
-setPersistence(secondaryAuth, inMemoryPersistence);
+export const secondaryAuth = initializeAuth(_secondaryApp, { persistence: inMemoryPersistence });
+
