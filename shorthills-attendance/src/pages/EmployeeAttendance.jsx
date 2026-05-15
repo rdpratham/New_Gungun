@@ -196,7 +196,7 @@ export default function EmployeeAttendance({ user }) {
                     <div>
                       <div className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Sign In</div>
                       <div className="text-xs text-gray-500">
-                        {signInRecord ? formatTime(signInRecord.submittedAt?.toDate?.() || new Date()) : 'Window: 4:30 – 5:30 PM'}
+                        {signInRecord ? formatTime(signInRecord.submittedAt?.toDate?.() || new Date()) : 'Window: 5:00 PM IST'}
                       </div>
                     </div>
                   </div>

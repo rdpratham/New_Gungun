@@ -127,7 +127,7 @@ export default function EmployeeLogin() {
               Shift: 5:00 PM – 2:00 AM IST
             </p>
             <div className="flex justify-center gap-4 mt-1.5 text-xs text-gray-500">
-              <span>Sign In: 4:30 – 5:30 PM</span>
+              <span>Sign In: 5:00 PM IST</span>
               <span>·</span>
               <span>Sign Out: 2:00 AM IST</span>
             </div>
