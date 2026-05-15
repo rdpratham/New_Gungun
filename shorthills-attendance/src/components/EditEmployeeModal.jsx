@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { doc, updateDoc, deleteDoc, collection, query, where, getDocs, writeBatch } from 'firebase/firestore';
 import { db } from '../firebase';
 import WebcamCapture from './WebcamCapture';
 import { getDescriptorFromDataURL } from '../utils/faceRecognition';
@@ -83,7 +83,24 @@ export default function EditEmployeeModal({ employee, onClose, onUpdated, onDele
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      await deleteDoc(doc(db, 'employees', employee.id));
+      const batch = writeBatch(db);
+
+      // Delete all attendance records for this employee
+      const attSnap = await getDocs(query(
+        collection(db, 'attendance'),
+        where('employeeUid', '==', employee.id)
+      ));
+      attSnap.docs.forEach(d => batch.delete(d.ref));
+
+      // Delete the employee Firestore document
+      batch.delete(doc(db, 'employees', employee.id));
+
+      await batch.commit();
+
+      // Firebase Auth account deletion requires Admin SDK (server-side only).
+      // Without the Firestore doc the app auto-signs-out this user on next load,
+      // so the account is permanently blocked even though the Auth record remains.
+
       onDeleted?.(employee.id);
       onClose();
     } catch (err) {
@@ -229,10 +246,10 @@ export default function EditEmployeeModal({ employee, onClose, onUpdated, onDele
             <div className="pt-3 border-t border-white/10">
               {confirmDelete ? (
                 <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
-                  <p className="text-red-300 text-sm font-medium mb-1">Delete {employee.name}?</p>
+                  <p className="text-red-300 text-sm font-medium mb-1">Delete {employee.name || employee.employeeId}?</p>
                   <p className="text-gray-500 text-xs mb-3">
-                    This removes their profile and <strong className="text-gray-400">immediately revokes access</strong>.
-                    Their login will stop working right away.
+                    This permanently deletes their profile and <strong className="text-gray-400">all attendance records</strong>.
+                    Their login will stop working immediately.
                   </p>
                   <div className="flex gap-2">
                     <button onClick={() => setConfirmDelete(false)}
