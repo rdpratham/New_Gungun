@@ -150,7 +150,10 @@ export default function App() {
           } />
           <Route path="/setup" element={
             <ProtectedRoute user={user} role={role} requiredRole="employee">
-              <EmployeeSetup user={user} onComplete={() => setProfileComplete(true)} />
+              {profileComplete
+                ? <Navigate to="/attendance" replace />
+                : <EmployeeSetup user={user} onComplete={() => setProfileComplete(true)} />
+              }
             </ProtectedRoute>
           } />
           <Route path="/attendance" element={
