@@ -46,7 +46,7 @@ export default function EmployeeLogin() {
           <div className="w-16 h-16 bg-electric-500 rounded-2xl flex items-center justify-center mx-auto mb-4 text-white text-3xl font-bold shadow-lg shadow-electric-500/30">
             S
           </div>
-          <h1 className="text-3xl font-bold text-white">Shorthills AI</h1>
+          <h1 className="text-3xl font-bold text-white">Attendance-US</h1>
           <p className="text-gray-400 mt-1">Employee Attendance Portal</p>
         </div>
 
@@ -137,7 +137,7 @@ export default function EmployeeLogin() {
         </div>
 
         <p className="text-center text-gray-600 text-xs mt-6">
-          Made with ♥ by Pratham Jain &nbsp;|&nbsp; Shorthills AI © {new Date().getFullYear()}
+          Made with ♥ by Pratham Jain &nbsp;|&nbsp; Attendance-US © {new Date().getFullYear()}
         </p>
       </div>
     </div>

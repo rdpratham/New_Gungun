@@ -20,7 +20,7 @@ export default function Navbar({ user, role }) {
               S
             </div>
             <div>
-              <span className="text-white font-bold text-lg leading-none">Shorthills AI</span>
+              <span className="text-white font-bold text-lg leading-none">Attendance-US</span>
               <div className="text-electric-400 text-xs">Attendance System</div>
             </div>
           </div>

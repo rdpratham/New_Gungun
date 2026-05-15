@@ -16,7 +16,7 @@ function LoadingScreen() {
   return (
     <div className="min-h-screen bg-navy-900 flex items-center justify-center">
       <div className="text-center animate-fade-in">
-        <div className="text-4xl font-bold text-electric-500 mb-2">Shorthills AI</div>
+        <div className="text-4xl font-bold text-electric-500 mb-2">Attendance-US</div>
         <div className="text-gray-400 mb-6">Attendance System</div>
         <div className="w-8 h-8 border-4 border-electric-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
       </div>

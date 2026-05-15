@@ -253,7 +253,7 @@ export default function EmployeeAttendance({ user }) {
             </div>
 
             <p className="text-center text-gray-700 text-xs pb-4">
-              Made with ♥ by Pratham Jain &nbsp;|&nbsp; Shorthills AI © {new Date().getFullYear()}
+              Made with ♥ by Pratham Jain &nbsp;|&nbsp; Attendance-US © {new Date().getFullYear()}
             </p>
           </div>
         )}
