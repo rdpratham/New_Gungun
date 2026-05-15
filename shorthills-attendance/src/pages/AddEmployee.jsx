@@ -4,35 +4,13 @@ import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import Navbar from '../components/Navbar';
-
-// Compress image to base64 (no Firebase Storage needed)
-function fileToCompressedBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const maxW = 300;
-        const ratio = Math.min(1, maxW / img.width);
-        canvas.width = Math.round(img.width * ratio);
-        canvas.height = Math.round(img.height * ratio);
-        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-        resolve(canvas.toDataURL('image/jpeg', 0.6));
-      };
-      img.onerror = reject;
-      img.src = e.target.result;
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
+import WebcamCapture from '../components/WebcamCapture';
+import { getDescriptorFromDataURL } from '../utils/faceRecognition';
 
 export default function AddEmployee() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ employeeId: '', name: '', email: '', password: '' });
-  const [photoFile, setPhotoFile] = useState(null);
-  const [photoPreview, setPhotoPreview] = useState(null);
+  const [capturedPhoto, setCapturedPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -42,13 +20,8 @@ export default function AddEmployee() {
     setError('');
   };
 
-  const handlePhotoChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (!file.type.startsWith('image/')) { setError('Please select an image file.'); return; }
-    if (file.size > 5 * 1024 * 1024) { setError('Photo must be under 5MB.'); return; }
-    setPhotoFile(file);
-    setPhotoPreview(URL.createObjectURL(file));
+  const handleCapture = (photoData) => {
+    setCapturedPhoto(photoData);
     setError('');
   };
 
@@ -57,33 +30,41 @@ export default function AddEmployee() {
     setError('');
     setSuccess('');
 
-    if (!photoFile) { setError('Please upload an employee photo.'); return; }
+    if (!capturedPhoto?.dataURL) { setError('Please capture the employee\'s face photo using the camera.'); return; }
     if (form.password.length < 6) { setError('Password must be at least 6 characters.'); return; }
 
     setLoading(true);
     try {
-      // 1. Compress photo to base64
-      const photoBase64 = await fileToCompressedBase64(photoFile);
+      // 1. Extract face descriptor for recognition
+      const faceDescriptor = await getDescriptorFromDataURL(capturedPhoto.dataURL);
+      if (!faceDescriptor) {
+        setError('No face detected in the photo. Please retake with the employee\'s face clearly visible.');
+        setLoading(false);
+        return;
+      }
 
-      // 2. Create Firebase Auth user
+      // 2. Compress photo to smaller base64
+      const compressedPhoto = await compressDataURL(capturedPhoto.dataURL);
+
+      // 3. Create Firebase Auth user
       const { user: newUser } = await createUserWithEmailAndPassword(auth, form.email, form.password);
 
-      // 3. Update display name
+      // 4. Update display name
       await updateProfile(newUser, { displayName: form.name });
 
-      // 4. Save to Firestore with base64 photo (no Storage needed)
+      // 5. Save to Firestore with photo + face descriptor
       await setDoc(doc(db, 'employees', newUser.uid), {
         employeeId: form.employeeId.trim(),
         name: form.name.trim(),
         email: form.email.trim().toLowerCase(),
-        photoURL: photoBase64,
+        photoURL: compressedPhoto,
+        faceDescriptor,
         createdAt: serverTimestamp(),
       });
 
-      setSuccess(`Employee "${form.name}" added successfully!`);
+      setSuccess(`Employee "${form.name}" added with face recognition enabled!`);
       setForm({ employeeId: '', name: '', email: '', password: '' });
-      setPhotoFile(null);
-      setPhotoPreview(null);
+      setCapturedPhoto(null);
 
       await auth.signOut();
       navigate('/admin/login');
@@ -91,7 +72,7 @@ export default function AddEmployee() {
       const msgs = {
         'auth/email-already-in-use': 'An account with this email already exists.',
         'auth/invalid-email': 'Invalid email address.',
-        'auth/weak-password': 'Password is too weak. Use at least 6 characters.',
+        'auth/weak-password': 'Password must be at least 6 characters.',
       };
       setError(msgs[err.code] || `Error: ${err.message}`);
     } finally {
@@ -112,7 +93,7 @@ export default function AddEmployee() {
           </button>
           <div>
             <h1 className="text-2xl font-bold text-white">Add New Employee</h1>
-            <p className="text-gray-400 text-sm">Create employee account and profile</p>
+            <p className="text-gray-400 text-sm">Capture face photo using live camera for attendance recognition</p>
           </div>
         </div>
 
@@ -127,35 +108,31 @@ export default function AddEmployee() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Photo upload */}
+
+            {/* Live camera capture */}
             <div>
-              <label className="label">Profile Photo <span className="text-red-400">*</span></label>
-              <div className="flex items-start gap-4">
-                <div className="w-24 h-24 rounded-xl overflow-hidden bg-navy-900 border-2 border-dashed border-navy-600 flex-shrink-0 flex items-center justify-center">
-                  {photoPreview ? (
-                    <img src={photoPreview} alt="Preview" className="w-full h-full object-cover" />
-                  ) : (
-                    <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                  )}
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-6 h-6 bg-electric-500/20 rounded-full flex items-center justify-center">
+                  <svg className="w-3 h-3 text-electric-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                    <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                  </svg>
                 </div>
-                <div className="flex-1">
-                  <label className="cursor-pointer">
-                    <div className="btn-secondary inline-flex items-center gap-2 text-sm">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                      </svg>
-                      Upload Photo
-                    </div>
-                    <input type="file" accept="image/*" onChange={handlePhotoChange} className="hidden" />
-                  </label>
-                  <p className="text-xs text-gray-500 mt-2">JPG, PNG up to 5MB</p>
-                  {photoFile && <p className="text-xs text-electric-400 mt-1">{photoFile.name}</p>}
-                </div>
+                <p className="text-sm text-electric-400 font-medium">
+                  Live Camera — Face is saved for attendance verification
+                </p>
               </div>
+              <div className="bg-navy-700/30 border border-navy-600 rounded-xl p-4">
+                <WebcamCapture onCapture={handleCapture} onError={(msg) => setError(msg)} />
+              </div>
+              {capturedPhoto && (
+                <div className="flex items-center gap-2 mt-2 text-green-400 text-sm">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  Face photo captured — will be used for attendance verification
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -174,7 +151,7 @@ export default function AddEmployee() {
             <div>
               <label className="label">Work Email <span className="text-red-400">*</span></label>
               <input type="email" name="email" value={form.email} onChange={handleChange}
-                placeholder="john@shorthillsai.com" required className="input-field" />
+                placeholder="john@company.com" required className="input-field" />
             </div>
 
             <div>
@@ -186,13 +163,23 @@ export default function AddEmployee() {
 
             {error && (
               <div className="flex items-start gap-2 bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-3">
-                <svg className="w-5 h-5 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                     d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <p className="text-red-400 text-sm">{error}</p>
               </div>
             )}
+
+            <div className="bg-electric-500/10 border border-electric-500/20 rounded-lg px-4 py-3">
+              <p className="text-electric-400 text-xs flex items-start gap-2">
+                <svg className="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                The captured face will be saved and used to verify the employee's identity when they submit attendance. Attendance will be denied if faces don't match.
+              </p>
+            </div>
 
             <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg px-4 py-3">
               <p className="text-yellow-400 text-xs">
@@ -204,11 +191,11 @@ export default function AddEmployee() {
               <button type="button" onClick={() => navigate('/admin/dashboard')} className="btn-secondary flex-1">
                 Cancel
               </button>
-              <button type="submit" disabled={loading} className="btn-primary flex-1 flex items-center justify-center gap-2">
+              <button type="submit" disabled={loading || !capturedPhoto} className="btn-primary flex-1 flex items-center justify-center gap-2">
                 {loading ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Creating Account...
+                    {loading ? 'Processing Face...' : 'Creating Account...'}
                   </>
                 ) : 'Add Employee'}
               </button>
@@ -222,4 +209,20 @@ export default function AddEmployee() {
       </div>
     </div>
   );
+}
+
+function compressDataURL(dataURL) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const maxW = 400;
+      const ratio = Math.min(1, maxW / img.width);
+      canvas.width = Math.round(img.width * ratio);
+      canvas.height = Math.round(img.height * ratio);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      resolve(canvas.toDataURL('image/jpeg', 0.5));
+    };
+    img.src = dataURL;
+  });
 }

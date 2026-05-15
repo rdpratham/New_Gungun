@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import WebcamCapture from './WebcamCapture';
+import { getDescriptorFromDataURL, isFaceMatch } from '../utils/faceRecognition';
 
 const MIN_SUMMARY_LENGTH = 50;
 
@@ -12,35 +13,65 @@ function getISTDateString() {
   }).format(new Date());
 }
 
-// Compress image to small base64 so it fits in Firestore (max 1MB per doc)
 function compressImage(dataURL) {
   return new Promise((resolve) => {
     const img = new Image();
     img.onload = () => {
       const canvas = document.createElement('canvas');
-      // Resize to max 400px wide
       const maxW = 400;
       const ratio = Math.min(1, maxW / img.width);
       canvas.width = Math.round(img.width * ratio);
       canvas.height = Math.round(img.height * ratio);
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
       resolve(canvas.toDataURL('image/jpeg', 0.5));
     };
     img.src = dataURL;
   });
 }
 
+// faceStatus: null | 'verifying' | 'verified' | 'mismatch' | 'no_face'
 export default function AttendancePopup({ user, employeeData, onSubmitted }) {
   const [capturedPhoto, setCapturedPhoto] = useState(null);
   const [workSummary, setWorkSummary] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [faceStatus, setFaceStatus] = useState(null);
 
-  const handleCapture = (photoData) => {
+  const handleCapture = async (photoData) => {
     setCapturedPhoto(photoData);
     setError('');
+    setFaceStatus('verifying');
+
+    try {
+      const capturedDescriptor = await getDescriptorFromDataURL(photoData.dataURL);
+
+      if (!capturedDescriptor) {
+        setFaceStatus('no_face');
+        setCapturedPhoto(null);
+        setError('No face detected. Please look directly at the camera and retake.');
+        return;
+      }
+
+      const storedDescriptor = employeeData?.faceDescriptor;
+      if (!storedDescriptor?.length) {
+        // No stored descriptor — allow submission without face check (legacy employees)
+        setFaceStatus('verified');
+        return;
+      }
+
+      const matched = isFaceMatch(storedDescriptor, capturedDescriptor);
+      if (matched) {
+        setFaceStatus('verified');
+      } else {
+        setFaceStatus('mismatch');
+        setCapturedPhoto(null);
+        setError('Face does not match our records. Please ensure good lighting and look directly at the camera, then retake.');
+      }
+    } catch {
+      // On error, allow submission to avoid blocking employees
+      setFaceStatus('verified');
+    }
   };
 
   const handleSubmit = async () => {
@@ -48,6 +79,10 @@ export default function AttendancePopup({ user, employeeData, onSubmitted }) {
 
     if (!capturedPhoto?.dataURL) {
       setError('Please capture your photo first.');
+      return;
+    }
+    if (faceStatus !== 'verified') {
+      setError('Face verification required before submitting.');
       return;
     }
     if (workSummary.trim().length < MIN_SUMMARY_LENGTH) {
@@ -59,8 +94,6 @@ export default function AttendancePopup({ user, employeeData, onSubmitted }) {
     try {
       const dateStr = getISTDateString();
       const employeeId = employeeData?.employeeId || user.uid;
-
-      // Compress photo and store as base64 directly in Firestore (no Storage needed)
       const compressedPhoto = await compressImage(capturedPhoto.dataURL);
 
       await addDoc(collection(db, 'attendance'), {
@@ -117,7 +150,34 @@ export default function AttendancePopup({ user, employeeData, onSubmitted }) {
         </div>
 
         <div className="space-y-6">
-          <WebcamCapture onCapture={handleCapture} onError={(msg) => setError(msg)} />
+          <div>
+            <WebcamCapture onCapture={handleCapture} onError={(msg) => setError(msg)} />
+
+            {/* Face verification status */}
+            {faceStatus === 'verifying' && (
+              <div className="flex items-center gap-2 mt-3 text-yellow-400 text-sm">
+                <div className="w-4 h-4 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin flex-shrink-0"></div>
+                Verifying your face, please wait...
+              </div>
+            )}
+            {faceStatus === 'verified' && (
+              <div className="flex items-center gap-2 mt-3 text-green-400 text-sm">
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                Face verified — you may submit attendance
+              </div>
+            )}
+            {(faceStatus === 'mismatch' || faceStatus === 'no_face') && (
+              <div className="flex items-center gap-2 mt-3 text-red-400 text-sm">
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                {faceStatus === 'mismatch' ? 'Face mismatch — please retake' : 'No face detected — please retake'}
+              </div>
+            )}
+          </div>
 
           <div>
             <label className="label">
@@ -152,7 +212,7 @@ export default function AttendancePopup({ user, employeeData, onSubmitted }) {
 
           <button
             onClick={handleSubmit}
-            disabled={submitting || !capturedPhoto}
+            disabled={submitting || !capturedPhoto || faceStatus !== 'verified'}
             className="btn-primary w-full flex items-center justify-center gap-2 py-3 text-base"
           >
             {submitting ? (
