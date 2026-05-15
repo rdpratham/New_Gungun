@@ -211,46 +211,6 @@ export default function AttendancePopup({ user, employeeData, attendanceType = '
 
         <div className="space-y-5">
 
-          {/* Location banner — always visible */}
-          <div className={`flex items-center gap-3 rounded-xl px-4 py-3 border text-sm font-medium ${
-            locationStatus === 'checking' ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' :
-            locationStatus === 'ok'       ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' :
-            locationStatus === 'outside'  ? 'bg-red-500/10 border-red-500/30 text-red-400' :
-                                            'bg-amber-500/10 border-amber-500/30 text-amber-400'
-          }`}>
-            <div className="flex-shrink-0">
-              {locationStatus === 'checking' && <div className="w-4 h-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />}
-              {locationStatus === 'ok' && (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              )}
-              {locationStatus === 'outside' && (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              )}
-              {locationStatus === 'error' && (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              )}
-            </div>
-            <div className="flex-1 min-w-0">
-              {locationStatus === 'checking' && 'Detecting your location…'}
-              {locationStatus === 'ok'       && `✓ You are at the right location — ${locationInfo?.office?.name}`}
-              {locationStatus === 'outside'  && `✗ You are not at the office · ${locationInfo?.distance}m away`}
-              {locationStatus === 'error'    && '⚠ GPS unavailable — location unverified, submission still allowed'}
-            </div>
-            {(locationStatus === 'outside' || locationStatus === 'error') && (
-              <button onClick={retryLocation}
-                      className="flex-shrink-0 text-xs bg-white/10 hover:bg-white/20 px-2 py-1 rounded-lg transition-colors">
-                Retry
-              </button>
-            )}
-          </div>
-
           {/* Camera + inline face status */}
           <div>
             <WebcamCapture onCapture={handleCapture} onError={(msg) => setFaceError(msg)} />
@@ -275,6 +235,41 @@ export default function AttendancePopup({ user, employeeData, attendanceType = '
                 </svg>
                 <span>{faceError || (faceStatus === 'mismatch' ? 'Face does not match — retake photo' : 'No face detected — retake photo')}</span>
               </div>
+            )}
+          </div>
+
+          {/* Location banner — below face status */}
+          <div className={`flex items-center gap-3 rounded-xl px-4 py-3 border text-sm font-medium ${
+            locationStatus === 'checking' ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' :
+            locationStatus === 'ok'       ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' :
+            locationStatus === 'outside'  ? 'bg-red-500/10 border-red-500/30 text-red-400' :
+                                            'bg-amber-500/10 border-amber-500/30 text-amber-400'
+          }`}>
+            <div className="flex-shrink-0">
+              {locationStatus === 'checking' && <div className="w-4 h-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />}
+              {locationStatus === 'ok' && (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              )}
+              {(locationStatus === 'outside' || locationStatus === 'error') && (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              {locationStatus === 'checking' && 'Detecting your location…'}
+              {locationStatus === 'ok'       && `✓ You are at the right location — ${locationInfo?.office?.name}`}
+              {locationStatus === 'outside'  && `✗ You are not at the office · ${locationInfo?.distance}m away`}
+              {locationStatus === 'error'    && '⚠ GPS unavailable — submission still allowed'}
+            </div>
+            {(locationStatus === 'outside' || locationStatus === 'error') && (
+              <button onClick={retryLocation}
+                      className="flex-shrink-0 text-xs bg-white/10 hover:bg-white/20 px-2 py-1 rounded-lg transition-colors">
+                Retry
+              </button>
             )}
           </div>
 
