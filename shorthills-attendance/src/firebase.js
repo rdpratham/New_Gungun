@@ -1,5 +1,5 @@
 import { initializeApp, getApp } from "firebase/app";
-import { initializeAuth, inMemoryPersistence } from "firebase/auth";
+import { initializeAuth, inMemoryPersistence, browserSessionPersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -12,8 +12,8 @@ const firebaseConfig = {
 };
 
 export const app = initializeApp(firebaseConfig);
-// No persistence — session lives in memory only, cleared on every refresh/new tab
-export const auth = initializeAuth(app, { persistence: inMemoryPersistence });
+// Session persistence — survives refresh in same tab, clears on tab close or new tab
+export const auth = initializeAuth(app, { persistence: browserSessionPersistence });
 export const db = getFirestore(app);
 
 // Purge ALL stale Firebase auth sessions from localStorage (old code used local persistence)
