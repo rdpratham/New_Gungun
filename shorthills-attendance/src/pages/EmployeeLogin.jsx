@@ -124,12 +124,12 @@ export default function EmployeeLogin() {
 
           <div className="mt-4 rounded-xl px-4 py-3 border border-violet-500/20 bg-violet-500/10">
             <p className="text-violet-300 text-sm text-center font-medium">
-              Shift: 5:00 PM – 1:30 AM IST
+              Shift: 5:00 PM – 2:00 AM IST
             </p>
             <div className="flex justify-center gap-4 mt-1.5 text-xs text-gray-500">
               <span>Sign In: 4:30 – 5:30 PM</span>
               <span>·</span>
-              <span>Sign Out: 1:30 – 2:30 AM</span>
+              <span>Sign Out: 1:30 – 2:30 AM IST</span>
             </div>
           </div>
 
