@@ -189,7 +189,7 @@ function TaskNotificationPopup({ tasks, onDismiss, onViewTasks }) {
 }
 
 /* ── My Attendance page ──────────────────────────────────── */
-function MyAttendancePage({ user }) {
+function MyAttendancePage({ user, employeeData }) {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -197,17 +197,26 @@ function MyAttendancePage({ user }) {
     (async () => {
       setLoading(true);
       try {
-        const snap = await getDocs(query(
-          collection(db, 'attendance'),
-          where('employeeUid', '==', user.uid),
-          orderBy('date', 'desc'),
-          limit(50)
-        ));
-        setRecords(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+        // Run parallel queries to catch records stored under different field names
+        const queries = [
+          getDocs(query(collection(db, 'attendance'), where('employeeUid', '==', user.uid))),
+          getDocs(query(collection(db, 'attendance'), where('employeeId',  '==', user.uid))),
+        ];
+        if (employeeData?.employeeId && employeeData.employeeId !== user.uid) {
+          queries.push(getDocs(query(collection(db, 'attendance'), where('employeeId', '==', employeeData.employeeId))));
+        }
+        const snaps = await Promise.all(queries);
+        const seen = new Set();
+        const merged = [];
+        snaps.forEach(snap => snap.docs.forEach(d => {
+          if (!seen.has(d.id)) { seen.add(d.id); merged.push({ id: d.id, ...d.data() }); }
+        }));
+        merged.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+        setRecords(merged.slice(0, 100));
       } catch (err) { console.error(err); }
       finally { setLoading(false); }
     })();
-  }, [user.uid]);
+  }, [user.uid, employeeData?.employeeId]);
 
   const signIns  = records.filter(r => r.type === 'signin').length;
   const signOuts = records.filter(r => r.type === 'signout').length;
@@ -476,17 +485,57 @@ export default function EmployeeAttendance({ user }) {
     setLoadingData(true);
     try {
       const empSnap = await getDoc(doc(db, 'employees', user.uid));
-      setEmployeeData(empSnap.exists() ? { id: empSnap.id, ...empSnap.data() } : null);
+      const emp = empSnap.exists() ? { id: empSnap.id, ...empSnap.data() } : null;
+      setEmployeeData(emp);
 
       const today = getISTDateString();
-      const siSnap = await getDocs(query(collection(db, 'attendance'), where('employeeUid', '==', user.uid), where('date', '==', today), where('type', '==', 'signin')));
-      setSignInRecord(siSnap.empty ? null : { id: siSnap.docs[0].id, ...siSnap.docs[0].data() });
+      const uid   = user.uid;
+      const empId = emp?.employeeId;
 
-      const soSnap = await getDocs(query(collection(db, 'attendance'), where('employeeUid', '==', user.uid), where('date', '==', today), where('type', '==', 'signout')));
-      setSignOutRecord(soSnap.empty ? null : { id: soSnap.docs[0].id, ...soSnap.docs[0].data() });
+      // Helper: merge docs from multiple snapshots, dedup by id
+      const mergeSnaps = (...snaps) => {
+        const seen = new Set(); const out = [];
+        snaps.forEach(s => s.docs.forEach(d => { if (!seen.has(d.id)) { seen.add(d.id); out.push({ id: d.id, ...d.data() }); } }));
+        return out;
+      };
 
-      const recentSnap = await getDocs(query(collection(db, 'attendance'), where('employeeUid', '==', user.uid), orderBy('date', 'desc'), limit(10)));
-      setRecentRecords(recentSnap.docs.map(d => ({ id: d.id, ...d.data() })));
+      // Today's sign-in — query by uid + employeeId (both field names)
+      const [si1, si2] = await Promise.all([
+        getDocs(query(collection(db, 'attendance'), where('employeeUid', '==', uid),  where('date', '==', today), where('type', '==', 'signin'))),
+        getDocs(query(collection(db, 'attendance'), where('employeeId',  '==', uid),  where('date', '==', today), where('type', '==', 'signin'))),
+      ]);
+      const siAll = mergeSnaps(si1, si2);
+      // Also check by readable employeeId
+      if (!siAll.length && empId && empId !== uid) {
+        const si3 = await getDocs(query(collection(db, 'attendance'), where('employeeId', '==', empId), where('date', '==', today), where('type', '==', 'signin')));
+        siAll.push(...si3.docs.map(d => ({ id: d.id, ...d.data() })));
+      }
+      setSignInRecord(siAll[0] || null);
+
+      // Today's sign-out
+      const [so1, so2] = await Promise.all([
+        getDocs(query(collection(db, 'attendance'), where('employeeUid', '==', uid),  where('date', '==', today), where('type', '==', 'signout'))),
+        getDocs(query(collection(db, 'attendance'), where('employeeId',  '==', uid),  where('date', '==', today), where('type', '==', 'signout'))),
+      ]);
+      const soAll = mergeSnaps(so1, so2);
+      if (!soAll.length && empId && empId !== uid) {
+        const so3 = await getDocs(query(collection(db, 'attendance'), where('employeeId', '==', empId), where('date', '==', today), where('type', '==', 'signout')));
+        soAll.push(...so3.docs.map(d => ({ id: d.id, ...d.data() })));
+      }
+      setSignOutRecord(soAll[0] || null);
+
+      // Recent records (last 10)
+      const [r1, r2] = await Promise.all([
+        getDocs(query(collection(db, 'attendance'), where('employeeUid', '==', uid), orderBy('date', 'desc'), limit(10))),
+        getDocs(query(collection(db, 'attendance'), where('employeeId',  '==', uid), orderBy('date', 'desc'), limit(10))),
+      ]);
+      let recent = mergeSnaps(r1, r2);
+      if (empId && empId !== uid) {
+        const r3 = await getDocs(query(collection(db, 'attendance'), where('employeeId', '==', empId), orderBy('date', 'desc'), limit(10)));
+        r3.docs.forEach(d => { if (!recent.find(r => r.id === d.id)) recent.push({ id: d.id, ...d.data() }); });
+      }
+      recent.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+      setRecentRecords(recent.slice(0, 10));
     } catch (err) {
       console.error('Error fetching data:', err);
     } finally {
@@ -607,7 +656,7 @@ export default function EmployeeAttendance({ user }) {
                                recentRecords={recentRecords} loadingData={loadingData}
                                openPopup={openPopup} currentTime={currentTime} />
               )}
-              {page === 'attendance' && <MyAttendancePage user={user} />}
+              {page === 'attendance' && <MyAttendancePage user={user} employeeData={employeeData} />}
               {page === 'tasks'      && <AssignedTasksPage user={user} />}
               {page === 'my-todo'    && <TodoPage user={user} />}
               {page === 'my-notes'   && <NotesPage user={user} />}
