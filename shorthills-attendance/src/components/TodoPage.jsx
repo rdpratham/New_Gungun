@@ -484,7 +484,7 @@ export default function TodoPage({ user, title }) {
           <button onClick={() => setError('')}
                   className="flex-shrink-0 w-6 h-6 rounded-lg flex items-center justify-center hover:scale-110 transition-transform"
                   style={{ background: 'rgba(239,68,68,0.2)', color: '#f87171' }}>
-            ✕
+            &#x2715;
           </button>
         </div>
       )}
