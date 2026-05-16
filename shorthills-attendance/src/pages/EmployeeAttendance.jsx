@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
-import { doc, getDoc, collection, query, where, orderBy, getDocs, limit, onSnapshot, updateDoc, writeBatch } from 'firebase/firestore';
+import { useEffect, useState, useRef } from 'react';
+import { doc, onSnapshot, collection, query, where, orderBy, limit, updateDoc, writeBatch } from 'firebase/firestore';
 import { db } from '../firebase';
 import Navbar from '../components/Navbar';
 import AttendancePopup from '../components/AttendancePopup';
@@ -193,29 +193,33 @@ function MyAttendancePage({ user, employeeData }) {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Real-time: 3 parallel onSnapshot listeners merged by doc ID
+  const mapRef = useRef(new Map());
   useEffect(() => {
-    (async () => {
-      setLoading(true);
-      try {
-        // Run parallel queries to catch records stored under different field names
-        const queries = [
-          getDocs(query(collection(db, 'attendance'), where('employeeUid', '==', user.uid))),
-          getDocs(query(collection(db, 'attendance'), where('employeeId',  '==', user.uid))),
-        ];
-        if (employeeData?.employeeId && employeeData.employeeId !== user.uid) {
-          queries.push(getDocs(query(collection(db, 'attendance'), where('employeeId', '==', employeeData.employeeId))));
-        }
-        const snaps = await Promise.all(queries);
-        const seen = new Set();
-        const merged = [];
-        snaps.forEach(snap => snap.docs.forEach(d => {
-          if (!seen.has(d.id)) { seen.add(d.id); merged.push({ id: d.id, ...d.data() }); }
-        }));
-        merged.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-        setRecords(merged.slice(0, 100));
-      } catch (err) { console.error(err); }
-      finally { setLoading(false); }
-    })();
+    setLoading(true);
+    const uid   = user.uid;
+    const empId = employeeData?.employeeId;
+
+    const applyMap = () => {
+      const all = Array.from(mapRef.current.values());
+      all.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+      setRecords(all.slice(0, 100));
+      setLoading(false);
+    };
+
+    const listen = (field, value) => onSnapshot(
+      query(collection(db, 'attendance'), where(field, '==', value), orderBy('date', 'desc'), limit(100)),
+      snap => { snap.docs.forEach(d => mapRef.current.set(d.id, { id: d.id, ...d.data() })); applyMap(); },
+      err => { console.error(err); setLoading(false); }
+    );
+
+    const unsubs = [
+      listen('employeeUid', uid),
+      listen('employeeId',  uid),
+    ];
+    if (empId && empId !== uid) unsubs.push(listen('employeeId', empId));
+
+    return () => { unsubs.forEach(u => u()); mapRef.current.clear(); };
   }, [user.uid, employeeData?.employeeId]);
 
   const signIns  = records.filter(r => r.type === 'signin').length;
@@ -480,72 +484,58 @@ export default function EmployeeAttendance({ user }) {
   const [unreadCount, setUnreadCount]       = useState(0);
   const notifiedIds = useRef(new Set());
 
-  const fetchData = useCallback(async () => {
+  // Real-time employee profile listener
+  useEffect(() => {
     if (!user) return;
-    setLoadingData(true);
-    try {
-      const empSnap = await getDoc(doc(db, 'employees', user.uid));
-      const emp = empSnap.exists() ? { id: empSnap.id, ...empSnap.data() } : null;
-      setEmployeeData(emp);
-
-      const today = getISTDateString();
-      const uid   = user.uid;
-      const empId = emp?.employeeId;
-
-      // Helper: merge docs from multiple snapshots, dedup by id
-      const mergeSnaps = (...snaps) => {
-        const seen = new Set(); const out = [];
-        snaps.forEach(s => s.docs.forEach(d => { if (!seen.has(d.id)) { seen.add(d.id); out.push({ id: d.id, ...d.data() }); } }));
-        return out;
-      };
-
-      // Today's sign-in — query by uid + employeeId (both field names)
-      const [si1, si2] = await Promise.all([
-        getDocs(query(collection(db, 'attendance'), where('employeeUid', '==', uid),  where('date', '==', today), where('type', '==', 'signin'))),
-        getDocs(query(collection(db, 'attendance'), where('employeeId',  '==', uid),  where('date', '==', today), where('type', '==', 'signin'))),
-      ]);
-      const siAll = mergeSnaps(si1, si2);
-      // Also check by readable employeeId
-      if (!siAll.length && empId && empId !== uid) {
-        const si3 = await getDocs(query(collection(db, 'attendance'), where('employeeId', '==', empId), where('date', '==', today), where('type', '==', 'signin')));
-        siAll.push(...si3.docs.map(d => ({ id: d.id, ...d.data() })));
-      }
-      setSignInRecord(siAll[0] || null);
-
-      // Today's sign-out
-      const [so1, so2] = await Promise.all([
-        getDocs(query(collection(db, 'attendance'), where('employeeUid', '==', uid),  where('date', '==', today), where('type', '==', 'signout'))),
-        getDocs(query(collection(db, 'attendance'), where('employeeId',  '==', uid),  where('date', '==', today), where('type', '==', 'signout'))),
-      ]);
-      const soAll = mergeSnaps(so1, so2);
-      if (!soAll.length && empId && empId !== uid) {
-        const so3 = await getDocs(query(collection(db, 'attendance'), where('employeeId', '==', empId), where('date', '==', today), where('type', '==', 'signout')));
-        soAll.push(...so3.docs.map(d => ({ id: d.id, ...d.data() })));
-      }
-      setSignOutRecord(soAll[0] || null);
-
-      // Recent records (last 10)
-      const [r1, r2] = await Promise.all([
-        getDocs(query(collection(db, 'attendance'), where('employeeUid', '==', uid), orderBy('date', 'desc'), limit(10))),
-        getDocs(query(collection(db, 'attendance'), where('employeeId',  '==', uid), orderBy('date', 'desc'), limit(10))),
-      ]);
-      let recent = mergeSnaps(r1, r2);
-      if (empId && empId !== uid) {
-        const r3 = await getDocs(query(collection(db, 'attendance'), where('employeeId', '==', empId), orderBy('date', 'desc'), limit(10)));
-        r3.docs.forEach(d => { if (!recent.find(r => r.id === d.id)) recent.push({ id: d.id, ...d.data() }); });
-      }
-      recent.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-      setRecentRecords(recent.slice(0, 10));
-    } catch (err) {
-      console.error('Error fetching data:', err);
-    } finally {
+    const unsub = onSnapshot(doc(db, 'employees', user.uid), snap => {
+      setEmployeeData(snap.exists() ? { id: snap.id, ...snap.data() } : null);
       setLoadingData(false);
-    }
+    }, err => { console.error(err); setLoadingData(false); });
+    return () => unsub();
   }, [user]);
 
-  useEffect(() => { fetchData(); }, [fetchData]);
+  // Real-time attendance listeners — 3 parallel queries merged by doc ID
+  // Covers: new records (employeeUid field), legacy records (employeeId = uid or readable ID)
+  const attMapRef = useRef(new Map()); // docId -> record, shared across all 3 listeners
+  useEffect(() => {
+    if (!user) return;
+    const uid   = user.uid;
+    const empId = employeeData?.employeeId;
+    const today = getISTDateString();
 
-  // Clock + auto-popup
+    const applyMap = () => {
+      const all = Array.from(attMapRef.current.values());
+      all.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+      setRecentRecords(all.slice(0, 10));
+      const todayRecs = all.filter(r => r.date === today);
+      setSignInRecord(todayRecs.find(r => r.type === 'signin')  || null);
+      setSignOutRecord(todayRecs.find(r => r.type === 'signout') || null);
+    };
+
+    const listen = (field, value) => onSnapshot(
+      query(collection(db, 'attendance'), where(field, '==', value), orderBy('date', 'desc'), limit(30)),
+      snap => {
+        snap.docs.forEach(d => attMapRef.current.set(d.id, { id: d.id, ...d.data() }));
+        applyMap();
+      },
+      err => console.error('Attendance listener error:', err)
+    );
+
+    const unsubs = [
+      listen('employeeUid', uid),
+      listen('employeeId',  uid),
+    ];
+    if (empId && empId !== uid) {
+      unsubs.push(listen('employeeId', empId));
+    }
+
+    return () => {
+      unsubs.forEach(u => u());
+      attMapRef.current.clear();
+    };
+  }, [user, employeeData?.employeeId]); // re-subscribes only if empId changes
+
+  // Clock tick + auto-popup check every 30s
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(new Date());
@@ -597,7 +587,8 @@ export default function EmployeeAttendance({ user }) {
   };
 
   const openPopup = (type) => { setPopupType(type); setShowPopup(true); };
-  const handleSubmitted = () => { setShowPopup(false); fetchData(); };
+  // onSnapshot listeners update data automatically — just close the popup
+  const handleSubmitted = () => setShowPopup(false);
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg)' }}>

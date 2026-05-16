@@ -1,6 +1,6 @@
 import { initializeApp, getApp } from "firebase/app";
 import { initializeAuth, inMemoryPersistence, browserSessionPersistence } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { initializeFirestore, memoryLocalCache } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -14,7 +14,8 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 // Session persistence — survives refresh in same tab, clears on tab close or new tab
 export const auth = initializeAuth(app, { persistence: browserSessionPersistence });
-export const db = getFirestore(app);
+// Memory-only cache: no IndexedDB, no stale data, always fetches from server
+export const db = initializeFirestore(app, { localCache: memoryLocalCache() });
 
 // Purge ALL stale Firebase auth sessions from localStorage (old code used local persistence)
 try {

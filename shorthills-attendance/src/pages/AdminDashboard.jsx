@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { collection, getDocs, query, orderBy, doc, getDoc, writeBatch } from 'firebase/firestore';
+import { useState, useEffect, useRef } from 'react';
+import { collection, onSnapshot, query, orderBy, doc, getDoc, writeBatch } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import Navbar from '../components/Navbar';
@@ -698,25 +698,27 @@ export default function AdminDashboard({ user }) {
   const [filterDate, setFilterDate]   = useState('');
   const [filterName, setFilterName]   = useState('');
 
-  const fetchEmployees = useCallback(async () => {
+  // Real-time employees listener
+  useEffect(() => {
     setLoadingEmp(true);
-    try {
-      const snap = await getDocs(query(collection(db, 'employees'), orderBy('createdAt', 'desc')));
-      setEmployees(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    } catch (err) { console.error(err); }
-    finally { setLoadingEmp(false); }
+    const unsub = onSnapshot(
+      query(collection(db, 'employees'), orderBy('createdAt', 'desc')),
+      snap => { setEmployees(snap.docs.map(d => ({ id: d.id, ...d.data() }))); setLoadingEmp(false); },
+      err  => { console.error(err); setLoadingEmp(false); }
+    );
+    return () => unsub();
   }, []);
 
-  const fetchAttendance = useCallback(async () => {
+  // Real-time attendance listener
+  useEffect(() => {
     setLoadingAtt(true);
-    try {
-      const snap = await getDocs(query(collection(db, 'attendance'), orderBy('date', 'desc')));
-      setAttendance(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    } catch (err) { console.error(err); }
-    finally { setLoadingAtt(false); }
+    const unsub = onSnapshot(
+      query(collection(db, 'attendance'), orderBy('date', 'desc')),
+      snap => { setAttendance(snap.docs.map(d => ({ id: d.id, ...d.data() }))); setLoadingAtt(false); },
+      err  => { console.error(err); setLoadingAtt(false); }
+    );
+    return () => unsub();
   }, []);
-
-  useEffect(() => { fetchEmployees(); fetchAttendance(); }, [fetchEmployees, fetchAttendance]);
 
   useEffect(() => {
     (async () => {
