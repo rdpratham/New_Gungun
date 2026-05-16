@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { collection, getDocs, query, orderBy, doc, getDoc } from 'firebase/firestore';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { collection, getDocs, query, orderBy, doc, getDoc, writeBatch } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import Navbar from '../components/Navbar';
@@ -711,6 +711,41 @@ export default function AdminDashboard({ user }) {
       } catch {}
     })();
   }, [user.uid]);
+
+  // Auto-delete orphaned attendance records once both datasets are loaded
+  const cleanedRef = useRef(false);
+  useEffect(() => {
+    if (loadingEmp || loadingAtt || cleanedRef.current) return;
+    cleanedRef.current = true;
+
+    const validUids   = new Set(employees.map(e => e.id));
+    const validEmpIds = new Set(employees.map(e => e.employeeId).filter(Boolean));
+
+    const orphans = attendance.filter(rec => {
+      if (rec.employeeUid && validUids.has(rec.employeeUid))   return false;
+      if (rec.employeeId  && validUids.has(rec.employeeId))    return false;
+      if (rec.employeeId  && validEmpIds.has(rec.employeeId))  return false;
+      return true;
+    });
+
+    if (orphans.length === 0) return;
+
+    (async () => {
+      try {
+        // Firestore batch limit is 500; chunk if needed
+        for (let i = 0; i < orphans.length; i += 400) {
+          const batch = writeBatch(db);
+          orphans.slice(i, i + 400).forEach(rec =>
+            batch.delete(doc(db, 'attendance', rec.id))
+          );
+          await batch.commit();
+        }
+        setAttendance(prev => prev.filter(r => !orphans.some(o => o.id === r.id)));
+      } catch (err) {
+        console.error('Orphan cleanup failed:', err);
+      }
+    })();
+  }, [loadingEmp, loadingAtt, employees, attendance]);
 
   const filteredAttendance = attendance.filter(rec => {
     const dateMatch = filterDate ? rec.date === filterDate : true;
