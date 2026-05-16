@@ -156,7 +156,9 @@ export default function AttendancePopup({ user, employeeData, attendanceType = '
 
     setSubmitting(true);
     try {
-      const compressedPhoto = await compressImage(capturedPhoto.dataURL);
+      const compressedPhoto = capturedPhoto?.dataURL
+        ? await compressImage(capturedPhoto.dataURL)
+        : null;
       await addDoc(collection(db, 'attendance'), {
         employeeId:   employeeData?.employeeId || user.uid,
         employeeUid:  user.uid,
@@ -167,9 +169,9 @@ export default function AttendancePopup({ user, employeeData, attendanceType = '
         workSummary:  workSummary.trim(),
         photoBase64:  compressedPhoto,
         location: {
-          lat: locationInfo?.lat,
-          lng: locationInfo?.lng,
-          accuracy: locationInfo?.accuracy,
+          lat:      locationInfo?.lat      ?? null,
+          lng:      locationInfo?.lng      ?? null,
+          accuracy: locationInfo?.accuracy ?? null,
         },
       });
       setSuccess(true);
