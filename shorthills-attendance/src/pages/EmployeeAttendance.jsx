@@ -482,6 +482,7 @@ export default function EmployeeAttendance({ user }) {
   const [newTasks, setNewTasks]             = useState([]);
   const [showNotification, setShowNotification] = useState(false);
   const [unreadCount, setUnreadCount]       = useState(0);
+  const [allTasks, setAllTasks]             = useState([]);
   const notifiedIds = useRef(new Set());
 
   // Real-time employee profile listener
@@ -560,12 +561,11 @@ export default function EmployeeAttendance({ user }) {
           notifiedIds.current.add(task.id);
         }
       });
-      const allTasks = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      const pending = allTasks.filter(t => t.status !== 'completed').length;
-      setUnreadCount(prev => {
-        const newUnseen = unseen.filter(t => !prev);
-        return pending;
-      });
+      const allTasksList = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      allTasksList.sort((a, b) => (b.createdAt?.seconds ?? 0) - (a.createdAt?.seconds ?? 0));
+      setAllTasks(allTasksList);
+      const pending = allTasksList.filter(t => t.status !== 'completed').length;
+      setUnreadCount(pending);
 
       if (unseen.length > 0) {
         setNewTasks(unseen);
@@ -586,13 +586,30 @@ export default function EmployeeAttendance({ user }) {
     setNewTasks([]);
   };
 
+  const handleMarkAllRead = async () => {
+    try {
+      const batch = writeBatch(db);
+      allTasks.filter(t => !t.seen).forEach(t => batch.update(doc(db, 'tasks', t.id), { seen: true }));
+      await batch.commit();
+    } catch (err) { console.error(err); }
+  };
+
   const openPopup = (type) => { setPopupType(type); setShowPopup(true); };
   // onSnapshot listeners update data automatically — just close the popup
   const handleSubmitted = () => setShowPopup(false);
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg)' }}>
-      <Navbar user={user} role="employee" avatarSrc={employeeData?.photoURL} onViewProfile={() => setShowProfile(true)} />
+      <Navbar
+        user={user}
+        role="employee"
+        avatarSrc={employeeData?.photoURL}
+        onViewProfile={() => setShowProfile(true)}
+        notifications={allTasks}
+        unreadCount={unreadCount}
+        onNotifClick={(task) => { if (task) setPage('tasks'); }}
+        onMarkAllRead={handleMarkAllRead}
+      />
 
       {showProfile && (
         <ProfileModal user={user} role="employee" employeeData={employeeData}

@@ -4,16 +4,185 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 import { useTheme } from '../context/ThemeContext';
 
-export default function Navbar({ user, role, avatarSrc, onViewProfile }) {
+/* ── Time-ago helper ─────────────────────────────────────────────── */
+function timeAgo(ts) {
+  if (!ts) return '';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  const diff = Math.floor((Date.now() - d.getTime()) / 1000);
+  if (diff < 60)    return 'just now';
+  if (diff < 3600)  return `${Math.floor(diff / 60)}m ago`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+  return `${Math.floor(diff / 86400)}d ago`;
+}
+
+/* ── Priority dot colors ─────────────────────────────────────────── */
+const PRIORITY_COLOR = {
+  high:   '#ef4444',
+  medium: '#f59e0b',
+  low:    '#10b981',
+};
+const PRIORITY_BORDER = {
+  high:   'rgba(239,68,68,0.6)',
+  medium: 'rgba(245,158,11,0.6)',
+  low:    'rgba(16,185,129,0.6)',
+};
+
+/* ── NotificationPanel ───────────────────────────────────────────── */
+function NotificationPanel({ notifications, unreadCount, onNotifClick, onMarkAllRead }) {
+  const [filter, setFilter] = useState('all'); // 'all' | 'unread'
+
+  const displayed = filter === 'unread'
+    ? notifications.filter(n => !n.seen)
+    : notifications;
+
+  const shown = displayed.slice(0, 10);
+
+  return (
+    <div className="absolute right-0 top-11 w-80 sm:w-96 rounded-2xl z-50 overflow-hidden animate-slide-up"
+         style={{
+           background: 'var(--surface-s)',
+           border: '1px solid var(--border)',
+           boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
+         }}>
+
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-3"
+           style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)' }}>
+        <div className="flex items-center gap-2">
+          <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+          <span className="text-white font-bold text-sm">Notifications</span>
+        </div>
+        {unreadCount > 0 && (
+          <button
+            onClick={onMarkAllRead}
+            className="text-[11px] font-medium transition-opacity hover:opacity-100"
+            style={{ color: 'rgba(255,255,255,0.75)' }}>
+            Mark all read
+          </button>
+        )}
+      </div>
+
+      {/* Filter tabs */}
+      <div className="flex gap-2 px-4 py-2.5 border-b" style={{ borderColor: 'var(--border)' }}>
+        {[
+          { key: 'all', label: 'All' },
+          { key: 'unread', label: `Unread (${unreadCount})` },
+        ].map(tab => (
+          <button
+            key={tab.key}
+            onClick={() => setFilter(tab.key)}
+            className="px-3 py-1 rounded-full text-xs font-semibold transition-all duration-150"
+            style={filter === tab.key
+              ? { background: 'linear-gradient(135deg,#7c3aed,#3b82f6)', color: '#fff' }
+              : { background: 'var(--surface)', color: 'var(--text-3)', border: '1px solid var(--border)' }
+            }>
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Notification list */}
+      <div style={{ maxHeight: '320px', overflowY: 'auto' }}>
+        {shown.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12 gap-3">
+            <svg className="w-10 h-10" style={{ color: 'var(--text-3)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+            <p className="text-sm" style={{ color: 'var(--text-3)' }}>No notifications</p>
+          </div>
+        ) : (
+          shown.map(task => {
+            const dotColor    = PRIORITY_COLOR[task.priority]  || PRIORITY_COLOR.medium;
+            const borderColor = PRIORITY_BORDER[task.priority] || PRIORITY_BORDER.medium;
+            const isUnread    = !task.seen;
+            return (
+              <button
+                key={task.id}
+                onClick={() => onNotifClick(task)}
+                className="w-full text-left flex items-start gap-3 px-4 py-3 border-b last:border-b-0 transition-colors duration-150"
+                style={{
+                  borderColor: 'var(--border)',
+                  background: isUnread ? 'rgba(124,58,237,0.08)' : 'transparent',
+                  borderLeft: `2px solid ${borderColor}`,
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'var(--surface)'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = isUnread ? 'rgba(124,58,237,0.08)' : 'transparent'; }}>
+
+                {/* Priority dot */}
+                <span className="flex-shrink-0 w-2 h-2 rounded-full mt-2"
+                      style={{ background: dotColor }} />
+
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold truncate"
+                     style={{
+                       color: 'var(--text)',
+                       textDecoration: task.status === 'completed' ? 'line-through' : 'none',
+                     }}>
+                    {task.title}
+                  </p>
+                  <p className="text-xs mt-0.5 truncate" style={{ color: 'var(--text-3)' }}>
+                    {task.assignedByName ? `By ${task.assignedByName}` : ''}
+                    {task.assignedByName && task.dueDate ? ' · ' : ''}
+                    {task.dueDate ? `Due ${task.dueDate}` : ''}
+                  </p>
+                </div>
+
+                {/* Time ago */}
+                <span className="flex-shrink-0 text-[10px] mt-0.5 whitespace-nowrap" style={{ color: 'var(--text-3)' }}>
+                  {timeAgo(task.createdAt)}
+                </span>
+              </button>
+            );
+          })
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="px-4 py-2.5 border-t text-center" style={{ borderColor: 'var(--border)' }}>
+        <button
+          onClick={() => onNotifClick(null)}
+          className="text-xs font-semibold transition-opacity hover:opacity-80"
+          style={{ color: '#a78bfa' }}>
+          View all tasks →
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ── Navbar ──────────────────────────────────────────────────────── */
+export default function Navbar({
+  user, role, avatarSrc, onViewProfile,
+  notifications = [], unreadCount = 0, onNotifClick, onMarkAllRead,
+}) {
   const navigate = useNavigate();
   const { isDark, toggle } = useTheme();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [notifOpen,    setNotifOpen]    = useState(false);
   const dropdownRef = useRef(null);
+  const notifRef    = useRef(null);
 
+  /* Close avatar dropdown on outside click */
   useEffect(() => {
     const handler = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  /* Close notification panel on outside click */
+  useEffect(() => {
+    const handler = (e) => {
+      if (notifRef.current && !notifRef.current.contains(e.target)) {
+        setNotifOpen(false);
       }
     };
     document.addEventListener('mousedown', handler);
@@ -55,6 +224,7 @@ export default function Navbar({ user, role, avatarSrc, onViewProfile }) {
 
           {/* Right */}
           <div className="flex items-center gap-2">
+
             {/* Theme toggle */}
             <button onClick={toggle} title={isDark ? 'Light mode' : 'Dark mode'}
                     className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-105"
@@ -71,6 +241,41 @@ export default function Navbar({ user, role, avatarSrc, onViewProfile }) {
                 </svg>
               )}
             </button>
+
+            {/* Notification bell — employee only */}
+            {role === 'employee' && (
+              <div className="relative" ref={notifRef}>
+                <button
+                  onClick={() => setNotifOpen(v => !v)}
+                  className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-105 relative"
+                  style={{ background: 'var(--surface-s)', border: '1px solid var(--border)', color: 'var(--text-2)' }}>
+                  {/* Bell SVG */}
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                  </svg>
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1 animate-pulse">
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </span>
+                  )}
+                </button>
+
+                {notifOpen && (
+                  <NotificationPanel
+                    notifications={notifications}
+                    unreadCount={unreadCount}
+                    onNotifClick={(task) => {
+                      setNotifOpen(false);
+                      onNotifClick?.(task);
+                    }}
+                    onMarkAllRead={() => {
+                      onMarkAllRead?.();
+                    }}
+                  />
+                )}
+              </div>
+            )}
 
             {/* Avatar dropdown */}
             {user && (
