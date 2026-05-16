@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 import WebcamCapture from './WebcamCapture';
 import { getDescriptorFromDataURL, isFaceMatch } from '../utils/faceRecognition';
 import { getCurrentLocation, isWithinOffice } from '../utils/locationVerification';
+
+const SETTINGS_DOC = doc(db, 'attendanceConfig', 'global');
 
 const MIN_SUMMARY_LENGTH = 50;
 
@@ -33,6 +35,8 @@ function compressImage(dataURL) {
 // locationStatus: 'checking' | 'ok' | 'outside' | 'error'
 // faceStatus:     'waiting'  | 'verifying' | 'ok' | 'mismatch' | 'noface'
 export default function AttendancePopup({ user, employeeData, attendanceType = 'signin', onSubmitted }) {
+  const [attConfig, setAttConfig]           = useState({ faceEnabled: true, locationEnabled: true });
+
   const [locationStatus, setLocationStatus] = useState('checking');
   const [locationInfo, setLocationInfo]     = useState(null);
   const [locationError, setLocationError]   = useState('');
@@ -48,8 +52,31 @@ export default function AttendancePopup({ user, employeeData, attendanceType = '
 
   const isSignIn = attendanceType === 'signin';
 
-  // Auto-check location on mount
+  // Live-sync attendance config (face/location enabled flags)
   useEffect(() => {
+    const unsub = onSnapshot(SETTINGS_DOC, snap => {
+      const data = snap.exists() ? snap.data() : {};
+      setAttConfig({
+        faceEnabled:     data.faceEnabled     !== false,
+        locationEnabled: data.locationEnabled !== false,
+      });
+    }, err => console.error('AttendanceConfig listener:', err));
+    return () => unsub();
+  }, []);
+
+  // When faceEnabled turns false, auto-approve face
+  useEffect(() => {
+    if (!attConfig.faceEnabled && faceStatus === 'waiting') {
+      setFaceStatus('ok');
+    }
+  }, [attConfig.faceEnabled, faceStatus]);
+
+  // Auto-check location on mount — only if locationEnabled
+  useEffect(() => {
+    if (!attConfig.locationEnabled) {
+      setLocationStatus('ok');
+      return;
+    }
     let cancelled = false;
     getCurrentLocation()
       .then((coords) => {
@@ -64,7 +91,7 @@ export default function AttendancePopup({ user, employeeData, attendanceType = '
         setLocationStatus('error');
       });
     return () => { cancelled = true; };
-  }, []);
+  }, [attConfig.locationEnabled]);
 
   const retryLocation = () => {
     setLocationStatus('checking');
@@ -115,9 +142,13 @@ export default function AttendancePopup({ user, employeeData, attendanceType = '
 
   const handleSubmit = async () => {
     setError('');
-    if (locationStatus === 'outside') { setError('You must be at Ambience Mall, Gurugram to submit attendance.'); return; }
-    if (locationStatus === 'checking') { setError('Location check still in progress, please wait.'); return; }
-    if (!capturedPhoto?.dataURL || faceStatus !== 'ok') { setError('Face verification required.'); return; }
+    if (attConfig.locationEnabled) {
+      if (locationStatus === 'outside') { setError('You must be at Ambience Mall, Gurugram to submit attendance.'); return; }
+      if (locationStatus === 'checking') { setError('Location check still in progress, please wait.'); return; }
+    }
+    if (attConfig.faceEnabled && (!capturedPhoto?.dataURL || faceStatus !== 'ok')) {
+      setError('Face verification required.'); return;
+    }
     if (workSummary.trim().length < MIN_SUMMARY_LENGTH) {
       setError(`Please write at least ${MIN_SUMMARY_LENGTH} characters. (${workSummary.trim().length} so far)`);
       return;
@@ -151,10 +182,9 @@ export default function AttendancePopup({ user, employeeData, attendanceType = '
     }
   };
 
-  // Allow submission if location is ok OR unavailable (error/no GPS) — only block if confirmed outside
-  const locationOk = locationStatus === 'ok' || locationStatus === 'error';
-  const canSubmit = locationOk && faceStatus === 'ok' &&
-                    workSummary.trim().length >= MIN_SUMMARY_LENGTH && !submitting;
+  const locationOk = !attConfig.locationEnabled || locationStatus === 'ok' || locationStatus === 'error';
+  const faceOk     = !attConfig.faceEnabled     || faceStatus === 'ok';
+  const canSubmit  = locationOk && faceOk && workSummary.trim().length >= MIN_SUMMARY_LENGTH && !submitting;
 
   if (success) {
     return (
@@ -213,65 +243,87 @@ export default function AttendancePopup({ user, employeeData, attendanceType = '
 
           {/* Camera + inline face status */}
           <div>
-            <WebcamCapture onCapture={handleCapture} onError={(msg) => setFaceError(msg)} />
-            {faceStatus === 'verifying' && (
-              <div className="flex items-center gap-2 mt-2 text-amber-400 text-sm bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-2">
-                <div className="w-4 h-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin flex-shrink-0" />
-                Verifying face, please wait...
-              </div>
-            )}
-            {faceStatus === 'ok' && (
-              <div className="flex items-center gap-2 mt-2 text-emerald-400 text-sm bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-4 py-2">
+            {attConfig.faceEnabled ? (
+              <>
+                <WebcamCapture onCapture={handleCapture} onError={(msg) => setFaceError(msg)} />
+                {faceStatus === 'verifying' && (
+                  <div className="flex items-center gap-2 mt-2 text-amber-400 text-sm bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-2">
+                    <div className="w-4 h-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin flex-shrink-0" />
+                    Verifying face, please wait...
+                  </div>
+                )}
+                {faceStatus === 'ok' && (
+                  <div className="flex items-center gap-2 mt-2 text-emerald-400 text-sm bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-4 py-2">
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Face verified — you can submit
+                  </div>
+                )}
+                {(faceStatus === 'mismatch' || faceStatus === 'noface') && (
+                  <div className="flex items-start gap-2 mt-2 text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-2">
+                    <svg className="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    <span>{faceError || (faceStatus === 'mismatch' ? 'Face does not match — retake photo' : 'No face detected — retake photo')}</span>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="flex items-center gap-3 rounded-xl px-4 py-3 border text-sm font-medium bg-blue-500/10 border-blue-500/30 text-blue-400">
                 <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M15 10l4.553-2.069A1 1 0 0121 8.82V15.18a1 1 0 01-1.447.894L15 14M3 8a1 1 0 011-1h9a1 1 0 011 1v8a1 1 0 01-1 1H4a1 1 0 01-1-1V8z" />
                 </svg>
-                Face verified — you can submit
-              </div>
-            )}
-            {(faceStatus === 'mismatch' || faceStatus === 'noface') && (
-              <div className="flex items-start gap-2 mt-2 text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-2">
-                <svg className="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-                <span>{faceError || (faceStatus === 'mismatch' ? 'Face does not match — retake photo' : 'No face detected — retake photo')}</span>
+                Face scan disabled — WFH mode is active
               </div>
             )}
           </div>
 
           {/* Location banner — below face status */}
-          <div className={`flex items-center gap-3 rounded-xl px-4 py-3 border text-sm font-medium ${
-            locationStatus === 'checking' ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' :
-            locationStatus === 'ok'       ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' :
-            locationStatus === 'outside'  ? 'bg-red-500/10 border-red-500/30 text-red-400' :
-                                            'bg-amber-500/10 border-amber-500/30 text-amber-400'
-          }`}>
-            <div className="flex-shrink-0">
-              {locationStatus === 'checking' && <div className="w-4 h-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />}
-              {locationStatus === 'ok' && (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              )}
+          {attConfig.locationEnabled ? (
+            <div className={`flex items-center gap-3 rounded-xl px-4 py-3 border text-sm font-medium ${
+              locationStatus === 'checking' ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' :
+              locationStatus === 'ok'       ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' :
+              locationStatus === 'outside'  ? 'bg-red-500/10 border-red-500/30 text-red-400' :
+                                              'bg-amber-500/10 border-amber-500/30 text-amber-400'
+            }`}>
+              <div className="flex-shrink-0">
+                {locationStatus === 'checking' && <div className="w-4 h-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />}
+                {locationStatus === 'ok' && (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                )}
+                {(locationStatus === 'outside' || locationStatus === 'error') && (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                {locationStatus === 'checking' && 'Detecting your location…'}
+                {locationStatus === 'ok'       && `✓ You are at the right location — ${locationInfo?.office?.name}`}
+                {locationStatus === 'outside'  && `✗ You are not at the office · ${locationInfo?.distance}m away`}
+                {locationStatus === 'error'    && '⚠ GPS unavailable — submission still allowed'}
+              </div>
               {(locationStatus === 'outside' || locationStatus === 'error') && (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <button onClick={retryLocation}
+                        className="flex-shrink-0 text-xs bg-white/10 hover:bg-white/20 px-2 py-1 rounded-lg transition-colors">
+                  Retry
+                </button>
               )}
             </div>
-            <div className="flex-1 min-w-0">
-              {locationStatus === 'checking' && 'Detecting your location…'}
-              {locationStatus === 'ok'       && `✓ You are at the right location — ${locationInfo?.office?.name}`}
-              {locationStatus === 'outside'  && `✗ You are not at the office · ${locationInfo?.distance}m away`}
-              {locationStatus === 'error'    && '⚠ GPS unavailable — submission still allowed'}
+          ) : (
+            <div className="flex items-center gap-3 rounded-xl px-4 py-3 border text-sm font-medium bg-violet-500/10 border-violet-500/30 text-violet-400">
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+              Location check disabled — Work From Home mode is active
             </div>
-            {(locationStatus === 'outside' || locationStatus === 'error') && (
-              <button onClick={retryLocation}
-                      className="flex-shrink-0 text-xs bg-white/10 hover:bg-white/20 px-2 py-1 rounded-lg transition-colors">
-                Retry
-              </button>
-            )}
-          </div>
+          )}
 
           {/* Work summary */}
           <div>

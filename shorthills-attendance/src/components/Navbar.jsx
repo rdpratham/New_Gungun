@@ -3,6 +3,7 @@ import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 import { useTheme } from '../context/ThemeContext';
+import AttendanceOptionsModal from './AttendanceOptionsModal';
 
 /* ── Time-ago helper ─────────────────────────────────────────────── */
 function timeAgo(ts) {
@@ -164,6 +165,7 @@ export default function Navbar({
   const { isDark, toggle } = useTheme();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifOpen,    setNotifOpen]    = useState(false);
+  const [showAO,       setShowAO]       = useState(false);
   const dropdownRef = useRef(null);
   const notifRef    = useRef(null);
 
@@ -202,6 +204,7 @@ export default function Navbar({
   };
 
   return (
+    <>
     <nav className="sticky top-0 z-40 border-b"
          style={{ borderColor: 'var(--border)', background: 'var(--surface)', backdropFilter: 'blur(20px)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -316,6 +319,24 @@ export default function Navbar({
                       </svg>
                       View Profile
                     </button>
+                    {/* Attendance Options — admin only */}
+                    {role === 'admin' && (
+                      <button
+                        onClick={() => { setDropdownOpen(false); setShowAO(true); }}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors text-left"
+                        style={{ color: 'var(--text-2)' }}
+                        onMouseEnter={e => { e.currentTarget.style.background = 'var(--surface)'; e.currentTarget.style.color = 'var(--text)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-2)'; }}
+                      >
+                        <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        Attendance Options
+                        <span className="ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                              style={{ background: 'rgba(124,58,237,0.15)', color: '#a78bfa' }}>AO</span>
+                      </button>
+                    )}
                     {/* Logout */}
                     <button
                       onClick={handleLogout}
@@ -338,5 +359,9 @@ export default function Navbar({
         </div>
       </div>
     </nav>
+
+    {/* Attendance Options Modal */}
+    {showAO && <AttendanceOptionsModal onClose={() => setShowAO(false)} />}
+    </>
   );
 }
