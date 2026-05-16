@@ -1,8 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import {
-  collection, addDoc, getDocs, updateDoc, deleteDoc,
-  doc, query, orderBy, serverTimestamp,
+  collection, addDoc, onSnapshot, updateDoc, deleteDoc,
+  doc, serverTimestamp,
 } from 'firebase/firestore';
 
 /* ── Helpers ─────────────────────────────────────────────────────── */
@@ -116,20 +116,20 @@ export default function AssignTaskPage({ user, employees = [] }) {
   const [toast,          setToast]          = useState('');
   const [confirmDel,     setConfirmDel]     = useState(null);
 
-  /* Fetch tasks */
-  const fetchTasks = useCallback(async () => {
+  useEffect(() => {
     setLoading(true);
-    try {
-      const snap = await getDocs(query(collection(db, 'tasks'), orderBy('createdAt', 'desc')));
-      setTasks(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    } catch (err) {
-      console.error('fetchTasks:', err);
-    } finally {
-      setLoading(false);
-    }
+    const unsub = onSnapshot(
+      collection(db, 'tasks'),
+      snap => {
+        const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        data.sort((a, b) => (b.createdAt?.seconds ?? 0) - (a.createdAt?.seconds ?? 0));
+        setTasks(data);
+        setLoading(false);
+      },
+      err => { console.error(err); setLoading(false); }
+    );
+    return () => unsub();
   }, []);
-
-  useEffect(() => { fetchTasks(); }, [fetchTasks]);
 
   /* Derived — filtered tasks */
   const filteredTasks = tasks.filter(t => {
@@ -159,9 +159,7 @@ export default function AssignTaskPage({ user, employees = [] }) {
         createdAt:      serverTimestamp(),
         seen:           false,
       };
-      const docRef = await addDoc(collection(db, 'tasks'), payload);
-      const newTask = { id: docRef.id, ...payload, createdAt: { seconds: Date.now() / 1000 } };
-      setTasks(prev => [newTask, ...prev]);
+      await addDoc(collection(db, 'tasks'), payload);
       setForm(INITIAL_FORM);
       setToast('Task assigned successfully!');
     } catch (err) {
@@ -172,11 +170,10 @@ export default function AssignTaskPage({ user, employees = [] }) {
   }
 
   async function cycleStatus(task) {
-    const idx     = STATUS_CYCLE.indexOf(task.status);
-    const next    = STATUS_CYCLE[(idx + 1) % STATUS_CYCLE.length];
+    const idx  = STATUS_CYCLE.indexOf(task.status);
+    const next = STATUS_CYCLE[(idx + 1) % STATUS_CYCLE.length];
     try {
       await updateDoc(doc(db, 'tasks', task.id), { status: next });
-      setTasks(prev => prev.map(t => t.id === task.id ? { ...t, status: next } : t));
     } catch (err) { console.error('cycleStatus:', err); }
   }
 
@@ -188,7 +185,6 @@ export default function AssignTaskPage({ user, employees = [] }) {
     }
     try {
       await deleteDoc(doc(db, 'tasks', id));
-      setTasks(prev => prev.filter(t => t.id !== id));
       setConfirmDel(null);
     } catch (err) { console.error('deleteTask:', err); }
   }

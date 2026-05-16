@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import {
-  collection, addDoc, getDocs, updateDoc, deleteDoc,
+  collection, addDoc, onSnapshot, updateDoc, deleteDoc,
   doc, query, where, serverTimestamp,
 } from 'firebase/firestore';
 
@@ -193,17 +193,20 @@ export default function NotesPage({ user }) {
   const [editingNote,  setEditingNote]  = useState(null);
   const [searchQuery,  setSearchQuery]  = useState('');
 
-  /* Fetch */
+  /* Fetch — real-time */
   useEffect(() => {
     if (!user?.uid) return;
     setLoading(true);
-    getDocs(query(collection(db, 'notes'), where('uid', '==', user.uid)))
-      .then(snap => {
+    const unsub = onSnapshot(
+      query(collection(db, 'notes'), where('uid', '==', user.uid)),
+      snap => {
         const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         setNotes(sortNotes(data));
-      })
-      .catch(err => console.error('fetchNotes:', err))
-      .finally(() => setLoading(false));
+        setLoading(false);
+      },
+      err => { console.error(err); setLoading(false); }
+    );
+    return () => unsub();
   }, [user?.uid]);
 
   /* Filtered */
@@ -215,12 +218,10 @@ export default function NotesPage({ user }) {
   /* Handlers */
   async function handleAdd({ title, content, color, pinned }) {
     try {
-      const docRef = await addDoc(collection(db, 'notes'), {
+      await addDoc(collection(db, 'notes'), {
         uid: user.uid, title, content, color, pinned,
         createdAt: serverTimestamp(), updatedAt: serverTimestamp(),
       });
-      const newNote = { id: docRef.id, uid: user.uid, title, content, color, pinned, updatedAt: { seconds: Date.now() / 1000 } };
-      setNotes(prev => sortNotes([newNote, ...prev]));
       setShowAddModal(false);
     } catch (err) { console.error('addNote:', err); }
   }
@@ -228,9 +229,6 @@ export default function NotesPage({ user }) {
   async function handleUpdate({ title, content, color, pinned }) {
     try {
       await updateDoc(doc(db, 'notes', editingNote.id), { title, content, color, pinned, updatedAt: serverTimestamp() });
-      setNotes(prev => sortNotes(prev.map(n =>
-        n.id === editingNote.id ? { ...n, title, content, color, pinned, updatedAt: { seconds: Date.now() / 1000 } } : n
-      )));
       setEditingNote(null);
     } catch (err) { console.error('updateNote:', err); }
   }
@@ -238,7 +236,6 @@ export default function NotesPage({ user }) {
   async function handleDelete(id) {
     try {
       await deleteDoc(doc(db, 'notes', id));
-      setNotes(prev => prev.filter(n => n.id !== id));
     } catch (err) { console.error('deleteNote:', err); }
   }
 

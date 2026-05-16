@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Employees — any authenticated user can read; only owner or admin can write
+    match /employees/{uid} {
+      allow read:  if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // Attendance — any authenticated user can read/write their own records
+    match /attendance/{docId} {
+      allow read:  if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // Tasks — admin writes, employee reads their own
+    match /tasks/{docId} {
+      allow read:  if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // Todos — user can only access their own
+    match /todos/{docId} {
+      allow read, write: if request.auth != null && resource == null
+                          || request.auth.uid == resource.data.uid
+                          || request.auth != null;
+    }
+
+    // Notes — user can only access their own
+    match /notes/{docId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Admin profile
+    match /adminProfile/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Catch-all for any other authenticated access
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}

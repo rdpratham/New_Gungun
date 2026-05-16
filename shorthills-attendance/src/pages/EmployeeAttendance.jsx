@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { doc, onSnapshot, collection, query, where, orderBy, limit, updateDoc, writeBatch } from 'firebase/firestore';
+import { doc, onSnapshot, collection, query, where, limit, updateDoc, writeBatch } from 'firebase/firestore';
 import { db } from '../firebase';
 import Navbar from '../components/Navbar';
 import AttendancePopup from '../components/AttendancePopup';
@@ -208,7 +208,7 @@ function MyAttendancePage({ user, employeeData }) {
     };
 
     const listen = (field, value) => onSnapshot(
-      query(collection(db, 'attendance'), where(field, '==', value), orderBy('date', 'desc'), limit(100)),
+      query(collection(db, 'attendance'), where(field, '==', value), limit(100)),
       snap => { snap.docs.forEach(d => mapRef.current.set(d.id, { id: d.id, ...d.data() })); applyMap(); },
       err => { console.error(err); setLoading(false); }
     );
@@ -513,12 +513,12 @@ export default function EmployeeAttendance({ user }) {
     };
 
     const listen = (field, value) => onSnapshot(
-      query(collection(db, 'attendance'), where(field, '==', value), orderBy('date', 'desc'), limit(30)),
+      query(collection(db, 'attendance'), where(field, '==', value), limit(50)),
       snap => {
         snap.docs.forEach(d => attMapRef.current.set(d.id, { id: d.id, ...d.data() }));
         applyMap();
       },
-      err => console.error('Attendance listener error:', err)
+      err => console.error('Attendance listener error:', field, value, err.message)
     );
 
     const unsubs = [

@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import {
-  collection, addDoc, getDocs, updateDoc, deleteDoc,
+  collection, addDoc, onSnapshot, updateDoc, deleteDoc,
   doc, query, where, serverTimestamp,
 } from 'firebase/firestore';
 
@@ -98,24 +98,23 @@ export default function TodoPage({ user, title }) {
   const [selectedDate, setSelectedDate] = useState(todayIST);
   const [newText,      setNewText]      = useState('');
   const [adding,       setAdding]       = useState(false);
+  const [error,        setError]        = useState('');
 
-  /* Fetch all user todos once */
-  const fetchTodos = useCallback(async () => {
+  useEffect(() => {
     if (!user?.uid) return;
     setLoading(true);
-    try {
-      const snap = await getDocs(query(collection(db, 'todos'), where('uid', '==', user.uid)));
-      const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      data.sort((a, b) => (a.createdAt?.seconds ?? 0) - (b.createdAt?.seconds ?? 0));
-      setTodos(data);
-    } catch (err) {
-      console.error('fetchTodos:', err);
-    } finally {
-      setLoading(false);
-    }
+    const unsub = onSnapshot(
+      query(collection(db, 'todos'), where('uid', '==', user.uid)),
+      snap => {
+        const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        data.sort((a, b) => (a.createdAt?.seconds ?? 0) - (b.createdAt?.seconds ?? 0));
+        setTodos(data);
+        setLoading(false);
+      },
+      err => { console.error(err); setLoading(false); setError('Failed to load tasks: ' + err.message); }
+    );
+    return () => unsub();
   }, [user?.uid]);
-
-  useEffect(() => { fetchTodos(); }, [fetchTodos]);
 
   /* Derived */
   const todosForDate = todos.filter(t => t.date === selectedDate);
@@ -140,36 +139,27 @@ export default function TodoPage({ user, title }) {
     const text = newText.trim();
     if (!text || adding) return;
     setAdding(true);
+    setError('');
     try {
-      const docRef = await addDoc(collection(db, 'todos'), {
+      await addDoc(collection(db, 'todos'), {
         uid: user.uid, text, date: selectedDate,
         completed: false, createdAt: serverTimestamp(),
       });
-      setTodos(prev => [...prev, {
-        id: docRef.id, uid: user.uid, text,
-        date: selectedDate, completed: false,
-        createdAt: { seconds: Date.now() / 1000 },
-      }]);
       setNewText('');
-    } catch (err) {
-      console.error('addTodo:', err);
-    } finally {
-      setAdding(false);
-    }
+    } catch (err) { setError('Failed to add: ' + err.message); }
+    finally { setAdding(false); }
   }
 
   async function toggleTodo(todo) {
     try {
       await updateDoc(doc(db, 'todos', todo.id), { completed: !todo.completed });
-      setTodos(prev => prev.map(t => t.id === todo.id ? { ...t, completed: !t.completed } : t));
-    } catch (err) { console.error('toggleTodo:', err); }
+    } catch (err) { console.error('toggleTodo:', err); setError(err.message); }
   }
 
   async function deleteTodo(id) {
     try {
       await deleteDoc(doc(db, 'todos', id));
-      setTodos(prev => prev.filter(t => t.id !== id));
-    } catch (err) { console.error('deleteTodo:', err); }
+    } catch (err) { console.error('deleteTodo:', err); setError(err.message); }
   }
 
   /* ── Render ── */
@@ -269,6 +259,19 @@ export default function TodoPage({ user, title }) {
           <span className="hidden sm:inline">Add</span>
         </button>
       </div>
+
+      {/* Error banner */}
+      {error && (
+        <div className="flex items-center justify-between gap-3 px-4 py-3 rounded-2xl text-sm font-medium"
+             style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.4)', color: '#f87171' }}>
+          <span>{error}</span>
+          <button onClick={() => setError('')}
+                  className="flex-shrink-0 w-6 h-6 rounded-lg flex items-center justify-center hover:scale-110 transition-transform"
+                  style={{ background: 'rgba(239,68,68,0.2)', color: '#f87171' }}>
+            ✕
+          </button>
+        </div>
+      )}
 
       {/* Task list */}
       <div className="space-y-2">
