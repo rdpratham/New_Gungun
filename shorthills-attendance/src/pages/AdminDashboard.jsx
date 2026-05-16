@@ -62,16 +62,13 @@ function Sidebar({ page, setPage, employeeCount, mobileOpen, setMobileOpen }) {
     },
   ];
 
-  const inner = (
+  const NavContent = () => (
     <div className="flex flex-col h-full">
-      {/* Brand strip */}
-      <div className="px-4 py-5 border-b" style={{ borderColor: 'var(--border)' }}>
+      <div className="px-5 py-5 border-b" style={{ borderColor: 'var(--border)' }}>
         <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-3)' }}>
           Admin Panel
         </p>
       </div>
-
-      {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-1">
         {items.map(item => {
           const active = page === item.id;
@@ -79,18 +76,18 @@ function Sidebar({ page, setPage, employeeCount, mobileOpen, setMobileOpen }) {
             <button
               key={item.id}
               onClick={() => { setPage(item.id); setMobileOpen(false); }}
-              className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200"
               style={active
-                ? { background: 'linear-gradient(135deg,#7c3aed,#3b82f6)', color: '#fff', boxShadow: '0 4px 20px rgba(124,58,237,0.35)' }
+                ? { background: 'linear-gradient(135deg,#7c3aed,#3b82f6)', color: '#fff', boxShadow: '0 4px 20px rgba(124,58,237,0.3)' }
                 : { color: 'var(--text-2)', background: 'transparent' }
               }
               onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'var(--surface-s)'; }}
               onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
             >
               {item.icon}
-              <span className="hidden md:inline">{item.label}</span>
+              <span>{item.label}</span>
               {item.badge !== undefined && (
-                <span className="ml-auto hidden md:inline text-xs px-2 py-0.5 rounded-full font-semibold"
+                <span className="ml-auto text-xs px-2 py-0.5 rounded-full font-semibold"
                       style={active
                         ? { background: 'rgba(255,255,255,0.25)', color: '#fff' }
                         : { background: 'var(--surface-s)', color: 'var(--text-3)' }}>
@@ -101,10 +98,8 @@ function Sidebar({ page, setPage, employeeCount, mobileOpen, setMobileOpen }) {
           );
         })}
       </nav>
-
-      {/* Footer */}
-      <div className="px-4 py-4 border-t" style={{ borderColor: 'var(--border)' }}>
-        <p className="text-xs text-center hidden md:block" style={{ color: 'var(--text-3)' }}>
+      <div className="px-5 py-4 border-t" style={{ borderColor: 'var(--border)' }}>
+        <p className="text-xs text-center" style={{ color: 'var(--text-3)' }}>
           Garvix Ops © {new Date().getFullYear()}
         </p>
       </div>
@@ -113,22 +108,26 @@ function Sidebar({ page, setPage, employeeCount, mobileOpen, setMobileOpen }) {
 
   return (
     <>
-      {/* Mobile overlay */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-40 md:hidden"
-             style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}
-             onClick={() => setMobileOpen(false)} />
-      )}
-
-      {/* Sidebar panel */}
+      {/* Desktop sidebar — always visible on md+ */}
       <aside
-        className={`fixed md:sticky top-16 z-40 h-[calc(100vh-4rem)] flex-shrink-0 transition-all duration-300
-                    ${mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-                    w-16 md:w-56 lg:w-64`}
+        className="hidden md:flex flex-col flex-shrink-0 sticky top-16 h-[calc(100vh-4rem)] w-56 lg:w-64"
         style={{ background: 'var(--surface)', borderRight: '1px solid var(--border)' }}
       >
-        {inner}
+        <NavContent />
       </aside>
+
+      {/* Mobile sidebar — full overlay when open */}
+      {mobileOpen && (
+        <div className="md:hidden fixed inset-0 z-50 flex">
+          <div className="absolute inset-0"
+               style={{ background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(4px)' }}
+               onClick={() => setMobileOpen(false)} />
+          <aside className="relative z-10 w-64 h-full flex flex-col shadow-2xl"
+                 style={{ background: 'var(--surface)', borderRight: '1px solid var(--border)' }}>
+            <NavContent />
+          </aside>
+        </div>
+      )}
     </>
   );
 }
