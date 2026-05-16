@@ -46,11 +46,22 @@ export default function EditEmployeeModal({ employee, onClose, onUpdated, onDele
     setDeleting(true);
     try {
       const batch = writeBatch(db);
-      const attSnap = await getDocs(query(
-        collection(db, 'attendance'),
-        where('employeeUid', '==', employee.id)
-      ));
-      attSnap.docs.forEach(d => batch.delete(d.ref));
+
+      // Collect all attendance docs across three possible field values
+      const queries = [
+        getDocs(query(collection(db, 'attendance'), where('employeeUid', '==', employee.id))),
+        getDocs(query(collection(db, 'attendance'), where('employeeId',  '==', employee.id))),
+      ];
+      if (employee.employeeId) {
+        queries.push(getDocs(query(collection(db, 'attendance'), where('employeeId', '==', employee.employeeId))));
+      }
+
+      const snaps = await Promise.all(queries);
+      const seen = new Set();
+      snaps.forEach(snap => snap.docs.forEach(d => {
+        if (!seen.has(d.id)) { seen.add(d.id); batch.delete(d.ref); }
+      }));
+
       batch.delete(doc(db, 'employees', employee.id));
       await batch.commit();
       onDeleted?.(employee.id);
