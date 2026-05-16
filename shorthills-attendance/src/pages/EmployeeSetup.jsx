@@ -24,6 +24,7 @@ function compressDataURL(dataURL) {
 export default function EmployeeSetup({ user, onComplete }) {
   const [employeeData, setEmployeeData] = useState(null);
   const [form, setForm] = useState({
+    name: '',
     joiningDate: '',
     mobile: '',
     currentPassword: '',
@@ -54,6 +55,7 @@ export default function EmployeeSetup({ user, onComplete }) {
   const handleNextStep = (e) => {
     e.preventDefault();
     setError('');
+    if (!form.name.trim()) { setError('Please enter your full name.'); return; }
     if (!form.joiningDate) { setError('Please enter your joining date.'); return; }
     if (!form.mobile || form.mobile.length < 10) { setError('Please enter a valid mobile number.'); return; }
     if (form.newPassword) {
@@ -87,6 +89,7 @@ export default function EmployeeSetup({ user, onComplete }) {
       }
 
       await updateDoc(doc(db, 'employees', user.uid), {
+        name: form.name.trim(),
         joiningDate: form.joiningDate,
         mobile: form.mobile.trim(),
         photoURL: compressedPhoto,
@@ -178,6 +181,20 @@ export default function EmployeeSetup({ user, onComplete }) {
           {step === 1 && (
             <form onSubmit={handleNextStep} className="space-y-5">
               <h2 className="text-base font-semibold mb-1" style={{ color: 'var(--text)' }}>Personal Information</h2>
+
+              {/* Name */}
+              <div>
+                <label className="label">Full Name <span className="text-red-400">*</span></label>
+                <input
+                  type="text"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="e.g. Pratham Jain"
+                  required
+                  className="input-field"
+                />
+              </div>
 
               {/* Read-only fields */}
               <div>

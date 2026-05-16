@@ -19,8 +19,8 @@ export default function EmployeeCard({ employee, onClick }) {
              style={{ backgroundImage: 'radial-gradient(circle at 70% 50%, #ffffff22 0%, transparent 60%)' }} />
         {/* Status dot */}
         <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-black/30 backdrop-blur-sm rounded-full px-2 py-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-white text-xs font-medium">Active</span>
+          <span className={`w-1.5 h-1.5 rounded-full ${employee.profileComplete ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
+          <span className="text-white text-xs font-medium">{employee.profileComplete ? 'Active' : 'Pending'}</span>
         </div>
       </div>
 
@@ -43,7 +43,7 @@ export default function EmployeeCard({ employee, onClick }) {
       {/* Info */}
       <div className="px-5 pb-5 text-center">
         <h3 className="font-bold text-base truncate mb-0.5" style={{ color: 'var(--text)' }}>
-          {employee.name || 'Setup Pending'}
+          {employee.name || employee.email?.split('@')[0] || '—'}
         </h3>
         <p className="text-xs truncate mb-3" style={{ color: 'var(--text-3)' }}>{employee.email}</p>
 

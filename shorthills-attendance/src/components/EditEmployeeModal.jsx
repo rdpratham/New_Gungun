@@ -4,6 +4,7 @@ import { db } from '../firebase';
 
 export default function EditEmployeeModal({ employee, onClose, onUpdated, onDeleted }) {
   const [form, setForm] = useState({
+    name:       employee.name       || '',
     employeeId: employee.employeeId || '',
     mobile:     employee.mobile     || '',
     joiningDate:employee.joiningDate|| '',
@@ -26,6 +27,7 @@ export default function EditEmployeeModal({ employee, onClose, onUpdated, onDele
     setError('');
     try {
       const updates = {
+        name:        form.name.trim(),
         employeeId:  form.employeeId.trim(),
         mobile:      form.mobile.trim(),
         joiningDate: form.joiningDate,
@@ -143,6 +145,11 @@ export default function EditEmployeeModal({ employee, onClose, onUpdated, onDele
                 Employee Information
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="sm:col-span-2">
+                  <label className="label">Full Name</label>
+                  <input type="text" name="name" value={form.name} onChange={handleChange}
+                         placeholder="e.g. Pratham Jain" className="input-field" />
+                </div>
                 <div>
                   <label className="label">Employee ID</label>
                   <input type="text" name="employeeId" value={form.employeeId} onChange={handleChange}
