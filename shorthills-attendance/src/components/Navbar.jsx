@@ -245,8 +245,21 @@ export default function Navbar({
               )}
             </button>
 
-            {/* Notification bell — employee only */}
-            {role === 'employee' && (
+            {/* GreyT HR quick link */}
+            <a href="https://shorthillstech.greythr.com/" target="_blank" rel="noopener noreferrer"
+               className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg"
+               title="Open GreyT HR Portal"
+               style={{ background: 'linear-gradient(135deg,rgba(124,58,237,0.12),rgba(59,130,246,0.12))',
+                        border: '1px solid rgba(124,58,237,0.25)', color: '#a78bfa' }}>
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              GreyT HR
+            </a>
+
+            {/* Notification bell — employee & admin */}
+            {(role === 'employee' || role === 'admin') && (
               <div className="relative" ref={notifRef}>
                 <button
                   onClick={() => setNotifOpen(v => !v)}

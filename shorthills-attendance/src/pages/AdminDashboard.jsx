@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { collection, onSnapshot, query, orderBy, doc, getDoc, writeBatch } from 'firebase/firestore';
+import { collection, onSnapshot, query, orderBy, doc, getDoc, writeBatch, where } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import Navbar from '../components/Navbar';
@@ -9,6 +9,7 @@ import ProfileModal from '../components/ProfileModal';
 import AssignTaskPage from '../components/AssignTaskPage';
 import TodoPage from '../components/TodoPage';
 import NotesPage from '../components/NotesPage';
+import CredentialsPage from '../components/CredentialsPage';
 
 function formatIST(ts) {
   if (!ts) return '—';
@@ -77,6 +78,10 @@ function Sidebar({ page, setPage, employeeCount, mobileOpen, setMobileOpen }) {
     {
       id: 'my-notes', label: 'My Notes',
       icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>,
+    },
+    {
+      id: 'my-credentials', label: 'My Credentials',
+      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg>,
     },
   ];
 
@@ -697,6 +702,28 @@ export default function AdminDashboard({ user }) {
   const [adminProfile, setAdminProfile] = useState(null);
   const [filterDate, setFilterDate]   = useState('');
   const [filterName, setFilterName]   = useState('');
+  const [adminNotifs,   setAdminNotifs]   = useState([]);
+  const [adminUnread,   setAdminUnread]   = useState(0);
+
+  // Real-time admin notifications listener
+  useEffect(() => {
+    const q = query(collection(db, 'notifications'), where('targetRole', '==', 'admin'));
+    const unsub = onSnapshot(q, snap => {
+      const notifs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      notifs.sort((a, b) => (b.createdAt?.seconds ?? 0) - (a.createdAt?.seconds ?? 0));
+      setAdminNotifs(notifs);
+      setAdminUnread(notifs.filter(n => !n.seen).length);
+    }, err => console.error('adminNotifs:', err));
+    return () => unsub();
+  }, []);
+
+  const handleAdminMarkAllRead = async () => {
+    try {
+      const batch = writeBatch(db);
+      adminNotifs.filter(n => !n.seen).forEach(n => batch.update(doc(db, 'notifications', n.id), { seen: true }));
+      await batch.commit();
+    } catch (err) { console.error(err); }
+  };
 
   // Real-time employees listener
   useEffect(() => {
@@ -773,7 +800,21 @@ export default function AdminDashboard({ user }) {
   return (
     <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg)' }}>
       <Navbar user={user} role="admin" avatarSrc={adminProfile?.photoURL}
-              onViewProfile={() => setShowProfile(true)} />
+              onViewProfile={() => setShowProfile(true)}
+              notifications={adminNotifs.map(n => ({
+                id:             n.id,
+                title:          n.taskTitle || 'Task',
+                assignedByName: `${n.employeeName || 'Employee'} → ${n.newStatus === 'in-progress' ? 'In Progress' : n.newStatus === 'completed' ? 'Completed' : 'Pending'}`,
+                dueDate:        null,
+                seen:           n.seen,
+                createdAt:      n.createdAt,
+                priority:       n.newStatus === 'completed' ? 'low' : n.newStatus === 'in-progress' ? 'medium' : 'high',
+                status:         null,
+              }))}
+              unreadCount={adminUnread}
+              onNotifClick={() => setPage('assign-task')}
+              onMarkAllRead={handleAdminMarkAllRead}
+      />
 
       {showProfile && <ProfileModal user={user} role="admin" onClose={() => setShowProfile(false)} />}
 
@@ -841,6 +882,9 @@ export default function AdminDashboard({ user }) {
           )}
           {page === 'my-notes' && (
             <NotesPage user={user} />
+          )}
+          {page === 'my-credentials' && (
+            <CredentialsPage user={user} />
           )}
         </main>
       </div>

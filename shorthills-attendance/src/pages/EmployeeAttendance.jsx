@@ -7,6 +7,7 @@ import ProfileModal from '../components/ProfileModal';
 import AssignedTasksPage from '../components/AssignedTasksPage';
 import TodoPage from '../components/TodoPage';
 import NotesPage from '../components/NotesPage';
+import CredentialsPage from '../components/CredentialsPage';
 
 /* ── helpers ─────────────────────────────────────────────── */
 function getISTDateString() {
@@ -53,6 +54,10 @@ function Sidebar({ page, setPage, unreadTasks, mobileOpen, setMobileOpen }) {
     {
       id: 'my-notes', label: 'My Notes',
       icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>,
+    },
+    {
+      id: 'my-credentials', label: 'My Credentials',
+      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg>,
     },
   ];
 
@@ -666,8 +671,9 @@ export default function EmployeeAttendance({ user }) {
               )}
               {page === 'attendance' && <MyAttendancePage user={user} employeeData={employeeData} />}
               {page === 'tasks'      && <AssignedTasksPage user={user} />}
-              {page === 'my-todo'    && <TodoPage user={user} />}
-              {page === 'my-notes'   && <NotesPage user={user} />}
+              {page === 'my-todo'        && <TodoPage user={user} />}
+              {page === 'my-notes'       && <NotesPage user={user} />}
+              {page === 'my-credentials' && <CredentialsPage user={user} />}
             </>
           )}
         </main>

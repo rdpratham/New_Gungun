@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import {
   collection, updateDoc, doc,
-  query, where, onSnapshot,
+  query, where, onSnapshot, addDoc, serverTimestamp,
 } from 'firebase/firestore';
 
 /* ── Helpers ─────────────────────────────────────────────────────── */
@@ -131,11 +131,26 @@ export default function AssignedTasksPage({ user }) {
     return () => unsub();
   }, [user?.uid]);
 
-  /* Update status */
+  const STATUS_LABEL = { pending: 'Pending', 'in-progress': 'In Progress', completed: 'Completed' };
+
+  /* Update status + notify admin */
   async function updateStatus(taskId, newStatus) {
+    const task = tasks.find(t => t.id === taskId);
+    if (!task || task.status === newStatus) return;
     try {
       await updateDoc(doc(db, 'tasks', taskId), { status: newStatus, seen: true });
-      // Optimistic update — snapshot will also fire
+      await addDoc(collection(db, 'notifications'), {
+        type:         'task_status_update',
+        taskId,
+        taskTitle:    task.title || 'Task',
+        employeeName: user?.displayName || user?.email || 'Employee',
+        employeeUid:  user?.uid,
+        oldStatus:    task.status,
+        newStatus,
+        createdAt:    serverTimestamp(),
+        seen:         false,
+        targetRole:   'admin',
+      });
       setTasks(prev => sortTasks(prev.map(t => t.id === taskId ? { ...t, status: newStatus } : t)));
     } catch (err) {
       console.error('updateStatus:', err);
