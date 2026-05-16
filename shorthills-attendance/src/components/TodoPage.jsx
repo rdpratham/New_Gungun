@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { db } from '../firebase';
 import {
   collection, addDoc, onSnapshot, updateDoc, deleteDoc,
@@ -30,13 +30,23 @@ function offsetDate(dateStr, delta) {
 }
 
 /* ── Icons ───────────────────────────────────────────────────────── */
-const IconCheck   = () => <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>;
-const IconTrash   = () => <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4h6v3M4 7h16" /></svg>;
-const IconPlus    = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>;
-const IconChevL   = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>;
-const IconChevR   = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>;
-const IconCalendar= () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>;
-const IconStar    = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>;
+const IconCheck    = () => <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>;
+const IconTrash    = () => <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4h6v3M4 7h16" /></svg>;
+const IconPlus     = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>;
+const IconChevL    = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>;
+const IconChevR    = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>;
+const IconCalendar = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>;
+const IconStar     = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>;
+const IconClock    = () => <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+const IconPencil   = () => <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>;
+const IconX        = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>;
+
+/* ── Priority config ─────────────────────────────────────────────── */
+const PRIORITY = {
+  high:   { label: 'High',   color: '#ef4444', bg: 'rgba(239,68,68,0.15)',   border: 'rgba(239,68,68,0.4)',   dot: '#ef4444' },
+  medium: { label: 'Medium', color: '#f59e0b', bg: 'rgba(245,158,11,0.15)',  border: 'rgba(245,158,11,0.4)',  dot: '#f59e0b' },
+  low:    { label: 'Low',    color: '#10b981', bg: 'rgba(16,185,129,0.15)',   border: 'rgba(16,185,129,0.4)',  dot: '#10b981' },
+};
 
 /* ── Spinner ─────────────────────────────────────────────────────── */
 function Spinner({ size = 6, color = '#7c3aed' }) {
@@ -46,14 +56,182 @@ function Spinner({ size = 6, color = '#7c3aed' }) {
   );
 }
 
+/* ── TaskForm (shared between Add & Edit modals) ─────────────────── */
+function TaskForm({ initial, selectedDate, onSave, onClose, modalTitle, saveLabel }) {
+  const [title,       setTitle]       = useState(initial?.title       || '');
+  const [description, setDescription] = useState(initial?.description || '');
+  const [date,        setDate]        = useState(initial?.date        || selectedDate);
+  const [time,        setTime]        = useState(initial?.time        || '');
+  const [priority,    setPriority]    = useState(initial?.priority    || 'medium');
+  const [saving,      setSaving]      = useState(false);
+  const [err,         setErr]         = useState('');
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (!title.trim()) { setErr('Title is required.'); return; }
+    setSaving(true);
+    setErr('');
+    try {
+      await onSave({ title: title.trim(), description: description.trim(), date, time, priority });
+    } catch (ex) {
+      setErr(ex.message);
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+         style={{ background: 'rgba(4,8,15,0.8)', backdropFilter: 'blur(8px)' }}>
+      <div className="max-w-md w-full rounded-2xl overflow-hidden animate-slide-up"
+           style={{ background: 'var(--surface)', border: '1px solid var(--border)', boxShadow: '0 24px 64px rgba(0,0,0,0.5)' }}>
+
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: 'var(--border)' }}>
+          <h2 className="text-lg font-bold" style={{ color: 'var(--text)' }}>{modalTitle}</h2>
+          <button onClick={onClose}
+                  className="w-8 h-8 rounded-xl flex items-center justify-center transition-all hover:scale-110"
+                  style={{ background: 'var(--surface-s)', border: '1px solid var(--border)', color: 'var(--text-3)' }}>
+            <IconX />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          {/* Title */}
+          <div>
+            <label className="label block mb-1.5">Title <span style={{ color: '#ef4444' }}>*</span></label>
+            <input
+              type="text"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              placeholder="What needs to be done?"
+              className="input-field w-full"
+              autoFocus
+            />
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="label block mb-1.5">Description <span style={{ color: 'var(--text-3)', fontSize: '0.7rem' }}>(optional)</span></label>
+            <textarea
+              value={description}
+              onChange={e => setDescription(e.target.value)}
+              placeholder="Add more details…"
+              className="input-field w-full resize-none"
+              rows={3}
+            />
+          </div>
+
+          {/* Date + Time row */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="label block mb-1.5">Date</label>
+              <input
+                type="date"
+                value={date}
+                onChange={e => setDate(e.target.value)}
+                className="input-field w-full"
+                style={{ colorScheme: 'dark' }}
+              />
+            </div>
+            <div>
+              <label className="label block mb-1.5">Time <span style={{ color: 'var(--text-3)', fontSize: '0.7rem' }}>(optional)</span></label>
+              <input
+                type="time"
+                value={time}
+                onChange={e => setTime(e.target.value)}
+                className="input-field w-full"
+                style={{ colorScheme: 'dark' }}
+              />
+            </div>
+          </div>
+
+          {/* Priority pills */}
+          <div>
+            <label className="label block mb-2">Priority</label>
+            <div className="flex gap-2">
+              {(['high', 'medium', 'low']).map(p => {
+                const cfg = PRIORITY[p];
+                const selected = priority === p;
+                return (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setPriority(p)}
+                    className="flex-1 py-2 rounded-xl text-sm font-semibold transition-all duration-200"
+                    style={selected
+                      ? { background: 'linear-gradient(135deg,#7c3aed,#3b82f6)', color: '#fff', boxShadow: '0 4px 16px rgba(124,58,237,0.35)', border: 'none' }
+                      : { background: 'var(--surface-s)', border: `1px solid ${cfg.border}`, color: cfg.color }
+                    }>
+                    {cfg.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Error */}
+          {err && (
+            <p className="text-sm font-medium px-3 py-2 rounded-xl"
+               style={{ background: 'rgba(239,68,68,0.12)', color: '#f87171', border: '1px solid rgba(239,68,68,0.3)' }}>
+              {err}
+            </p>
+          )}
+
+          {/* Footer */}
+          <div className="flex gap-3 pt-1">
+            <button type="button" onClick={onClose} className="btn-secondary flex-1">
+              Cancel
+            </button>
+            <button type="submit" disabled={saving} className="btn-primary flex-1 flex items-center justify-center gap-2">
+              {saving ? <Spinner size={4} color="#fff" /> : null}
+              {saveLabel}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+/* ── AddTodoModal ────────────────────────────────────────────────── */
+function AddTodoModal({ selectedDate, onSave, onClose }) {
+  return (
+    <TaskForm
+      initial={null}
+      selectedDate={selectedDate}
+      onSave={onSave}
+      onClose={onClose}
+      modalTitle="New Task"
+      saveLabel="Save Task"
+    />
+  );
+}
+
+/* ── EditTodoModal ───────────────────────────────────────────────── */
+function EditTodoModal({ todo, selectedDate, onSave, onClose }) {
+  return (
+    <TaskForm
+      initial={todo}
+      selectedDate={selectedDate}
+      onSave={onSave}
+      onClose={onClose}
+      modalTitle="Edit Task"
+      saveLabel="Update Task"
+    />
+  );
+}
+
 /* ── TodoItem ────────────────────────────────────────────────────── */
-function TodoItem({ todo, onToggle, onDelete }) {
+function TodoItem({ todo, onToggle, onDelete, onEdit }) {
   const [confirmDel, setConfirmDel] = useState(false);
 
   function handleDelete() {
     if (!confirmDel) { setConfirmDel(true); setTimeout(() => setConfirmDel(false), 2500); return; }
     onDelete(todo.id);
   }
+
+  const displayTitle = todo.title || todo.text || '—';
+  const pCfg = PRIORITY[todo.priority] || PRIORITY.medium;
 
   return (
     <div className="group flex items-center gap-3 rounded-2xl px-4 py-3.5 transition-all duration-200"
@@ -72,21 +250,49 @@ function TodoItem({ todo, onToggle, onDelete }) {
         <IconCheck />
       </button>
 
-      {/* Text */}
-      <span className="flex-1 text-sm font-medium transition-all duration-200 leading-relaxed"
-            style={{ color: todo.completed ? 'var(--text-3)' : 'var(--text)', textDecoration: todo.completed ? 'line-through' : 'none' }}>
-        {todo.text}
-      </span>
+      {/* Middle: title + time + description */}
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium leading-snug truncate"
+           style={{ color: todo.completed ? 'var(--text-3)' : 'var(--text)', textDecoration: todo.completed ? 'line-through' : 'none' }}>
+          {displayTitle}
+        </p>
+        {todo.time && (
+          <span className="inline-flex items-center gap-1 mt-0.5 text-[11px]" style={{ color: 'var(--text-3)' }}>
+            <IconClock /> {todo.time}
+          </span>
+        )}
+        {todo.description && (
+          <p className="text-xs mt-0.5 truncate" style={{ color: 'var(--text-3)' }}>{todo.description}</p>
+        )}
+      </div>
 
-      {/* Delete */}
-      <button onClick={handleDelete}
-              className="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 hover:scale-110 opacity-0 group-hover:opacity-100"
-              style={confirmDel
-                ? { background: 'rgba(239,68,68,0.2)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.4)' }
-                : { background: 'var(--surface-s)', color: 'var(--text-3)', border: '1px solid var(--border-s)' }}
-              title={confirmDel ? 'Click again to confirm' : 'Delete task'}>
-        <IconTrash />
-      </button>
+      {/* Right: priority badge + action buttons */}
+      <div className="flex items-center gap-1.5 flex-shrink-0">
+        {/* Priority badge */}
+        <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full"
+              style={{ background: pCfg.bg, color: pCfg.color, border: `1px solid ${pCfg.border}` }}>
+          <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: pCfg.dot }} />
+          {pCfg.label}
+        </span>
+
+        {/* Edit */}
+        <button onClick={() => onEdit(todo)}
+                className="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 hover:scale-110 opacity-0 group-hover:opacity-100"
+                style={{ background: 'var(--surface-s)', color: 'var(--text-3)', border: '1px solid var(--border-s)' }}
+                title="Edit task">
+          <IconPencil />
+        </button>
+
+        {/* Delete */}
+        <button onClick={handleDelete}
+                className="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 hover:scale-110 opacity-0 group-hover:opacity-100"
+                style={confirmDel
+                  ? { background: 'rgba(239,68,68,0.2)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.4)' }
+                  : { background: 'var(--surface-s)', color: 'var(--text-3)', border: '1px solid var(--border-s)' }}
+                title={confirmDel ? 'Click again to confirm' : 'Delete task'}>
+          <IconTrash />
+        </button>
+      </div>
     </div>
   );
 }
@@ -96,9 +302,9 @@ export default function TodoPage({ user, title }) {
   const [todos,        setTodos]        = useState([]);
   const [loading,      setLoading]      = useState(true);
   const [selectedDate, setSelectedDate] = useState(todayIST);
-  const [newText,      setNewText]      = useState('');
-  const [adding,       setAdding]       = useState(false);
   const [error,        setError]        = useState('');
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [editingTodo,  setEditingTodo]  = useState(null);
 
   useEffect(() => {
     if (!user?.uid) return;
@@ -135,19 +341,17 @@ export default function TodoPage({ user, title }) {
   })();
 
   /* Handlers */
-  async function handleAdd() {
-    const text = newText.trim();
-    if (!text || adding) return;
-    setAdding(true);
-    setError('');
-    try {
-      await addDoc(collection(db, 'todos'), {
-        uid: user.uid, text, date: selectedDate,
-        completed: false, createdAt: serverTimestamp(),
-      });
-      setNewText('');
-    } catch (err) { setError('Failed to add: ' + err.message); }
-    finally { setAdding(false); }
+  async function handleAdd({ title: ttl, description, date, time, priority }) {
+    await addDoc(collection(db, 'todos'), {
+      uid: user.uid, title: ttl, description, date, time, priority,
+      completed: false, createdAt: serverTimestamp(),
+    });
+    setShowAddModal(false);
+  }
+
+  async function handleEdit({ title: ttl, description, date, time, priority }) {
+    await updateDoc(doc(db, 'todos', editingTodo.id), { title: ttl, description, date, time, priority });
+    setEditingTodo(null);
   }
 
   async function toggleTodo(todo) {
@@ -165,6 +369,23 @@ export default function TodoPage({ user, title }) {
   /* ── Render ── */
   return (
     <div className="max-w-2xl mx-auto space-y-5 animate-fade-in">
+
+      {/* Modals */}
+      {showAddModal && (
+        <AddTodoModal
+          selectedDate={selectedDate}
+          onSave={handleAdd}
+          onClose={() => setShowAddModal(false)}
+        />
+      )}
+      {editingTodo && (
+        <EditTodoModal
+          todo={editingTodo}
+          selectedDate={selectedDate}
+          onSave={handleEdit}
+          onClose={() => setEditingTodo(null)}
+        />
+      )}
 
       {/* Page header */}
       <div className="flex items-center gap-4">
@@ -246,19 +467,14 @@ export default function TodoPage({ user, title }) {
         </div>
       )}
 
-      {/* Add task */}
-      <div className="flex gap-2">
-        <input type="text" value={newText}
-               onChange={e => setNewText(e.target.value)}
-               onKeyDown={e => e.key === 'Enter' && handleAdd()}
-               placeholder="Add a new task… (Enter to save)"
-               className="input-field flex-1" />
-        <button onClick={handleAdd} disabled={!newText.trim() || adding}
-                className="btn-primary flex items-center gap-2 flex-shrink-0 px-5">
-          {adding ? <Spinner size={4} color="#fff" /> : <IconPlus />}
-          <span className="hidden sm:inline">Add</span>
-        </button>
-      </div>
+      {/* Add Task button */}
+      <button
+        onClick={() => setShowAddModal(true)}
+        className="w-full flex items-center justify-center gap-2.5 py-3.5 rounded-2xl text-sm font-bold text-white transition-all duration-200 hover:opacity-90 hover:scale-[1.01] active:scale-[0.99]"
+        style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)', boxShadow: '0 4px 20px rgba(124,58,237,0.35)' }}>
+        <IconPlus />
+        Add Task
+      </button>
 
       {/* Error banner */}
       {error && (
@@ -289,12 +505,18 @@ export default function TodoPage({ user, title }) {
             </div>
             <div>
               <p className="font-semibold text-center" style={{ color: 'var(--text-2)' }}>No tasks for {formatDisplayDate(selectedDate)}</p>
-              <p className="text-sm text-center mt-1" style={{ color: 'var(--text-3)' }}>Add one above to get started</p>
+              <p className="text-sm text-center mt-1" style={{ color: 'var(--text-3)' }}>Click "Add Task" above to get started</p>
             </div>
           </div>
         ) : (
           todosForDate.map(todo => (
-            <TodoItem key={todo.id} todo={todo} onToggle={toggleTodo} onDelete={deleteTodo} />
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              onToggle={toggleTodo}
+              onDelete={deleteTodo}
+              onEdit={setEditingTodo}
+            />
           ))
         )}
       </div>
