@@ -1,42 +1,460 @@
-import { useEffect, useState, useCallback } from 'react';
-import { doc, getDoc, collection, query, where, orderBy, getDocs, limit } from 'firebase/firestore';
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { doc, getDoc, collection, query, where, orderBy, getDocs, limit, onSnapshot, updateDoc, writeBatch } from 'firebase/firestore';
 import { db } from '../firebase';
 import Navbar from '../components/Navbar';
 import AttendancePopup from '../components/AttendancePopup';
 import ProfileModal from '../components/ProfileModal';
+import AssignedTasksPage from '../components/AssignedTasksPage';
+import TodoPage from '../components/TodoPage';
+import NotesPage from '../components/NotesPage';
 
+/* ── helpers ─────────────────────────────────────────────── */
 function getISTDateString() {
-  return new Intl.DateTimeFormat('en-CA', {
-    timeZone: 'Asia/Kolkata',
-    year: 'numeric', month: '2-digit', day: '2-digit',
-  }).format(new Date());
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
 }
-
 function getISTTime() {
-  const now = new Date();
-  const parts = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'Asia/Kolkata',
-    hour: 'numeric', minute: 'numeric', hour12: false,
-  }).formatToParts(now);
-  return {
-    hour:   parseInt(parts.find(p => p.type === 'hour').value),
-    minute: parseInt(parts.find(p => p.type === 'minute').value),
-  };
+  const parts = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Kolkata', hour: 'numeric', minute: 'numeric', hour12: false }).formatToParts(new Date());
+  return { hour: parseInt(parts.find(p => p.type === 'hour').value), minute: parseInt(parts.find(p => p.type === 'minute').value) };
+}
+function isSignInWindow()  { const { hour, minute } = getISTTime(); const m = hour*60+minute; return m >= 16*60+30 && m <= 17*60+30; }
+function isSignOutWindow() { const { hour, minute } = getISTTime(); const m = hour*60+minute; return m >= 1*60+30  && m <= 2*60+30; }
+function formatIST(ts) {
+  return new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true, day: '2-digit', month: 'short', year: 'numeric' })
+    .format(ts instanceof Date ? ts : ts?.toDate?.() || new Date());
+}
+function formatDate(dateStr) {
+  const [y, m, d] = dateStr.split('-');
+  return new Date(y, m-1, d).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
+}
+function formatTime(ts) {
+  return new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true })
+    .format(ts instanceof Date ? ts : ts?.toDate?.() || new Date());
 }
 
-function isSignInWindow() {
-  const { hour, minute } = getISTTime();
-  const mins = hour * 60 + minute;
-  return mins >= 16 * 60 + 30 && mins <= 17 * 60 + 30;
+/* ── Sidebar ─────────────────────────────────────────────── */
+function Sidebar({ page, setPage, unreadTasks, mobileOpen, setMobileOpen }) {
+  const items = [
+    {
+      id: 'dashboard', label: 'Dashboard',
+      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>,
+    },
+    {
+      id: 'attendance', label: 'My Attendance',
+      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>,
+    },
+    {
+      id: 'tasks', label: 'Assigned Tasks', badge: unreadTasks || undefined,
+      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7l2 2 4-4" /></svg>,
+    },
+    {
+      id: 'my-todo', label: 'My To-Do',
+      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
+    },
+    {
+      id: 'my-notes', label: 'My Notes',
+      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>,
+    },
+  ];
+
+  const NavContent = () => (
+    <div className="flex flex-col h-full">
+      <div className="px-5 py-5 border-b" style={{ borderColor: 'var(--border)' }}>
+        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-3)' }}>My Portal</p>
+      </div>
+      <nav className="flex-1 px-3 py-4 space-y-1">
+        {items.map(item => {
+          const active = page === item.id;
+          return (
+            <button key={item.id}
+              onClick={() => { setPage(item.id); setMobileOpen(false); }}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200"
+              style={active
+                ? { background: 'linear-gradient(135deg,#7c3aed,#3b82f6)', color: '#fff', boxShadow: '0 4px 20px rgba(124,58,237,0.3)' }
+                : { color: 'var(--text-2)', background: 'transparent' }
+              }
+              onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'var(--surface-s)'; }}
+              onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
+            >
+              {item.icon}
+              <span>{item.label}</span>
+              {item.badge !== undefined && (
+                <span className="ml-auto text-xs px-2 py-0.5 rounded-full font-bold animate-pulse"
+                      style={{ background: '#ef4444', color: '#fff', minWidth: '20px', textAlign: 'center' }}>
+                  {item.badge}
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </nav>
+      <div className="px-5 py-4 border-t" style={{ borderColor: 'var(--border)' }}>
+        <p className="text-xs text-center" style={{ color: 'var(--text-3)' }}>Garvix Ops © {new Date().getFullYear()}</p>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      <aside className="hidden md:flex flex-col flex-shrink-0 sticky top-16 h-[calc(100vh-4rem)] w-56 lg:w-64"
+             style={{ background: 'var(--surface)', borderRight: '1px solid var(--border)' }}>
+        <NavContent />
+      </aside>
+      {mobileOpen && (
+        <div className="md:hidden fixed inset-0 z-50 flex">
+          <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(4px)' }}
+               onClick={() => setMobileOpen(false)} />
+          <aside className="relative z-10 w-64 h-full flex flex-col shadow-2xl"
+                 style={{ background: 'var(--surface)', borderRight: '1px solid var(--border)' }}>
+            <NavContent />
+          </aside>
+        </div>
+      )}
+    </>
+  );
 }
 
-function isSignOutWindow() {
-  const { hour, minute } = getISTTime();
-  const mins = hour * 60 + minute;
-  return mins >= 1 * 60 + 30 && mins <= 2 * 60 + 30;
+/* ── Task Notification Popup ─────────────────────────────── */
+function TaskNotificationPopup({ tasks, onDismiss, onViewTasks }) {
+  const [idx, setIdx] = useState(0);
+  const task = tasks[idx];
+  if (!task) return null;
+
+  const priorityStyle = { high: '#ef4444', medium: '#f59e0b', low: '#10b981' };
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+         style={{ background: 'rgba(4,8,15,0.85)', backdropFilter: 'blur(8px)' }}>
+      <div className="max-w-md w-full rounded-3xl overflow-hidden shadow-2xl animate-slide-up"
+           style={{ background: 'var(--surface)', border: '1px solid rgba(124,58,237,0.4)' }}>
+        {/* Header */}
+        <div className="p-5 pb-4" style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)' }}>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <p className="text-white/70 text-xs font-medium">New Task Assigned!</p>
+              <p className="text-white font-bold">From your Manager</p>
+            </div>
+            {tasks.length > 1 && (
+              <span className="text-white/70 text-xs">{idx+1} of {tasks.length}</span>
+            )}
+          </div>
+        </div>
+
+        {/* Task details */}
+        <div className="p-5 space-y-3">
+          <div className="flex items-start justify-between gap-3">
+            <h3 className="font-bold text-lg leading-tight" style={{ color: 'var(--text)' }}>{task.title}</h3>
+            <span className="flex-shrink-0 text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide"
+                  style={{ background: priorityStyle[task.priority] + '22', color: priorityStyle[task.priority], border: `1px solid ${priorityStyle[task.priority]}44` }}>
+              {task.priority}
+            </span>
+          </div>
+          {task.description && (
+            <p className="text-sm" style={{ color: 'var(--text-2)' }}>{task.description}</p>
+          )}
+          <div className="flex items-center gap-4 text-xs" style={{ color: 'var(--text-3)' }}>
+            <span className="flex items-center gap-1">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+              Due: {task.dueDate}
+            </span>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="px-5 pb-5 flex gap-3">
+          {tasks.length > 1 && idx < tasks.length - 1 ? (
+            <button onClick={() => setIdx(i => i+1)} className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all"
+                    style={{ background: 'var(--surface-s)', border: '1px solid var(--border)', color: 'var(--text-2)' }}>
+              Next ({tasks.length - idx - 1} more)
+            </button>
+          ) : (
+            <button onClick={onDismiss} className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all"
+                    style={{ background: 'var(--surface-s)', border: '1px solid var(--border)', color: 'var(--text-2)' }}>
+              Got it!
+            </button>
+          )}
+          <button onClick={() => { onDismiss(); onViewTasks(); }}
+                  className="flex-1 py-2.5 rounded-xl text-sm font-bold text-white"
+                  style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)' }}>
+            View Tasks
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
+/* ── My Attendance page ──────────────────────────────────── */
+function MyAttendancePage({ user }) {
+  const [records, setRecords] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      try {
+        const snap = await getDocs(query(
+          collection(db, 'attendance'),
+          where('employeeUid', '==', user.uid),
+          orderBy('date', 'desc'),
+          limit(50)
+        ));
+        setRecords(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      } catch (err) { console.error(err); }
+      finally { setLoading(false); }
+    })();
+  }, [user.uid]);
+
+  const signIns  = records.filter(r => r.type === 'signin').length;
+  const signOuts = records.filter(r => r.type === 'signout').length;
+  const uniqueDays = new Set(records.map(r => r.date)).size;
+
+  return (
+    <div className="space-y-6 animate-fade-in">
+      <div>
+        <h1 className="text-2xl lg:text-3xl font-bold" style={{ color: 'var(--text)' }}>My Attendance</h1>
+        <p className="text-sm mt-1" style={{ color: 'var(--text-3)' }}>Your complete attendance history</p>
+      </div>
+
+      <div className="grid grid-cols-3 gap-4">
+        {[
+          { label: 'Sign Ins', value: signIns, color: '#a78bfa', bg: 'rgba(124,58,237,0.12)' },
+          { label: 'Sign Outs', value: signOuts, color: '#34d399', bg: 'rgba(52,211,153,0.12)' },
+          { label: 'Days Present', value: uniqueDays, color: '#60a5fa', bg: 'rgba(59,130,246,0.12)' },
+        ].map(s => (
+          <div key={s.label} className="rounded-2xl p-4 text-center" style={{ background: s.bg, border: `1px solid ${s.color}33` }}>
+            <p className="text-3xl font-black mb-1" style={{ color: s.color }}>{loading ? '—' : s.value}</p>
+            <p className="text-xs font-medium" style={{ color: 'var(--text-3)' }}>{s.label}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="rounded-2xl overflow-hidden" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+        <div className="px-5 py-4 border-b" style={{ borderColor: 'var(--border)' }}>
+          <h2 className="font-bold" style={{ color: 'var(--text)' }}>Attendance Records</h2>
+          <p className="text-xs mt-0.5" style={{ color: 'var(--text-3)' }}>Last {records.length} records</p>
+        </div>
+        {loading ? (
+          <div className="flex justify-center py-16">
+            <div className="w-7 h-7 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#7c3aed', borderTopColor: 'transparent' }} />
+          </div>
+        ) : records.length === 0 ? (
+          <div className="text-center py-16">
+            <p className="text-sm" style={{ color: 'var(--text-3)' }}>No attendance records yet.</p>
+          </div>
+        ) : (
+          <div>
+            {records.map(rec => (
+              <div key={rec.id} className="flex items-start gap-4 px-5 py-4 border-b last:border-b-0 transition-colors"
+                   style={{ borderColor: 'var(--border)' }}
+                   onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-s)'}
+                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                {(rec.photoBase64 || rec.photoURL) && (
+                  <img src={rec.photoBase64 || rec.photoURL} alt=""
+                       className="w-12 h-12 rounded-xl object-cover flex-shrink-0 hover:scale-105 transition-transform cursor-pointer"
+                       style={{ border: '2px solid var(--border)' }}
+                       onClick={() => window.open(rec.photoBase64 || rec.photoURL, '_blank')} />
+                )}
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                    <span className="font-semibold text-sm" style={{ color: 'var(--text)' }}>{formatDate(rec.date)}</span>
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full"
+                          style={rec.type === 'signin'
+                            ? { background: 'rgba(124,58,237,0.15)', color: '#a78bfa', border: '1px solid rgba(124,58,237,0.3)' }
+                            : { background: 'rgba(52,211,153,0.12)', color: '#34d399', border: '1px solid rgba(52,211,153,0.25)' }}>
+                      {rec.type === 'signin' ? '↗ Sign In' : '↙ Sign Out'}
+                    </span>
+                  </div>
+                  <p className="text-xs mb-1" style={{ color: '#60a5fa' }}>{formatIST(rec.submittedAt?.toDate?.() || new Date())}</p>
+                  <p className="text-sm line-clamp-2" style={{ color: 'var(--text-2)' }}>{rec.workSummary}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ── Dashboard page (existing content) ───────────────────── */
+function DashboardPage({ user, employeeData, signInRecord, signOutRecord, recentRecords, loadingData, openPopup, currentTime }) {
+  const today = getISTDateString();
+
+  return (
+    <div className="space-y-5 animate-fade-in">
+
+      {/* Hero profile card */}
+      <div className="relative rounded-3xl overflow-hidden p-6"
+           style={{ background: 'linear-gradient(135deg,#7c3aed 0%,#3b82f6 60%,#06b6d4 100%)' }}>
+        <div className="absolute inset-0 opacity-20"
+             style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, #fff 0%, transparent 50%)' }} />
+        <div className="relative flex flex-col sm:flex-row items-center sm:items-start gap-5">
+          <div className="w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0 border-2 border-white/30">
+            {employeeData?.photoURL
+              ? <img src={employeeData.photoURL} alt="" className="w-full h-full object-cover" />
+              : <div className="w-full h-full flex items-center justify-center text-2xl font-bold text-white bg-white/20">
+                  {(employeeData?.name || user.email || '?').charAt(0).toUpperCase()}
+                </div>
+            }
+          </div>
+          <div className="flex-1 text-center sm:text-left">
+            <h1 className="text-xl font-black text-white">{employeeData?.name || employeeData?.employeeId || 'Employee'}</h1>
+            <p className="text-white/70 text-sm">{user.email}</p>
+            <p className="text-white/60 text-xs mt-1">ID: {employeeData?.employeeId} · {employeeData?.team || 'Sales Team'}</p>
+            <div className="mt-3 inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm px-3 py-1.5 rounded-full">
+              <div className="w-2 h-2 bg-emerald-300 rounded-full animate-pulse" />
+              <span className="text-white/80 text-xs font-medium">Shift: 5:00 PM – 2:00 AM IST</span>
+            </div>
+          </div>
+          <div className="text-center bg-white/10 backdrop-blur-sm rounded-2xl px-5 py-3">
+            <div className="text-2xl font-black text-white font-mono tracking-tight">
+              {new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }).format(currentTime)}
+            </div>
+            <div className="text-white/50 text-xs mt-1">IST</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Sign In / Sign Out cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Sign In */}
+        <div className="rounded-2xl p-5 transition-all duration-300"
+             style={{ background: signInRecord ? 'rgba(52,211,153,0.08)' : 'var(--surface)', border: `2px solid ${signInRecord ? 'rgba(52,211,153,0.3)' : 'var(--border)'}` }}>
+          <div className="flex items-start justify-between gap-3 mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                   style={{ background: signInRecord ? 'rgba(52,211,153,0.2)' : 'var(--surface-s)' }}>
+                {signInRecord
+                  ? <svg className="w-5 h-5" style={{ color: '#34d399' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  : <svg className="w-5 h-5" style={{ color: 'var(--text-3)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14" /></svg>
+                }
+              </div>
+              <div>
+                <p className="font-bold text-sm" style={{ color: 'var(--text)' }}>Sign In</p>
+                <p className="text-xs" style={{ color: 'var(--text-3)' }}>
+                  {signInRecord ? formatTime(signInRecord.submittedAt?.toDate?.() || new Date()) : 'Window: 5:00 PM IST'}
+                </p>
+              </div>
+            </div>
+            <span className="text-xs font-bold px-2.5 py-1 rounded-full"
+                  style={signInRecord
+                    ? { background: 'rgba(52,211,153,0.2)', color: '#34d399' }
+                    : { background: 'rgba(245,158,11,0.15)', color: '#f59e0b' }}>
+              {signInRecord ? 'Done ✓' : 'Pending'}
+            </span>
+          </div>
+          {!signInRecord && (
+            <button onClick={() => openPopup('signin')} className="w-full py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90"
+                    style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)' }}>
+              Submit Sign In
+            </button>
+          )}
+        </div>
+
+        {/* Sign Out */}
+        <div className="rounded-2xl p-5 transition-all duration-300"
+             style={{
+               background: signOutRecord ? 'rgba(52,211,153,0.08)' : 'var(--surface)',
+               border: `2px solid ${signOutRecord ? 'rgba(52,211,153,0.3)' : 'var(--border)'}`,
+               opacity: !signInRecord && !signOutRecord ? 0.6 : 1,
+             }}>
+          <div className="flex items-start justify-between gap-3 mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                   style={{ background: signOutRecord ? 'rgba(52,211,153,0.2)' : 'var(--surface-s)' }}>
+                {signOutRecord
+                  ? <svg className="w-5 h-5" style={{ color: '#34d399' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  : <svg className="w-5 h-5" style={{ color: 'var(--text-3)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 9l3 3m0 0l-3 3m3-3H8" /></svg>
+                }
+              </div>
+              <div>
+                <p className="font-bold text-sm" style={{ color: 'var(--text)' }}>Sign Out</p>
+                <p className="text-xs" style={{ color: 'var(--text-3)' }}>
+                  {signOutRecord ? formatTime(signOutRecord.submittedAt?.toDate?.() || new Date()) : 'Window: 2:00 AM IST'}
+                </p>
+              </div>
+            </div>
+            <span className="text-xs font-bold px-2.5 py-1 rounded-full"
+                  style={signOutRecord
+                    ? { background: 'rgba(52,211,153,0.2)', color: '#34d399' }
+                    : signInRecord
+                    ? { background: 'rgba(245,158,11,0.15)', color: '#f59e0b' }
+                    : { background: 'rgba(239,68,68,0.12)', color: '#f87171' }}>
+              {signOutRecord ? 'Done ✓' : signInRecord ? 'Pending' : 'Sign in first'}
+            </span>
+          </div>
+          {!signOutRecord && signInRecord && (
+            <button onClick={() => openPopup('signout')} className="w-full py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90"
+                    style={{ background: 'linear-gradient(135deg,#10b981,#34d399)' }}>
+              Submit Sign Out
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Location notice */}
+      <div className="rounded-2xl p-4 flex items-start gap-3"
+           style={{ background: 'rgba(124,58,237,0.08)', border: '1px solid rgba(124,58,237,0.2)' }}>
+        <svg className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#a78bfa' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        <div>
+          <p className="text-sm font-semibold" style={{ color: '#a78bfa' }}>Location-verified attendance</p>
+          <p className="text-xs mt-0.5" style={{ color: 'var(--text-3)' }}>
+            You must be at <span style={{ color: '#a78bfa' }}>Ambience Mall, Gurugram</span>. Both sign-in and sign-out require face + location verification.
+          </p>
+        </div>
+      </div>
+
+      {/* Recent attendance */}
+      <div className="rounded-2xl overflow-hidden" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+        <div className="px-5 py-4 border-b" style={{ borderColor: 'var(--border)' }}>
+          <h2 className="font-bold" style={{ color: 'var(--text)' }}>Recent Attendance</h2>
+        </div>
+        {recentRecords.length === 0 ? (
+          <div className="text-center py-12">
+            <div className="text-4xl mb-3">📋</div>
+            <p className="text-sm" style={{ color: 'var(--text-3)' }}>No records yet</p>
+          </div>
+        ) : (
+          <div>
+            {recentRecords.slice(0, 5).map(rec => (
+              <div key={rec.id} className="flex items-start gap-3 px-5 py-4 border-b last:border-b-0 transition-colors"
+                   style={{ borderColor: 'var(--border)' }}
+                   onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-s)'}
+                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                {(rec.photoBase64 || rec.photoURL) && (
+                  <img src={rec.photoBase64 || rec.photoURL} alt="" className="w-10 h-10 rounded-xl object-cover flex-shrink-0" style={{ border: '1px solid var(--border)' }} />
+                )}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-medium text-sm" style={{ color: 'var(--text)' }}>{formatDate(rec.date)}</span>
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full"
+                          style={rec.type === 'signin' ? { background: 'rgba(124,58,237,0.15)', color: '#a78bfa' } : { background: 'rgba(52,211,153,0.12)', color: '#34d399' }}>
+                      {rec.type === 'signin' ? '↗ Sign In' : '↙ Sign Out'}
+                    </span>
+                  </div>
+                  <p className="text-xs mt-1 line-clamp-1" style={{ color: 'var(--text-3)' }}>{rec.workSummary}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ── Main component ──────────────────────────────────────── */
 export default function EmployeeAttendance({ user }) {
+  const [page, setPage]               = useState('dashboard');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [employeeData, setEmployeeData]   = useState(null);
   const [signInRecord, setSignInRecord]   = useState(null);
   const [signOutRecord, setSignOutRecord] = useState(null);
@@ -47,6 +465,12 @@ export default function EmployeeAttendance({ user }) {
   const [currentTime, setCurrentTime]     = useState(new Date());
   const [showProfile, setShowProfile]     = useState(false);
 
+  // Task notifications
+  const [newTasks, setNewTasks]             = useState([]);
+  const [showNotification, setShowNotification] = useState(false);
+  const [unreadCount, setUnreadCount]       = useState(0);
+  const notifiedIds = useRef(new Set());
+
   const fetchData = useCallback(async () => {
     if (!user) return;
     setLoadingData(true);
@@ -55,29 +479,13 @@ export default function EmployeeAttendance({ user }) {
       setEmployeeData(empSnap.exists() ? { id: empSnap.id, ...empSnap.data() } : null);
 
       const today = getISTDateString();
-
-      const siSnap = await getDocs(query(
-        collection(db, 'attendance'),
-        where('employeeUid', '==', user.uid),
-        where('date', '==', today),
-        where('type', '==', 'signin')
-      ));
+      const siSnap = await getDocs(query(collection(db, 'attendance'), where('employeeUid', '==', user.uid), where('date', '==', today), where('type', '==', 'signin')));
       setSignInRecord(siSnap.empty ? null : { id: siSnap.docs[0].id, ...siSnap.docs[0].data() });
 
-      const soSnap = await getDocs(query(
-        collection(db, 'attendance'),
-        where('employeeUid', '==', user.uid),
-        where('date', '==', today),
-        where('type', '==', 'signout')
-      ));
+      const soSnap = await getDocs(query(collection(db, 'attendance'), where('employeeUid', '==', user.uid), where('date', '==', today), where('type', '==', 'signout')));
       setSignOutRecord(soSnap.empty ? null : { id: soSnap.docs[0].id, ...soSnap.docs[0].data() });
 
-      const recentSnap = await getDocs(query(
-        collection(db, 'attendance'),
-        where('employeeUid', '==', user.uid),
-        orderBy('date', 'desc'),
-        limit(10)
-      ));
+      const recentSnap = await getDocs(query(collection(db, 'attendance'), where('employeeUid', '==', user.uid), orderBy('date', 'desc'), limit(10)));
       setRecentRecords(recentSnap.docs.map(d => ({ id: d.id, ...d.data() })));
     } catch (err) {
       console.error('Error fetching data:', err);
@@ -88,247 +496,124 @@ export default function EmployeeAttendance({ user }) {
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
+  // Clock + auto-popup
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(new Date());
       if (!showPopup) {
-        if (!signInRecord && isSignInWindow()) {
-          setPopupType('signin'); setShowPopup(true);
-        } else if (signInRecord && !signOutRecord && isSignOutWindow()) {
-          setPopupType('signout'); setShowPopup(true);
-        }
+        if (!signInRecord && isSignInWindow()) { setPopupType('signin'); setShowPopup(true); }
+        else if (signInRecord && !signOutRecord && isSignOutWindow()) { setPopupType('signout'); setShowPopup(true); }
       }
     }, 30000);
     return () => clearInterval(interval);
   }, [signInRecord, signOutRecord, showPopup]);
 
+  // Real-time task listener
+  useEffect(() => {
+    if (!user) return;
+    const q = query(collection(db, 'tasks'), where('assignedTo', '==', user.uid));
+    const unsub = onSnapshot(q, (snap) => {
+      const unseen = [];
+      snap.docs.forEach(d => {
+        const task = { id: d.id, ...d.data() };
+        if (!task.seen && !notifiedIds.current.has(task.id)) {
+          unseen.push(task);
+          notifiedIds.current.add(task.id);
+        }
+      });
+      const allTasks = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      const pending = allTasks.filter(t => t.status !== 'completed').length;
+      setUnreadCount(prev => {
+        const newUnseen = unseen.filter(t => !prev);
+        return pending;
+      });
+
+      if (unseen.length > 0) {
+        setNewTasks(unseen);
+        setShowNotification(true);
+      }
+    });
+    return () => unsub();
+  }, [user]);
+
+  const handleDismissNotification = async () => {
+    setShowNotification(false);
+    // Mark all shown tasks as seen
+    try {
+      const batch = writeBatch(db);
+      newTasks.forEach(t => batch.update(doc(db, 'tasks', t.id), { seen: true }));
+      await batch.commit();
+    } catch (err) { console.error(err); }
+    setNewTasks([]);
+  };
+
   const openPopup = (type) => { setPopupType(type); setShowPopup(true); };
   const handleSubmitted = () => { setShowPopup(false); fetchData(); };
 
-  const formatIST = (ts) => new Intl.DateTimeFormat('en-IN', {
-    timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true,
-    day: '2-digit', month: 'short', year: 'numeric',
-  }).format(ts instanceof Date ? ts : ts?.toDate?.() || new Date());
-
-  const formatDate = (dateStr) => {
-    const [y, m, d] = dateStr.split('-');
-    return new Date(y, m - 1, d).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
-  };
-
-  const formatTime = (ts) => new Intl.DateTimeFormat('en-IN', {
-    timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true,
-  }).format(ts instanceof Date ? ts : ts?.toDate?.() || new Date());
-
   return (
-    <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
+    <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg)' }}>
       <Navbar user={user} role="employee" avatarSrc={employeeData?.photoURL} onViewProfile={() => setShowProfile(true)} />
+
       {showProfile && (
-        <ProfileModal
-          user={user} role="employee" employeeData={employeeData}
-          onClose={() => setShowProfile(false)}
-          onUpdated={(updated) => setEmployeeData(updated)}
-        />
+        <ProfileModal user={user} role="employee" employeeData={employeeData}
+                      onClose={() => setShowProfile(false)}
+                      onUpdated={updated => setEmployeeData(updated)} />
       )}
 
       {showPopup && (
-        <AttendancePopup
-          user={user}
-          employeeData={employeeData}
-          attendanceType={popupType}
-          onSubmitted={handleSubmitted}
+        <AttendancePopup user={user} employeeData={employeeData}
+                         attendanceType={popupType} onSubmitted={handleSubmitted} />
+      )}
+
+      {showNotification && newTasks.length > 0 && (
+        <TaskNotificationPopup
+          tasks={newTasks}
+          onDismiss={handleDismissNotification}
+          onViewTasks={() => setPage('tasks')}
         />
       )}
 
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        {loadingData ? (
-          <div className="flex items-center justify-center py-24">
-            <div className="text-center">
-              <div className="w-10 h-10 border-2 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-gray-500 text-sm">Loading your dashboard...</p>
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-5 animate-fade-in">
+      <div className="flex flex-1 relative">
+        {/* Mobile FAB */}
+        <button className="fixed bottom-5 left-5 z-40 md:hidden w-12 h-12 rounded-2xl flex items-center justify-center shadow-xl text-white"
+                style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)' }}
+                onClick={() => setSidebarOpen(v => !v)}>
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          {unreadCount > 0 && (
+            <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-xs font-bold">
+              {unreadCount}
+            </span>
+          )}
+        </button>
 
-            {/* Profile Card */}
-            <div className="card flex flex-col sm:flex-row items-center sm:items-start gap-5">
-              <div className="w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0 border border-violet-500/30"
-                   style={{ background: 'linear-gradient(135deg, #7c3aed22, #3b82f622)' }}>
-                {employeeData?.photoURL ? (
-                  <img src={employeeData.photoURL} alt={employeeData.name} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-violet-400 text-3xl font-bold">
-                    {employeeData?.name?.charAt(0) || '?'}
-                  </div>
-                )}
-              </div>
-              <div className="text-center sm:text-left flex-1">
-                <h1 className="text-xl font-bold" style={{ color: 'var(--text)' }}>{employeeData?.name || employeeData?.employeeId || 'Employee'}</h1>
-                <p className="text-sm" style={{ color: 'var(--text-3)' }}>{user.email}</p>
-                <p className="text-violet-400 text-xs mt-1">ID: {employeeData?.employeeId}</p>
-                <div className="mt-3 inline-flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
-                  <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-                  <span className="text-gray-400 text-xs">Shift: 5:00 PM – 2:00 AM IST</span>
-                </div>
-              </div>
+        <Sidebar page={page} setPage={setPage} unreadTasks={unreadCount}
+                 mobileOpen={sidebarOpen} setMobileOpen={setSidebarOpen} />
+
+        <main className="flex-1 min-w-0 p-5 lg:p-8 overflow-auto">
+          {loadingData && page === 'dashboard' ? (
+            <div className="flex items-center justify-center py-24">
               <div className="text-center">
-                <div className="text-2xl font-bold text-white font-mono tracking-tight">
-                  {new Intl.DateTimeFormat('en-IN', {
-                    timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
-                  }).format(currentTime)}
-                </div>
-                <div className="text-xs text-gray-600 mt-0.5">IST</div>
+                <div className="w-10 h-10 border-2 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                <p className="text-sm" style={{ color: 'var(--text-3)' }}>Loading your dashboard...</p>
               </div>
             </div>
-
-            {/* Today Sign-In / Sign-Out Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Sign In */}
-              <div className={`card border-2 transition-all duration-300 ${
-                signInRecord ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-white/10'
-              }`}>
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                      signInRecord ? 'bg-emerald-500/20' : 'bg-white/5'
-                    }`}>
-                      {signInRecord ? (
-                        <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                      ) : (
-                        <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14" />
-                        </svg>
-                      )}
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Sign In</div>
-                      <div className="text-xs text-gray-500">
-                        {signInRecord ? formatTime(signInRecord.submittedAt?.toDate?.() || new Date()) : 'Window: 5:00 PM IST'}
-                      </div>
-                    </div>
-                  </div>
-                  {signInRecord
-                    ? <span className="status-badge-green flex-shrink-0">Done</span>
-                    : <span className="status-badge-yellow flex-shrink-0">Pending</span>
-                  }
-                </div>
-                {!signInRecord && (
-                  <button onClick={() => openPopup('signin')} className="btn-primary w-full mt-4 text-sm py-2">
-                    Submit Sign In
-                  </button>
-                )}
-              </div>
-
-              {/* Sign Out */}
-              <div className={`card border-2 transition-all duration-300 ${
-                signOutRecord ? 'border-emerald-500/30 bg-emerald-500/5' :
-                signInRecord ? 'border-white/10' : 'border-white/5 opacity-60'
-              }`}>
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                      signOutRecord ? 'bg-emerald-500/20' : 'bg-white/5'
-                    }`}>
-                      {signOutRecord ? (
-                        <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                      ) : (
-                        <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 9l3 3m0 0l-3 3m3-3H8" />
-                        </svg>
-                      )}
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Sign Out</div>
-                      <div className="text-xs text-gray-500">
-                        {signOutRecord ? formatTime(signOutRecord.submittedAt?.toDate?.() || new Date()) : 'Window: 2:00 AM IST'}
-                      </div>
-                    </div>
-                  </div>
-                  {signOutRecord
-                    ? <span className="status-badge-green flex-shrink-0">Done</span>
-                    : signInRecord
-                    ? <span className="status-badge-yellow flex-shrink-0">Pending</span>
-                    : <span className="status-badge-red flex-shrink-0">Sign in first</span>
-                  }
-                </div>
-                {!signOutRecord && signInRecord && (
-                  <button onClick={() => openPopup('signout')} className="btn-primary w-full mt-4 text-sm py-2">
-                    Submit Sign Out
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Location notice */}
-            <div className="card border border-violet-500/20 bg-violet-500/5">
-              <div className="flex items-start gap-3">
-                <svg className="w-5 h-5 text-violet-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <div>
-                  <p className="text-violet-300 text-sm font-medium">Location verified attendance</p>
-                  <p className="text-gray-500 text-xs mt-0.5">
-                    You must be physically present at <span className="text-violet-400">Ambience Mall, Gurugram</span>.
-                    Both sign-in and sign-out require face + location verification.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Recent Records */}
-            <div className="card">
-              <h2 className="text-base font-semibold mb-4" style={{ color: 'var(--text)' }}>Recent Attendance</h2>
-              {recentRecords.length === 0 ? (
-                <div className="text-center py-10 text-gray-600">
-                  <svg className="w-10 h-10 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                  </svg>
-                  No attendance records yet.
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  {recentRecords.map((rec) => (
-                    <div key={rec.id} className="flex items-start gap-3 rounded-xl p-4 border" style={{ background: 'var(--surface-s)', borderColor: 'var(--border-s)' }}>
-                      {(rec.photoBase64 || rec.photoURL) && (
-                        <img
-                          src={rec.photoBase64 || rec.photoURL}
-                          alt="Attendance"
-                          className="w-12 h-12 rounded-lg object-cover flex-shrink-0 cursor-pointer hover:opacity-80"
-                          style={{ border: '1px solid var(--border)' }}
-                          onClick={() => window.open(rec.photoBase64 || rec.photoURL, '_blank')}
-                        />
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-medium text-sm" style={{ color: 'var(--text)' }}>{formatDate(rec.date)}</span>
-                          {rec.type === 'signin'
-                            ? <span className="status-badge-violet">Sign In</span>
-                            : rec.type === 'signout'
-                            ? <span className="status-badge-green">Sign Out</span>
-                            : <span className="status-badge-green">Submitted</span>
-                          }
-                        </div>
-                        <p className="text-gray-500 text-xs mt-1 line-clamp-2">{rec.workSummary}</p>
-                        <p className="text-gray-700 text-xs mt-1">{formatIST(rec.submittedAt?.toDate?.() || new Date())}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+          ) : (
+            <>
+              {page === 'dashboard' && (
+                <DashboardPage user={user} employeeData={employeeData}
+                               signInRecord={signInRecord} signOutRecord={signOutRecord}
+                               recentRecords={recentRecords} loadingData={loadingData}
+                               openPopup={openPopup} currentTime={currentTime} />
               )}
-            </div>
-
-            <p className="text-center text-gray-700 text-xs pb-4">
-              Made with ♥ by Pratham Jain &nbsp;|&nbsp; Garvix Ops © {new Date().getFullYear()}
-            </p>
-          </div>
-        )}
+              {page === 'attendance' && <MyAttendancePage user={user} />}
+              {page === 'tasks'      && <AssignedTasksPage user={user} />}
+              {page === 'my-todo'    && <TodoPage user={user} />}
+              {page === 'my-notes'   && <NotesPage user={user} />}
+            </>
+          )}
+        </main>
       </div>
     </div>
   );
