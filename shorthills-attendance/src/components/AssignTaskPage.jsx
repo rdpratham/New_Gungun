@@ -275,6 +275,7 @@ export default function AssignTaskPage({ user, employees = [] }) {
     const next = STATUS_CYCLE[(idx + 1) % STATUS_CYCLE.length];
     try {
       await updateDoc(doc(db, 'tasks', task.id), { status: next });
+      setViewTask(prev => prev?.id === task.id ? { ...prev, status: next } : prev);
     } catch (err) { console.error('cycleStatus:', err); }
   }
 
@@ -287,6 +288,7 @@ export default function AssignTaskPage({ user, employees = [] }) {
     try {
       await deleteDoc(doc(db, 'tasks', id));
       setConfirmDel(null);
+      setViewTask(null);
     } catch (err) { console.error('deleteTask:', err); }
   }
 
@@ -499,7 +501,7 @@ export default function AssignTaskPage({ user, employees = [] }) {
                         {formatDate(task.dueDate)}
                       </span>
                       <PriorityBadge priority={task.priority} />
-                      <StatusBadge status={task.status} onClick={() => cycleStatus(task)} />
+                      <StatusBadge status={task.status} onClick={e => { e.stopPropagation(); cycleStatus(task); }} />
                     </div>
                   </div>
                 );
@@ -516,9 +518,9 @@ export default function AssignTaskPage({ user, employees = [] }) {
       {viewTask && (
         <TaskDetailModal
           task={viewTask}
-          onClose={() => setViewTask(null)}
-          onCycleStatus={(task) => { cycleStatus(task); setViewTask(prev => prev ? { ...prev, status: STATUS_CYCLE[(STATUS_CYCLE.indexOf(prev.status) + 1) % STATUS_CYCLE.length] } : null); }}
-          onDelete={(id) => { handleDelete(id); if (confirmDel === id) setViewTask(null); }}
+          onClose={() => { setViewTask(null); setConfirmDel(null); }}
+          onCycleStatus={cycleStatus}
+          onDelete={handleDelete}
           confirmDel={confirmDel}
         />
       )}
