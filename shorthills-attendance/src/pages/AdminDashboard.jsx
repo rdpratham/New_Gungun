@@ -33,6 +33,12 @@ function formatDate(dateStr) {
   });
 }
 
+function formatTimeOnly(ts) {
+  if (!ts) return '—';
+  const d = ts?.toDate ? ts.toDate() : new Date(ts);
+  return new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true }).format(d);
+}
+
 function todayIST() {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
 }
@@ -899,6 +905,38 @@ function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDa
   const todaySignIns  = attendance.filter(a => a.date === today && a.type === 'signin').length;
   const todaySignOuts = attendance.filter(a => a.date === today && a.type === 'signout').length;
 
+  // Today's split records for the C panel
+  const todaySignInRecs  = attendance.filter(r => r.date === today && r.type === 'signin');
+  const todaySignOutRecs = attendance.filter(r => r.date === today && r.type === 'signout');
+  const todayEmpMap = {};
+  attendance.filter(r => r.date === today).forEach(r => {
+    const key = r.employeeUid || r.employeeId;
+    if (key && !todayEmpMap[key]) todayEmpMap[key] = {};
+    if (key) todayEmpMap[key][r.type] = r;
+  });
+  const calcWorkHours = (inRec, outRec) => {
+    if (!inRec || !outRec) return null;
+    const a = inRec.submittedAt?.toDate?.()  || new Date(inRec.submittedAt  || 0);
+    const b = outRec.submittedAt?.toDate?.() || new Date(outRec.submittedAt || 0);
+    const ms = Math.abs(b - a);
+    if (ms < 60000) return null;
+    const h = Math.floor(ms / 3600000);
+    const m = Math.floor((ms % 3600000) / 60000);
+    return h > 0 ? `${h}h ${m}m` : `${m}m`;
+  };
+  const completePairs = Object.values(todayEmpMap).filter(e => e.signin && e.signout);
+  const totalWorkMs = completePairs.reduce((sum, e) => {
+    const a = e.signin.submittedAt?.toDate?.()  || new Date(0);
+    const b = e.signout.submittedAt?.toDate?.() || new Date(0);
+    return sum + Math.abs(b - a);
+  }, 0);
+  const totalWorkStr = (() => {
+    if (!completePairs.length) return null;
+    const h = Math.floor(totalWorkMs / 3600000);
+    const m = Math.floor((totalWorkMs % 3600000) / 60000);
+    return h > 0 ? `${h}h ${m}m` : `${m}m`;
+  })();
+
   const pendingTodos   = (adminTodos || []).filter(t => !t.completed);
   const PRIORITY_COLOR = { high: '#f87171', medium: '#fbbf24', low: '#34d399' };
 
@@ -1062,76 +1100,145 @@ function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDa
       {/* ── Row 2: C (attendance) + E (todo) ── */}
       <div className="grid gap-4" style={{ gridTemplateColumns: '1fr 320px' }}>
 
-      {/* Attendance records */}
-      <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--surface)' }}>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 border-b"
-             style={{ borderColor: 'var(--border)' }}>
+      {/* C — Today's Attendance Split Panel */}
+      <div className="rounded-xl overflow-hidden flex flex-col" style={{ border: '1px solid var(--border)', background: 'var(--surface)' }}>
+
+        {/* Header */}
+        <div className="px-4 py-3 flex items-center justify-between flex-shrink-0 border-b" style={{ borderColor: 'var(--border)', background: 'var(--surface-s)' }}>
           <div>
-            <h2 className="font-bold text-lg" style={{ color: 'var(--text)' }}>Attendance Records</h2>
-            <p className="text-xs mt-0.5" style={{ color: 'var(--text-3)' }}>
-              Showing {filteredAttendance.length} of {attendance.length} records
+            <div className="flex items-center gap-2">
+              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)' }}>Today's Attendance</span>
+              <span className="px-2 py-0.5 rounded text-xs font-medium" style={{ background: 'rgba(124,58,237,0.12)', color: '#a78bfa', fontSize: 10 }}>
+                {new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'short', day: 'numeric', month: 'short' }).format(new Date())}
+              </span>
+            </div>
+            <p style={{ fontSize: 10, color: 'var(--text-3)', marginTop: 2 }}>
+              {todaySignIns} sign-ins · {todaySignOuts} sign-outs{totalWorkStr ? ` · ${totalWorkStr} total hours` : ''}
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <input type="date" value={filterDate} onChange={e => setFilterDate(e.target.value)}
-                   className="input-field text-sm py-2 px-3 w-40" style={{ colorScheme: 'auto' }} />
-            <input type="text" value={filterName} onChange={e => setFilterName(e.target.value)}
-                   placeholder="Search by name…" className="input-field text-sm py-2 px-3 w-44" />
-            {(filterDate || filterName) && (
-              <button onClick={() => { setFilterDate(''); setFilterName(''); }}
-                      className="btn-secondary text-sm py-2 px-3">Clear</button>
-            )}
-          </div>
+          <button onClick={() => onNavigate('attendance')} style={{ fontSize: 10, color: '#60a5fa', fontWeight: 500, flexShrink: 0 }}>All Records →</button>
         </div>
 
+        {/* Split columns */}
         {loadingAtt ? (
-          <div className="flex justify-center py-16">
-            <div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin"
-                 style={{ borderColor: '#7c3aed', borderTopColor: 'transparent' }} />
-          </div>
-        ) : filteredAttendance.length === 0 ? (
-          <div className="text-center py-16">
-            <p className="text-sm" style={{ color: 'var(--text-3)' }}>No attendance records found.</p>
+          <div className="flex justify-center py-12">
+            <div className="w-7 h-7 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#7c3aed', borderTopColor: 'transparent' }} />
           </div>
         ) : (
-          <div>
-            {filteredAttendance.map(rec => (
-              <div key={rec.id} className="flex items-start gap-4 px-5 py-4 transition-colors border-b last:border-b-0"
-                   style={{ borderColor: 'var(--border)' }}
-                   onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-s)'}
-                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                {(rec.photoBase64 || rec.photoURL)
-                  ? <img src={rec.photoBase64 || rec.photoURL} alt={rec.employeeName}
-                           className="w-12 h-12 rounded-xl object-cover flex-shrink-0 cursor-pointer hover:scale-105 transition-transform"
-                           style={{ border: '2px solid var(--border)' }}
-                           onClick={() => setExpandedPhoto(rec.photoBase64 || rec.photoURL)} />
-                  : <div className="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center font-bold text-sm"
-                         style={{ background: 'linear-gradient(135deg,#7c3aed22,#3b82f622)', color: '#a78bfa' }}>
-                      {(rec.employeeName || '?').charAt(0).toUpperCase()}
-                    </div>
-                }
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center gap-2 mb-1">
-                    <span className="font-semibold text-sm" style={{ color: 'var(--text)' }}>{rec.employeeName}</span>
-                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full"
-                          style={rec.type === 'signin'
-                            ? { background: 'rgba(124,58,237,0.15)', color: '#a78bfa', border: '1px solid rgba(124,58,237,0.3)' }
-                            : rec.type === 'signout'
-                            ? { background: 'rgba(52,211,153,0.12)', color: '#34d399', border: '1px solid rgba(52,211,153,0.25)' }
-                            : { background: 'rgba(16,185,129,0.1)', color: '#6ee7b7' }}>
-                      {rec.type === 'signin' ? '↗ Sign In' : rec.type === 'signout' ? '↙ Sign Out' : 'Submitted'}
-                    </span>
-                    <span className="text-xs" style={{ color: 'var(--text-3)' }}>ID: {rec.employeeId}</span>
-                  </div>
-                  <p className="text-xs mb-1.5" style={{ color: '#60a5fa' }}>
-                    {formatDate(rec.date)} &nbsp;·&nbsp; {formatIST(rec.submittedAt)}
-                  </p>
-                  <p className="text-sm line-clamp-2" style={{ color: 'var(--text-2)' }}>{rec.workSummary}</p>
-                </div>
+          <div className="grid grid-cols-2 flex-1" style={{ borderBottom: '1px solid var(--border)' }}>
+
+            {/* ── Sign In column ── */}
+            <div className="flex flex-col" style={{ borderRight: '1px solid var(--border)' }}>
+              <div className="px-3 py-2 flex items-center gap-1.5 flex-shrink-0"
+                   style={{ background: 'rgba(124,58,237,0.06)', borderBottom: '1px solid rgba(124,58,237,0.12)' }}>
+                <svg className="w-3 h-3 flex-shrink-0" style={{ color: '#a78bfa' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M11 16l-4-4m0 0l4-4m-4 4h14" />
+                </svg>
+                <span style={{ fontSize: 10, fontWeight: 700, color: '#a78bfa', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Sign In</span>
+                <span className="ml-auto px-1.5 py-0.5 rounded font-bold" style={{ background: 'rgba(124,58,237,0.15)', color: '#a78bfa', fontSize: 10 }}>{todaySignIns}</span>
               </div>
-            ))}
+              <div style={{ overflowY: 'auto', maxHeight: 260 }}>
+                {todaySignInRecs.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-8 gap-1">
+                    <svg className="w-6 h-6" style={{ color: 'var(--text-3)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p style={{ fontSize: 11, color: 'var(--text-3)' }}>No sign-ins yet</p>
+                  </div>
+                ) : todaySignInRecs.map(rec => {
+                  const empKey = rec.employeeUid || rec.employeeId;
+                  const hrs = calcWorkHours(rec, todayEmpMap[empKey]?.signout);
+                  const photo = rec.photoBase64 || rec.photoURL;
+                  return (
+                    <div key={rec.id} className="flex items-center gap-2 px-3 py-2.5 transition-colors"
+                         style={{ borderBottom: '1px solid var(--border)' }}
+                         onMouseEnter={e => e.currentTarget.style.background = 'rgba(124,58,237,0.04)'}
+                         onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                      <div style={{ width: 28, height: 28, borderRadius: 8, overflow: 'hidden', flexShrink: 0, border: '1.5px solid rgba(124,58,237,0.25)', background: 'linear-gradient(135deg,#7c3aed22,#3b82f622)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: photo ? 'pointer' : 'default' }}
+                           onClick={() => photo && setExpandedPhoto(photo)}>
+                        {photo
+                          ? <img src={photo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          : <span style={{ fontSize: 10, fontWeight: 700, color: '#a78bfa' }}>{(rec.employeeName || '?').charAt(0).toUpperCase()}</span>}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="truncate font-semibold" style={{ fontSize: 11, color: 'var(--text)' }}>{rec.employeeName}</p>
+                        <p style={{ fontSize: 10, color: '#a78bfa' }}>{formatTimeOnly(rec.submittedAt)}</p>
+                      </div>
+                      {hrs && (
+                        <span className="flex-shrink-0 px-1.5 py-0.5 rounded font-semibold" style={{ background: 'rgba(16,185,129,0.12)', color: '#10b981', border: '1px solid rgba(16,185,129,0.2)', fontSize: 9 }}>
+                          ⏱{hrs}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* ── Sign Out column ── */}
+            <div className="flex flex-col">
+              <div className="px-3 py-2 flex items-center gap-1.5 flex-shrink-0"
+                   style={{ background: 'rgba(16,185,129,0.06)', borderBottom: '1px solid rgba(16,185,129,0.12)' }}>
+                <svg className="w-3 h-3 flex-shrink-0" style={{ color: '#34d399' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 9l3 3m0 0l-3 3m3-3H8" />
+                </svg>
+                <span style={{ fontSize: 10, fontWeight: 700, color: '#34d399', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Sign Out</span>
+                <span className="ml-auto px-1.5 py-0.5 rounded font-bold" style={{ background: 'rgba(16,185,129,0.15)', color: '#34d399', fontSize: 10 }}>{todaySignOuts}</span>
+              </div>
+              <div style={{ overflowY: 'auto', maxHeight: 260 }}>
+                {todaySignOutRecs.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-8 gap-1">
+                    <svg className="w-6 h-6" style={{ color: 'var(--text-3)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p style={{ fontSize: 11, color: 'var(--text-3)' }}>No sign-outs yet</p>
+                  </div>
+                ) : todaySignOutRecs.map(rec => {
+                  const empKey = rec.employeeUid || rec.employeeId;
+                  const hrs = calcWorkHours(todayEmpMap[empKey]?.signin, rec);
+                  const photo = rec.photoBase64 || rec.photoURL;
+                  return (
+                    <div key={rec.id} className="flex items-center gap-2 px-3 py-2.5 transition-colors"
+                         style={{ borderBottom: '1px solid var(--border)' }}
+                         onMouseEnter={e => e.currentTarget.style.background = 'rgba(16,185,129,0.04)'}
+                         onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                      <div style={{ width: 28, height: 28, borderRadius: 8, overflow: 'hidden', flexShrink: 0, border: '1.5px solid rgba(16,185,129,0.25)', background: 'linear-gradient(135deg,#10b98122,#34d39922)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: photo ? 'pointer' : 'default' }}
+                           onClick={() => photo && setExpandedPhoto(photo)}>
+                        {photo
+                          ? <img src={photo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          : <span style={{ fontSize: 10, fontWeight: 700, color: '#34d399' }}>{(rec.employeeName || '?').charAt(0).toUpperCase()}</span>}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="truncate font-semibold" style={{ fontSize: 11, color: 'var(--text)' }}>{rec.employeeName}</p>
+                        <p style={{ fontSize: 10, color: '#34d399' }}>{formatTimeOnly(rec.submittedAt)}</p>
+                      </div>
+                      {hrs && (
+                        <span className="flex-shrink-0 px-1.5 py-0.5 rounded font-semibold" style={{ background: 'rgba(16,185,129,0.12)', color: '#10b981', border: '1px solid rgba(16,185,129,0.2)', fontSize: 9 }}>
+                          ⏱{hrs}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         )}
+
+        {/* Footer summary bar */}
+        <div className="px-4 py-2 flex items-center gap-4 flex-shrink-0" style={{ background: 'var(--surface-s)', borderTop: '1px solid var(--border)' }}>
+          {[
+            { label: 'Signed In',  value: todaySignIns,       color: '#a78bfa' },
+            { label: 'Signed Out', value: todaySignOuts,      color: '#34d399' },
+            { label: 'Full Day',   value: completePairs.length, color: '#10b981' },
+            ...(totalWorkStr ? [{ label: 'Total Hours', value: totalWorkStr, color: '#fbbf24' }] : []),
+          ].map(s => (
+            <div key={s.label} className="flex items-center gap-1.5">
+              <span style={{ fontSize: 13, fontWeight: 700, color: s.color }}>{s.value}</span>
+              <span style={{ fontSize: 10, color: 'var(--text-3)' }}>{s.label}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* E — My To-Do */}
