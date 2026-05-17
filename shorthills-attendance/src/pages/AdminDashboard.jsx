@@ -12,6 +12,7 @@ import NotesPage from '../components/NotesPage';
 import CredentialsPage from '../components/CredentialsPage';
 import AssignMeetingTarget from '../components/AssignMeetingTarget';
 import MeetingReport from '../components/MeetingReport';
+import TeamTargetPage from '../components/TeamTargetPage';
 
 function formatIST(ts) {
   if (!ts) return '—';
@@ -58,78 +59,79 @@ function getEmpRecords(attendance, employee) {
 
 /* ── Sidebar ──────────────────────────────────────────────── */
 function Sidebar({ page, setPage, employeeCount, mobileOpen, setMobileOpen }) {
-  const items = [
+  const groups = [
     {
-      id: 'dashboard', label: 'Dashboard',
-      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>,
+      label: 'Overview',
+      items: [
+        { id: 'dashboard', label: 'Dashboard', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg> },
+        { id: 'employees', label: 'Employees', badge: employeeCount, icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg> },
+        { id: 'attendance', label: 'Attendance', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg> },
+      ],
     },
     {
-      id: 'employees', label: 'Employees', badge: employeeCount,
-      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>,
+      label: 'Team',
+      items: [
+        { id: 'assign-task', label: 'Assign Task', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7l2 2 4-4" /></svg> },
+        { id: 'assign-meeting', label: 'Assign Meeting Target', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" strokeWidth={2} /><circle cx="12" cy="12" r="6" strokeWidth={2} /><circle cx="12" cy="12" r="2" strokeWidth={2} /></svg> },
+        { id: 'team-target', label: 'My Team Target', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg> },
+        { id: 'meeting-report', label: 'Meeting Report', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg> },
+      ],
     },
     {
-      id: 'attendance', label: 'Attendance',
-      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>,
-    },
-    {
-      id: 'assign-task', label: 'Assign Task',
-      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7l2 2 4-4" /></svg>,
-    },
-    {
-      id: 'my-todo', label: 'My To-Do',
-      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
-    },
-    {
-      id: 'my-notes', label: 'My Notes',
-      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>,
-    },
-    {
-      id: 'my-credentials', label: 'My Credentials',
-      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg>,
-    },
-    {
-      id: 'assign-meeting', label: 'Assign Meeting Target',
-      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" strokeWidth={2} /><circle cx="12" cy="12" r="6" strokeWidth={2} /><circle cx="12" cy="12" r="2" strokeWidth={2} /></svg>,
-    },
-    {
-      id: 'meeting-report', label: 'Meeting Report',
-      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>,
+      label: 'Personal',
+      items: [
+        { id: 'my-todo', label: 'My To-Do', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> },
+        { id: 'my-notes', label: 'My Notes', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg> },
+        { id: 'my-credentials', label: 'My Credentials', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg> },
+      ],
     },
   ];
 
   const NavContent = () => (
-    <div className="flex flex-col h-full">
-      <div className="px-5 py-5 border-b" style={{ borderColor: 'var(--border)' }}>
-        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-3)' }}>Admin Panel</p>
+    <div className="flex flex-col h-full overflow-y-auto">
+      <div className="px-4 py-3.5 border-b flex items-center gap-2.5" style={{ borderColor: 'var(--border)' }}>
+        <div className="w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
+             style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)' }}>G</div>
+        <div>
+          <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)' }}>Garvix Ops</p>
+          <p style={{ fontSize: 10, color: 'var(--text-3)' }}>Admin Panel</p>
+        </div>
       </div>
-      <nav className="flex-1 px-3 py-4 space-y-1">
-        {items.map(item => {
-          const active = page === item.id;
-          return (
-            <button key={item.id}
-              onClick={() => { setPage(item.id); setMobileOpen(false); }}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200"
-              style={active
-                ? { background: 'linear-gradient(135deg,#7c3aed,#3b82f6)', color: '#fff', boxShadow: '0 4px 20px rgba(124,58,237,0.3)' }
-                : { color: 'var(--text-2)', background: 'transparent' }
-              }
-              onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'var(--surface-s)'; }}
-              onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
-            >
-              {item.icon}
-              <span>{item.label}</span>
-              {item.badge !== undefined && (
-                <span className="ml-auto text-xs px-2 py-0.5 rounded-full font-semibold"
-                      style={active ? { background: 'rgba(255,255,255,0.25)', color: '#fff' } : { background: 'var(--surface-s)', color: 'var(--text-3)' }}>
-                  {item.badge}
-                </span>
-              )}
-            </button>
-          );
-        })}
+      <nav className="flex-1 px-2 py-3">
+        {groups.map(group => (
+          <div key={group.label} className="mb-4">
+            <p className="px-3 mb-1" style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--text-3)' }}>
+              {group.label}
+            </p>
+            {group.items.map(item => {
+              const active = page === item.id;
+              return (
+                <button key={item.id}
+                  onClick={() => { setPage(item.id); setMobileOpen(false); }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg transition-all duration-150 mb-0.5"
+                  style={active
+                    ? { background: 'rgba(124,58,237,0.15)', color: '#a78bfa', borderLeft: '2px solid #7c3aed' }
+                    : { color: 'var(--text-2)', background: 'transparent', borderLeft: '2px solid transparent' }
+                  }
+                  onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'var(--surface-s)'; }}
+                  onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
+                >
+                  {item.icon}
+                  <span style={{ fontSize: 12, fontWeight: active ? 600 : 400 }}>{item.label}</span>
+                  {item.badge !== undefined && (
+                    <span className="ml-auto px-1.5 py-0.5 rounded text-xs font-semibold"
+                          style={{ background: 'var(--surface-s)', color: 'var(--text-3)', fontSize: 10 }}>
+                      {item.badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        ))}
       </nav>
-      <div className="px-5 py-4 border-t" style={{ borderColor: 'var(--border)' }}>
-        <p className="text-xs text-center" style={{ color: 'var(--text-3)' }}>Garvix Ops © {new Date().getFullYear()}</p>
+      <div className="px-4 py-3 border-t" style={{ borderColor: 'var(--border)' }}>
+        <p style={{ fontSize: 10, textAlign: 'center', color: 'var(--text-3)' }}>Garvix Ops © {new Date().getFullYear()}</p>
       </div>
     </div>
   );
@@ -880,119 +882,170 @@ function AttendancePage({ employees, attendance, loadingEmp, loadingAtt, setExpa
 /* ── Dashboard page ───────────────────────────────────────── */
 function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDate, setFilterDate,
                          filterName, setFilterName, filteredAttendance, setExpandedPhoto,
-                         adminTodos, onNavigate }) {
+                         adminTodos, onNavigate, user }) {
   const today = todayIST();
   const todaySignIns  = attendance.filter(a => a.date === today && a.type === 'signin').length;
   const todaySignOuts = attendance.filter(a => a.date === today && a.type === 'signout').length;
 
   const pendingTodos   = (adminTodos || []).filter(t => !t.completed);
-  const completedTodos = (adminTodos || []).filter(t => t.completed);
   const PRIORITY_COLOR = { high: '#f87171', medium: '#fbbf24', low: '#34d399' };
-  const todayDate = new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
+
+  // Live clock
+  const [clock, setClock] = useState(new Date());
+  useEffect(() => {
+    const i = setInterval(() => setClock(new Date()), 1000);
+    return () => clearInterval(i);
+  }, []);
+
+  // Team Target + meetings aggregate
+  const [teamTarget, setTeamTarget] = useState(null);
+  const [teamMeet,   setTeamMeet]   = useState({ completed: 0, scheduled: 0 });
+  const currentMonth = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date()).slice(0, 7);
+
+  useEffect(() => {
+    if (!user) return;
+    return onSnapshot(doc(db, 'teamTargets', `${user.uid}_${currentMonth}`), snap => {
+      setTeamTarget(snap.exists() ? snap.data() : null);
+    });
+  }, [user]);
+
+  useEffect(() => {
+    const q = query(collection(db, 'meetings'), where('month', '==', currentMonth));
+    return onSnapshot(q, snap => {
+      const comp  = snap.docs.reduce((s, d) => s + (d.data().completed  || 0), 0);
+      const sched = snap.docs.reduce((s, d) => s + (d.data().scheduled  || 0), 0);
+      setTeamMeet({ completed: comp, scheduled: sched });
+    });
+  }, []);
+
+  const tgt = teamTarget?.target || 0;
+  const pct = tgt > 0 ? Math.min(teamMeet.completed / tgt, 1) : 0;
+  const R = 36, CIRC = 2 * Math.PI * R;
+
+  const greetWord = clock.getHours() < 12 ? 'Morning' : clock.getHours() < 17 ? 'Afternoon' : 'Evening';
+  const fullDate  = new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(clock);
+  const timeStr   = new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }).format(clock);
+
+  // Todo groups by date
+  const todayTodos    = pendingTodos.filter(t => !t.date || t.date === today).slice(0, 6);
+  const tomorrowTodos = pendingTodos.filter(t => {
+    if (!t.date) return false;
+    const [y, m, d] = today.split('-').map(Number);
+    const tom = new Date(y, m - 1, d + 1);
+    return t.date === new Intl.DateTimeFormat('en-CA').format(tom);
+  }).slice(0, 3);
+  const overdueTodos  = pendingTodos.filter(t => t.date && t.date < today).slice(0, 3);
 
   return (
-    <div className="space-y-5 animate-fade-in">
+    <div className="space-y-4 animate-fade-in">
 
-      {/* Page header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-semibold" style={{ color: 'var(--text)', fontSize: 15 }}>{greet()}, Admin</h1>
-          <p style={{ color: 'var(--text-3)', fontSize: 12 }}>{todayDate}</p>
-        </div>
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg"
-             style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)' }}>
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
-          <span className="text-xs font-medium" style={{ color: '#10b981' }}>System Online</span>
-        </div>
-      </div>
+      {/* ── Row 1: B (greeting) + D (team target) ── */}
+      <div className="grid gap-4" style={{ gridTemplateColumns: '1fr 320px' }}>
 
-      {/* Stats row */}
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-3">
-        <StatCard label="Total Employees"  value={employees.length} sub="registered members"
-          gradient="linear-gradient(135deg,#7c3aed,#3b82f6)" loading={loadingEmp}
-          icon={<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>}
-        />
-        <StatCard label="Sign Ins Today" value={todaySignIns} sub="punched in"
-          gradient="linear-gradient(135deg,#7c3aed,#a855f7)" loading={loadingAtt}
-          icon={<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>}
-        />
-        <StatCard label="Sign Outs Today" value={todaySignOuts} sub="completed shift"
-          gradient="linear-gradient(135deg,#10b981,#34d399)" loading={loadingAtt}
-          icon={<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>}
-        />
-        <StatCard label="Total Records" value={attendance.length} sub="all time"
-          gradient="linear-gradient(135deg,#f59e0b,#fbbf24)" loading={loadingAtt}
-          icon={<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>}
-        />
-      </div>
-
-      {/* My To-Do widget */}
-      <div className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--surface)' }}>
-        <div className="px-4 py-2.5 flex items-center justify-between border-b" style={{ borderColor: 'var(--border)', background: 'var(--surface-s)' }}>
-          <div className="flex items-center gap-2">
-            <svg className="w-3.5 h-3.5" style={{ color: '#a78bfa' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-3)' }}>My To-Do</span>
-            {pendingTodos.length > 0 && (
-              <span className="text-xs font-semibold px-1.5 py-0.5 rounded-full" style={{ background: '#7c3aed20', color: '#a78bfa' }}>
-                {pendingTodos.length} pending
-              </span>
-            )}
+        {/* B — Greeting banner */}
+        <div className="rounded-xl overflow-hidden relative"
+             style={{ background: 'linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%)', border: '1px solid rgba(124,58,237,0.25)' }}>
+          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 10% 50%,rgba(124,58,237,0.12) 0%,transparent 60%)' }} />
+          <div className="relative p-5">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p style={{ fontSize: 11, fontWeight: 500, color: 'rgba(167,139,250,0.7)', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: 4 }}>Admin Dashboard</p>
+                <h2 style={{ fontSize: 20, fontWeight: 700, color: '#fff', lineHeight: 1.2 }}>Good {greetWord} 👋</h2>
+                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', marginTop: 3 }}>{fullDate}</p>
+              </div>
+              {/* Live clock */}
+              <div className="text-right flex-shrink-0">
+                <p style={{ fontSize: 22, fontWeight: 700, color: '#fff', fontFamily: 'monospace', letterSpacing: '0.02em' }}>{timeStr}</p>
+                <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', marginTop: 2 }}>IST · Live</p>
+              </div>
+            </div>
+            {/* Mini stat chips */}
+            <div className="flex gap-2 mt-4 flex-wrap">
+              {[
+                { label: 'Employees', value: employees.length, color: '#a78bfa' },
+                { label: 'Sign-ins Today', value: todaySignIns, color: '#34d399' },
+                { label: 'Sign-outs Today', value: todaySignOuts, color: '#60a5fa' },
+                { label: 'Total Records', value: attendance.length, color: '#fbbf24' },
+              ].map(s => (
+                <div key={s.label} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg"
+                     style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: s.color }}>{s.value}</span>
+                  <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)' }}>{s.label}</span>
+                </div>
+              ))}
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg ml-auto"
+                   style={{ background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.2)' }}>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span style={{ fontSize: 10, color: '#10b981', fontWeight: 500 }}>System Online</span>
+              </div>
+            </div>
           </div>
-          <button onClick={() => onNavigate('my-todo')} className="text-xs font-medium" style={{ color: '#a78bfa' }}>
-            Manage →
-          </button>
         </div>
-        {pendingTodos.length === 0 ? (
-          <div className="px-4 py-6 text-center">
-            <p className="text-xs" style={{ color: 'var(--text-3)' }}>
-              {completedTodos.length > 0 ? `All ${completedTodos.length} tasks completed ✓` : 'No to-do items yet — add from My To-Do'}
+
+        {/* D — Team Target widget */}
+        <div className="rounded-xl overflow-hidden" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+          <div className="px-4 py-2.5 flex items-center justify-between border-b" style={{ borderColor: 'var(--border)', background: 'var(--surface-s)' }}>
+            <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--text-3)' }}>My Team Target</span>
+            <button onClick={() => onNavigate('team-target')} style={{ fontSize: 10, color: '#a78bfa', fontWeight: 500 }}>Manage →</button>
+          </div>
+          <div className="p-4">
+            {/* Month label */}
+            <p style={{ fontSize: 10, color: 'var(--text-3)', marginBottom: 10 }}>
+              {new Intl.DateTimeFormat('en-IN', { month: 'long', year: 'numeric' }).format(new Date())}
             </p>
-          </div>
-        ) : (
-          <div>
-            {pendingTodos.slice(0, 8).map(todo => {
-              const isToday = todo.date === today;
-              const isOverdue = todo.date && todo.date < today;
-              return (
-                <div key={todo.id} className="px-4 py-2.5 border-b last:border-b-0 flex items-center gap-3 transition-colors"
-                     style={{ borderColor: 'var(--border)' }}
-                     onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-s)'}
-                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                  <div className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                       style={{ background: PRIORITY_COLOR[todo.priority] || '#94a3b8' }} />
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium truncate" style={{ color: 'var(--text)', fontSize: 13 }}>{todo.title}</p>
-                  </div>
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    {todo.date && (
-                      <span className="text-xs px-2 py-0.5 rounded font-medium"
-                            style={isOverdue ? { background: 'rgba(239,68,68,0.1)', color: '#f87171' }
-                                             : isToday ? { background: 'rgba(124,58,237,0.1)', color: '#a78bfa' }
-                                             : { color: 'var(--text-3)', background: 'transparent' }}>
-                        {isToday ? 'Today' : isOverdue ? 'Overdue' : todo.date}
-                      </span>
-                    )}
-                    <span className="text-xs px-2 py-0.5 rounded font-medium"
-                          style={{ background: todo.priority === 'high' ? 'rgba(239,68,68,0.1)' : todo.priority === 'medium' ? 'rgba(245,158,11,0.1)' : 'rgba(16,185,129,0.1)',
-                                   color: PRIORITY_COLOR[todo.priority] || '#94a3b8' }}>
-                      {todo.priority || 'med'}
-                    </span>
+            {tgt === 0 ? (
+              <div className="text-center py-4">
+                <p style={{ fontSize: 11, color: 'var(--text-3)' }}>No target set for this month</p>
+                <button onClick={() => onNavigate('team-target')} className="btn-primary mt-2" style={{ fontSize: 11 }}>Set Target</button>
+              </div>
+            ) : (
+              <>
+                {/* Ring + numbers */}
+                <div className="flex items-center gap-3">
+                  <svg width={88} height={88} style={{ flexShrink: 0 }}>
+                    <defs>
+                      <linearGradient id="dt-ring" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#7c3aed" />
+                        <stop offset="100%" stopColor="#3b82f6" />
+                      </linearGradient>
+                    </defs>
+                    <circle cx={44} cy={44} r={R} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={7} />
+                    <circle cx={44} cy={44} r={R} fill="none" stroke="url(#dt-ring)" strokeWidth={7}
+                      strokeLinecap="round"
+                      strokeDasharray={`${CIRC * pct} ${CIRC}`}
+                      transform="rotate(-90 44 44)"
+                      style={{ transition: 'stroke-dasharray 1s', filter: 'drop-shadow(0 0 5px #7c3aed60)' }} />
+                    <text x={44} y={40} textAnchor="middle" fill="white" fontSize={16} fontWeight={700}>{Math.round(pct * 100)}%</text>
+                    <text x={44} y={54} textAnchor="middle" fill="rgba(255,255,255,0.35)" fontSize={9}>done</text>
+                  </svg>
+                  <div className="flex-1 space-y-2">
+                    {[
+                      { label: 'Target',    value: tgt,                                         color: '#60a5fa' },
+                      { label: 'Completed', value: teamMeet.completed,                          color: '#10b981' },
+                      { label: 'Scheduled', value: teamMeet.scheduled,                          color: '#f59e0b' },
+                      { label: 'Remaining', value: Math.max(0, tgt - teamMeet.completed),       color: '#f87171' },
+                    ].map(s => (
+                      <div key={s.label} className="flex items-center justify-between">
+                        <span style={{ fontSize: 10, color: 'var(--text-3)' }}>{s.label}</span>
+                        <span style={{ fontSize: 13, fontWeight: 700, color: s.color }}>{s.value}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              );
-            })}
-            {pendingTodos.length > 8 && (
-              <div className="px-4 py-2.5 text-center">
-                <button onClick={() => onNavigate('my-todo')} className="text-xs" style={{ color: 'var(--text-3)' }}>
-                  +{pendingTodos.length - 8} more — view all
-                </button>
-              </div>
+                {/* Progress bar */}
+                <div className="mt-3">
+                  <div style={{ height: 4, borderRadius: 99, background: 'var(--surface-s)', overflow: 'hidden' }}>
+                    <div style={{ height: '100%', width: `${pct * 100}%`, background: 'linear-gradient(90deg,#7c3aed,#3b82f6)', borderRadius: 99, transition: 'width 1s' }} />
+                  </div>
+                </div>
+              </>
             )}
           </div>
-        )}
+        </div>
       </div>
+
+      {/* ── Row 2: C (attendance) + E (todo) ── */}
+      <div className="grid gap-4" style={{ gridTemplateColumns: '1fr 320px' }}>
 
       {/* Attendance records */}
       <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--surface)' }}>
@@ -1065,7 +1118,90 @@ function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDa
           </div>
         )}
       </div>
+
+      {/* E — My To-Do */}
+      <div className="rounded-xl overflow-hidden flex flex-col" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+        <div className="px-4 py-2.5 flex items-center justify-between border-b flex-shrink-0" style={{ borderColor: 'var(--border)', background: 'var(--surface-s)' }}>
+          <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--text-3)' }}>My To-Do</span>
+          <button onClick={() => onNavigate('my-todo')} style={{ fontSize: 10, color: '#a78bfa', fontWeight: 500 }}>Manage →</button>
+        </div>
+        <div className="flex-1 overflow-y-auto" style={{ maxHeight: 340 }}>
+          {(overdueTodos.length + todayTodos.length + tomorrowTodos.length) === 0 ? (
+            <div className="text-center py-8">
+              <p style={{ fontSize: 11, color: 'var(--text-3)' }}>All caught up! No pending items.</p>
+            </div>
+          ) : (
+            <div className="p-3 space-y-3">
+              {overdueTodos.length > 0 && (
+                <div>
+                  <p style={{ fontSize: 10, fontWeight: 600, color: '#f87171', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <span>⚠</span> Overdue
+                  </p>
+                  <div className="space-y-1.5">
+                    {overdueTodos.map(t => (
+                      <div key={t.id} className="flex items-start gap-2 px-3 py-2 rounded-lg"
+                           style={{ background: 'rgba(248,113,113,0.06)', border: '1px solid rgba(248,113,113,0.15)' }}>
+                        <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: '#f87171' }} />
+                        <div className="flex-1 min-w-0">
+                          <p className="truncate font-medium" style={{ fontSize: 11, color: 'var(--text)' }}>{t.title}</p>
+                          {t.date && <p style={{ fontSize: 10, color: '#f87171', marginTop: 1 }}>{t.date}</p>}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {todayTodos.length > 0 && (
+                <div>
+                  <p style={{ fontSize: 10, fontWeight: 600, color: '#a78bfa', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <span>◈</span> Today
+                  </p>
+                  <div className="space-y-1.5">
+                    {todayTodos.map(t => (
+                      <div key={t.id} className="flex items-start gap-2 px-3 py-2 rounded-lg"
+                           style={{ background: 'rgba(124,58,237,0.06)', border: '1px solid rgba(124,58,237,0.12)' }}>
+                        <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
+                             style={{ background: PRIORITY_COLOR[t.priority] || '#a78bfa' }} />
+                        <div className="flex-1 min-w-0">
+                          <p className="truncate font-medium" style={{ fontSize: 11, color: 'var(--text)' }}>{t.title}</p>
+                          <p style={{ fontSize: 10, color: '#a78bfa', marginTop: 1 }}>Today</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {tomorrowTodos.length > 0 && (
+                <div>
+                  <p style={{ fontSize: 10, fontWeight: 600, color: '#60a5fa', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <span>→</span> Tomorrow
+                  </p>
+                  <div className="space-y-1.5">
+                    {tomorrowTodos.map(t => (
+                      <div key={t.id} className="flex items-start gap-2 px-3 py-2 rounded-lg"
+                           style={{ background: 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.12)' }}>
+                        <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
+                             style={{ background: PRIORITY_COLOR[t.priority] || '#60a5fa' }} />
+                        <div className="flex-1 min-w-0">
+                          <p className="truncate font-medium" style={{ fontSize: 11, color: 'var(--text)' }}>{t.title}</p>
+                          <p style={{ fontSize: 10, color: '#60a5fa', marginTop: 1 }}>Tomorrow</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+        <div className="px-4 py-2 border-t flex-shrink-0" style={{ borderColor: 'var(--border)', background: 'var(--surface-s)' }}>
+          <p style={{ fontSize: 10, color: 'var(--text-3)', textAlign: 'center' }}>
+            {pendingTodos.length} pending item{pendingTodos.length !== 1 ? 's' : ''}
+          </p>
+        </div>
+      </div>
     </div>
+  </div>
   );
 }
 
@@ -1292,7 +1428,7 @@ export default function AdminDashboard({ user }) {
               filterName={filterName} setFilterName={setFilterName}
               filteredAttendance={filteredAttendance}
               setExpandedPhoto={setExpandedPhoto}
-              adminTodos={adminTodos} onNavigate={setPage}
+              adminTodos={adminTodos} onNavigate={setPage} user={user}
             />
           )}
           {page === 'employees' && (
@@ -1321,6 +1457,9 @@ export default function AdminDashboard({ user }) {
           )}
           {page === 'meeting-report' && (
             <MeetingReport user={user} />
+          )}
+          {page === 'team-target' && (
+            <TeamTargetPage user={user} />
           )}
         </main>
       </div>
