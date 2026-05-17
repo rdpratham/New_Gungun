@@ -15,7 +15,7 @@ export const app = initializeApp(firebaseConfig);
 // Session persistence — survives refresh in same tab, clears on tab close or new tab
 export const auth = initializeAuth(app, { persistence: browserSessionPersistence });
 // Memory-only cache: no IndexedDB, no stale data, always fetches from server
-export const db = initializeFirestore(app, { localCache: memoryLocalCache() });
+export const db = initializeFirestore(app, { localCache: memoryLocalCache(), ignoreUndefinedProperties: true });
 
 // Purge ALL stale Firebase auth sessions from localStorage (old code used local persistence)
 try {
