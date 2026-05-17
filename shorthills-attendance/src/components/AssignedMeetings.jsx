@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { db } from '../firebase';
 import { doc, onSnapshot, updateDoc, serverTimestamp } from 'firebase/firestore';
 
+/* ── Helpers ─────────────────────────────────────────────────────── */
 function currentMonthIST() {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date()).slice(0, 7);
 }
@@ -18,235 +19,479 @@ function getRecentMonths(n = 6) {
   }
   return months;
 }
+function formatTS(ts) {
+  if (!ts) return '—';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+function clamp(val, min, max) { return Math.min(Math.max(val, min), max); }
 
-/* Animated donut ring */
-function DonutRing({ pct = 0, size = 160, strokeW = 16, color1 = '#7c3aed', color2 = '#3b82f6', label, sublabel }) {
-  const R = (size - strokeW * 2) / 2;
-  const CX = size / 2, CY = size / 2;
-  const CIRC = 2 * Math.PI * R;
-  const id = `dr-${size}-${label}`;
+/* ── Icons ───────────────────────────────────────────────────────── */
+const IconTarget = () => (
+  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="10" strokeWidth={2} />
+    <circle cx="12" cy="12" r="6" strokeWidth={2} />
+    <circle cx="12" cy="12" r="2" strokeWidth={2} />
+  </svg>
+);
+const IconCalendar = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+  </svg>
+);
+const IconSave = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+      d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+  </svg>
+);
+const IconTrophy = () => (
+  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+      d="M8 21h8m-4 0v-4m0 0a4 4 0 004-4V5H8v8a4 4 0 004 4zM8 5H4a2 2 0 000 4h4M16 5h4a2 2 0 010 4h-4" />
+  </svg>
+);
+const IconSpinner = () => (
+  <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.3)" strokeWidth="3" />
+    <path d="M12 2a10 10 0 0110 10" stroke="white" strokeWidth="3" strokeLinecap="round" />
+  </svg>
+);
+const IconCheck = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+  </svg>
+);
+
+/* ── Large Progress Ring ─────────────────────────────────────────── */
+function ProgressRing({ completed = 0, scheduled = 0, target = 0 }) {
+  const rOuter = 75;
+  const rSched = 62;
+  const circumOuter = 2 * Math.PI * rOuter;
+  const circumSched = 2 * Math.PI * rSched;
+
+  const compPct = target > 0 ? clamp(completed / target, 0, 1) : 0;
+  const schedPct = target > 0 ? clamp(scheduled / target, 0, 1) : 0;
+  const compDash = compPct * circumOuter;
+  const schedDash = schedPct * circumSched;
+  const pctNum = Math.round(compPct * 100);
+  const achieved = compPct >= 1 && target > 0;
+
   return (
-    <svg width={size} height={size}>
+    <svg width="200" height="200" viewBox="0 0 200 200">
       <defs>
-        <linearGradient id={id} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor={color1} />
-          <stop offset="100%" stopColor={color2} />
+        <linearGradient id="prComp" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#7c3aed" />
+          <stop offset="100%" stopColor="#3b82f6" />
         </linearGradient>
-        <filter id={`${id}-glow`}>
-          <feGaussianBlur stdDeviation="3" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        <radialGradient id="prGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor={achieved ? 'rgba(16,185,129,0.25)' : 'rgba(124,58,237,0.25)'} />
+          <stop offset="100%" stopColor="transparent" />
+        </radialGradient>
+        <filter id="prFilter">
+          <feGaussianBlur stdDeviation="3.5" result="blur" />
+          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
         </filter>
+        {achieved && (
+          <linearGradient id="prAchieved" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#10b981" />
+            <stop offset="100%" stopColor="#059669" />
+          </linearGradient>
+        )}
       </defs>
-      {/* Track */}
-      <circle cx={CX} cy={CY} r={R} fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth={strokeW} />
-      {/* Progress */}
-      {pct > 0 && (
-        <circle cx={CX} cy={CY} r={R} fill="none" stroke={`url(#${id})`} strokeWidth={strokeW}
-          strokeLinecap="round"
-          strokeDasharray={`${CIRC * Math.min(pct, 1)} ${CIRC}`}
-          transform={`rotate(-90 ${CX} ${CY})`}
-          style={{ transition: 'stroke-dasharray 1s ease', filter: `drop-shadow(0 0 6px ${color1}80)` }} />
-      )}
-      {label !== undefined && (
-        <>
-          <text x={CX} y={CY - 8} textAnchor="middle" fill="white" fontSize={size > 120 ? 28 : 18} fontWeight="800">{label}</text>
-          {sublabel && <text x={CX} y={CY + 14} textAnchor="middle" fill="rgba(255,255,255,0.5)" fontSize={12}>{sublabel}</text>}
-        </>
-      )}
+
+      {/* Glow background */}
+      <circle cx="100" cy="100" r="90" fill="url(#prGlow)" opacity="0.6" />
+
+      {/* Outer track (target) */}
+      <circle cx="100" cy="100" r={rOuter} fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="14" />
+      {/* Scheduled ring (inner) */}
+      <circle cx="100" cy="100" r={rSched} fill="none" stroke="rgba(59,130,246,0.25)" strokeWidth="10" />
+
+      {/* Scheduled arc */}
+      <circle
+        cx="100" cy="100" r={rSched} fill="none"
+        stroke="rgba(59,130,246,0.55)" strokeWidth="10"
+        strokeDasharray={`${schedDash} ${circumSched}`}
+        strokeLinecap="round"
+        transform="rotate(-90 100 100)"
+        style={{ transition: 'stroke-dasharray 0.8s ease' }}
+      />
+
+      {/* Completed arc */}
+      <circle
+        cx="100" cy="100" r={rOuter} fill="none"
+        stroke={achieved ? 'url(#prAchieved)' : 'url(#prComp)'} strokeWidth="14"
+        strokeDasharray={`${compDash} ${circumOuter}`}
+        strokeLinecap="round"
+        transform="rotate(-90 100 100)"
+        filter="url(#prFilter)"
+        style={{ transition: 'stroke-dasharray 0.8s ease' }}
+      />
+
+      {/* Center text */}
+      <text x="100" y="88" textAnchor="middle" fontSize="36" fontWeight="900" fill="white">{completed}</text>
+      <text x="100" y="108" textAnchor="middle" fontSize="13" fontWeight="500" fill="rgba(255,255,255,0.55)">of {target}</text>
+      <text x="100" y="127" textAnchor="middle" fontSize="16" fontWeight="800"
+        fill={achieved ? '#10b981' : '#a78bfa'}
+      >{pctNum}%</text>
     </svg>
   );
 }
 
-/* Counter input with +/- buttons */
-function CounterInput({ value, onChange, min = 0, max = 999, label, color1, color2 }) {
+/* ── Empty State ─────────────────────────────────────────────────── */
+function EmptyState({ month }) {
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-3)' }}>{label}</div>
-      <div className="flex items-center gap-3 rounded-2xl px-4 py-3"
-        style={{ background: 'var(--surface-s)', border: `2px solid ${color1}40` }}>
-        <button
-          onClick={() => onChange(Math.max(min, value - 1))}
-          className="w-9 h-9 rounded-full flex items-center justify-center text-xl font-bold transition-all hover:scale-110"
-          style={{ background: `linear-gradient(135deg,${color1},${color2})`, color: 'white' }}>
-          −
-        </button>
-        <div className="text-3xl font-bold w-12 text-center" style={{
-          background: `linear-gradient(135deg,${color1},${color2})`,
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
-        }}>
-          {value}
+    <div className="animate-fade-in flex flex-col items-center gap-5 py-20 px-6">
+      <div
+        className="relative w-24 h-24 rounded-3xl flex items-center justify-center"
+        style={{
+          background: 'linear-gradient(135deg,rgba(124,58,237,0.15),rgba(59,130,246,0.15))',
+          border: '1px solid rgba(124,58,237,0.2)',
+        }}
+      >
+        <div className="text-violet-400">
+          <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </svg>
         </div>
-        <button
-          onClick={() => onChange(Math.min(max, value + 1))}
-          className="w-9 h-9 rounded-full flex items-center justify-center text-xl font-bold transition-all hover:scale-110"
-          style={{ background: `linear-gradient(135deg,${color1},${color2})`, color: 'white' }}>
-          +
-        </button>
+        <div
+          className="absolute -top-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold"
+          style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)' }}
+        >?</div>
+      </div>
+      <div className="text-center flex flex-col gap-1.5">
+        <h3 className="text-lg font-bold" style={{ color: 'var(--text)' }}>No target assigned</h3>
+        <p className="text-sm" style={{ color: 'var(--text-2)' }}>
+          No meeting target has been set for <span className="font-semibold" style={{ color: '#a78bfa' }}>{formatMonth(month)}</span>.
+        </p>
+        <p className="text-xs mt-1" style={{ color: 'var(--text-3)' }}>
+          Please contact your admin to assign a meeting target for this month.
+        </p>
       </div>
     </div>
   );
 }
 
+/* ── Main Component ──────────────────────────────────────────────── */
 export default function AssignedMeetings({ user, employeeData }) {
-  const [month, setMonth] = useState(currentMonthIST());
-  const [meetingData, setMeetingData] = useState(null);
-  const [completed, setCompleted] = useState(0);
-  const [scheduled, setScheduled] = useState(0);
+  const allMonths = getRecentMonths(6);
+  const [month, setMonth] = useState(allMonths[0]);
+  const [record, setRecord] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  /* update form state */
+  const [editCompleted, setEditCompleted] = useState('');
+  const [editScheduled, setEditScheduled] = useState('');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  const months = getRecentMonths(6);
+  const savedTimerRef = useRef(null);
 
-  const uid = user?.uid;
-  const docId = uid ? `${uid}_${month}` : null;
-
+  /* realtime snapshot for own record */
   useEffect(() => {
-    if (!docId) return;
-    return onSnapshot(doc(db, 'meetings', docId), snap => {
+    if (!user?.uid || !month) return;
+    setLoading(true);
+    const docRef = doc(db, 'meetings', `${user.uid}_${month}`);
+    const unsub = onSnapshot(docRef, snap => {
       if (snap.exists()) {
-        const d = snap.data();
-        setMeetingData(d);
-        setCompleted(d.completed || 0);
-        setScheduled(d.scheduled || 0);
+        const data = { id: snap.id, ...snap.data() };
+        setRecord(data);
+        setEditCompleted(String(data.completed ?? 0));
+        setEditScheduled(String(data.scheduled ?? 0));
       } else {
-        setMeetingData(null);
-        setCompleted(0);
-        setScheduled(0);
+        setRecord(null);
+        setEditCompleted('');
+        setEditScheduled('');
       }
+      setLoading(false);
     });
-  }, [docId]);
+    return () => unsub();
+  }, [user?.uid, month]);
 
-  async function handleSave() {
-    if (!docId || !meetingData) return;
+  async function handleSave(e) {
+    e.preventDefault();
+    if (!record) return;
+    const c = Math.max(0, parseInt(editCompleted, 10) || 0);
+    const s = Math.max(0, parseInt(editScheduled, 10) || 0);
     setSaving(true);
     try {
-      await updateDoc(doc(db, 'meetings', docId), {
-        completed, scheduled, updatedAt: serverTimestamp()
+      await updateDoc(doc(db, 'meetings', `${user.uid}_${month}`), {
+        completed: c,
+        scheduled: s,
+        updatedAt: serverTimestamp(),
       });
       setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
-    } catch (e) {
-      console.error(e);
+      if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
+      savedTimerRef.current = setTimeout(() => setSaved(false), 2500);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSaving(false);
     }
-    setSaving(false);
   }
 
-  const target = meetingData?.target || 0;
-  const completedPct = target > 0 ? completed / target : 0;
-  const scheduledPct = target > 0 ? scheduled / target : 0;
-  const remaining = Math.max(0, target - completed);
-  const hasTarget = !!meetingData;
-  const isDirty = hasTarget && (completed !== (meetingData?.completed || 0) || scheduled !== (meetingData?.scheduled || 0));
+  const completed = record?.completed ?? 0;
+  const scheduled = record?.scheduled ?? 0;
+  const target = record?.target ?? 0;
+  const remaining = Math.max(target - completed, 0);
+  const achieved = completed >= target && target > 0;
 
   return (
-    <div className="p-4 md:p-6 space-y-6 animate-fade-in">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--text)' }}>My Meeting Targets</h1>
-          <p className="text-sm mt-1" style={{ color: 'var(--text-3)' }}>Track your monthly meeting progress</p>
+    <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
+
+      {/* ── Hero Banner ─────────────────────────────────────────── */}
+      <div
+        className="relative overflow-hidden"
+        style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)', padding: '2.5rem 2rem 2rem' }}
+      >
+        <div className="absolute -top-16 -right-16 w-60 h-60 rounded-full opacity-20 blur-3xl"
+          style={{ background: 'radial-gradient(circle,#fff,transparent)' }} />
+        <div className="absolute -bottom-10 left-1/4 w-44 h-44 rounded-full opacity-15 blur-3xl"
+          style={{ background: 'radial-gradient(circle,#a78bfa,transparent)' }} />
+        <div className="relative flex flex-col sm:flex-row sm:items-center gap-4 max-w-2xl mx-auto">
+          <div className="flex items-center gap-4 flex-1">
+            <div
+              className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 text-white"
+              style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.25)' }}
+            >
+              <IconTarget />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-white tracking-tight">My Meeting Target</h1>
+              <p className="text-sm mt-0.5" style={{ color: 'rgba(255,255,255,0.75)' }}>
+                {formatMonth(month)}
+              </p>
+            </div>
+          </div>
+          {/* Month selector */}
+          <div>
+            <select
+              className="text-sm font-semibold text-white rounded-xl px-4 py-2 cursor-pointer"
+              style={{ background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.25)' }}
+              value={month}
+              onChange={e => setMonth(e.target.value)}
+            >
+              {allMonths.map(m => (
+                <option key={m} value={m} style={{ background: '#1e1b4b', color: '#fff' }}>{formatMonth(m)}</option>
+              ))}
+            </select>
+          </div>
         </div>
-        <select value={month} onChange={e => setMonth(e.target.value)} className="input-field w-auto">
-          {months.map(m => <option key={m} value={m}>{formatMonth(m)}</option>)}
-        </select>
       </div>
 
-      {!hasTarget ? (
-        <div className="card rounded-2xl p-12 text-center" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
-          <div className="text-5xl mb-4">🎯</div>
-          <div className="font-bold text-xl mb-2" style={{ color: 'var(--text)' }}>No Target Assigned</div>
-          <div className="text-sm" style={{ color: 'var(--text-3)' }}>Your manager hasn't assigned a meeting target for {formatMonth(month)} yet</div>
-        </div>
-      ) : (
-        <>
-          {/* Hero progress card */}
-          <div className="rounded-2xl overflow-hidden" style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)', border: '1px solid var(--border)' }}>
-            <div className="p-6">
-              <div className="flex flex-col sm:flex-row items-center gap-6">
-                <div className="relative flex-shrink-0">
-                  <DonutRing pct={completedPct} size={180} strokeW={18} color1="#fff" color2="rgba(255,255,255,0.5)"
-                    label={completed} sublabel={`of ${target}`} />
+      <div className="max-w-2xl mx-auto px-4 py-8 flex flex-col gap-6">
+        {loading ? (
+          <div className="flex justify-center py-20">
+            <div className="w-10 h-10 rounded-full border-2 border-violet-500 border-t-transparent animate-spin" />
+          </div>
+        ) : !record ? (
+          <div
+            className="card animate-fade-in"
+            style={{ border: '1px dashed var(--border)' }}
+          >
+            <EmptyState month={month} />
+          </div>
+        ) : (
+          <>
+            {/* ── Target achievement banner ────────────────────────── */}
+            {achieved && (
+              <div
+                className="animate-fade-in flex items-center gap-4 px-5 py-4 rounded-2xl"
+                style={{
+                  background: 'linear-gradient(135deg,rgba(16,185,129,0.18),rgba(5,150,105,0.12))',
+                  border: '1px solid rgba(16,185,129,0.35)',
+                  boxShadow: '0 0 30px rgba(16,185,129,0.12)',
+                }}
+              >
+                <div className="text-emerald-400 flex-shrink-0">
+                  <IconTrophy />
                 </div>
-                <div className="flex-1 text-white space-y-3">
+                <div>
+                  <p className="font-bold text-base" style={{ color: '#10b981' }}>Target Achieved! 🎉</p>
+                  <p className="text-sm" style={{ color: 'var(--text-2)' }}>
+                    Outstanding! You've completed {completed} out of {target} meetings this month.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* ── Gradient hero info card ───────────────────────────── */}
+            <div
+              className="animate-fade-in relative overflow-hidden rounded-2xl p-5"
+              style={{
+                background: 'linear-gradient(135deg,rgba(124,58,237,0.15),rgba(59,130,246,0.12))',
+                border: '1px solid rgba(124,58,237,0.25)',
+                backdropFilter: 'blur(12px)',
+              }}
+            >
+              <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full opacity-10 blur-3xl"
+                style={{ background: 'radial-gradient(circle,#7c3aed,transparent)' }} />
+
+              <div className="flex items-start justify-between gap-4 mb-3">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: 'var(--text-3)' }}>
+                    Monthly Target
+                  </p>
+                  <p className="text-4xl font-black" style={{ color: 'var(--text)' }}>{target}</p>
+                  <p className="text-sm mt-0.5" style={{ color: 'var(--text-2)' }}>meetings</p>
+                </div>
+                <div className="flex flex-col items-end gap-1 text-xs" style={{ color: 'var(--text-3)' }}>
+                  <div className="flex items-center gap-1">
+                    <IconCalendar />
+                    <span>Assigned {formatTS(record.assignedAt)}</span>
+                  </div>
+                </div>
+              </div>
+
+              {record.comment && (
+                <div
+                  className="flex gap-2.5 px-3.5 py-3 rounded-xl mt-1"
+                  style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-s)' }}
+                >
+                  <svg className="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: '#a78bfa' }}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                  <p className="text-sm italic" style={{ color: 'var(--text-2)' }}>"{record.comment}"</p>
+                </div>
+              )}
+            </div>
+
+            {/* ── Large SVG Progress Ring ───────────────────────────── */}
+            <div
+              className="animate-fade-in card flex flex-col items-center gap-6 py-8"
+              style={{ borderColor: achieved ? 'rgba(16,185,129,0.25)' : undefined }}
+            >
+              <h3 className="text-base font-semibold self-start" style={{ color: 'var(--text)' }}>
+                Progress Overview
+              </h3>
+              <ProgressRing completed={completed} scheduled={scheduled} target={target} />
+
+              {/* 4 stat chips */}
+              <div className="grid grid-cols-4 gap-2 w-full">
+                {[
+                  { label: 'Target', value: target, color: 'var(--text-2)' },
+                  { label: 'Completed', value: completed, color: '#7c3aed' },
+                  { label: 'Scheduled', value: scheduled, color: '#3b82f6' },
+                  { label: 'Remaining', value: remaining, color: remaining === 0 && target > 0 ? '#10b981' : '#f59e0b' },
+                ].map(({ label, value, color }) => (
+                  <div
+                    key={label}
+                    className="flex flex-col items-center py-3 rounded-xl"
+                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border-s)' }}
+                  >
+                    <span className="text-2xl font-black" style={{ color }}>{value}</span>
+                    <span className="text-xs mt-0.5" style={{ color: 'var(--text-3)' }}>{label}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Progress bar */}
+              <div className="w-full flex flex-col gap-1.5">
+                <div className="flex justify-between text-xs" style={{ color: 'var(--text-3)' }}>
+                  <span>Completion progress</span>
+                  <span className="font-semibold" style={{ color: '#a78bfa' }}>
+                    {target > 0 ? Math.round((completed / target) * 100) : 0}%
+                  </span>
+                </div>
+                <div className="relative h-3 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.07)' }}>
+                  {/* Scheduled */}
+                  <div
+                    className="absolute left-0 top-0 h-full rounded-full"
+                    style={{
+                      width: `${target > 0 ? clamp((scheduled / target) * 100, 0, 100) : 0}%`,
+                      background: 'rgba(59,130,246,0.35)',
+                      transition: 'width 0.8s ease',
+                    }}
+                  />
+                  {/* Completed */}
+                  <div
+                    className="absolute left-0 top-0 h-full rounded-full"
+                    style={{
+                      width: `${target > 0 ? clamp((completed / target) * 100, 0, 100) : 0}%`,
+                      background: achieved
+                        ? 'linear-gradient(90deg,#10b981,#059669)'
+                        : 'linear-gradient(90deg,#7c3aed,#3b82f6)',
+                      boxShadow: '0 0 8px rgba(124,58,237,0.45)',
+                      transition: 'width 0.8s ease',
+                    }}
+                  />
+                </div>
+                <div className="flex justify-between text-xs" style={{ color: 'var(--text-3)' }}>
+                  <span>{completed} completed</span>
+                  <span>{scheduled} scheduled</span>
+                </div>
+              </div>
+            </div>
+
+            {/* ── Update Progress Form ──────────────────────────────── */}
+            <div className="card animate-slide-up">
+              <h3 className="text-base font-semibold mb-4 flex items-center gap-2" style={{ color: 'var(--text)' }}>
+                <span
+                  className="w-6 h-6 rounded-md flex items-center justify-center text-white"
+                  style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)' }}
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                  </svg>
+                </span>
+                Update Progress
+              </h3>
+              <form onSubmit={handleSave} className="flex flex-col gap-4">
+                <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <div className="text-sm opacity-70">Monthly Target — {formatMonth(month)}</div>
-                    <div className="text-4xl font-black mt-1">{target} <span className="text-xl font-normal opacity-70">meetings</span></div>
+                    <label className="label">Meetings Completed</label>
+                    <input
+                      type="number"
+                      min="0"
+                      max="9999"
+                      className="input-field"
+                      value={editCompleted}
+                      onChange={e => setEditCompleted(e.target.value)}
+                      placeholder="0"
+                    />
                   </div>
-                  <div className="grid grid-cols-3 gap-3">
-                    {[
-                      { label: 'Done', value: completed, color: 'rgba(255,255,255,0.9)' },
-                      { label: 'Scheduled', value: scheduled, color: 'rgba(255,255,255,0.9)' },
-                      { label: 'Remaining', value: remaining, color: remaining > 0 ? '#fcd34d' : '#86efac' },
-                    ].map(s => (
-                      <div key={s.label} className="rounded-xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
-                        <div className="text-2xl font-bold" style={{ color: s.color }}>{s.value}</div>
-                        <div className="text-xs opacity-70 mt-0.5">{s.label}</div>
-                      </div>
-                    ))}
+                  <div>
+                    <label className="label">Meetings Scheduled</label>
+                    <input
+                      type="number"
+                      min="0"
+                      max="9999"
+                      className="input-field"
+                      value={editScheduled}
+                      onChange={e => setEditScheduled(e.target.value)}
+                      placeholder="0"
+                    />
                   </div>
-                  {meetingData.comment && (
-                    <div className="rounded-xl p-3 text-sm" style={{ background: 'rgba(255,255,255,0.15)' }}>
-                      <span className="opacity-60">Note: </span>{meetingData.comment}
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <button
+                    type="submit"
+                    className="btn-primary flex items-center gap-2"
+                    disabled={saving}
+                  >
+                    {saving ? <><IconSpinner /> Saving…</> : <><IconSave /> Save Progress</>}
+                  </button>
+
+                  {/* Saved indicator */}
+                  {saved && (
+                    <div
+                      className="animate-fade-in flex items-center gap-1.5 text-sm font-semibold"
+                      style={{ color: '#10b981' }}
+                    >
+                      <IconCheck />
+                      Saved!
                     </div>
                   )}
                 </div>
-              </div>
+              </form>
             </div>
-          </div>
-
-          {/* Progress bars */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="rounded-2xl p-5" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
-              <div className="flex justify-between items-center mb-3">
-                <span className="text-sm font-semibold" style={{ color: 'var(--text-2)' }}>Completion Rate</span>
-                <span className="text-sm font-bold" style={{ color: '#7c3aed' }}>{Math.round(completedPct * 100)}%</span>
-              </div>
-              <div className="w-full h-3 rounded-full overflow-hidden" style={{ background: 'var(--surface-s)' }}>
-                <div className="h-full rounded-full transition-all duration-1000"
-                  style={{ width: `${Math.min(completedPct * 100, 100)}%`, background: 'linear-gradient(90deg,#7c3aed,#3b82f6)' }} />
-              </div>
-            </div>
-            <div className="rounded-2xl p-5" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
-              <div className="flex justify-between items-center mb-3">
-                <span className="text-sm font-semibold" style={{ color: 'var(--text-2)' }}>Scheduled Rate</span>
-                <span className="text-sm font-bold" style={{ color: '#ec4899' }}>{Math.round(scheduledPct * 100)}%</span>
-              </div>
-              <div className="w-full h-3 rounded-full overflow-hidden" style={{ background: 'var(--surface-s)' }}>
-                <div className="h-full rounded-full transition-all duration-1000"
-                  style={{ width: `${Math.min(scheduledPct * 100, 100)}%`, background: 'linear-gradient(90deg,#ec4899,#f97316)' }} />
-              </div>
-            </div>
-          </div>
-
-          {/* Update section */}
-          <div className="rounded-2xl p-6" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
-            <h2 className="font-bold text-lg mb-6" style={{ color: 'var(--text)' }}>Update Progress</h2>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <CounterInput value={completed} onChange={setCompleted} min={0} max={target}
-                label="Meetings Completed" color1="#7c3aed" color2="#3b82f6" />
-              <CounterInput value={scheduled} onChange={setScheduled} min={0} max={999}
-                label="Meetings Scheduled" color1="#ec4899" color2="#f97316" />
-            </div>
-            <div className="flex justify-center mt-6">
-              <button
-                onClick={handleSave}
-                disabled={saving || !isDirty}
-                className="btn-primary px-8 py-3 rounded-xl font-semibold flex items-center gap-2 transition-all duration-200"
-                style={{ opacity: isDirty ? 1 : 0.5, transform: saving ? 'scale(0.98)' : 'scale(1)' }}>
-                {saving ? (
-                  <><div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" /> Saving...</>
-                ) : saved ? (
-                  <>✓ Saved!</>
-                ) : (
-                  <>Save Progress</>
-                )}
-              </button>
-            </div>
-            {!isDirty && !saving && (
-              <p className="text-center text-xs mt-3" style={{ color: 'var(--text-3)' }}>Change a value above to enable saving</p>
-            )}
-          </div>
-        </>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 }
