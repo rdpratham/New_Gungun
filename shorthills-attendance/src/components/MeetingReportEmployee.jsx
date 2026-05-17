@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { collection, query, where, onSnapshot, doc } from 'firebase/firestore';
+import { onSnapshot, doc } from 'firebase/firestore';
 
 /* ── Helpers ─────────────────────────────────────────────────────── */
 function currentMonthIST() {
@@ -237,9 +237,6 @@ export default function MeetingReportEmployee({ user, employeeData }) {
   const [myRecord, setMyRecord] = useState(null);
   const [myLoading, setMyLoading] = useState(true);
 
-  /* Team data */
-  const [teamRecords, setTeamRecords] = useState([]);
-  const [teamLoading, setTeamLoading] = useState(true);
 
   /* Subscription 1 — own doc */
   useEffect(() => {
@@ -253,19 +250,6 @@ export default function MeetingReportEmployee({ user, employeeData }) {
     return () => unsub();
   }, [user?.uid, selectedMonth]);
 
-  /* Subscription 2 — all team docs for month */
-  useEffect(() => {
-    if (!selectedMonth) return;
-    setTeamLoading(true);
-    const q = query(collection(db, 'meetings'), where('month', '==', selectedMonth));
-    const unsub = onSnapshot(q, snap => {
-      const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      docs.sort((a, b) => (b.completed ?? 0) - (a.completed ?? 0));
-      setTeamRecords(docs);
-      setTeamLoading(false);
-    });
-    return () => unsub();
-  }, [selectedMonth]);
 
   /* My stats */
   const myCompleted = myRecord?.completed ?? 0;
@@ -276,11 +260,6 @@ export default function MeetingReportEmployee({ user, employeeData }) {
   const myCompPct = myTarget > 0 ? clamp((myCompleted / myTarget) * 100, 0, 100) : 0;
   const mySchedPct = myTarget > 0 ? clamp((myScheduled / myTarget) * 100, 0, 100) : 0;
 
-  /* Team aggregates */
-  const teamCompleted = teamRecords.reduce((s, r) => s + (r.completed ?? 0), 0);
-  const teamScheduled = teamRecords.reduce((s, r) => s + (r.scheduled ?? 0), 0);
-  const teamTarget = teamRecords.reduce((s, r) => s + (r.target ?? 0), 0);
-  const maxTarget = Math.max(...teamRecords.map(r => r.target ?? 0), 1);
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
@@ -305,7 +284,7 @@ export default function MeetingReportEmployee({ user, employeeData }) {
             <div>
               <h1 className="text-2xl font-bold text-white tracking-tight">Meeting Report</h1>
               <p className="text-sm mt-0.5" style={{ color: 'rgba(255,255,255,0.75)' }}>
-                Your progress &amp; team overview
+                Your meeting progress
               </p>
             </div>
           </div>
@@ -455,96 +434,6 @@ export default function MeetingReportEmployee({ user, employeeData }) {
           )}
         </section>
 
-        {/* ════════════════════════════════════════════════════════
-            TEAM REPORT SECTION
-            ════════════════════════════════════════════════════ */}
-        <section className="flex flex-col gap-4">
-          <h2 className="text-lg font-bold flex items-center gap-2.5" style={{ color: 'var(--text)' }}>
-            <span
-              className="w-7 h-7 rounded-lg flex items-center justify-center text-white"
-              style={{ background: 'linear-gradient(135deg,#3b82f6,#7c3aed)' }}
-            >
-              <IconBarChart />
-            </span>
-            Team Overview
-            <span className="text-sm font-normal ml-1" style={{ color: 'var(--text-3)' }}>— {formatMonth(selectedMonth)}</span>
-          </h2>
-
-          {teamLoading ? (
-            <div className="flex justify-center py-12">
-              <div className="w-8 h-8 rounded-full border-2 border-violet-500 border-t-transparent animate-spin" />
-            </div>
-          ) : teamRecords.length === 0 ? (
-            <div
-              className="animate-fade-in flex flex-col items-center gap-3 py-12 rounded-2xl"
-              style={{ background: 'var(--surface)', border: '1px dashed var(--border)' }}
-            >
-              <div className="text-violet-400"><IconBarChart /></div>
-              <p className="text-sm font-medium" style={{ color: 'var(--text-2)' }}>
-                No team data for {formatMonth(selectedMonth)}
-              </p>
-            </div>
-          ) : (
-            <>
-              {/* Team totals */}
-              <div
-                className="animate-fade-in rounded-2xl p-4"
-                style={{
-                  background: 'linear-gradient(135deg,rgba(59,130,246,0.12),rgba(124,58,237,0.1))',
-                  border: '1px solid rgba(59,130,246,0.2)',
-                }}
-              >
-                <p className="text-xs font-semibold mb-3" style={{ color: 'var(--text-3)' }}>
-                  TEAM TOTALS — {teamRecords.length} MEMBER{teamRecords.length !== 1 ? 'S' : ''}
-                </p>
-                <div className="grid grid-cols-3 gap-3">
-                  <StatChip label="Completed" value={teamCompleted} color="#7c3aed" />
-                  <StatChip label="Scheduled" value={teamScheduled} color="#3b82f6" />
-                  <StatChip label="Target" value={teamTarget} color="#f59e0b" />
-                </div>
-              </div>
-
-              {/* Per-member bars */}
-              <div className="flex flex-col gap-2">
-                {teamRecords.map(rec => (
-                  <TeamBarRow
-                    key={rec.id}
-                    rec={rec}
-                    maxTarget={maxTarget}
-                    isOwn={rec.employeeUid === user?.uid}
-                  />
-                ))}
-              </div>
-
-              {/* Legend */}
-              <div
-                className="flex flex-wrap items-center gap-4 px-4 py-2.5 rounded-xl text-xs"
-                style={{ background: 'var(--surface)', border: '1px solid var(--border-s)', color: 'var(--text-3)' }}
-              >
-                <div className="flex items-center gap-1.5">
-                  <div className="w-7 h-2 rounded-full" style={{ background: 'linear-gradient(90deg,#7c3aed,#3b82f6)' }} />
-                  <span>Your bar</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="w-7 h-2 rounded-full" style={{ background: 'rgba(148,163,184,0.5)' }} />
-                  <span>Others</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="w-7 h-2 rounded-full" style={{ background: 'rgba(59,130,246,0.35)' }} />
-                  <span>Scheduled</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="w-px h-4 rounded-full" style={{ background: 'rgba(255,255,255,0.65)' }} />
-                  <span>Target</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="w-7 h-2 rounded-full" style={{ background: 'linear-gradient(90deg,#10b981,#059669)' }} />
-                  <span style={{ color: '#10b981' }}>Achieved</span>
-                </div>
-              </div>
-            </>
-          )}
-        </section>
       </div>
     </div>
   );

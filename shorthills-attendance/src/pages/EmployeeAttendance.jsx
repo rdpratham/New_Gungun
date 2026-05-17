@@ -36,74 +36,69 @@ function formatTime(ts) {
 
 /* ── Sidebar ─────────────────────────────────────────────── */
 function Sidebar({ page, setPage, unreadTasks, mobileOpen, setMobileOpen }) {
-  const items = [
+  const groups = [
     {
-      id: 'dashboard', label: 'Dashboard',
-      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>,
+      label: 'Overview',
+      items: [
+        { id: 'dashboard', label: 'Dashboard', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg> },
+        { id: 'attendance', label: 'My Attendance', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg> },
+      ],
     },
     {
-      id: 'attendance', label: 'My Attendance',
-      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>,
+      label: 'Work',
+      items: [
+        { id: 'tasks', label: 'Assigned Tasks', badge: unreadTasks || undefined, icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7l2 2 4-4" /></svg> },
+        { id: 'assigned-meetings', label: 'Assigned Meetings', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" strokeWidth={2} /><circle cx="12" cy="12" r="6" strokeWidth={2} /><circle cx="12" cy="12" r="2" strokeWidth={2} /></svg> },
+        { id: 'meeting-report', label: 'Meeting Report', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg> },
+      ],
     },
     {
-      id: 'tasks', label: 'Assigned Tasks', badge: unreadTasks || undefined,
-      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7l2 2 4-4" /></svg>,
-    },
-    {
-      id: 'my-todo', label: 'My To-Do',
-      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
-    },
-    {
-      id: 'my-notes', label: 'My Notes',
-      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>,
-    },
-    {
-      id: 'my-credentials', label: 'My Credentials',
-      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg>,
-    },
-    {
-      id: 'assigned-meetings', label: 'Assigned Meetings',
-      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" strokeWidth={2} /><circle cx="12" cy="12" r="6" strokeWidth={2} /><circle cx="12" cy="12" r="2" strokeWidth={2} /></svg>,
-    },
-    {
-      id: 'meeting-report', label: 'Meeting Report',
-      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>,
+      label: 'Personal',
+      items: [
+        { id: 'my-todo', label: 'My To-Do', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> },
+        { id: 'my-notes', label: 'My Notes', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg> },
+        { id: 'my-credentials', label: 'My Credentials', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg> },
+      ],
     },
   ];
 
   const NavContent = () => (
-    <div className="flex flex-col h-full">
-      <div className="px-5 py-5 border-b" style={{ borderColor: 'var(--border)' }}>
-        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--text-3)' }}>My Portal</p>
-      </div>
-      <nav className="flex-1 px-3 py-4 space-y-1">
-        {items.map(item => {
-          const active = page === item.id;
-          return (
-            <button key={item.id}
-              onClick={() => { setPage(item.id); setMobileOpen(false); }}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200"
-              style={active
-                ? { background: 'linear-gradient(135deg,#7c3aed,#3b82f6)', color: '#fff', boxShadow: '0 4px 20px rgba(124,58,237,0.3)' }
-                : { color: 'var(--text-2)', background: 'transparent' }
-              }
-              onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'var(--surface-s)'; }}
-              onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
-            >
-              {item.icon}
-              <span>{item.label}</span>
-              {item.badge !== undefined && (
-                <span className="ml-auto text-xs px-2 py-0.5 rounded-full font-bold animate-pulse"
-                      style={{ background: '#ef4444', color: '#fff', minWidth: '20px', textAlign: 'center' }}>
-                  {item.badge}
-                </span>
-              )}
-            </button>
-          );
-        })}
+    <div className="flex flex-col h-full" style={{ minHeight: 0 }}>
+      <nav className="flex-1 overflow-y-auto px-2 py-3" style={{ minHeight: 0 }}>
+        {groups.map(group => (
+          <div key={group.label} className="mb-4">
+            <p className="px-3 mb-1" style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--text-3)' }}>
+              {group.label}
+            </p>
+            {group.items.map(item => {
+              const active = page === item.id;
+              return (
+                <button key={item.id}
+                  onClick={() => { setPage(item.id); setMobileOpen(false); }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg transition-all duration-150 mb-0.5"
+                  style={active
+                    ? { background: 'rgba(124,58,237,0.15)', color: '#a78bfa', borderLeft: '2px solid #7c3aed' }
+                    : { color: 'var(--text-2)', background: 'transparent', borderLeft: '2px solid transparent' }
+                  }
+                  onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'var(--surface-s)'; }}
+                  onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
+                >
+                  {item.icon}
+                  <span style={{ fontSize: 12, fontWeight: active ? 600 : 400 }}>{item.label}</span>
+                  {item.badge !== undefined && (
+                    <span className="ml-auto px-1.5 py-0.5 rounded font-semibold animate-pulse"
+                          style={{ background: '#ef4444', color: '#fff', fontSize: 10 }}>
+                      {item.badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        ))}
       </nav>
-      <div className="px-5 py-4 border-t" style={{ borderColor: 'var(--border)' }}>
-        <p className="text-xs text-center" style={{ color: 'var(--text-3)' }}>Garvix Ops © {new Date().getFullYear()}</p>
+      <div className="px-4 py-3 border-t" style={{ borderColor: 'var(--border)' }}>
+        <p style={{ fontSize: 10, textAlign: 'center', color: 'var(--text-3)' }}>Garvix Ops © {new Date().getFullYear()}</p>
       </div>
     </div>
   );
@@ -814,6 +809,7 @@ export default function EmployeeAttendance({ user }) {
       if (snap.exists()) {
         const val = snap.data().requirePhotoOnSetup !== false;
         setRequirePhoto(val);
+        if (val) setPhotoBannerDismissed(false);
       }
     });
   }, []);
