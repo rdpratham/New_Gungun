@@ -827,6 +827,11 @@ export default function EmployeeAttendance({ user }) {
           )}
         </main>
       </div>
+
+      {/* ── Footer ── */}
+      <div className="text-center py-3 text-xs" style={{ color: 'var(--text-3)', borderTop: '1px solid var(--border)', background: 'var(--surface)' }}>
+        Created by <span style={{ color: '#a78bfa', fontWeight: 700 }}>Pratham Jain</span>
+      </div>
     </div>
   );
 }
