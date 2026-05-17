@@ -10,6 +10,8 @@ import AssignTaskPage from '../components/AssignTaskPage';
 import TodoPage from '../components/TodoPage';
 import NotesPage from '../components/NotesPage';
 import CredentialsPage from '../components/CredentialsPage';
+import AssignMeetingTarget from '../components/AssignMeetingTarget';
+import MeetingReport from '../components/MeetingReport';
 
 function formatIST(ts) {
   if (!ts) return '—';
@@ -80,6 +82,14 @@ function Sidebar({ page, setPage, employeeCount, mobileOpen, setMobileOpen }) {
     {
       id: 'my-credentials', label: 'My Credentials',
       icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg>,
+    },
+    {
+      id: 'assign-meeting', label: 'Assign Meeting Target',
+      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" strokeWidth={2} /><circle cx="12" cy="12" r="6" strokeWidth={2} /><circle cx="12" cy="12" r="2" strokeWidth={2} /></svg>,
+    },
+    {
+      id: 'meeting-report', label: 'Meeting Report',
+      icon: <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>,
     },
   ];
 
@@ -1245,6 +1255,12 @@ export default function AdminDashboard({ user }) {
           )}
           {page === 'my-credentials' && (
             <CredentialsPage user={user} />
+          )}
+          {page === 'assign-meeting' && (
+            <AssignMeetingTarget user={user} employees={employees} />
+          )}
+          {page === 'meeting-report' && (
+            <MeetingReport user={user} />
           )}
         </main>
       </div>
