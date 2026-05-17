@@ -221,7 +221,6 @@ export default function Navbar({
                     style={{ backgroundImage: 'linear-gradient(135deg, #a78bfa, #60a5fa)' }}>
                 Garvix Ops
               </span>
-              <div className="text-xs mt-0.5" style={{ color: 'var(--text-3)' }}>Daily Task Buddy</div>
             </div>
           </div>
 

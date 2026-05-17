@@ -102,14 +102,6 @@ function Sidebar({ page, setPage, employeeCount, mobileOpen, setMobileOpen }) {
 
   const NavContent = () => (
     <div className="flex flex-col h-full" style={{ minHeight: 0 }}>
-      <div className="px-4 py-3.5 border-b flex items-center gap-2.5 flex-shrink-0" style={{ borderColor: 'var(--border)' }}>
-        <div className="w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
-             style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)' }}>G</div>
-        <div>
-          <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)' }}>Garvix Ops</p>
-          <p style={{ fontSize: 10, color: 'var(--text-3)' }}>Admin Panel</p>
-        </div>
-      </div>
       <nav className="flex-1 overflow-y-auto px-2 py-3" style={{ minHeight: 0 }}>
         {groups.map(group => (
           <div key={group.label} className="mb-4">
@@ -1362,7 +1354,7 @@ function EmployeesPage({ employees, loadingEmp, onEdit, navigate }) {
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <div className="grid grid-cols-4 gap-3">
           {filtered.map(emp => <EmployeeCard key={emp.id} employee={emp} onClick={onEdit} />)}
         </div>
       )}
