@@ -261,7 +261,332 @@ function TrendChart({ trendData, employees }) {
   );
 }
 
-/* ── Employee detail modal ────────────────────────────────────────── */
+/* ── Full Employee Report Page ────────────────────────────────────── */
+function EmployeeReportPage({ emp, allRecords, onBack }) {
+  const months6 = getRecentMonths(6).reverse();   // oldest → newest
+  const uid = emp?.employeeUid;
+
+  /* Real-time listener for ALL 6 months of this employee's data */
+  const [monthDocs, setMonthDocs] = useState({});   // month → doc data
+  useEffect(() => {
+    if (!uid) return;
+    const unsubs = months6.map(m => {
+      return onSnapshot(doc(db, 'meetings', `${uid}_${m}`), snap => {
+        setMonthDocs(prev => ({ ...prev, [m]: snap.exists() ? snap.data() : null }));
+      });
+    });
+    return () => unsubs.forEach(u => u());
+  }, [uid]);
+
+  const currentMonth = currentMonthIST();
+  const cur = monthDocs[currentMonth] || emp;   // use emp as fallback for current month
+
+  const target    = cur?.target    || 0;
+  const completed = cur?.completed || 0;
+  const scheduled = cur?.scheduled || 0;
+  const remaining = Math.max(0, target - completed);
+  const pct       = target > 0 ? clamp(completed / target, 0, 1) : 0;
+
+  /* All-time totals across 6 months */
+  const allTimeCompleted = months6.reduce((s, m) => s + (monthDocs[m]?.completed || 0), 0);
+  const allTimeTarget    = months6.reduce((s, m) => s + (monthDocs[m]?.target    || 0), 0);
+  const allTimePct       = allTimeTarget > 0 ? clamp(allTimeCompleted / allTimeTarget, 0, 1) : 0;
+
+  /* Team rank for current month */
+  const sorted = [...allRecords].sort((a, b) => (b.completed || 0) - (a.completed || 0));
+  const rank   = sorted.findIndex(r => r.employeeUid === uid) + 1;
+
+  /* Bar data for trend chart */
+  const maxBarVal = Math.max(...months6.map(m => monthDocs[m]?.completed || 0), 1);
+
+  return (
+    <div className="space-y-5 animate-fade-in">
+      {/* Back button + header */}
+      <div className="flex items-center gap-4">
+        <button onClick={onBack}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all hover:scale-105"
+          style={{ background: 'var(--surface-s)', border: '1px solid var(--border)', color: 'var(--text-2)' }}>
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to Dashboard
+        </button>
+        <div className="text-xs px-2 py-1 rounded-lg font-semibold"
+          style={{ background: 'rgba(124,58,237,0.15)', color: '#a78bfa' }}>
+          Individual Report
+        </div>
+      </div>
+
+      {/* Hero banner */}
+      <div className="rounded-2xl overflow-hidden" style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)' }}>
+        <div className="p-6 md:p-8">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+            {/* Avatar + info */}
+            <div className="flex items-center gap-4">
+              <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-3xl font-black text-white flex-shrink-0"
+                style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)' }}>
+                {getInitials(emp?.employeeName)}
+              </div>
+              <div>
+                <div className="text-2xl font-black text-white">{emp?.employeeName || '—'}</div>
+                <div className="text-blue-200 text-sm mt-0.5">Employee ID: {emp?.employeeId || '—'}</div>
+                {rank > 0 && (
+                  <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold"
+                    style={{ background: rank === 1 ? 'rgba(245,158,11,0.3)' : 'rgba(255,255,255,0.15)', color: rank === 1 ? '#fcd34d' : 'white' }}>
+                    {rank === 1 ? '🏆' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '📊'} Rank #{rank} in Team
+                  </div>
+                )}
+              </div>
+            </div>
+            {/* 3 quick stats */}
+            <div className="flex gap-4 md:ml-auto">
+              {[
+                { label: 'This Month Target', value: target },
+                { label: '6-Month Completed', value: allTimeCompleted },
+                { label: '6-Month Target', value: allTimeTarget },
+              ].map(s => (
+                <div key={s.label} className="text-center rounded-xl px-4 py-3"
+                  style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)' }}>
+                  <div className="text-3xl font-black text-white"><AnimatedNumber value={s.value} /></div>
+                  <div className="text-xs text-white/60 mt-0.5 whitespace-nowrap">{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Current month gauges + stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {/* Radial gauge */}
+        <div className="rounded-2xl p-6 flex flex-col items-center"
+          style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+          <div className="text-sm font-bold uppercase tracking-widest mb-2" style={{ color: 'var(--text-3)' }}>
+            {formatMonth(currentMonth)} Progress
+          </div>
+          <RadialGauge pct={pct} size={220} value={`${Math.round(pct * 100)}%`}
+            label="completion" sublabel={`${completed} of ${target} meetings`} />
+          {cur?.comment && (
+            <div className="mt-3 w-full rounded-xl px-4 py-3 text-sm text-center"
+              style={{ background: 'var(--surface-s)', border: '1px solid var(--border)', color: 'var(--text-2)' }}>
+              <span style={{ color: 'var(--text-3)' }}>Note: </span>{cur.comment}
+            </div>
+          )}
+        </div>
+
+        {/* 4 stat cards + progress bars */}
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { label: 'Target',    value: target,    color: '#3b82f6', icon: '🎯' },
+              { label: 'Completed', value: completed, color: '#7c3aed', icon: '✅' },
+              { label: 'Scheduled', value: scheduled, color: '#ec4899', icon: '📅' },
+              { label: 'Remaining', value: remaining, color: remaining > 0 ? '#f59e0b' : '#10b981', icon: remaining > 0 ? '⏳' : '🏆' },
+            ].map(s => (
+              <div key={s.label} className="rounded-xl p-4 text-center relative overflow-hidden"
+                style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+                <div className="absolute inset-0 opacity-10"
+                  style={{ background: `radial-gradient(circle at 80% 20%,${s.color},transparent 70%)` }} />
+                <div className="text-2xl mb-1">{s.icon}</div>
+                <div className="text-3xl font-black tabular-nums" style={{ color: s.color }}>
+                  <AnimatedNumber value={s.value} />
+                </div>
+                <div className="text-xs mt-1 font-semibold" style={{ color: 'var(--text-3)' }}>{s.label}</div>
+              </div>
+            ))}
+          </div>
+          {/* Dual progress bars */}
+          <div className="rounded-xl p-4 space-y-3" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+            {[
+              { label: 'Completion Rate', pct, c1: '#7c3aed', c2: '#3b82f6', val: `${completed}/${target}` },
+              { label: 'Scheduled Rate', pct: target > 0 ? clamp(scheduled / target, 0, 1) : 0, c1: '#ec4899', c2: '#f97316', val: `${scheduled}/${target}` },
+              { label: '6-Month Overall', pct: allTimePct, c1: '#10b981', c2: '#06b6d4', val: `${allTimeCompleted}/${allTimeTarget}` },
+            ].map(b => (
+              <div key={b.label}>
+                <div className="flex justify-between text-xs mb-1.5">
+                  <span style={{ color: 'var(--text-2)', fontWeight: 600 }}>{b.label}</span>
+                  <span style={{ color: b.c1, fontWeight: 700 }}>{b.val} ({Math.round(b.pct * 100)}%)</span>
+                </div>
+                <div className="h-2.5 rounded-full overflow-hidden" style={{ background: 'var(--surface-s)' }}>
+                  <div className="h-full rounded-full transition-all duration-1000"
+                    style={{ width: `${b.pct * 100}%`, background: `linear-gradient(90deg,${b.c1},${b.c2})`, boxShadow: `0 0 8px ${b.c1}60` }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* 6-month bar trend chart */}
+      <div className="rounded-2xl p-6" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <div className="font-bold" style={{ color: 'var(--text)' }}>6-Month Meeting History</div>
+            <div className="text-xs mt-0.5" style={{ color: 'var(--text-3)' }}>Completed vs Target per month</div>
+          </div>
+          <div className="flex gap-3">
+            {[{ label: 'Completed', c: '#7c3aed' }, { label: 'Scheduled', c: '#ec4899' }, { label: 'Target', c: 'rgba(255,255,255,0.2)' }].map(l => (
+              <div key={l.label} className="flex items-center gap-1.5 text-xs" style={{ color: 'var(--text-3)' }}>
+                <div className="w-2 h-2 rounded-full" style={{ background: l.c }} />
+                {l.label}
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* SVG bar chart */}
+        <svg viewBox="0 0 600 180" width="100%" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="emp-comp" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#7c3aed" />
+              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.7" />
+            </linearGradient>
+            <linearGradient id="emp-sched" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#ec4899" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#f97316" stopOpacity="0.4" />
+            </linearGradient>
+          </defs>
+          {(() => {
+            const W = 600, H = 180, PL = 36, PR = 16, PT = 12, PB = 44;
+            const iW = W - PL - PR, iH = H - PT - PB;
+            const n = months6.length;
+            const gW = iW / n;
+            const bW = Math.min(gW * 0.28, 22);
+            const gap = bW * 0.4;
+            const maxV = Math.max(...months6.flatMap(m => [
+              monthDocs[m]?.completed || 0,
+              monthDocs[m]?.scheduled || 0,
+              monthDocs[m]?.target    || 0,
+            ]), 1);
+            const yS = v => iH - clamp(v / maxV, 0, 1) * iH;
+            const ticks = [0, 0.5, 1].map(f => Math.round(f * maxV));
+            return (
+              <>
+                {ticks.map((t, i) => {
+                  const y = PT + yS(t);
+                  return (
+                    <g key={i}>
+                      <line x1={PL} x2={W - PR} y1={y} y2={y} stroke="rgba(255,255,255,0.07)" strokeWidth={1} strokeDasharray="4 4" />
+                      <text x={PL - 5} y={y + 4} textAnchor="end" fill="rgba(255,255,255,0.35)" fontSize={9}>{t}</text>
+                    </g>
+                  );
+                })}
+                {months6.map((m, i) => {
+                  const cx   = PL + i * gW + gW / 2;
+                  const cD   = monthDocs[m];
+                  const comp = cD?.completed || 0;
+                  const sched= cD?.scheduled || 0;
+                  const tgt  = cD?.target    || 0;
+                  const compH  = yS(comp);
+                  const schedH = yS(sched);
+                  const isCur  = m === currentMonth;
+                  return (
+                    <g key={m}>
+                      {/* Current month highlight */}
+                      {isCur && <rect x={cx - gW / 2 + 2} y={PT} width={gW - 4} height={iH} rx={4} fill="rgba(124,58,237,0.06)" />}
+                      {/* Target dashed line */}
+                      {tgt > 0 && <line x1={cx - bW - gap - 4} x2={cx + bW * 2 + gap + 4}
+                        y1={PT + yS(tgt)} y2={PT + yS(tgt)}
+                        stroke="rgba(255,255,255,0.3)" strokeWidth={1.5} strokeDasharray="4 2" />}
+                      {/* Scheduled bar */}
+                      <rect x={cx - bW - gap / 2} y={PT + schedH} width={bW} height={iH - schedH}
+                        rx={3} fill="url(#emp-sched)"
+                        style={{ transition: 'all 1s ease' }} />
+                      {/* Completed bar */}
+                      <rect x={cx + gap / 2} y={PT + compH} width={bW} height={iH - compH}
+                        rx={3} fill="url(#emp-comp)"
+                        style={{ transition: 'all 1s ease', filter: comp > 0 ? 'drop-shadow(0 0 5px #7c3aed80)' : 'none' }} />
+                      {/* Value label */}
+                      {comp > 0 && <text x={cx + gap / 2 + bW / 2} y={PT + compH - 4}
+                        textAnchor="middle" fill="white" fontSize={9} fontWeight="700">{comp}</text>}
+                      {/* Month label */}
+                      <text x={cx} y={H - PB + 14} textAnchor="middle" fill={isCur ? '#a78bfa' : 'rgba(255,255,255,0.5)'} fontSize={9} fontWeight={isCur ? 700 : 400}>
+                        {formatMonthShort(m)}
+                      </text>
+                      {isCur && <text x={cx} y={H - PB + 25} textAnchor="middle" fill="#a78bfa" fontSize={7} fontWeight="600">Current</text>}
+                    </g>
+                  );
+                })}
+                <line x1={PL} x2={PL} y1={PT} y2={PT + iH} stroke="rgba(255,255,255,0.12)" strokeWidth={1} />
+                <line x1={PL} x2={W - PR} y1={PT + iH} y2={PT + iH} stroke="rgba(255,255,255,0.12)" strokeWidth={1} />
+              </>
+            );
+          })()}
+        </svg>
+      </div>
+
+      {/* Month-by-month data table */}
+      <div className="rounded-2xl overflow-hidden" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+        <div className="px-5 py-4 font-bold" style={{ color: 'var(--text)', borderBottom: '1px solid var(--border)' }}>
+          Month-wise Breakdown
+        </div>
+        <div className="overflow-x-auto">
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+            <thead>
+              <tr style={{ background: 'var(--surface-s)' }}>
+                {['Month', 'Target', 'Completed', 'Scheduled', 'Remaining', 'Achievement'].map(h => (
+                  <th key={h} style={{ padding: '10px 16px', textAlign: h === 'Month' ? 'left' : 'center', color: 'var(--text-3)', fontWeight: 600, borderBottom: '1px solid var(--border)', whiteSpace: 'nowrap', fontSize: 11 }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {months6.slice().reverse().map((m, i) => {
+                const d = monthDocs[m];
+                const tgt  = d?.target    || 0;
+                const comp = d?.completed || 0;
+                const sched= d?.scheduled || 0;
+                const rem  = Math.max(0, tgt - comp);
+                const achPct = tgt > 0 ? clamp(comp / tgt, 0, 1) : 0;
+                const isCur = m === currentMonth;
+                return (
+                  <tr key={m} style={{ borderBottom: '1px solid var(--border)', background: isCur ? 'rgba(124,58,237,0.05)' : 'transparent' }}>
+                    <td style={{ padding: '12px 16px', fontWeight: 600, color: isCur ? '#a78bfa' : 'var(--text)', whiteSpace: 'nowrap' }}>
+                      {formatMonth(m)} {isCur && <span style={{ fontSize: 10, background: 'rgba(124,58,237,0.2)', color: '#a78bfa', borderRadius: 99, padding: '1px 6px', marginLeft: 4 }}>Current</span>}
+                    </td>
+                    <td style={{ padding: '12px 16px', textAlign: 'center', color: '#3b82f6', fontWeight: tgt > 0 ? 700 : 400 }}>{tgt || '—'}</td>
+                    <td style={{ padding: '12px 16px', textAlign: 'center', color: comp > 0 ? '#7c3aed' : 'var(--text-3)', fontWeight: comp > 0 ? 700 : 400 }}>{comp || '—'}</td>
+                    <td style={{ padding: '12px 16px', textAlign: 'center', color: sched > 0 ? '#ec4899' : 'var(--text-3)', fontWeight: sched > 0 ? 700 : 400 }}>{sched || '—'}</td>
+                    <td style={{ padding: '12px 16px', textAlign: 'center', color: rem > 0 ? '#f59e0b' : (tgt > 0 ? '#10b981' : 'var(--text-3)'), fontWeight: 600 }}>
+                      {tgt > 0 ? (rem === 0 ? '✓ Done' : rem) : '—'}
+                    </td>
+                    <td style={{ padding: '12px 16px', textAlign: 'center' }}>
+                      {tgt > 0 ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'center' }}>
+                          <div style={{ flex: 1, maxWidth: 80, height: 6, borderRadius: 99, background: 'var(--surface-s)', overflow: 'hidden' }}>
+                            <div style={{ height: '100%', width: `${achPct * 100}%`, background: 'linear-gradient(90deg,#7c3aed,#3b82f6)', borderRadius: 99, transition: 'width 1s ease' }} />
+                          </div>
+                          <span style={{ fontSize: 11, fontWeight: 700, color: achPct >= 1 ? '#10b981' : achPct >= 0.7 ? '#a78bfa' : '#f59e0b', minWidth: 32 }}>
+                            {Math.round(achPct * 100)}%
+                          </span>
+                        </div>
+                      ) : <span style={{ color: 'var(--text-3)', fontSize: 11 }}>No target</span>}
+                    </td>
+                  </tr>
+                );
+              })}
+              {/* Totals row */}
+              <tr style={{ background: 'rgba(124,58,237,0.08)', borderTop: '2px solid rgba(124,58,237,0.2)' }}>
+                <td style={{ padding: '12px 16px', fontWeight: 800, color: '#a78bfa' }}>Total (6 months)</td>
+                <td style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 800, color: '#3b82f6' }}>{allTimeTarget || '—'}</td>
+                <td style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 800, color: '#7c3aed' }}>{allTimeCompleted || '—'}</td>
+                <td style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 800, color: '#ec4899' }}>
+                  {months6.reduce((s, m) => s + (monthDocs[m]?.scheduled || 0), 0) || '—'}
+                </td>
+                <td style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 800, color: allTimePct >= 1 ? '#10b981' : '#f59e0b' }}>
+                  {Math.max(0, allTimeTarget - allTimeCompleted) || (allTimeTarget > 0 ? '✓' : '—')}
+                </td>
+                <td style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 800, color: allTimePct >= 1 ? '#10b981' : '#a78bfa' }}>
+                  {allTimeTarget > 0 ? `${Math.round(allTimePct * 100)}%` : '—'}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Employee detail modal (quick peek) ──────────────────────────── */
 function EmployeeModal({ emp, trendData, onClose }) {
   if (!emp) return null;
   const months = getRecentMonths(6).reverse();
@@ -353,6 +678,7 @@ export default function MeetingReport({ user }) {
   const [records, setRecords] = useState([]);
   const [trendData, setTrendData] = useState({});   // uid → { month → completed }
   const [selectedEmp, setSelectedEmp] = useState(null);
+  const [drillEmp, setDrillEmp] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
   const months = getRecentMonths(6);
   const allMonths = getRecentMonths(6).reverse();
@@ -397,6 +723,10 @@ export default function MeetingReport({ user }) {
   const trendEmployees = records.map(r => ({ id: r.employeeUid, name: r.employeeName })).filter(e => e.id);
   const trendByEmpMonth = {};
   trendEmployees.forEach(e => { trendByEmpMonth[e.id] = trendData[e.id] || {}; });
+
+  if (drillEmp) {
+    return <EmployeeReportPage emp={drillEmp} allRecords={records} onBack={() => setDrillEmp(null)} />;
+  }
 
   return (
     <div className="space-y-5 animate-fade-in" style={{ minHeight: '100%' }}>
@@ -600,7 +930,7 @@ export default function MeetingReport({ user }) {
                   <div key={r.id}
                     className="rounded-2xl p-5 cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:shadow-lg"
                     style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
-                    onClick={() => setSelectedEmp(r)}>
+                    onClick={() => setDrillEmp(r)}>
                     {/* Header */}
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold flex-shrink-0"
