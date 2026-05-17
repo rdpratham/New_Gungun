@@ -674,8 +674,8 @@ function EmployeeModal({ emp, trendData, onClose }) {
 
 /* ── Main Dashboard ───────────────────────────────────────────────── */
 export default function MeetingReport({ user }) {
-  const [month, setMonth] = useState(currentMonthIST());
-  const [records, setRecords] = useState([]);
+  const [selectedMonths, setSelectedMonths] = useState(() => new Set([currentMonthIST()]));
+  const [rawRecords, setRawRecords] = useState([]);
   const [trendData, setTrendData] = useState({});   // uid → { month → completed }
   const [selectedEmp, setSelectedEmp] = useState(null);
   const [drillEmp, setDrillEmp] = useState(null);
@@ -683,18 +683,26 @@ export default function MeetingReport({ user }) {
   const months = getRecentMonths(6);
   const allMonths = getRecentMonths(6).reverse();
 
-  /* Current month records */
-  useEffect(() => {
-    const q = query(collection(db, 'meetings'), where('month', '==', month));
-    return onSnapshot(q, snap => {
-      setRecords(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    });
-  }, [month]);
+  const toggleMonth = (m) => setSelectedMonths(prev => {
+    const next = new Set(prev);
+    if (next.has(m)) { if (next.size > 1) next.delete(m); } else next.add(m);
+    return next;
+  });
 
-  /* 6-month trend data — one listener per employee in current month */
+  /* Records for selected months */
   useEffect(() => {
-    if (!records.length) return;
-    const uids = [...new Set(records.map(r => r.employeeUid).filter(Boolean))];
+    const arr = [...selectedMonths];
+    const q = query(collection(db, 'meetings'), where('month', 'in', arr));
+    return onSnapshot(q, snap => {
+      setRawRecords(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [[...selectedMonths].sort().join(',')]);
+
+  /* 6-month trend data — one listener per employee */
+  useEffect(() => {
+    if (!rawRecords.length) return;
+    const uids = [...new Set(rawRecords.map(r => r.employeeUid).filter(Boolean))];
     const unsubs = [];
     const acc = {};
     uids.forEach(uid => {
@@ -709,7 +717,25 @@ export default function MeetingReport({ user }) {
       });
     });
     return () => unsubs.forEach(u => u());
-  }, [records.map(r => r.employeeUid).join(','), month]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rawRecords.map(r => r.employeeUid).join(',')]);
+
+  /* Merge raw records by employee (sums across selected months) */
+  const records = (() => {
+    const merged = {};
+    rawRecords.forEach(r => {
+      const uid = r.employeeUid || r.id;
+      if (!merged[uid]) merged[uid] = { ...r, target: 0, completed: 0, scheduled: 0 };
+      merged[uid].target    += r.target    || 0;
+      merged[uid].completed += r.completed || 0;
+      merged[uid].scheduled += r.scheduled || 0;
+    });
+    return Object.values(merged);
+  })();
+
+  const displayLabel = selectedMonths.size === 1
+    ? formatMonth([...selectedMonths][0])
+    : `${selectedMonths.size} months`;
 
   /* Totals */
   const totalTarget    = records.reduce((s, r) => s + (r.target    || 0), 0);
@@ -733,16 +759,28 @@ export default function MeetingReport({ user }) {
 
       {/* ── TOP HEADER BAR ── */}
       <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-start justify-between gap-3 flex-wrap">
           <div>
-            <h1 className="text-2xl font-black" style={{ color: 'var(--text)' }}>Meeting Report</h1>
-            <p className="text-sm mt-0.5" style={{ color: 'var(--text-3)' }}>
-              {records.length} employee{records.length !== 1 ? 's' : ''} · {formatMonth(month)}
+            <h1 style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>Meeting Report</h1>
+            <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 2 }}>
+              {records.length} employee{records.length !== 1 ? 's' : ''} · {displayLabel}
             </p>
           </div>
-          <select value={month} onChange={e => setMonth(e.target.value)} className="input-field text-sm" style={{ minWidth: 140 }}>
-            {months.map(m => <option key={m} value={m}>{formatMonth(m)}</option>)}
-          </select>
+          <div className="flex flex-wrap gap-1.5">
+            {months.map(m => {
+              const active = selectedMonths.has(m);
+              return (
+                <button key={m} onClick={() => toggleMonth(m)}
+                  className="px-2.5 py-1 rounded-lg transition-all"
+                  style={active
+                    ? { background: 'linear-gradient(135deg,#7c3aed,#3b82f6)', color: '#fff', fontSize: 11, fontWeight: 600, border: 'none' }
+                    : { background: 'var(--surface-s)', color: 'var(--text-3)', fontSize: 11, fontWeight: 500, border: '1px solid var(--border)' }
+                  }>
+                  {formatMonthShort(m)}
+                </button>
+              );
+            })}
+          </div>
         </div>
         {/* Tab switcher — full width row so all 3 tabs always visible */}
         <div className="flex rounded-xl overflow-hidden" style={{ background: 'var(--surface-s)', border: '1px solid var(--border)', width: '100%' }}>
@@ -777,7 +815,7 @@ export default function MeetingReport({ user }) {
               <div className="relative flex items-start justify-between gap-2">
                 <div>
                   <div className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: 'var(--text-3)' }}>{s.label}</div>
-                  <div className="text-4xl font-black tabular-nums" style={{ color: 'var(--text)' }}>
+                  <div className="tabular-nums" style={{ color: 'var(--text)', fontSize: 22, fontWeight: 800, lineHeight: 1.2 }}>
                     <AnimatedNumber value={s.value} />
                   </div>
                   <div className="text-xs mt-1 font-semibold" style={{ color: s.c1 }}>{Math.round(clamp(s.pct, 0, 1) * 100)}% of target</div>
@@ -840,8 +878,8 @@ export default function MeetingReport({ user }) {
               </div>
             </div>
             {records.length === 0
-              ? <div className="flex items-center justify-center h-40 text-sm" style={{ color: 'var(--text-3)' }}>No data for {formatMonth(month)}</div>
-              : <VerticalBarChart records={sorted} month={month} />}
+              ? <div className="flex items-center justify-center h-40 text-sm" style={{ color: 'var(--text-3)' }}>No data for selected period</div>
+              : <VerticalBarChart records={sorted} />}
           </div>
         </div>
       )}
@@ -868,7 +906,7 @@ export default function MeetingReport({ user }) {
             </div>
           </div>
           {trendEmployees.length === 0
-            ? <div className="flex items-center justify-center h-40 text-sm" style={{ color: 'var(--text-3)' }}>No data for {formatMonth(month)}</div>
+            ? <div className="flex items-center justify-center h-40 text-sm" style={{ color: 'var(--text-3)' }}>No data for selected period</div>
             : <TrendChart trendData={trendByEmpMonth} employees={trendEmployees} />}
 
           {/* Monthly data table */}
@@ -917,7 +955,7 @@ export default function MeetingReport({ user }) {
           {records.length === 0 ? (
             <div className="rounded-2xl p-12 text-center" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
               <div className="text-4xl mb-3">📊</div>
-              <div className="font-semibold" style={{ color: 'var(--text)' }}>No data for {formatMonth(month)}</div>
+              <div className="font-semibold" style={{ color: 'var(--text)' }}>No data for selected period</div>
               <div className="text-sm mt-1" style={{ color: 'var(--text-3)' }}>Assign meeting targets to employees first</div>
             </div>
           ) : (
@@ -942,7 +980,7 @@ export default function MeetingReport({ user }) {
                         <div className="text-xs" style={{ color: 'var(--text-3)' }}>ID: {r.employeeId || '—'}</div>
                       </div>
                       <div className="flex-shrink-0 text-right">
-                        <div className="text-2xl font-black tabular-nums" style={{ color: p.c1 }}>{r.completed || 0}</div>
+                        <div className="tabular-nums" style={{ color: p.c1, fontSize: 18, fontWeight: 800 }}>{r.completed || 0}</div>
                         <div className="text-xs" style={{ color: 'var(--text-3)' }}>of {r.target || 0}</div>
                       </div>
                     </div>

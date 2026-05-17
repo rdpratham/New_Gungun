@@ -80,14 +80,14 @@ function Sidebar({ page, setPage, employeeCount, mobileOpen, setMobileOpen }) {
       items: [
         { id: 'assign-task', label: 'Assign Task', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7l2 2 4-4" /></svg> },
         { id: 'assign-meeting', label: 'Assign Meeting Target', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" strokeWidth={2} /><circle cx="12" cy="12" r="6" strokeWidth={2} /><circle cx="12" cy="12" r="2" strokeWidth={2} /></svg> },
-        { id: 'team-target', label: 'Team Target', highlight: true, icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg> },
+        { id: 'team-target', label: 'Team Target', highlight: true, highlightColor: '#14b8a6', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg> },
         { id: 'meeting-report', label: 'Meeting Report', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg> },
       ],
     },
     {
       label: 'Personal',
       items: [
-        { id: 'my-todo', label: 'My To-Do', highlight: true, icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> },
+        { id: 'my-todo', label: 'My To-Do', highlight: true, highlightColor: '#a78bfa', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> },
         { id: 'my-notes', label: 'My Notes', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg> },
         { id: 'my-credentials', label: 'My Credentials', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg> },
       ],
@@ -125,16 +125,16 @@ function Sidebar({ page, setPage, employeeCount, mobileOpen, setMobileOpen }) {
                   style={active
                     ? { background: 'rgba(124,58,237,0.15)', color: '#a78bfa', borderLeft: '2px solid #7c3aed' }
                     : (item.highlight
-                      ? { color: 'var(--text-2)', background: 'rgba(251,191,36,0.06)', borderLeft: '2px solid rgba(251,191,36,0.4)' }
+                      ? { color: 'var(--text-2)', background: (item.highlightColor || '#fbbf24') + '15', borderLeft: '2px solid ' + (item.highlightColor || '#fbbf24') + '66' }
                       : { color: 'var(--text-2)', background: 'transparent', borderLeft: '2px solid transparent' })
                   }
                   onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'var(--surface-s)'; }}
-                  onMouseLeave={e => { if (!active) e.currentTarget.style.background = item.highlight ? 'rgba(251,191,36,0.06)' : 'transparent'; }}
+                  onMouseLeave={e => { if (!active) e.currentTarget.style.background = item.highlight ? (item.highlightColor || '#fbbf24') + '15' : 'transparent'; }}
                 >
                   {item.icon}
                   <span style={{ fontSize: 12, fontWeight: active ? 600 : 400 }}>{item.label}</span>
                   {item.highlight && !active && (
-                    <span className="ml-auto w-1.5 h-1.5 rounded-full animate-pulse flex-shrink-0" style={{ background: '#fbbf24' }} />
+                    <span className="ml-auto w-1.5 h-1.5 rounded-full animate-pulse flex-shrink-0" style={{ background: item.highlightColor || '#fbbf24' }} />
                   )}
                   {item.badge !== undefined && (
                     <span className="ml-auto px-1.5 py-0.5 rounded text-xs font-semibold"
@@ -1033,13 +1033,13 @@ function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDa
         </div>
 
         {/* D — Team Target widget */}
-        <div className="rounded-xl overflow-hidden" style={{ background: 'var(--surface)', border: '1px solid rgba(251,191,36,0.35)', boxShadow: '0 0 0 1px rgba(251,191,36,0.08), 0 4px 16px rgba(251,191,36,0.06)' }}>
-          <div className="px-4 py-2.5 flex items-center justify-between border-b" style={{ borderColor: 'rgba(251,191,36,0.2)', background: 'rgba(251,191,36,0.05)' }}>
+        <div className="rounded-xl overflow-hidden" style={{ background: 'var(--surface)', border: '1px solid rgba(20,184,166,0.35)', boxShadow: '0 0 0 1px rgba(20,184,166,0.06), 0 4px 16px rgba(20,184,166,0.08)' }}>
+          <div className="px-4 py-2.5 flex items-center justify-between border-b" style={{ borderColor: 'rgba(20,184,166,0.2)', background: 'rgba(20,184,166,0.05)' }}>
             <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full animate-pulse flex-shrink-0" style={{ background: '#fbbf24' }} />
-              <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#fbbf24' }}>Team Target</span>
+              <span className="w-1.5 h-1.5 rounded-full animate-pulse flex-shrink-0" style={{ background: '#14b8a6' }} />
+              <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#14b8a6' }}>Team Target</span>
             </div>
-            <button onClick={() => onNavigate('team-target')} style={{ fontSize: 10, color: '#fbbf24', fontWeight: 500 }}>Manage →</button>
+            <button onClick={() => onNavigate('team-target')} style={{ fontSize: 10, color: '#14b8a6', fontWeight: 500 }}>Manage →</button>
           </div>
           <div className="p-4">
             {/* Month label */}
@@ -1112,115 +1112,95 @@ function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDa
                 {new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'short', day: 'numeric', month: 'short' }).format(new Date())}
               </span>
             </div>
-            <p style={{ fontSize: 10, color: 'var(--text-3)', marginTop: 2 }}>
-              {todaySignIns} sign-ins · {todaySignOuts} sign-outs{totalWorkStr ? ` · ${totalWorkStr} total hours` : ''}
-            </p>
           </div>
           <button onClick={() => onNavigate('attendance')} style={{ fontSize: 10, color: '#60a5fa', fontWeight: 500, flexShrink: 0 }}>All Records →</button>
         </div>
 
-        {/* Split columns */}
+        {/* Paired employee rows */}
         {loadingAtt ? (
           <div className="flex justify-center py-12">
             <div className="w-7 h-7 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#7c3aed', borderTopColor: 'transparent' }} />
           </div>
         ) : (
-          <div className="grid grid-cols-2 flex-1" style={{ borderBottom: '1px solid var(--border)' }}>
-
-            {/* ── Sign In column ── */}
-            <div className="flex flex-col" style={{ borderRight: '1px solid var(--border)' }}>
-              <div className="px-3 py-2 flex items-center gap-1.5 flex-shrink-0"
-                   style={{ background: 'rgba(124,58,237,0.06)', borderBottom: '1px solid rgba(124,58,237,0.12)' }}>
+          <div className="flex-1 flex flex-col" style={{ borderBottom: '1px solid var(--border)' }}>
+            {/* Column headers */}
+            <div className="grid grid-cols-2 flex-shrink-0">
+              <div className="px-3 py-2 flex items-center gap-1.5" style={{ background: 'rgba(124,58,237,0.06)', borderBottom: '1px solid rgba(124,58,237,0.12)', borderRight: '1px solid var(--border)' }}>
                 <svg className="w-3 h-3 flex-shrink-0" style={{ color: '#a78bfa' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M11 16l-4-4m0 0l4-4m-4 4h14" />
                 </svg>
                 <span style={{ fontSize: 10, fontWeight: 700, color: '#a78bfa', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Sign In</span>
                 <span className="ml-auto px-1.5 py-0.5 rounded font-bold" style={{ background: 'rgba(124,58,237,0.15)', color: '#a78bfa', fontSize: 10 }}>{todaySignIns}</span>
               </div>
-              <div style={{ overflowY: 'auto', maxHeight: 260 }}>
-                {todaySignInRecs.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-8 gap-1">
-                    <svg className="w-6 h-6" style={{ color: 'var(--text-3)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <p style={{ fontSize: 11, color: 'var(--text-3)' }}>No sign-ins yet</p>
-                  </div>
-                ) : todaySignInRecs.map(rec => {
-                  const empKey = rec.employeeUid || rec.employeeId;
-                  const hrs = calcWorkHours(rec, todayEmpMap[empKey]?.signout);
-                  const photo = rec.photoBase64 || rec.photoURL;
-                  return (
-                    <div key={rec.id} className="flex items-center gap-2 px-3 py-2.5 transition-colors"
-                         style={{ borderBottom: '1px solid var(--border)' }}
-                         onMouseEnter={e => e.currentTarget.style.background = 'rgba(124,58,237,0.04)'}
-                         onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                      <div style={{ width: 28, height: 28, borderRadius: 8, overflow: 'hidden', flexShrink: 0, border: '1.5px solid rgba(124,58,237,0.25)', background: 'linear-gradient(135deg,#7c3aed22,#3b82f622)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: photo ? 'pointer' : 'default' }}
-                           onClick={() => photo && setExpandedPhoto(photo)}>
-                        {photo
-                          ? <img src={photo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                          : <span style={{ fontSize: 10, fontWeight: 700, color: '#a78bfa' }}>{(rec.employeeName || '?').charAt(0).toUpperCase()}</span>}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="truncate font-semibold" style={{ fontSize: 11, color: 'var(--text)' }}>{rec.employeeName}</p>
-                        <p style={{ fontSize: 10, color: '#a78bfa' }}>{formatTimeOnly(rec.submittedAt)}</p>
-                      </div>
-                      {hrs && (
-                        <span className="flex-shrink-0 px-1.5 py-0.5 rounded font-semibold" style={{ background: 'rgba(16,185,129,0.12)', color: '#10b981', border: '1px solid rgba(16,185,129,0.2)', fontSize: 9 }}>
-                          ⏱{hrs}
-                        </span>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* ── Sign Out column ── */}
-            <div className="flex flex-col">
-              <div className="px-3 py-2 flex items-center gap-1.5 flex-shrink-0"
-                   style={{ background: 'rgba(16,185,129,0.06)', borderBottom: '1px solid rgba(16,185,129,0.12)' }}>
+              <div className="px-3 py-2 flex items-center gap-1.5" style={{ background: 'rgba(16,185,129,0.06)', borderBottom: '1px solid rgba(16,185,129,0.12)' }}>
                 <svg className="w-3 h-3 flex-shrink-0" style={{ color: '#34d399' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 9l3 3m0 0l-3 3m3-3H8" />
                 </svg>
                 <span style={{ fontSize: 10, fontWeight: 700, color: '#34d399', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Sign Out</span>
                 <span className="ml-auto px-1.5 py-0.5 rounded font-bold" style={{ background: 'rgba(16,185,129,0.15)', color: '#34d399', fontSize: 10 }}>{todaySignOuts}</span>
               </div>
-              <div style={{ overflowY: 'auto', maxHeight: 260 }}>
-                {todaySignOutRecs.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-8 gap-1">
-                    <svg className="w-6 h-6" style={{ color: 'var(--text-3)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <p style={{ fontSize: 11, color: 'var(--text-3)' }}>No sign-outs yet</p>
-                  </div>
-                ) : todaySignOutRecs.map(rec => {
-                  const empKey = rec.employeeUid || rec.employeeId;
-                  const hrs = calcWorkHours(todayEmpMap[empKey]?.signin, rec);
-                  const photo = rec.photoBase64 || rec.photoURL;
-                  return (
-                    <div key={rec.id} className="flex items-center gap-2 px-3 py-2.5 transition-colors"
-                         style={{ borderBottom: '1px solid var(--border)' }}
-                         onMouseEnter={e => e.currentTarget.style.background = 'rgba(16,185,129,0.04)'}
+            </div>
+            {/* Paired rows — one per employee */}
+            <div style={{ overflowY: 'auto', maxHeight: 280 }}>
+              {Object.keys(todayEmpMap).length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-8 gap-1">
+                  <svg className="w-6 h-6" style={{ color: 'var(--text-3)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p style={{ fontSize: 11, color: 'var(--text-3)' }}>No attendance records yet</p>
+                </div>
+              ) : Object.entries(todayEmpMap).map(([empKey, empRecs]) => {
+                const signIn  = empRecs.signin;
+                const signOut = empRecs.signout;
+                const hrs = calcWorkHours(signIn, signOut);
+                const name = (signIn || signOut)?.employeeName || '—';
+                const inPhoto  = signIn?.photoBase64  || signIn?.photoURL;
+                const outPhoto = signOut?.photoBase64 || signOut?.photoURL;
+                return (
+                  <div key={empKey} className="grid grid-cols-2" style={{ borderBottom: '1px solid var(--border)' }}>
+                    {/* Sign In cell */}
+                    <div className="flex items-center gap-2 px-3 py-2.5"
+                         style={{ borderRight: '1px solid var(--border)' }}
+                         onMouseEnter={e => e.currentTarget.style.background = 'rgba(124,58,237,0.04)'}
                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                      <div style={{ width: 28, height: 28, borderRadius: 8, overflow: 'hidden', flexShrink: 0, border: '1.5px solid rgba(16,185,129,0.25)', background: 'linear-gradient(135deg,#10b98122,#34d39922)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: photo ? 'pointer' : 'default' }}
-                           onClick={() => photo && setExpandedPhoto(photo)}>
-                        {photo
-                          ? <img src={photo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                          : <span style={{ fontSize: 10, fontWeight: 700, color: '#34d399' }}>{(rec.employeeName || '?').charAt(0).toUpperCase()}</span>}
+                      <div style={{ width: 26, height: 26, borderRadius: 7, overflow: 'hidden', flexShrink: 0, border: '1.5px solid rgba(124,58,237,0.25)', background: 'linear-gradient(135deg,#7c3aed22,#3b82f622)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: inPhoto ? 'pointer' : 'default' }}
+                           onClick={() => inPhoto && setExpandedPhoto(inPhoto)}>
+                        {inPhoto ? <img src={inPhoto} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <span style={{ fontSize: 9, fontWeight: 700, color: '#a78bfa' }}>{name.charAt(0).toUpperCase()}</span>}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="truncate font-semibold" style={{ fontSize: 11, color: 'var(--text)' }}>{rec.employeeName}</p>
-                        <p style={{ fontSize: 10, color: '#34d399' }}>{formatTimeOnly(rec.submittedAt)}</p>
+                        <p className="truncate font-semibold" style={{ fontSize: 11, color: 'var(--text)' }}>{name}</p>
+                        {signIn
+                          ? <p style={{ fontSize: 10, color: '#a78bfa' }}>{formatTimeOnly(signIn.submittedAt)}</p>
+                          : <p style={{ fontSize: 10, color: 'var(--text-3)' }}>—</p>}
                       </div>
-                      {hrs && (
-                        <span className="flex-shrink-0 px-1.5 py-0.5 rounded font-semibold" style={{ background: 'rgba(16,185,129,0.12)', color: '#10b981', border: '1px solid rgba(16,185,129,0.2)', fontSize: 9 }}>
-                          ⏱{hrs}
-                        </span>
+                    </div>
+                    {/* Sign Out cell */}
+                    <div className="flex items-center gap-2 px-3 py-2.5"
+                         onMouseEnter={e => e.currentTarget.style.background = 'rgba(16,185,129,0.04)'}
+                         onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                      {signOut ? (
+                        <>
+                          <div style={{ width: 26, height: 26, borderRadius: 7, overflow: 'hidden', flexShrink: 0, border: '1.5px solid rgba(16,185,129,0.25)', background: 'linear-gradient(135deg,#10b98122,#34d39922)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: outPhoto ? 'pointer' : 'default' }}
+                               onClick={() => outPhoto && setExpandedPhoto(outPhoto)}>
+                            {outPhoto ? <img src={outPhoto} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <span style={{ fontSize: 9, fontWeight: 700, color: '#34d399' }}>{name.charAt(0).toUpperCase()}</span>}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="truncate font-semibold" style={{ fontSize: 11, color: 'var(--text)' }}>{name}</p>
+                            <p style={{ fontSize: 10, color: '#34d399' }}>{formatTimeOnly(signOut.submittedAt)}</p>
+                          </div>
+                          {hrs && (
+                            <span className="flex-shrink-0 px-1.5 py-0.5 rounded font-semibold" style={{ background: 'rgba(16,185,129,0.12)', color: '#10b981', border: '1px solid rgba(16,185,129,0.2)', fontSize: 9 }}>
+                              ⏱{hrs}
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        <p style={{ fontSize: 10, color: 'var(--text-3)', paddingLeft: 4 }}>Not yet</p>
                       )}
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
