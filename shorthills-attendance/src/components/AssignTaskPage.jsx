@@ -103,6 +103,106 @@ function FormField({ label, children }) {
   );
 }
 
+/* ── Task Detail Modal (admin view) ──────────────────────────────── */
+function TaskDetailModal({ task, onClose, onCycleStatus, onDelete, confirmDel }) {
+  const p = PRIORITY[task.priority] || PRIORITY.medium;
+  const s = STATUS[task.status]     || STATUS.pending;
+  const isDel = confirmDel === task.id;
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+         style={{ background: 'rgba(4,8,15,0.9)', backdropFilter: 'blur(16px)' }}
+         onClick={onClose}>
+      <div className="max-w-lg w-full rounded-3xl shadow-2xl animate-slide-up overflow-hidden"
+           style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+           onClick={e => e.stopPropagation()}>
+
+        {/* Header */}
+        <div className="relative px-6 py-5" style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)' }}>
+          <div className="absolute left-0 top-0 bottom-0 w-1 rounded-tl-3xl" style={{ background: p.dot }} />
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <p className="text-white/70 text-xs font-medium mb-1">Task Details</p>
+              <h2 className="text-lg font-bold text-white leading-snug">{task.title}</h2>
+            </div>
+            <button onClick={onClose}
+                    className="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center text-white transition-all hover:scale-110"
+                    style={{ background: 'rgba(255,255,255,0.15)' }}>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div className="px-6 py-5 space-y-5 max-h-[70vh] overflow-y-auto">
+
+          {/* Employee assigned to */}
+          <div className="flex items-center gap-3 px-4 py-3 rounded-2xl"
+               style={{ background: 'var(--surface-s)', border: '1px solid var(--border)' }}>
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-bold flex-shrink-0 text-white"
+                 style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)' }}>
+              {getInitials(task.assignedToName)}
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-3)' }}>Assigned To</p>
+              <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>{task.assignedToName || '—'}</p>
+            </div>
+          </div>
+
+          {/* Badges row */}
+          <div className="flex flex-wrap gap-2">
+            <PriorityBadge priority={task.priority} />
+            <StatusBadge status={task.status} onClick={() => { onCycleStatus(task); }} />
+          </div>
+
+          {/* Description */}
+          {task.description && (
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: 'var(--text-3)' }}>Description</p>
+              <p className="text-sm leading-relaxed whitespace-pre-wrap" style={{ color: 'var(--text-2)' }}>{task.description}</p>
+            </div>
+          )}
+
+          {/* Meta */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-xl px-4 py-3" style={{ background: 'var(--surface-s)', border: '1px solid var(--border)' }}>
+              <p className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: 'var(--text-3)' }}>Due Date</p>
+              <p className="text-sm font-semibold flex items-center gap-1.5" style={{ color: 'var(--text)' }}>
+                <IconCalendar />{formatDate(task.dueDate)}
+              </p>
+            </div>
+            <div className="rounded-xl px-4 py-3" style={{ background: 'var(--surface-s)', border: '1px solid var(--border)' }}>
+              <p className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: 'var(--text-3)' }}>Assigned On</p>
+              <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>{formatTS(task.createdAt)}</p>
+            </div>
+          </div>
+
+          {/* Delete */}
+          <div className="pt-2 border-t" style={{ borderColor: 'var(--border-s)' }}>
+            {isDel ? (
+              <div className="flex items-center gap-3 px-4 py-3 rounded-xl"
+                   style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)' }}>
+                <p className="flex-1 text-xs font-medium" style={{ color: '#f87171' }}>Click again to confirm delete</p>
+                <button onClick={() => onDelete(task.id)}
+                        className="px-3 py-1.5 rounded-lg text-xs font-bold text-white"
+                        style={{ background: 'linear-gradient(135deg,#ef4444,#f87171)' }}>
+                  Delete
+                </button>
+              </div>
+            ) : (
+              <button onClick={() => onDelete(task.id)}
+                      className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all w-full justify-center"
+                      style={{ background: 'rgba(239,68,68,0.08)', color: '#f87171', border: '1px solid rgba(239,68,68,0.2)' }}>
+                <IconTrash /> Delete Task
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ── Main component ──────────────────────────────────────────────── */
 export default function AssignTaskPage({ user, employees = [] }) {
   const INITIAL_FORM = { title: '', description: '', assignedTo: '', dueDate: '', priority: 'medium' };
@@ -114,6 +214,7 @@ export default function AssignTaskPage({ user, employees = [] }) {
   const [filterStatus,   setFilterStatus]   = useState('all');
   const [filterEmployee, setFilterEmployee] = useState('');
   const [toast,          setToast]          = useState('');
+  const [viewTask,       setViewTask]       = useState(null);
   const [confirmDel,     setConfirmDel]     = useState(null);
 
   useEffect(() => {
@@ -350,8 +451,9 @@ export default function AssignTaskPage({ user, employees = [] }) {
                 const isDel = confirmDel === task.id;
                 return (
                   <div key={task.id}
-                       className="rounded-2xl p-4 transition-all duration-200 hover:shadow-lg"
+                       className="rounded-2xl p-4 transition-all duration-200 hover:shadow-lg cursor-pointer"
                        style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+                       onClick={() => setViewTask(task)}
                        onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.3)'}
                        onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}>
 
@@ -373,7 +475,7 @@ export default function AssignTaskPage({ user, employees = [] }) {
                       </div>
 
                       {/* Delete button */}
-                      <button onClick={() => handleDelete(task.id)}
+                      <button onClick={e => { e.stopPropagation(); handleDelete(task.id); }}
                               title={isDel ? 'Confirm delete' : 'Delete task'}
                               className="w-7 h-7 rounded-lg flex items-center justify-center transition-all hover:scale-110 flex-shrink-0"
                               style={isDel
@@ -409,6 +511,17 @@ export default function AssignTaskPage({ user, employees = [] }) {
 
       {/* Toast */}
       {toast && <Toast msg={toast} onDone={() => setToast('')} />}
+
+      {/* Task detail modal */}
+      {viewTask && (
+        <TaskDetailModal
+          task={viewTask}
+          onClose={() => setViewTask(null)}
+          onCycleStatus={(task) => { cycleStatus(task); setViewTask(prev => prev ? { ...prev, status: STATUS_CYCLE[(STATUS_CYCLE.indexOf(prev.status) + 1) % STATUS_CYCLE.length] } : null); }}
+          onDelete={(id) => { handleDelete(id); if (confirmDel === id) setViewTask(null); }}
+          confirmDel={confirmDel}
+        />
+      )}
     </div>
   );
 }

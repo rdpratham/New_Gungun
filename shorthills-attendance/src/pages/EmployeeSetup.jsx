@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, collection, getDocs } from 'firebase/firestore';
 import { updatePassword, EmailAuthProvider, reauthenticateWithCredential, signOut } from 'firebase/auth';
 import { db, auth } from '../firebase';
 import WebcamCapture from '../components/WebcamCapture';
-import { getDescriptorFromDataURL } from '../utils/faceRecognition';
+import { getDescriptorFromDataURL, isFaceMatch } from '../utils/faceRecognition';
 
 function compressDataURL(dataURL) {
   return new Promise((resolve) => {
@@ -77,6 +77,18 @@ export default function EmployeeSetup({ user, onComplete }) {
         setError('No face detected. Please position your face clearly in the camera and try again.');
         setLoading(false);
         return;
+      }
+
+      // Check face uniqueness across all employees
+      const allEmpSnap = await getDocs(collection(db, 'employees'));
+      for (const empDoc of allEmpSnap.docs) {
+        if (empDoc.id === user.uid) continue;
+        const existing = empDoc.data().faceDescriptor;
+        if (existing?.length && isFaceMatch(existing, faceDescriptor)) {
+          setError('This face is already registered to another employee. Each employee must have a unique face photo.');
+          setLoading(false);
+          return;
+        }
       }
 
       const compressedPhoto = await compressDataURL(capturedPhoto.dataURL);

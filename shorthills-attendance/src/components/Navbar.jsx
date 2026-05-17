@@ -258,6 +258,34 @@ export default function Navbar({
               GreyT HR
             </a>
 
+            {/* CRM quick link */}
+            <a href="https://shorthills.crm.dynamics.com/main.aspx?appid=d41e8c8f-ab17-f011-998b-002248245c33&forceUCI=1&pagetype=control&controlName=MscrmControls.AcceleratedSales.AnchorShellControl"
+               target="_blank" rel="noopener noreferrer"
+               className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg"
+               title="Open Dynamics CRM"
+               style={{ background: 'linear-gradient(135deg,rgba(6,182,212,0.12),rgba(59,130,246,0.12))',
+                        border: '1px solid rgba(6,182,212,0.25)', color: '#22d3ee' }}>
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+              CRM
+            </a>
+
+            {/* My Email quick link */}
+            <a href="https://outlook.cloud.microsoft/mail/"
+               target="_blank" rel="noopener noreferrer"
+               className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg"
+               title="Open Outlook Mail"
+               style={{ background: 'linear-gradient(135deg,rgba(16,185,129,0.12),rgba(59,130,246,0.12))',
+                        border: '1px solid rgba(16,185,129,0.25)', color: '#34d399' }}>
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              My Email
+            </a>
+
             {/* Notification bell — employee & admin */}
             {(role === 'employee' || role === 'admin') && (
               <div className="relative" ref={notifRef}>

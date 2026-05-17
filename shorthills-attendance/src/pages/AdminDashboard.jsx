@@ -408,10 +408,102 @@ function EmployeeAttendanceDetail({ employee, attendance, onBack, setExpandedPho
   );
 }
 
+/* ── Attendance helpers ───────────────────────────────────── */
+function isPastWorkDay(dateStr) {
+  // A work day is "past" after 2 AM IST of the next calendar day
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const nowIST = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+  const cutoffIST = new Date(new Date(Date.UTC(y, m - 1, d + 1, 2, 0, 0)).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+  return nowIST > cutoffIST;
+}
+
+function getAttStatus(empRecs, dateStr) {
+  const recs   = empRecs.filter(r => r.date === dateStr);
+  const hasIn  = recs.some(r => r.type === 'signin');
+  const hasOut = recs.some(r => r.type === 'signout');
+  if (hasIn && hasOut) return 'full';
+  if (hasIn)           return 'signin-only';
+  if (hasOut)          return 'signout-only';
+  if (isPastWorkDay(dateStr)) return 'leave';
+  return 'future';
+}
+
+const STATUS_META = {
+  full:          { bg: '#34d399', label: '✓', tip: 'Present – both sign-in & sign-out', text: '#064e3b' },
+  'signin-only': { bg: '#a78bfa', label: '↗', tip: 'Signed in – no sign-out yet',       text: '#2e1065' },
+  'signout-only':{ bg: '#60a5fa', label: '↙', tip: 'Sign-out only (no sign-in)',          text: '#1e3a5f' },
+  leave:         { bg: '#fbbf24', label: 'L',  tip: 'Absent / Leave',                    text: '#78350f' },
+  future:        { bg: 'var(--surface-s)', label: '—', tip: 'Not applicable yet',        text: 'var(--text-3)' },
+};
+
+function getLast30Days() {
+  const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+  return Array.from({ length: 30 }, (_, i) => {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    const y  = d.getFullYear();
+    const mo = String(d.getMonth() + 1).padStart(2, '0');
+    const dy = String(d.getDate()).padStart(2, '0');
+    return {
+      str:   `${y}-${mo}-${dy}`,
+      short: d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }),
+      dow:   d.toLocaleDateString('en-IN', { weekday: 'short' }),
+    };
+  });
+}
+
 /* ── Attendance page ──────────────────────────────────────── */
 function AttendancePage({ employees, attendance, loadingEmp, loadingAtt, setExpandedPhoto }) {
-  const [selected, setSelected] = useState(null);
+  const [selected,      setSelected]      = useState(null);
+  const [searchName,    setSearchName]    = useState('');
+  const [dateRange,     setDateRange]     = useState('30d');
+  const [statusFilter,  setStatusFilter]  = useState('all');
+  const [attSearchName, setAttSearchName] = useState('');
+  const [attFilterDate, setAttFilterDate] = useState('');
+
   const today = todayIST();
+  const days30 = getLast30Days();
+
+  /* ---- date range slice for matrix ---- */
+  const matrixDays = (() => {
+    if (dateRange === '7d')  return days30.slice(0, 7);
+    if (dateRange === 'month') {
+      const [y, m] = today.split('-').map(Number);
+      return days30.filter(d => d.str.startsWith(`${y}-${String(m).padStart(2,'0')}`));
+    }
+    return days30; // 30d
+  })();
+
+  /* ---- filtered employees ---- */
+  const filteredEmps = employees.filter(emp => {
+    if (searchName && !(emp.name || emp.email || '').toLowerCase().includes(searchName.toLowerCase())) return false;
+    if (statusFilter !== 'all') {
+      const empRecs  = getEmpRecords(attendance, emp);
+      const todaySt  = getAttStatus(empRecs, today);
+      if (statusFilter === 'present' && todaySt !== 'full' && todaySt !== 'signin-only') return false;
+      if (statusFilter === 'leave'   && todaySt !== 'leave') return false;
+    }
+    return true;
+  });
+
+  /* ---- today's summary stats ---- */
+  const totalSignInsToday  = attendance.filter(r => r.date === today && r.type === 'signin').length;
+  const totalSignOutsToday = attendance.filter(r => r.date === today && r.type === 'signout').length;
+  const totalPresentToday  = employees.filter(emp => {
+    const recs = getEmpRecords(attendance, emp).filter(r => r.date === today);
+    return recs.some(r => r.type === 'signin') || recs.some(r => r.type === 'signout');
+  }).length;
+  const totalLeaveToday = employees.filter(emp => {
+    const recs = getEmpRecords(attendance, emp).filter(r => r.date === today);
+    return !recs.some(r => r.type === 'signin') && !recs.some(r => r.type === 'signout') && isPastWorkDay(today);
+  }).length;
+
+  /* ---- raw record list (below matrix) ---- */
+  const filteredAttRecords = attendance.filter(rec => {
+    const dateMatch = attFilterDate ? rec.date === attFilterDate : true;
+    const nameMatch = attSearchName ? rec.employeeName?.toLowerCase().includes(attSearchName.toLowerCase()) : true;
+    return dateMatch && nameMatch;
+  });
 
   if (selected) {
     return (
@@ -426,79 +518,347 @@ function AttendancePage({ employees, attendance, loadingEmp, loadingAtt, setExpa
 
   return (
     <div className="space-y-6 animate-fade-in">
+
+      {/* ── Page header ── */}
       <div>
         <h1 className="text-2xl lg:text-3xl font-bold" style={{ color: 'var(--text)' }}>Attendance</h1>
         <p className="text-sm mt-1" style={{ color: 'var(--text-3)' }}>
-          Click any employee to view their detailed attendance records
+          Day-wise attendance matrix · Click any employee row to view their full records
         </p>
       </div>
 
-      {loadingEmp ? (
-        <div className="flex justify-center py-20">
-          <div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin"
-               style={{ borderColor: '#7c3aed', borderTopColor: 'transparent' }} />
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {employees.map(emp => {
-            const empRecs   = getEmpRecords(attendance, emp);
-            const todayRecs = empRecs.filter(r => r.date === today);
-            const signedIn  = todayRecs.some(r => r.type === 'signin');
-            const signedOut = todayRecs.some(r => r.type === 'signout');
-            const monthRecs = empRecs.filter(r => r.date.startsWith(today.slice(0, 7)));
-
-            return (
-              <div key={emp.id} onClick={() => setSelected(emp)}
-                   className="group rounded-2xl p-5 cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl animate-fade-in"
-                   style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
-                   onMouseEnter={e => e.currentTarget.style.borderColor = '#7c3aed55'}
-                   onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0 border-2"
-                       style={{ borderColor: '#7c3aed33', background: 'linear-gradient(135deg,#7c3aed22,#3b82f622)' }}>
-                    {emp.photoURL
-                      ? <img src={emp.photoURL} alt="" className="w-full h-full object-cover" />
-                      : <div className="w-full h-full flex items-center justify-center font-bold text-violet-400">
-                          {(emp.name || emp.email || '?').charAt(0).toUpperCase()}
-                        </div>
-                    }
-                  </div>
-                  <div className="min-w-0">
-                    <p className="font-semibold truncate text-sm" style={{ color: 'var(--text)' }}>
-                      {emp.name || emp.email?.split('@')[0]}
-                    </p>
-                    <p className="text-xs truncate" style={{ color: 'var(--text-3)' }}>ID: {emp.employeeId}</p>
-                  </div>
-                </div>
-
-                {/* Today's status */}
-                <div className="flex items-center gap-1.5 mb-3 text-xs font-semibold px-3 py-2 rounded-xl"
-                     style={signedIn && signedOut ? { background: 'rgba(52,211,153,0.12)', color: '#34d399' }
-                           : signedIn             ? { background: 'rgba(124,58,237,0.12)', color: '#a78bfa' }
-                           :                        { background: 'var(--surface-s)', color: 'var(--text-3)' }}>
-                  <span className={`w-1.5 h-1.5 rounded-full ${signedIn ? 'animate-pulse' : ''}`}
-                        style={{ background: signedIn && signedOut ? '#34d399' : signedIn ? '#a78bfa' : 'var(--text-3)' }} />
-                  {signedIn && signedOut ? 'Shift complete' : signedIn ? 'Currently in' : 'Not signed in'}
-                </div>
-
-                <div className="flex justify-between text-xs" style={{ color: 'var(--text-3)' }}>
-                  <span>This month</span>
-                  <span className="font-semibold" style={{ color: 'var(--text-2)' }}>{monthRecs.length} records</span>
-                </div>
-
-                <div className="mt-3 flex items-center justify-end gap-1 text-xs font-medium group-hover:gap-2 transition-all"
-                     style={{ color: '#a78bfa' }}>
-                  View details
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </div>
-              </div>
-            );
-          })}
+      {/* ── Summary stat cards ── */}
+      {!loadingEmp && !loadingAtt && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          {[
+            { label: 'Total Employees',   value: employees.length,    color: '#a78bfa', bg: 'rgba(124,58,237,0.10)' },
+            { label: 'Sign-Ins Today',    value: totalSignInsToday,   color: '#60a5fa', bg: 'rgba(59,130,246,0.10)' },
+            { label: 'Sign-Outs Today',   value: totalSignOutsToday,  color: '#34d399', bg: 'rgba(52,211,153,0.10)' },
+            { label: 'Present Today',     value: totalPresentToday,   color: '#34d399', bg: 'rgba(52,211,153,0.10)' },
+            { label: 'Absent / Leave',    value: totalLeaveToday,     color: '#fbbf24', bg: 'rgba(245,158,11,0.10)' },
+          ].map(s => (
+            <div key={s.label}
+                 className="rounded-2xl p-4 text-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+                 style={{ background: s.bg, border: `1px solid ${s.color}33` }}>
+              <p className="text-3xl font-black mb-1" style={{ color: s.color }}>{s.value}</p>
+              <p className="text-xs font-medium leading-tight" style={{ color: 'var(--text-3)' }}>{s.label}</p>
+            </div>
+          ))}
         </div>
       )}
+
+      {/* ── Filters bar ── */}
+      <div className="flex flex-wrap gap-2 items-center"
+           style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '1rem', padding: '0.75rem 1rem' }}>
+        {/* Search */}
+        <div className="relative flex-1 min-w-36">
+          <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
+               style={{ color: 'var(--text-3)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input type="text" value={searchName} onChange={e => setSearchName(e.target.value)}
+                 placeholder="Search employee…" className="input-field pl-9 py-1.5 text-sm" />
+        </div>
+        {/* Date range */}
+        <div className="flex rounded-xl overflow-hidden border" style={{ borderColor: 'var(--border)' }}>
+          {[['7d','Last 7d'],['30d','Last 30d'],['month','This Month']].map(([v, lbl]) => (
+            <button key={v} onClick={() => setDateRange(v)}
+                    className="px-3 py-1.5 text-xs font-semibold transition-all"
+                    style={dateRange === v
+                      ? { background: 'linear-gradient(135deg,#7c3aed,#3b82f6)', color: '#fff' }
+                      : { background: 'var(--surface-s)', color: 'var(--text-3)' }}>
+              {lbl}
+            </button>
+          ))}
+        </div>
+        {/* Status filter */}
+        <div className="flex rounded-xl overflow-hidden border" style={{ borderColor: 'var(--border)' }}>
+          {[['all','All'],['present','Present'],['leave','Leave']].map(([v, lbl]) => (
+            <button key={v} onClick={() => setStatusFilter(v)}
+                    className="px-3 py-1.5 text-xs font-semibold transition-all"
+                    style={statusFilter === v
+                      ? { background: 'linear-gradient(135deg,#7c3aed,#3b82f6)', color: '#fff' }
+                      : { background: 'var(--surface-s)', color: 'var(--text-3)' }}>
+              {lbl}
+            </button>
+          ))}
+        </div>
+        {(searchName || statusFilter !== 'all' || dateRange !== '30d') && (
+          <button onClick={() => { setSearchName(''); setStatusFilter('all'); setDateRange('30d'); }}
+                  className="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all"
+                  style={{ background: 'var(--surface-s)', color: 'var(--text-3)' }}>
+            Reset
+          </button>
+        )}
+      </div>
+
+      {/* ── Matrix ── */}
+      {loadingEmp || loadingAtt ? (
+        <div className="flex justify-center py-20">
+          <div className="w-8 h-8 border-4 rounded-full animate-spin"
+               style={{ borderColor: '#7c3aed', borderTopColor: 'transparent' }} />
+        </div>
+      ) : filteredEmps.length === 0 ? (
+        <div className="rounded-2xl text-center py-16" style={{ border: '1px dashed var(--border)' }}>
+          <p className="text-sm" style={{ color: 'var(--text-3)' }}>No employees match your filters.</p>
+        </div>
+      ) : (
+        <div className="rounded-2xl overflow-hidden" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+
+          {/* Table scroll wrapper */}
+          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+            <table style={{ borderCollapse: 'separate', borderSpacing: 0, minWidth: `${220 + matrixDays.length * 52}px`, width: '100%' }}>
+              <thead>
+                <tr style={{ background: 'var(--surface-s)' }}>
+                  {/* Sticky employee header */}
+                  <th style={{
+                    position: 'sticky', left: 0, zIndex: 10,
+                    background: 'var(--surface-s)',
+                    borderBottom: '1px solid var(--border)',
+                    borderRight: '1px solid var(--border)',
+                    padding: '0.75rem 1rem',
+                    textAlign: 'left', whiteSpace: 'nowrap',
+                    fontSize: '0.7rem', fontWeight: 700,
+                    color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: '0.08em',
+                  }}>
+                    Employee ({filteredEmps.length})
+                  </th>
+                  {matrixDays.map(day => (
+                    <th key={day.str}
+                        style={{
+                          borderBottom: '1px solid var(--border)',
+                          borderLeft: '1px solid var(--border)',
+                          padding: '0.5rem 0.25rem',
+                          textAlign: 'center',
+                          minWidth: 50,
+                          background: day.str === today ? 'rgba(124,58,237,0.08)' : 'var(--surface-s)',
+                        }}>
+                      <div style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--text-3)', lineHeight: 1 }}>
+                        {day.dow}
+                      </div>
+                      <div style={{ fontSize: '0.68rem', fontWeight: 700, color: day.str === today ? '#a78bfa' : 'var(--text-2)', marginTop: 2 }}>
+                        {day.short}
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {filteredEmps.map((emp, rowIdx) => {
+                  const empRecs = getEmpRecords(attendance, emp);
+                  const todaySt = getAttStatus(empRecs, today);
+                  const isEven  = rowIdx % 2 === 0;
+                  const rowBg   = isEven ? 'var(--surface)' : 'var(--surface-s)';
+
+                  return (
+                    <tr key={emp.id}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => setSelected(emp)}
+                        onMouseEnter={e => {
+                          e.currentTarget.querySelectorAll('td').forEach(td => {
+                            td.style.background = 'rgba(124,58,237,0.06)';
+                          });
+                          const sticky = e.currentTarget.querySelector('td:first-child');
+                          if (sticky) sticky.style.background = 'rgba(124,58,237,0.10)';
+                        }}
+                        onMouseLeave={e => {
+                          e.currentTarget.querySelectorAll('td').forEach(td => {
+                            td.style.background = rowBg;
+                          });
+                          const sticky = e.currentTarget.querySelector('td:first-child');
+                          if (sticky) sticky.style.background = rowBg;
+                        }}
+                    >
+                      {/* Sticky employee cell */}
+                      <td style={{
+                        position: 'sticky', left: 0, zIndex: 5,
+                        background: rowBg,
+                        borderBottom: '1px solid var(--border)',
+                        borderRight: '1px solid var(--border)',
+                        padding: '0.6rem 1rem',
+                        whiteSpace: 'nowrap',
+                        transition: 'background 0.15s',
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                          {/* Avatar */}
+                          <div style={{
+                            width: 32, height: 32, borderRadius: 8, overflow: 'hidden', flexShrink: 0,
+                            border: '1.5px solid #7c3aed33',
+                            background: 'linear-gradient(135deg,#7c3aed22,#3b82f622)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          }}>
+                            {emp.photoURL
+                              ? <img src={emp.photoURL} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                              : <span style={{ fontWeight: 700, fontSize: '0.75rem', color: '#a78bfa' }}>
+                                  {(emp.name || emp.email || '?').charAt(0).toUpperCase()}
+                                </span>
+                            }
+                          </div>
+                          <div style={{ minWidth: 0 }}>
+                            <div style={{ fontWeight: 600, fontSize: '0.8rem', color: 'var(--text)', maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {emp.name || emp.email?.split('@')[0]}
+                            </div>
+                            <div style={{ fontSize: '0.68rem', color: 'var(--text-3)' }}>ID {emp.employeeId}</div>
+                          </div>
+                          {/* Today badge */}
+                          <span style={{
+                            fontSize: '0.6rem', fontWeight: 700, borderRadius: 99,
+                            padding: '2px 6px', flexShrink: 0,
+                            background: todaySt === 'full' ? 'rgba(52,211,153,0.15)' :
+                                        todaySt === 'signin-only' ? 'rgba(124,58,237,0.15)' :
+                                        todaySt === 'leave' ? 'rgba(245,158,11,0.15)' : 'var(--surface-s)',
+                            color: todaySt === 'full' ? '#34d399' :
+                                   todaySt === 'signin-only' ? '#a78bfa' :
+                                   todaySt === 'leave' ? '#fbbf24' : 'var(--text-3)',
+                          }}>
+                            {todaySt === 'full' ? 'IN/OUT' : todaySt === 'signin-only' ? 'IN' : todaySt === 'leave' ? 'ABS' : '—'}
+                          </span>
+                        </div>
+                      </td>
+
+                      {/* Date cells */}
+                      {matrixDays.map(day => {
+                        const st   = getAttStatus(empRecs, day.str);
+                        const meta = STATUS_META[st];
+                        const isToday = day.str === today;
+                        return (
+                          <td key={day.str}
+                              title={`${emp.name || emp.email?.split('@')[0]} · ${day.short} · ${meta.tip}`}
+                              style={{
+                                borderBottom: '1px solid var(--border)',
+                                borderLeft:   '1px solid var(--border)',
+                                padding: '0.4rem 0.25rem',
+                                textAlign: 'center',
+                                background: isToday ? `rgba(124,58,237,0.04)` : rowBg,
+                                transition: 'background 0.15s',
+                              }}>
+                            <div style={{
+                              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                              width: 28, height: 28, borderRadius: 7,
+                              fontSize: '0.75rem', fontWeight: 700,
+                              background: st === 'future' ? 'transparent' : meta.bg + (st === 'future' ? '' : '33'),
+                              color: st === 'future' ? 'var(--text-3)' : meta.bg,
+                              outline: isToday ? '2px solid #7c3aed44' : 'none',
+                              outlineOffset: 1,
+                            }}>
+                              {meta.label}
+                            </div>
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Legend */}
+          <div style={{
+            display: 'flex', flexWrap: 'wrap', gap: '0.75rem 1.25rem',
+            padding: '0.75rem 1rem',
+            borderTop: '1px solid var(--border)',
+            background: 'var(--surface-s)',
+          }}>
+            {[
+              { st: 'full',          label: 'Present (In + Out)' },
+              { st: 'signin-only',   label: 'Signed in only' },
+              { st: 'signout-only',  label: 'Signed out only' },
+              { st: 'leave',         label: 'Absent / Leave' },
+              { st: 'future',        label: 'Not yet applicable' },
+            ].map(({ st, label }) => {
+              const meta = STATUS_META[st];
+              return (
+                <div key={st} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <div style={{
+                    width: 22, height: 22, borderRadius: 6,
+                    background: st === 'future' ? 'var(--surface-s)' : meta.bg + '33',
+                    color: st === 'future' ? 'var(--text-3)' : meta.bg,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '0.65rem', fontWeight: 700,
+                    border: '1px solid ' + (st === 'future' ? 'var(--border)' : meta.bg + '55'),
+                  }}>
+                    {meta.label}
+                  </div>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-3)', fontWeight: 500 }}>{label}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* ── Raw records list ── */}
+      <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--surface)' }}>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 border-b"
+             style={{ borderColor: 'var(--border)' }}>
+          <div>
+            <h2 className="font-bold text-lg" style={{ color: 'var(--text)' }}>All Attendance Records</h2>
+            <p className="text-xs mt-0.5" style={{ color: 'var(--text-3)' }}>
+              Showing {filteredAttRecords.length} of {attendance.length} records
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <input type="date" value={attFilterDate} onChange={e => setAttFilterDate(e.target.value)}
+                   className="input-field text-sm py-2 px-3 w-40" style={{ colorScheme: 'auto' }} />
+            <input type="text" value={attSearchName} onChange={e => setAttSearchName(e.target.value)}
+                   placeholder="Search by name…" className="input-field text-sm py-2 px-3 w-44" />
+            {(attFilterDate || attSearchName) && (
+              <button onClick={() => { setAttFilterDate(''); setAttSearchName(''); }}
+                      className="btn-secondary text-sm py-2 px-3">Clear</button>
+            )}
+          </div>
+        </div>
+
+        {loadingAtt ? (
+          <div className="flex justify-center py-16">
+            <div className="w-8 h-8 border-4 rounded-full animate-spin"
+                 style={{ borderColor: '#7c3aed', borderTopColor: 'transparent' }} />
+          </div>
+        ) : filteredAttRecords.length === 0 ? (
+          <div className="text-center py-16">
+            <p className="text-sm" style={{ color: 'var(--text-3)' }}>No attendance records found.</p>
+          </div>
+        ) : (
+          <div>
+            {filteredAttRecords.map(rec => (
+              <div key={rec.id} className="flex items-start gap-4 px-5 py-4 transition-colors border-b last:border-b-0"
+                   style={{ borderColor: 'var(--border)' }}
+                   onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-s)'}
+                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                {(rec.photoBase64 || rec.photoURL)
+                  ? <img src={rec.photoBase64 || rec.photoURL} alt={rec.employeeName}
+                           className="w-12 h-12 rounded-xl object-cover flex-shrink-0 cursor-pointer hover:scale-105 transition-transform"
+                           style={{ border: '2px solid var(--border)' }}
+                           onClick={() => setExpandedPhoto(rec.photoBase64 || rec.photoURL)} />
+                  : <div className="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center font-bold text-sm"
+                         style={{ background: 'linear-gradient(135deg,#7c3aed22,#3b82f622)', color: '#a78bfa' }}>
+                      {(rec.employeeName || '?').charAt(0).toUpperCase()}
+                    </div>
+                }
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                    <span className="font-semibold text-sm" style={{ color: 'var(--text)' }}>{rec.employeeName}</span>
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full"
+                          style={rec.type === 'signin'
+                            ? { background: 'rgba(124,58,237,0.15)', color: '#a78bfa', border: '1px solid rgba(124,58,237,0.3)' }
+                            : rec.type === 'signout'
+                            ? { background: 'rgba(52,211,153,0.12)', color: '#34d399', border: '1px solid rgba(52,211,153,0.25)' }
+                            : { background: 'rgba(16,185,129,0.1)', color: '#6ee7b7' }}>
+                      {rec.type === 'signin' ? '↗ Sign In' : rec.type === 'signout' ? '↙ Sign Out' : 'Submitted'}
+                    </span>
+                    <span className="text-xs" style={{ color: 'var(--text-3)' }}>ID: {rec.employeeId}</span>
+                  </div>
+                  <p className="text-xs mb-1.5" style={{ color: '#60a5fa' }}>
+                    {formatDate(rec.date)} &nbsp;·&nbsp; {formatIST(rec.submittedAt)}
+                  </p>
+                  <p className="text-sm line-clamp-2" style={{ color: 'var(--text-2)' }}>{rec.workSummary}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

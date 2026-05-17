@@ -17,8 +17,8 @@ function getISTTime() {
   const parts = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Kolkata', hour: 'numeric', minute: 'numeric', hour12: false }).formatToParts(new Date());
   return { hour: parseInt(parts.find(p => p.type === 'hour').value), minute: parseInt(parts.find(p => p.type === 'minute').value) };
 }
-function isSignInWindow()  { const { hour, minute } = getISTTime(); const m = hour*60+minute; return m >= 16*60+30 && m <= 17*60+30; }
-function isSignOutWindow() { const { hour, minute } = getISTTime(); const m = hour*60+minute; return m >= 1*60+30  && m <= 2*60+30; }
+function isSignInWindow()  { const { hour } = getISTTime(); return hour >= 17 || hour < 2; }
+function isSignOutWindow() { const { hour } = getISTTime(); return hour >= 17 || hour < 2; }
 function formatIST(ts) {
   return new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true, day: '2-digit', month: 'short', year: 'numeric' })
     .format(ts instanceof Date ? ts : ts?.toDate?.() || new Date());

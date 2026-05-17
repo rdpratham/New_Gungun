@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createUserWithEmailAndPassword, deleteUser } from 'firebase/auth';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp, collection, query, where, getDocs } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { auth, secondaryAuth, db } from '../firebase';
 import Navbar from '../components/Navbar';
@@ -27,6 +27,21 @@ export default function AddEmployee() {
     setLoading(true);
     let newUser = null;
     try {
+      // Check employee code uniqueness
+      const codeSnap = await getDocs(query(collection(db, 'employees'), where('employeeId', '==', form.employeeCode.trim())));
+      if (!codeSnap.empty) {
+        setError('Employee code already exists. Please use a unique code.');
+        setLoading(false);
+        return;
+      }
+      // Check email uniqueness in employees collection
+      const emailSnap = await getDocs(query(collection(db, 'employees'), where('email', '==', form.email.trim().toLowerCase())));
+      if (!emailSnap.empty) {
+        setError('An employee with this email already exists.');
+        setLoading(false);
+        return;
+      }
+
       // Use secondary auth so admin session is not replaced by new employee session
       const credential = await createUserWithEmailAndPassword(secondaryAuth, form.email, form.password);
       newUser = credential.user;

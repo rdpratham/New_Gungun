@@ -44,7 +44,7 @@ function sortTasks(arr) {
 const PRIORITY_STYLES = {
   high:   { color: '#f87171', bg: 'rgba(239,68,68,0.15)',   border: 'rgba(239,68,68,0.35)',  accent: '#ef4444', label: 'High' },
   medium: { color: '#fbbf24', bg: 'rgba(245,158,11,0.15)',  border: 'rgba(245,158,11,0.35)', accent: '#f59e0b', label: 'Medium' },
-  low:    { color: '#34d399', bg: 'rgba(16,185,129,0.15)',  border: 'rgba(16,185,129,0.35)',accent: '#10b981', label: 'Low' },
+  low:    { color: '#34d399', bg: 'rgba(16,185,129,0.15)',  border: 'rgba(16,185,129,0.35)', accent: '#10b981', label: 'Low' },
 };
 
 const STATUS_STYLES = {
@@ -57,6 +57,8 @@ const STATUS_STYLES = {
 const IconBriefcase = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>;
 const IconCalendar  = () => <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>;
 const IconClock     = () => <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+const IconClose     = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>;
+const IconUser      = () => <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>;
 
 /* ── Priority badge ──────────────────────────────────────────────── */
 function PriorityBadge({ priority }) {
@@ -103,11 +105,125 @@ function StatCard({ value, label, color, bg }) {
   );
 }
 
+/* ── Task Detail Modal ───────────────────────────────────────────── */
+function TaskDetailModal({ task, onClose, onUpdateStatus }) {
+  const pStyle  = PRIORITY_STYLES[task.priority] || PRIORITY_STYLES.medium;
+  const sStyle  = STATUS_STYLES[task.status] || STATUS_STYLES.pending;
+  const overdue = isOverdue(task.dueDate, task.status);
+
+  return (
+    <div
+      className="fixed inset-0 flex items-center justify-center p-4 z-[60]"
+      style={{ background: 'rgba(4,8,15,0.9)', backdropFilter: 'blur(16px)' }}
+      onClick={onClose}
+    >
+      <div
+        className="max-w-lg w-full rounded-3xl shadow-2xl animate-slide-up overflow-hidden"
+        style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="relative px-6 py-5" style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)' }}>
+          <div
+            className="absolute left-0 top-0 bottom-0 w-1 rounded-tl-3xl"
+            style={{ background: pStyle.accent }}
+          />
+          <div className="flex items-start justify-between gap-4">
+            <h2 className="text-lg font-bold text-white leading-snug pr-2" style={{ textDecoration: task.status === 'completed' ? 'line-through' : 'none', opacity: task.status === 'completed' ? 0.8 : 1 }}>
+              {task.title}
+            </h2>
+            <button
+              onClick={onClose}
+              className="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center transition-all hover:scale-110"
+              style={{ background: 'rgba(255,255,255,0.15)', color: '#fff' }}
+            >
+              <IconClose />
+            </button>
+          </div>
+        </div>
+
+        {/* Body */}
+        <div className="px-6 py-5 space-y-5 max-h-[70vh] overflow-y-auto">
+
+          {/* Overdue warning */}
+          {overdue && (
+            <div className="flex items-center gap-2 px-4 py-3 rounded-2xl text-sm font-semibold"
+                 style={{ background: 'rgba(239,68,68,0.12)', color: '#f87171', border: '1px solid rgba(239,68,68,0.3)' }}>
+              <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: '#ef4444' }} />
+              This task is overdue
+            </div>
+          )}
+
+          {/* Badges */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <PriorityBadge priority={task.priority} />
+            <span
+              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold"
+              style={{ background: sStyle.bg, color: sStyle.color, border: `1px solid ${sStyle.border}` }}
+            >
+              <span
+                className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${task.status === 'in-progress' ? 'animate-pulse' : ''}`}
+                style={{ background: sStyle.color }}
+              />
+              {sStyle.label}
+            </span>
+          </div>
+
+          {/* Description */}
+          {task.description && (
+            <div>
+              <p className="text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: 'var(--text-3)' }}>Description</p>
+              <p className="text-sm leading-relaxed" style={{ color: 'var(--text-2)' }}>{task.description}</p>
+            </div>
+          )}
+
+          {/* Dates */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-2xl p-3" style={{ background: 'var(--surface-s)', border: '1px solid var(--border-s)' }}>
+              <div className="flex items-center gap-1.5 mb-1" style={{ color: 'var(--text-3)' }}>
+                <IconCalendar />
+                <span className="text-xs font-semibold uppercase tracking-wider">Due Date</span>
+              </div>
+              <p className="text-sm font-semibold" style={{ color: overdue ? '#f87171' : 'var(--text)' }}>
+                {formatDate(task.dueDate)}
+              </p>
+            </div>
+            <div className="rounded-2xl p-3" style={{ background: 'var(--surface-s)', border: '1px solid var(--border-s)' }}>
+              <div className="flex items-center gap-1.5 mb-1" style={{ color: 'var(--text-3)' }}>
+                <IconClock />
+                <span className="text-xs font-semibold uppercase tracking-wider">Assigned</span>
+              </div>
+              <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>
+                {formatTS(task.createdAt)}
+              </p>
+            </div>
+          </div>
+
+          {/* Assigned by */}
+          {task.assignedByName && (
+            <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-2)' }}>
+              <IconUser />
+              <span>Assigned by <span className="font-semibold" style={{ color: 'var(--text)' }}>{task.assignedByName}</span></span>
+            </div>
+          )}
+
+          {/* Status update */}
+          <div className="pt-4 border-t" style={{ borderColor: 'var(--border-s)' }}>
+            <p className="text-xs font-semibold mb-2.5 uppercase tracking-wider" style={{ color: 'var(--text-3)' }}>Update Status</p>
+            <StatusPills currentStatus={task.status} onUpdate={newStatus => onUpdateStatus(task.id, newStatus)} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ── Main component ──────────────────────────────────────────────── */
 export default function AssignedTasksPage({ user }) {
   const [tasks,        setTasks]        = useState([]);
   const [loading,      setLoading]      = useState(true);
   const [filterStatus, setFilterStatus] = useState('all');
+  const [viewTask,     setViewTask]     = useState(null);
 
   /* Real-time listener */
   useEffect(() => {
@@ -131,8 +247,6 @@ export default function AssignedTasksPage({ user }) {
     return () => unsub();
   }, [user?.uid]);
 
-  const STATUS_LABEL = { pending: 'Pending', 'in-progress': 'In Progress', completed: 'Completed' };
-
   /* Update status + notify admin */
   async function updateStatus(taskId, newStatus) {
     const task = tasks.find(t => t.id === taskId);
@@ -152,6 +266,7 @@ export default function AssignedTasksPage({ user }) {
         targetRole:   'admin',
       });
       setTasks(prev => sortTasks(prev.map(t => t.id === taskId ? { ...t, status: newStatus } : t)));
+      setViewTask(prev => prev?.id === taskId ? { ...prev, status: newStatus } : prev);
     } catch (err) {
       console.error('updateStatus:', err);
     }
@@ -247,12 +362,13 @@ export default function AssignedTasksPage({ user }) {
 
             return (
               <div key={task.id}
-                   className="rounded-2xl overflow-hidden transition-all duration-200 hover:shadow-xl"
+                   className="rounded-2xl overflow-hidden transition-all duration-200 hover:shadow-xl cursor-pointer"
                    style={{
                      background: 'var(--surface)',
                      border: `1px solid var(--border)`,
                      borderLeft: `4px solid ${pStyle.accent}`,
-                   }}>
+                   }}
+                   onClick={() => setViewTask(task)}>
 
                 <div className="p-4 space-y-3">
                   {/* Title row */}
@@ -293,7 +409,8 @@ export default function AssignedTasksPage({ user }) {
                   </div>
 
                   {/* Status update pills */}
-                  <div className="pt-1 border-t" style={{ borderColor: 'var(--border-s)' }}>
+                  <div className="pt-1 border-t" style={{ borderColor: 'var(--border-s)' }}
+                       onClick={e => e.stopPropagation()}>
                     <p className="text-xs font-semibold mb-2" style={{ color: 'var(--text-3)' }}>Update Status</p>
                     <StatusPills currentStatus={task.status} onUpdate={newStatus => updateStatus(task.id, newStatus)} />
                   </div>
@@ -302,6 +419,15 @@ export default function AssignedTasksPage({ user }) {
             );
           })}
         </div>
+      )}
+
+      {/* Task detail modal */}
+      {viewTask && (
+        <TaskDetailModal
+          task={viewTask}
+          onClose={() => setViewTask(null)}
+          onUpdateStatus={updateStatus}
+        />
       )}
     </div>
   );
