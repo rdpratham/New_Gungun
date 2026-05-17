@@ -14,6 +14,8 @@ import AssignMeetingTarget from '../components/AssignMeetingTarget';
 import MeetingReport from '../components/MeetingReport';
 import TeamTargetPage from '../components/TeamTargetPage';
 import ProfileSetupSettings from '../components/ProfileSetupSettings';
+import CampaignsPage from '../components/CampaignsPage';
+import { getDailyQuote } from '../utils/dailyQuote';
 
 function formatIST(ts) {
   if (!ts) return '—';
@@ -82,6 +84,7 @@ function Sidebar({ page, setPage, employeeCount, mobileOpen, setMobileOpen }) {
         { id: 'assign-meeting', label: 'Assign Meeting Target', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" strokeWidth={2} /><circle cx="12" cy="12" r="6" strokeWidth={2} /><circle cx="12" cy="12" r="2" strokeWidth={2} /></svg> },
         { id: 'team-target', label: 'Team Target', highlight: true, highlightColor: '#14b8a6', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg> },
         { id: 'meeting-report', label: 'Meeting Report', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg> },
+        { id: 'campaigns', label: 'Campaigns', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" /></svg> },
       ],
     },
     {
@@ -1002,8 +1005,14 @@ function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDa
                 <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', marginTop: 2 }}>IST · Live</p>
               </div>
             </div>
+            {/* Daily quote */}
+            <div className="mt-3 px-3 py-2.5 rounded-lg" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', fontStyle: 'italic', lineHeight: 1.5 }}>
+                💡 &ldquo;{getDailyQuote()}&rdquo;
+              </p>
+            </div>
             {/* Mini stat chips */}
-            <div className="flex gap-2 mt-4 flex-wrap">
+            <div className="flex gap-2 mt-3 flex-wrap">
               {[
                 { label: 'Employees', value: employees.length, color: '#a78bfa' },
                 { label: 'Sign-ins Today', value: todaySignIns, color: '#34d399' },
@@ -1558,6 +1567,9 @@ export default function AdminDashboard({ user }) {
           )}
           {page === 'team-target' && (
             <TeamTargetPage user={user} />
+          )}
+          {page === 'campaigns' && (
+            <CampaignsPage user={user} employees={employees} />
           )}
           {page === 'profile-setup' && (
             <ProfileSetupSettings />

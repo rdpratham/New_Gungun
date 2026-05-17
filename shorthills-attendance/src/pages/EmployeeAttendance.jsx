@@ -10,6 +10,7 @@ import NotesPage from '../components/NotesPage';
 import CredentialsPage from '../components/CredentialsPage';
 import AssignedMeetings from '../components/AssignedMeetings';
 import MeetingReportEmployee from '../components/MeetingReportEmployee';
+import { getDailyQuote } from '../utils/dailyQuote';
 
 /* ── helpers ─────────────────────────────────────────────── */
 function getISTDateString() {
@@ -482,10 +483,15 @@ function MyAttendancePage({ user, employeeData }) {
 /* ── Dashboard page ──────────────────────────────────────── */
 function DashboardPage({ user, employeeData, signInRecord, signOutRecord, recentRecords, loadingData, openPopup, currentTime, allTasks, myTodos, onNavigate }) {
   const today = getISTDateString();
-  const todayDate = new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
 
-  const pendingTasks = allTasks.filter(t => t.status !== 'completed').slice(0, 5);
-  const todayTodos   = myTodos.filter(t => !t.completed && (t.date === today || !t.date)).slice(0, 5);
+  const istHour   = parseInt(new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata', hour: 'numeric', hour12: false }).format(currentTime), 10);
+  const greetWord = istHour < 12 ? 'Morning' : istHour < 17 ? 'Afternoon' : 'Evening';
+  const fullDate  = new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(currentTime);
+  const timeStr   = new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }).format(currentTime);
+  const firstName = (employeeData?.name || 'there').split(' ')[0];
+
+  const pendingTasks  = allTasks.filter(t => t.status !== 'completed').slice(0, 5);
+  const todayTodos    = myTodos.filter(t => !t.completed && (t.date === today || !t.date)).slice(0, 5);
   const upcomingTodos = myTodos.filter(t => !t.completed && t.date && t.date > today).slice(0, 3);
 
   const PRIORITY_COLOR = { high: '#f87171', medium: '#fbbf24', low: '#34d399' };
@@ -495,19 +501,92 @@ function DashboardPage({ user, employeeData, signInRecord, signOutRecord, recent
   return (
     <div className="space-y-4 animate-fade-in">
 
-      {/* Header strip */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-semibold" style={{ color: 'var(--text)', fontSize: 15 }}>
-            Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'}, {(employeeData?.name || 'there').split(' ')[0]}
-          </h1>
-          <p style={{ color: 'var(--text-3)', fontSize: 12 }}>{todayDate}</p>
-        </div>
-        <div className="px-3 py-1.5 rounded-lg font-mono text-xs font-medium tabular-nums"
-             style={{ background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-2)' }}>
-          {new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }).format(currentTime)} IST
+      {/* ── Greeting banner ── */}
+      <div className="rounded-xl overflow-hidden relative"
+           style={{ background: 'linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%)', border: '1px solid rgba(124,58,237,0.25)' }}>
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 10% 50%,rgba(124,58,237,0.12) 0%,transparent 60%)' }} />
+        <div className="relative p-5">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p style={{ fontSize: 11, fontWeight: 500, color: 'rgba(167,139,250,0.7)', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: 4 }}>
+                My Dashboard
+              </p>
+              <h2 style={{ fontSize: 20, fontWeight: 700, color: '#fff', lineHeight: 1.2 }}>
+                Good {greetWord}, {firstName} 👋
+              </h2>
+              <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', marginTop: 3 }}>{fullDate}</p>
+            </div>
+            <div className="text-right flex-shrink-0">
+              <p style={{ fontSize: 22, fontWeight: 700, color: '#fff', fontFamily: 'monospace', letterSpacing: '0.02em' }}>{timeStr}</p>
+              <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', marginTop: 2 }}>IST · Live</p>
+            </div>
+          </div>
+          {/* Daily quote */}
+          <div className="mt-3 px-3 py-2.5 rounded-lg" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', fontStyle: 'italic', lineHeight: 1.5 }}>
+              💡 &ldquo;{getDailyQuote()}&rdquo;
+            </p>
+          </div>
+          {/* Mini chips */}
+          <div className="flex gap-2 mt-3 flex-wrap">
+            <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg"
+                 style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <span style={{ fontSize: 14, fontWeight: 700, color: signInRecord ? '#34d399' : '#f59e0b' }}>
+                {signInRecord ? '✓' : '—'}
+              </span>
+              <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)' }}>
+                {signInRecord ? 'Signed In' : 'Not Signed In'}
+              </span>
+            </div>
+            {pendingTasks.length > 0 && (
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg"
+                   style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: '#60a5fa' }}>{pendingTasks.length}</span>
+                <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)' }}>Tasks</span>
+              </div>
+            )}
+            {(todayTodos.length + upcomingTodos.length) > 0 && (
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg"
+                   style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: '#a78bfa' }}>{todayTodos.length + upcomingTodos.length}</span>
+                <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)' }}>To-Do</span>
+              </div>
+            )}
+            <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg ml-auto"
+                 style={{ background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.2)' }}>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span style={{ fontSize: 10, color: '#10b981', fontWeight: 500 }}>Online</span>
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* ── Campaign widget ── */}
+      {employeeData?.campaign?.name && (
+        <div className="rounded-xl flex items-center gap-3 p-4"
+             style={{ background: 'linear-gradient(135deg,rgba(124,58,237,0.1),rgba(59,130,246,0.07))', border: '1px solid rgba(124,58,237,0.25)' }}>
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+               style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)' }}>
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+            </svg>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p style={{ fontSize: 10, fontWeight: 600, color: '#a78bfa', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              Current Campaign
+            </p>
+            <p className="font-bold truncate" style={{ color: 'var(--text)', fontSize: 14 }}>
+              {employeeData.campaign.name}
+            </p>
+          </div>
+          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium flex-shrink-0"
+                style={{ background: 'rgba(16,185,129,0.12)', color: '#34d399', border: '1px solid rgba(16,185,129,0.2)' }}>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            Active
+          </span>
+        </div>
+      )}
 
       {/* Attendance strip */}
       <div className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--surface)' }}>
