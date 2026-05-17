@@ -43,10 +43,8 @@ function greet() {
 function getEmpRecords(attendance, employee) {
   const seen = new Set();
   return attendance.filter(r => {
-    const match =
-      r.employeeUid === employee.id ||
-      r.employeeId  === employee.id ||
-      (employee.employeeId && r.employeeId === employee.employeeId);
+    // Match exclusively by Firebase UID — never by company employeeId code which can be non-unique
+    const match = r.employeeUid === employee.id;
     if (match && !seen.has(r.id)) { seen.add(r.id); return true; }
     return false;
   });
@@ -476,6 +474,7 @@ function AttendancePage({ employees, attendance, loadingEmp, loadingAtt, setExpa
 
   /* ---- filtered employees ---- */
   const filteredEmps = employees.filter(emp => {
+    if (!emp.profileComplete) return false; // exclude employees who haven't completed setup
     if (searchName && !(emp.name || emp.email || '').toLowerCase().includes(searchName.toLowerCase())) return false;
     if (statusFilter !== 'all') {
       const empRecs  = getEmpRecords(attendance, emp);
@@ -486,14 +485,15 @@ function AttendancePage({ employees, attendance, loadingEmp, loadingAtt, setExpa
     return true;
   });
 
-  /* ---- today's summary stats ---- */
+  /* ---- today's summary stats (only profile-complete employees) ---- */
+  const setupEmps = employees.filter(e => e.profileComplete);
   const totalSignInsToday  = attendance.filter(r => r.date === today && r.type === 'signin').length;
   const totalSignOutsToday = attendance.filter(r => r.date === today && r.type === 'signout').length;
-  const totalPresentToday  = employees.filter(emp => {
+  const totalPresentToday  = setupEmps.filter(emp => {
     const recs = getEmpRecords(attendance, emp).filter(r => r.date === today);
     return recs.some(r => r.type === 'signin') || recs.some(r => r.type === 'signout');
   }).length;
-  const totalLeaveToday = employees.filter(emp => {
+  const totalLeaveToday = setupEmps.filter(emp => {
     const recs = getEmpRecords(attendance, emp).filter(r => r.date === today);
     return !recs.some(r => r.type === 'signin') && !recs.some(r => r.type === 'signout') && isPastWorkDay(today);
   }).length;
@@ -531,7 +531,7 @@ function AttendancePage({ employees, attendance, loadingEmp, loadingAtt, setExpa
       {!loadingEmp && !loadingAtt && (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           {[
-            { label: 'Total Employees',   value: employees.length,    color: '#a78bfa', bg: 'rgba(124,58,237,0.10)' },
+            { label: 'Total Employees',   value: setupEmps.length,    color: '#a78bfa', bg: 'rgba(124,58,237,0.10)' },
             { label: 'Sign-Ins Today',    value: totalSignInsToday,   color: '#60a5fa', bg: 'rgba(59,130,246,0.10)' },
             { label: 'Sign-Outs Today',   value: totalSignOutsToday,  color: '#34d399', bg: 'rgba(52,211,153,0.10)' },
             { label: 'Present Today',     value: totalPresentToday,   color: '#34d399', bg: 'rgba(52,211,153,0.10)' },
