@@ -449,167 +449,231 @@ function MyAttendancePage({ user, employeeData }) {
   );
 }
 
-/* ── Dashboard page (existing content) ───────────────────── */
-function DashboardPage({ user, employeeData, signInRecord, signOutRecord, recentRecords, loadingData, openPopup, currentTime }) {
+/* ── Dashboard page ──────────────────────────────────────── */
+function DashboardPage({ user, employeeData, signInRecord, signOutRecord, recentRecords, loadingData, openPopup, currentTime, allTasks, myTodos, onNavigate }) {
   const today = getISTDateString();
+  const todayDate = new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
+
+  const pendingTasks = allTasks.filter(t => t.status !== 'completed').slice(0, 5);
+  const todayTodos   = myTodos.filter(t => !t.completed && (t.date === today || !t.date)).slice(0, 5);
+  const upcomingTodos = myTodos.filter(t => !t.completed && t.date && t.date > today).slice(0, 3);
+
+  const PRIORITY_COLOR = { high: '#f87171', medium: '#fbbf24', low: '#34d399' };
+  const STATUS_COLOR   = { pending: '#94a3b8', 'in-progress': '#60a5fa', completed: '#34d399' };
+  const STATUS_LABEL   = { pending: 'Pending', 'in-progress': 'In Progress', completed: 'Done' };
 
   return (
-    <div className="space-y-5 animate-fade-in">
+    <div className="space-y-4 animate-fade-in">
 
-      {/* Hero profile card */}
-      <div className="relative rounded-3xl overflow-hidden p-6"
-           style={{ background: 'linear-gradient(135deg,#7c3aed 0%,#3b82f6 60%,#06b6d4 100%)' }}>
-        <div className="absolute inset-0 opacity-20"
-             style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, #fff 0%, transparent 50%)' }} />
-        <div className="relative flex flex-col sm:flex-row items-center sm:items-start gap-5">
-          <div className="w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0 border-2 border-white/30">
-            {employeeData?.photoURL
-              ? <img src={employeeData.photoURL} alt="" className="w-full h-full object-cover" />
-              : <div className="w-full h-full flex items-center justify-center text-2xl font-bold text-white bg-white/20">
-                  {(employeeData?.name || user.email || '?').charAt(0).toUpperCase()}
-                </div>
-            }
-          </div>
-          <div className="flex-1 text-center sm:text-left">
-            <h1 className="text-xl font-black text-white">{employeeData?.name || employeeData?.employeeId || 'Employee'}</h1>
-            <p className="text-white/70 text-sm">{user.email}</p>
-            <p className="text-white/60 text-xs mt-1">ID: {employeeData?.employeeId} · {employeeData?.team || 'Sales Team'}</p>
-            <div className="mt-3 inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm px-3 py-1.5 rounded-full">
-              <div className="w-2 h-2 bg-emerald-300 rounded-full animate-pulse" />
-              <span className="text-white/80 text-xs font-medium">Shift: 5:00 PM – 2:00 AM IST</span>
-            </div>
-          </div>
-          <div className="text-center bg-white/10 backdrop-blur-sm rounded-2xl px-5 py-3">
-            <div className="text-2xl font-black text-white font-mono tracking-tight">
-              {new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }).format(currentTime)}
-            </div>
-            <div className="text-white/50 text-xs mt-1">IST</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Sign In / Sign Out cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* Sign In */}
-        <div className="rounded-2xl p-5 transition-all duration-300"
-             style={{ background: signInRecord ? 'rgba(52,211,153,0.08)' : 'var(--surface)', border: `2px solid ${signInRecord ? 'rgba(52,211,153,0.3)' : 'var(--border)'}` }}>
-          <div className="flex items-start justify-between gap-3 mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-                   style={{ background: signInRecord ? 'rgba(52,211,153,0.2)' : 'var(--surface-s)' }}>
-                {signInRecord
-                  ? <svg className="w-5 h-5" style={{ color: '#34d399' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                  : <svg className="w-5 h-5" style={{ color: 'var(--text-3)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14" /></svg>
-                }
-              </div>
-              <div>
-                <p className="font-bold text-sm" style={{ color: 'var(--text)' }}>Sign In</p>
-                <p className="text-xs" style={{ color: 'var(--text-3)' }}>
-                  {signInRecord ? formatTime(signInRecord.submittedAt?.toDate?.() || new Date()) : 'Window: 5:00 PM IST'}
-                </p>
-              </div>
-            </div>
-            <span className="text-xs font-bold px-2.5 py-1 rounded-full"
-                  style={signInRecord
-                    ? { background: 'rgba(52,211,153,0.2)', color: '#34d399' }
-                    : { background: 'rgba(245,158,11,0.15)', color: '#f59e0b' }}>
-              {signInRecord ? 'Done ✓' : 'Pending'}
-            </span>
-          </div>
-          {!signInRecord && (
-            <button onClick={() => openPopup('signin')} className="w-full py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90"
-                    style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)' }}>
-              Submit Sign In
-            </button>
-          )}
-        </div>
-
-        {/* Sign Out */}
-        <div className="rounded-2xl p-5 transition-all duration-300"
-             style={{
-               background: signOutRecord ? 'rgba(52,211,153,0.08)' : 'var(--surface)',
-               border: `2px solid ${signOutRecord ? 'rgba(52,211,153,0.3)' : 'var(--border)'}`,
-               opacity: !signInRecord && !signOutRecord ? 0.6 : 1,
-             }}>
-          <div className="flex items-start justify-between gap-3 mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-                   style={{ background: signOutRecord ? 'rgba(52,211,153,0.2)' : 'var(--surface-s)' }}>
-                {signOutRecord
-                  ? <svg className="w-5 h-5" style={{ color: '#34d399' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                  : <svg className="w-5 h-5" style={{ color: 'var(--text-3)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 9l3 3m0 0l-3 3m3-3H8" /></svg>
-                }
-              </div>
-              <div>
-                <p className="font-bold text-sm" style={{ color: 'var(--text)' }}>Sign Out</p>
-                <p className="text-xs" style={{ color: 'var(--text-3)' }}>
-                  {signOutRecord ? formatTime(signOutRecord.submittedAt?.toDate?.() || new Date()) : 'Window: 2:00 AM IST'}
-                </p>
-              </div>
-            </div>
-            <span className="text-xs font-bold px-2.5 py-1 rounded-full"
-                  style={signOutRecord
-                    ? { background: 'rgba(52,211,153,0.2)', color: '#34d399' }
-                    : signInRecord
-                    ? { background: 'rgba(245,158,11,0.15)', color: '#f59e0b' }
-                    : { background: 'rgba(239,68,68,0.12)', color: '#f87171' }}>
-              {signOutRecord ? 'Done ✓' : signInRecord ? 'Pending' : 'Sign in first'}
-            </span>
-          </div>
-          {!signOutRecord && signInRecord && (
-            <button onClick={() => openPopup('signout')} className="w-full py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90"
-                    style={{ background: 'linear-gradient(135deg,#10b981,#34d399)' }}>
-              Submit Sign Out
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Location notice */}
-      <div className="rounded-2xl p-4 flex items-start gap-3"
-           style={{ background: 'rgba(124,58,237,0.08)', border: '1px solid rgba(124,58,237,0.2)' }}>
-        <svg className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#a78bfa' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
+      {/* Header strip */}
+      <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-semibold" style={{ color: '#a78bfa' }}>Location-verified attendance</p>
-          <p className="text-xs mt-0.5" style={{ color: 'var(--text-3)' }}>
-            You must be at <span style={{ color: '#a78bfa' }}>Ambience Mall, Gurugram</span>. Both sign-in and sign-out require face + location verification.
-          </p>
+          <h1 className="font-semibold" style={{ color: 'var(--text)', fontSize: 15 }}>
+            Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'}, {(employeeData?.name || 'there').split(' ')[0]}
+          </h1>
+          <p style={{ color: 'var(--text-3)', fontSize: 12 }}>{todayDate}</p>
+        </div>
+        <div className="px-3 py-1.5 rounded-lg font-mono text-xs font-medium tabular-nums"
+             style={{ background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-2)' }}>
+          {new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }).format(currentTime)} IST
         </div>
       </div>
 
-      {/* Recent attendance */}
-      <div className="rounded-2xl overflow-hidden" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
-        <div className="px-5 py-4 border-b" style={{ borderColor: 'var(--border)' }}>
-          <h2 className="font-bold" style={{ color: 'var(--text)' }}>Recent Attendance</h2>
+      {/* Attendance strip */}
+      <div className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--surface)' }}>
+        <div className="px-4 py-2.5 flex items-center justify-between border-b" style={{ borderColor: 'var(--border)', background: 'var(--surface-s)' }}>
+          <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-3)' }}>Today's Attendance</span>
+          <span className="text-xs" style={{ color: 'var(--text-3)' }}>Shift 5:00 PM – 2:00 AM IST</span>
+        </div>
+        <div className="grid grid-cols-2 divide-x" style={{ divideColor: 'var(--border)' }}>
+          {/* Sign In */}
+          <div className="p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0"
+                     style={{ background: signInRecord ? 'rgba(16,185,129,0.12)' : 'var(--surface-s)', border: '1px solid var(--border)' }}>
+                  {signInRecord
+                    ? <svg className="w-3.5 h-3.5" style={{ color: '#10b981' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                    : <svg className="w-3.5 h-3.5" style={{ color: 'var(--text-3)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14" /></svg>
+                  }
+                </div>
+                <span className="text-xs font-semibold" style={{ color: 'var(--text-2)' }}>Sign In</span>
+              </div>
+              <span className="text-xs px-2 py-0.5 rounded-full font-medium"
+                    style={signInRecord ? { background: 'rgba(16,185,129,0.1)', color: '#10b981' } : { background: 'rgba(245,158,11,0.1)', color: '#f59e0b' }}>
+                {signInRecord ? 'Recorded' : 'Pending'}
+              </span>
+            </div>
+            <p className="text-xs mb-3" style={{ color: 'var(--text-3)' }}>
+              {signInRecord ? formatTime(signInRecord.submittedAt?.toDate?.() || new Date()) : 'Not recorded yet'}
+            </p>
+            {!signInRecord && (
+              <button onClick={() => openPopup('signin')} className="btn-primary w-full text-center" style={{ fontSize: 12 }}>
+                Sign In
+              </button>
+            )}
+          </div>
+
+          {/* Sign Out */}
+          <div className="p-4" style={{ opacity: !signInRecord && !signOutRecord ? 0.5 : 1 }}>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0"
+                     style={{ background: signOutRecord ? 'rgba(16,185,129,0.12)' : 'var(--surface-s)', border: '1px solid var(--border)' }}>
+                  {signOutRecord
+                    ? <svg className="w-3.5 h-3.5" style={{ color: '#10b981' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                    : <svg className="w-3.5 h-3.5" style={{ color: 'var(--text-3)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 9l3 3m0 0l-3 3m3-3H8" /></svg>
+                  }
+                </div>
+                <span className="text-xs font-semibold" style={{ color: 'var(--text-2)' }}>Sign Out</span>
+              </div>
+              <span className="text-xs px-2 py-0.5 rounded-full font-medium"
+                    style={signOutRecord ? { background: 'rgba(16,185,129,0.1)', color: '#10b981' } : signInRecord ? { background: 'rgba(245,158,11,0.1)', color: '#f59e0b' } : { background: 'rgba(239,68,68,0.08)', color: '#f87171' }}>
+                {signOutRecord ? 'Recorded' : signInRecord ? 'Pending' : 'Sign in first'}
+              </span>
+            </div>
+            <p className="text-xs mb-3" style={{ color: 'var(--text-3)' }}>
+              {signOutRecord ? formatTime(signOutRecord.submittedAt?.toDate?.() || new Date()) : 'Not recorded yet'}
+            </p>
+            {!signOutRecord && signInRecord && (
+              <button onClick={() => openPopup('signout')} className="btn-primary w-full text-center"
+                      style={{ fontSize: 12, background: 'linear-gradient(135deg,#059669,#10b981)' }}>
+                Sign Out
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Tasks + Todos grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+        {/* Assigned Tasks */}
+        <div className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--surface)' }}>
+          <div className="px-4 py-2.5 flex items-center justify-between border-b" style={{ borderColor: 'var(--border)', background: 'var(--surface-s)' }}>
+            <div className="flex items-center gap-2">
+              <svg className="w-3.5 h-3.5" style={{ color: '#60a5fa' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7l2 2 4-4" />
+              </svg>
+              <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-3)' }}>Assigned Tasks</span>
+              {pendingTasks.length > 0 && (
+                <span className="text-xs font-semibold px-1.5 py-0.5 rounded-full" style={{ background: '#3b82f620', color: '#60a5fa' }}>
+                  {pendingTasks.length}
+                </span>
+              )}
+            </div>
+            <button onClick={() => onNavigate('tasks')} className="text-xs font-medium transition-colors" style={{ color: '#60a5fa' }}>
+              View all →
+            </button>
+          </div>
+          {pendingTasks.length === 0 ? (
+            <div className="px-4 py-8 text-center">
+              <p className="text-xs" style={{ color: 'var(--text-3)' }}>No pending tasks assigned</p>
+            </div>
+          ) : (
+            <div>
+              {pendingTasks.map((task, i) => (
+                <div key={task.id} className="px-4 py-3 border-b last:border-b-0 flex items-start gap-3 transition-colors"
+                     style={{ borderColor: 'var(--border)' }}
+                     onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-s)'}
+                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                  <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
+                       style={{ background: PRIORITY_COLOR[task.priority] || '#94a3b8' }} />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium truncate" style={{ color: 'var(--text)', fontSize: 13 }}>{task.title}</p>
+                    <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                      <span className="text-xs" style={{ color: STATUS_COLOR[task.status] || '#94a3b8' }}>
+                        {STATUS_LABEL[task.status] || task.status}
+                      </span>
+                      {task.dueDate && (
+                        <span className="text-xs" style={{ color: 'var(--text-3)' }}>· Due {task.dueDate}</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* My To-Do */}
+        <div className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--surface)' }}>
+          <div className="px-4 py-2.5 flex items-center justify-between border-b" style={{ borderColor: 'var(--border)', background: 'var(--surface-s)' }}>
+            <div className="flex items-center gap-2">
+              <svg className="w-3.5 h-3.5" style={{ color: '#a78bfa' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-3)' }}>My To-Do</span>
+              {(todayTodos.length + upcomingTodos.length) > 0 && (
+                <span className="text-xs font-semibold px-1.5 py-0.5 rounded-full" style={{ background: '#7c3aed20', color: '#a78bfa' }}>
+                  {todayTodos.length + upcomingTodos.length}
+                </span>
+              )}
+            </div>
+            <button onClick={() => onNavigate('my-todo')} className="text-xs font-medium transition-colors" style={{ color: '#a78bfa' }}>
+              View all →
+            </button>
+          </div>
+          {todayTodos.length === 0 && upcomingTodos.length === 0 ? (
+            <div className="px-4 py-8 text-center">
+              <p className="text-xs" style={{ color: 'var(--text-3)' }}>No pending to-do items</p>
+            </div>
+          ) : (
+            <div>
+              {todayTodos.map(todo => (
+                <div key={todo.id} className="px-4 py-3 border-b last:border-b-0 flex items-start gap-3 transition-colors"
+                     style={{ borderColor: 'var(--border)' }}
+                     onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-s)'}
+                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                  <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
+                       style={{ background: PRIORITY_COLOR[todo.priority] || '#a78bfa' }} />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium truncate" style={{ color: 'var(--text)', fontSize: 13 }}>{todo.title}</p>
+                    <p className="text-xs mt-0.5" style={{ color: '#a78bfa' }}>Today</p>
+                  </div>
+                </div>
+              ))}
+              {upcomingTodos.map(todo => (
+                <div key={todo.id} className="px-4 py-3 border-b last:border-b-0 flex items-start gap-3 transition-colors"
+                     style={{ borderColor: 'var(--border)' }}
+                     onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-s)'}
+                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                  <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
+                       style={{ background: PRIORITY_COLOR[todo.priority] || '#94a3b8' }} />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium truncate" style={{ color: 'var(--text)', fontSize: 13 }}>{todo.title}</p>
+                    <p className="text-xs mt-0.5" style={{ color: 'var(--text-3)' }}>{todo.date}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Recent attendance — compact */}
+      <div className="rounded-xl overflow-hidden" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+        <div className="px-4 py-2.5 border-b flex items-center justify-between" style={{ borderColor: 'var(--border)', background: 'var(--surface-s)' }}>
+          <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-3)' }}>Recent Attendance</span>
+          <button onClick={() => onNavigate('attendance')} className="text-xs font-medium" style={{ color: 'var(--text-3)' }}>View all →</button>
         </div>
         {recentRecords.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="text-4xl mb-3">📋</div>
-            <p className="text-sm" style={{ color: 'var(--text-3)' }}>No records yet</p>
+          <div className="text-center py-8">
+            <p className="text-xs" style={{ color: 'var(--text-3)' }}>No records yet</p>
           </div>
         ) : (
           <div>
             {recentRecords.slice(0, 5).map(rec => (
-              <div key={rec.id} className="flex items-start gap-3 px-5 py-4 border-b last:border-b-0 transition-colors"
+              <div key={rec.id} className="flex items-center gap-3 px-4 py-2.5 border-b last:border-b-0 transition-colors"
                    style={{ borderColor: 'var(--border)' }}
                    onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-s)'}
                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                {(rec.photoBase64 || rec.photoURL) && (
-                  <img src={rec.photoBase64 || rec.photoURL} alt="" className="w-10 h-10 rounded-xl object-cover flex-shrink-0" style={{ border: '1px solid var(--border)' }} />
-                )}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-medium text-sm" style={{ color: 'var(--text)' }}>{formatDate(rec.date)}</span>
-                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full"
-                          style={rec.type === 'signin' ? { background: 'rgba(124,58,237,0.15)', color: '#a78bfa' } : { background: 'rgba(52,211,153,0.12)', color: '#34d399' }}>
-                      {rec.type === 'signin' ? '↗ Sign In' : '↙ Sign Out'}
-                    </span>
-                  </div>
-                  <p className="text-xs mt-1 line-clamp-1" style={{ color: 'var(--text-3)' }}>{rec.workSummary}</p>
-                </div>
+                <span className="text-xs px-2 py-0.5 rounded font-medium flex-shrink-0"
+                      style={rec.type === 'signin' ? { background: 'rgba(124,58,237,0.12)', color: '#a78bfa' } : { background: 'rgba(16,185,129,0.1)', color: '#10b981' }}>
+                  {rec.type === 'signin' ? '↗ In' : '↙ Out'}
+                </span>
+                <span className="text-xs font-medium" style={{ color: 'var(--text-2)' }}>{formatDate(rec.date)}</span>
+                <span className="text-xs ml-auto truncate" style={{ color: 'var(--text-3)' }}>{rec.workSummary?.slice(0, 40)}</span>
               </div>
             ))}
           </div>
@@ -639,6 +703,12 @@ export default function EmployeeAttendance({ user }) {
   const [unreadCount, setUnreadCount]       = useState(0);
   const [allTasks, setAllTasks]             = useState([]);
   const notifiedIds = useRef(new Set());
+
+  // My todos for dashboard widget
+  const [myTodos, setMyTodos] = useState([]);
+
+  // Tracks if user dismissed the popup this session so it doesn't re-pop every 30s
+  const dismissedRef = useRef({ signin: false, signout: false, date: '' });
 
   // Real-time employee profile listener
   useEffect(() => {
@@ -688,15 +758,33 @@ export default function EmployeeAttendance({ user }) {
     };
   }, [user, employeeData?.employeeId]); // re-subscribes only if empId changes
 
-  // Clock tick + auto-popup check every 30s
+  // My todos listener
+  useEffect(() => {
+    if (!user) return;
+    const q = query(collection(db, 'todos'), where('uid', '==', user.uid));
+    return onSnapshot(q, snap => {
+      const todos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      setMyTodos(todos.filter(t => !t.completed).sort((a, b) => (a.date || '').localeCompare(b.date || '')));
+    }, err => console.error('todos listener:', err));
+  }, [user]);
+
+  // Clock tick every minute — auto-popup only once per session per type
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(new Date());
-      if (!showPopup) {
-        if (!signInRecord && isSignInWindow()) { setPopupType('signin'); setShowPopup(true); }
-        else if (signInRecord && !signOutRecord && isSignOutWindow()) { setPopupType('signout'); setShowPopup(true); }
+      const today = getISTDateString();
+      // Reset dismissed flags on new day
+      if (dismissedRef.current.date !== today) {
+        dismissedRef.current = { signin: false, signout: false, date: today };
       }
-    }, 30000);
+      if (!showPopup) {
+        if (!signInRecord && isSignInWindow() && !dismissedRef.current.signin) {
+          setPopupType('signin'); setShowPopup(true);
+        } else if (signInRecord && !signOutRecord && isSignOutWindow() && !dismissedRef.current.signout) {
+          setPopupType('signout'); setShowPopup(true);
+        }
+      }
+    }, 60000);
     return () => clearInterval(interval);
   }, [signInRecord, signOutRecord, showPopup]);
 
@@ -747,8 +835,12 @@ export default function EmployeeAttendance({ user }) {
   };
 
   const openPopup = (type) => { setPopupType(type); setShowPopup(true); };
-  // onSnapshot listeners update data automatically — just close the popup
   const handleSubmitted = () => setShowPopup(false);
+  const handleClosePopup = () => {
+    // Mark this type as dismissed so interval doesn't re-show it
+    dismissedRef.current[popupType] = true;
+    setShowPopup(false);
+  };
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg)' }}>
@@ -771,7 +863,7 @@ export default function EmployeeAttendance({ user }) {
 
       {showPopup && (
         <AttendancePopup user={user} employeeData={employeeData}
-                         attendanceType={popupType} onSubmitted={handleSubmitted} />
+                         attendanceType={popupType} onSubmitted={handleSubmitted} onClose={handleClosePopup} />
       )}
 
       {showNotification && newTasks.length > 0 && (
@@ -814,7 +906,9 @@ export default function EmployeeAttendance({ user }) {
                 <DashboardPage user={user} employeeData={employeeData}
                                signInRecord={signInRecord} signOutRecord={signOutRecord}
                                recentRecords={recentRecords} loadingData={loadingData}
-                               openPopup={openPopup} currentTime={currentTime} />
+                               openPopup={openPopup} currentTime={currentTime}
+                               allTasks={allTasks} myTodos={myTodos}
+                               onNavigate={setPage} />
               )}
               {page === 'attendance' && <MyAttendancePage user={user} employeeData={employeeData} />}
               {page === 'tasks'      && <AssignedTasksPage user={user} />}

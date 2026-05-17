@@ -34,7 +34,7 @@ function compressImage(dataURL) {
 
 // locationStatus: 'checking' | 'ok' | 'outside' | 'error'
 // faceStatus:     'waiting'  | 'verifying' | 'ok' | 'mismatch' | 'noface'
-export default function AttendancePopup({ user, employeeData, attendanceType = 'signin', onSubmitted }) {
+export default function AttendancePopup({ user, employeeData, attendanceType = 'signin', onSubmitted, onClose }) {
   const [attConfig, setAttConfig]           = useState({ faceEnabled: true, locationEnabled: true });
 
   const [locationStatus, setLocationStatus] = useState('checking');
@@ -192,7 +192,12 @@ export default function AttendancePopup({ user, employeeData, attendanceType = '
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
            style={{ background: 'rgba(4, 8, 15, 0.97)', backdropFilter: 'blur(20px)' }}>
-        <div className="card max-w-sm w-full text-center animate-slide-up">
+        <div className="card max-w-sm w-full text-center animate-slide-up relative">
+          {onClose && (
+            <button onClick={onClose} className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+          )}
           <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-5"
                style={{ background: 'linear-gradient(135deg, #7c3aed22, #3b82f622)', border: '2px solid #34d39940' }}>
             <svg className="w-10 h-10 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -221,22 +226,33 @@ export default function AttendancePopup({ user, employeeData, attendanceType = '
 
         {/* Header */}
         <div className="flex items-center gap-3 mb-6 pb-5 border-b border-white/10">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold shadow-lg"
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center text-white font-bold shadow-lg flex-shrink-0"
                style={{ background: 'linear-gradient(135deg, #7c3aed, #3b82f6)' }}>
             G
           </div>
-          <div className="flex-1">
-            <h2 className="text-lg font-bold text-white">
+          <div className="flex-1 min-w-0">
+            <h2 className="text-sm font-semibold text-white">
               {isSignIn ? 'Sign In — Start of Shift' : 'Sign Out — End of Shift'}
             </h2>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500 mt-0.5">
               {new Intl.DateTimeFormat('en-IN', {
                 timeZone: 'Asia/Kolkata', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
               }).format(new Date())}
             </p>
           </div>
-          <div className={isSignIn ? 'status-badge-violet' : 'status-badge-yellow'}>
-            {isSignIn ? '5:00 PM' : '1:45 AM'}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <div className={isSignIn ? 'status-badge-violet' : 'status-badge-yellow'}>
+              {isSignIn ? '5:00 PM' : '1:45 AM'}
+            </div>
+            {onClose && (
+              <button onClick={onClose}
+                className="w-7 h-7 flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+                title="Close">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            )}
           </div>
         </div>
 

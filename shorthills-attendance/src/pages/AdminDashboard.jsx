@@ -879,36 +879,35 @@ function AttendancePage({ employees, attendance, loadingEmp, loadingAtt, setExpa
 
 /* ── Dashboard page ───────────────────────────────────────── */
 function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDate, setFilterDate,
-                         filterName, setFilterName, filteredAttendance, setExpandedPhoto }) {
+                         filterName, setFilterName, filteredAttendance, setExpandedPhoto,
+                         adminTodos, onNavigate }) {
   const today = todayIST();
   const todaySignIns  = attendance.filter(a => a.date === today && a.type === 'signin').length;
   const todaySignOuts = attendance.filter(a => a.date === today && a.type === 'signout').length;
 
-  return (
-    <div className="space-y-7 animate-fade-in">
+  const pendingTodos   = (adminTodos || []).filter(t => !t.completed);
+  const completedTodos = (adminTodos || []).filter(t => t.completed);
+  const PRIORITY_COLOR = { high: '#f87171', medium: '#fbbf24', low: '#34d399' };
+  const todayDate = new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
 
-      {/* Hero banner */}
-      <div className="relative rounded-3xl overflow-hidden p-6 lg:p-8"
-           style={{ background: 'linear-gradient(135deg,#7c3aed 0%,#3b82f6 60%,#06b6d4 100%)' }}>
-        <div className="absolute inset-0 opacity-20"
-             style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, #ffffff 0%, transparent 50%), radial-gradient(circle at 80% 20%, #ffffff 0%, transparent 40%)' }} />
-        <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <p className="text-white/70 text-sm font-medium mb-1">
-              {new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date())}
-            </p>
-            <h1 className="text-2xl lg:text-3xl font-black text-white">{greet()}, Admin 👋</h1>
-            <p className="text-white/60 text-sm mt-1">Here's what's happening with your team today.</p>
-          </div>
-          <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm px-4 py-2 rounded-2xl w-fit">
-            <span className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse" />
-            <span className="text-white text-sm font-semibold">System Online</span>
-          </div>
+  return (
+    <div className="space-y-5 animate-fade-in">
+
+      {/* Page header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="font-semibold" style={{ color: 'var(--text)', fontSize: 15 }}>{greet()}, Admin</h1>
+          <p style={{ color: 'var(--text-3)', fontSize: 12 }}>{todayDate}</p>
+        </div>
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg"
+             style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)' }}>
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
+          <span className="text-xs font-medium" style={{ color: '#10b981' }}>System Online</span>
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+      {/* Stats row */}
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-3">
         <StatCard label="Total Employees"  value={employees.length} sub="registered members"
           gradient="linear-gradient(135deg,#7c3aed,#3b82f6)" loading={loadingEmp}
           icon={<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>}
@@ -925,6 +924,74 @@ function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDa
           gradient="linear-gradient(135deg,#f59e0b,#fbbf24)" loading={loadingAtt}
           icon={<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>}
         />
+      </div>
+
+      {/* My To-Do widget */}
+      <div className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--surface)' }}>
+        <div className="px-4 py-2.5 flex items-center justify-between border-b" style={{ borderColor: 'var(--border)', background: 'var(--surface-s)' }}>
+          <div className="flex items-center gap-2">
+            <svg className="w-3.5 h-3.5" style={{ color: '#a78bfa' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-3)' }}>My To-Do</span>
+            {pendingTodos.length > 0 && (
+              <span className="text-xs font-semibold px-1.5 py-0.5 rounded-full" style={{ background: '#7c3aed20', color: '#a78bfa' }}>
+                {pendingTodos.length} pending
+              </span>
+            )}
+          </div>
+          <button onClick={() => onNavigate('my-todo')} className="text-xs font-medium" style={{ color: '#a78bfa' }}>
+            Manage →
+          </button>
+        </div>
+        {pendingTodos.length === 0 ? (
+          <div className="px-4 py-6 text-center">
+            <p className="text-xs" style={{ color: 'var(--text-3)' }}>
+              {completedTodos.length > 0 ? `All ${completedTodos.length} tasks completed ✓` : 'No to-do items yet — add from My To-Do'}
+            </p>
+          </div>
+        ) : (
+          <div>
+            {pendingTodos.slice(0, 8).map(todo => {
+              const isToday = todo.date === today;
+              const isOverdue = todo.date && todo.date < today;
+              return (
+                <div key={todo.id} className="px-4 py-2.5 border-b last:border-b-0 flex items-center gap-3 transition-colors"
+                     style={{ borderColor: 'var(--border)' }}
+                     onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-s)'}
+                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                  <div className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                       style={{ background: PRIORITY_COLOR[todo.priority] || '#94a3b8' }} />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium truncate" style={{ color: 'var(--text)', fontSize: 13 }}>{todo.title}</p>
+                  </div>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    {todo.date && (
+                      <span className="text-xs px-2 py-0.5 rounded font-medium"
+                            style={isOverdue ? { background: 'rgba(239,68,68,0.1)', color: '#f87171' }
+                                             : isToday ? { background: 'rgba(124,58,237,0.1)', color: '#a78bfa' }
+                                             : { color: 'var(--text-3)', background: 'transparent' }}>
+                        {isToday ? 'Today' : isOverdue ? 'Overdue' : todo.date}
+                      </span>
+                    )}
+                    <span className="text-xs px-2 py-0.5 rounded font-medium"
+                          style={{ background: todo.priority === 'high' ? 'rgba(239,68,68,0.1)' : todo.priority === 'medium' ? 'rgba(245,158,11,0.1)' : 'rgba(16,185,129,0.1)',
+                                   color: PRIORITY_COLOR[todo.priority] || '#94a3b8' }}>
+                      {todo.priority || 'med'}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+            {pendingTodos.length > 8 && (
+              <div className="px-4 py-2.5 text-center">
+                <button onClick={() => onNavigate('my-todo')} className="text-xs" style={{ color: 'var(--text-3)' }}>
+                  +{pendingTodos.length - 8} more — view all
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Attendance records */}
@@ -1078,6 +1145,18 @@ export default function AdminDashboard({ user }) {
   const [filterName, setFilterName]   = useState('');
   const [adminNotifs,   setAdminNotifs]   = useState([]);
   const [adminUnread,   setAdminUnread]   = useState(0);
+  const [adminTodos,    setAdminTodos]    = useState([]);
+
+  // Admin todos listener
+  useEffect(() => {
+    if (!user) return;
+    const q = query(collection(db, 'todos'), where('uid', '==', user.uid));
+    return onSnapshot(q, snap => {
+      const todos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      todos.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+      setAdminTodos(todos);
+    }, err => console.error('adminTodos:', err));
+  }, [user]);
 
   // Real-time admin notifications listener
   useEffect(() => {
@@ -1213,6 +1292,7 @@ export default function AdminDashboard({ user }) {
               filterName={filterName} setFilterName={setFilterName}
               filteredAttendance={filteredAttendance}
               setExpandedPhoto={setExpandedPhoto}
+              adminTodos={adminTodos} onNavigate={setPage}
             />
           )}
           {page === 'employees' && (
