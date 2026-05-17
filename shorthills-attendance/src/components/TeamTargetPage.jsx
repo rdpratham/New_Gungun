@@ -80,7 +80,7 @@ export default function TeamTargetPage({ user }) {
   return (
     <div className="space-y-4 animate-fade-in">
       <div>
-        <h1 style={{ color: 'var(--text)', fontSize: 14, fontWeight: 600 }}>My Team Target</h1>
+        <h1 style={{ color: 'var(--text)', fontSize: 14, fontWeight: 600 }}>Team Target</h1>
         <p style={{ color: 'var(--text-3)', fontSize: 11, marginTop: 2 }}>Set and track your team's monthly meeting target</p>
       </div>
 

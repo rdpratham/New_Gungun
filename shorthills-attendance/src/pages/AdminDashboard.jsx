@@ -13,6 +13,7 @@ import CredentialsPage from '../components/CredentialsPage';
 import AssignMeetingTarget from '../components/AssignMeetingTarget';
 import MeetingReport from '../components/MeetingReport';
 import TeamTargetPage from '../components/TeamTargetPage';
+import ProfileSetupSettings from '../components/ProfileSetupSettings';
 
 function formatIST(ts) {
   if (!ts) return '—';
@@ -73,16 +74,22 @@ function Sidebar({ page, setPage, employeeCount, mobileOpen, setMobileOpen }) {
       items: [
         { id: 'assign-task', label: 'Assign Task', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7l2 2 4-4" /></svg> },
         { id: 'assign-meeting', label: 'Assign Meeting Target', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" strokeWidth={2} /><circle cx="12" cy="12" r="6" strokeWidth={2} /><circle cx="12" cy="12" r="2" strokeWidth={2} /></svg> },
-        { id: 'team-target', label: 'My Team Target', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg> },
+        { id: 'team-target', label: 'Team Target', highlight: true, icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg> },
         { id: 'meeting-report', label: 'Meeting Report', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg> },
       ],
     },
     {
       label: 'Personal',
       items: [
-        { id: 'my-todo', label: 'My To-Do', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> },
+        { id: 'my-todo', label: 'My To-Do', highlight: true, icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> },
         { id: 'my-notes', label: 'My Notes', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg> },
         { id: 'my-credentials', label: 'My Credentials', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg> },
+      ],
+    },
+    {
+      label: 'Settings',
+      items: [
+        { id: 'profile-setup', label: 'Profile Setup', icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> },
       ],
     },
   ];
@@ -111,13 +118,18 @@ function Sidebar({ page, setPage, employeeCount, mobileOpen, setMobileOpen }) {
                   className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg transition-all duration-150 mb-0.5"
                   style={active
                     ? { background: 'rgba(124,58,237,0.15)', color: '#a78bfa', borderLeft: '2px solid #7c3aed' }
-                    : { color: 'var(--text-2)', background: 'transparent', borderLeft: '2px solid transparent' }
+                    : (item.highlight
+                      ? { color: 'var(--text-2)', background: 'rgba(251,191,36,0.06)', borderLeft: '2px solid rgba(251,191,36,0.4)' }
+                      : { color: 'var(--text-2)', background: 'transparent', borderLeft: '2px solid transparent' })
                   }
                   onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'var(--surface-s)'; }}
-                  onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
+                  onMouseLeave={e => { if (!active) e.currentTarget.style.background = item.highlight ? 'rgba(251,191,36,0.06)' : 'transparent'; }}
                 >
                   {item.icon}
                   <span style={{ fontSize: 12, fontWeight: active ? 600 : 400 }}>{item.label}</span>
+                  {item.highlight && !active && (
+                    <span className="ml-auto w-1.5 h-1.5 rounded-full animate-pulse flex-shrink-0" style={{ background: '#fbbf24' }} />
+                  )}
                   {item.badge !== undefined && (
                     <span className="ml-auto px-1.5 py-0.5 rounded text-xs font-semibold"
                           style={{ background: 'var(--surface-s)', color: 'var(--text-3)', fontSize: 10 }}>
@@ -985,7 +997,7 @@ function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDa
         {/* D — Team Target widget */}
         <div className="rounded-xl overflow-hidden" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
           <div className="px-4 py-2.5 flex items-center justify-between border-b" style={{ borderColor: 'var(--border)', background: 'var(--surface-s)' }}>
-            <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--text-3)' }}>My Team Target</span>
+            <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--text-3)' }}>Team Target</span>
             <button onClick={() => onNavigate('team-target')} style={{ fontSize: 10, color: '#a78bfa', fontWeight: 500 }}>Manage →</button>
           </div>
           <div className="p-4">
@@ -1460,6 +1472,9 @@ export default function AdminDashboard({ user }) {
           )}
           {page === 'team-target' && (
             <TeamTargetPage user={user} />
+          )}
+          {page === 'profile-setup' && (
+            <ProfileSetupSettings />
           )}
         </main>
       </div>

@@ -36,6 +36,7 @@ export default function EmployeeSetup({ user, onComplete }) {
   const [loadingData, setLoadingData] = useState(true);
   const [error, setError] = useState('');
   const [step, setStep] = useState(1); // 1=info, 2=face
+  const [requirePhoto, setRequirePhoto] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -47,12 +48,23 @@ export default function EmployeeSetup({ user, onComplete }) {
     })();
   }, [user.uid]);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const snap = await getDoc(doc(db, 'appSettings', 'config'));
+        if (snap.exists() && snap.data().requirePhotoOnSetup === false) {
+          setRequirePhoto(false);
+        }
+      } catch {}
+    })();
+  }, []);
+
   const handleChange = (e) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
     setError('');
   };
 
-  const handleNextStep = (e) => {
+  const handleNextStep = async (e) => {
     e.preventDefault();
     setError('');
     if (!form.name.trim()) { setError('Please enter your full name.'); return; }
@@ -62,6 +74,36 @@ export default function EmployeeSetup({ user, onComplete }) {
       if (!form.currentPassword) { setError('Enter your current password to change it.'); return; }
       if (form.newPassword.length < 6) { setError('New password must be at least 6 characters.'); return; }
       if (form.newPassword !== form.confirmPassword) { setError('New passwords do not match.'); return; }
+    }
+    if (!requirePhoto) {
+      // Skip photo — save profile directly
+      setLoading(true);
+      try {
+        if (form.newPassword && form.currentPassword) {
+          const credential = EmailAuthProvider.credential(user.email, form.currentPassword);
+          await reauthenticateWithCredential(auth.currentUser, credential);
+          await updatePassword(auth.currentUser, form.newPassword);
+        }
+        await updateDoc(doc(db, 'employees', user.uid), {
+          name: form.name.trim(),
+          joiningDate: form.joiningDate,
+          mobile: form.mobile.trim(),
+          profileComplete: true,
+          photoRequired: true, // flag that photo still needs to be added
+        });
+        onComplete();
+      } catch (err) {
+        const msgs = {
+          'auth/wrong-password': 'Current password is incorrect.',
+          'auth/invalid-credential': 'Current password is incorrect.',
+          'auth/weak-password': 'New password must be at least 6 characters.',
+          'auth/requires-recent-login': 'Please log out and log back in before changing your password.',
+        };
+        setError(msgs[err.code] || `Error: ${err.message}`);
+      } finally {
+        setLoading(false);
+      }
+      return;
     }
     setStep(2);
   };
@@ -166,7 +208,7 @@ export default function EmployeeSetup({ user, onComplete }) {
 
         {/* Step indicator */}
         <div className="flex items-center justify-center gap-3 mb-8">
-          {[1, 2].map((s) => (
+          {(requirePhoto ? [1, 2] : [1]).map((s) => (
             <div key={s} className="flex items-center gap-2">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300 ${
                 step >= s
@@ -183,7 +225,7 @@ export default function EmployeeSetup({ user, onComplete }) {
                   </svg>
                 ) : s}
               </div>
-              {s < 2 && <div className="w-12 h-0.5" style={{ background: step > s ? 'linear-gradient(90deg,#7c3aed,#3b82f6)' : 'var(--border)' }}></div>}
+              {s < 2 && requirePhoto && <div className="w-12 h-0.5" style={{ background: step > s ? 'linear-gradient(90deg,#7c3aed,#3b82f6)' : 'var(--border)' }}></div>}
             </div>
           ))}
         </div>
@@ -311,7 +353,7 @@ export default function EmployeeSetup({ user, onComplete }) {
               )}
 
               <button type="submit" className="btn-primary w-full flex items-center justify-center gap-2">
-                Next: Capture Face
+                {requirePhoto ? 'Next: Capture Face' : 'Complete Setup'}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
