@@ -27,25 +27,53 @@ function EmployeeProfile({ user, employeeData, onClose, onUpdated }) {
     joiningDate: employeeData?.joiningDate || '',
     team:        employeeData?.team        || 'Sales Team',
   });
-  const [saving, setSaving] = useState(false);
-  const [error,  setError]  = useState('');
-  const [success, setSuccess] = useState('');
+  const [saving, setSaving]           = useState(false);
+  const [error,  setError]            = useState('');
+  const [success, setSuccess]         = useState('');
+  const [showCamera, setShowCamera]   = useState(false);
+  const [capturedPhoto, setCapturedPhoto] = useState(null);
+  const [faceStatus, setFaceStatus]   = useState(null); // null | 'detecting' | 'ok' | 'noface'
 
   const handleChange = (e) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
     setError('');
   };
 
+  const handleCapture = async (photoData) => {
+    if (!photoData) { setCapturedPhoto(null); setFaceStatus(null); return; }
+    setFaceStatus('detecting'); setError('');
+    try {
+      const descriptor = await getDescriptorFromDataURL(photoData.dataURL);
+      if (!descriptor) {
+        setFaceStatus('noface');
+        setError('No face detected — retake in good lighting, facing the camera directly.');
+        setCapturedPhoto(null);
+        return;
+      }
+      setCapturedPhoto({ ...photoData, descriptor });
+      setFaceStatus('ok');
+    } catch {
+      setCapturedPhoto(photoData);
+      setFaceStatus('ok');
+    }
+  };
+
   const handleSave = async () => {
     setSaving(true); setError('');
     try {
-      await updateDoc(doc(db, 'employees', user.uid), {
+      const updates = {
         mobile:      form.mobile.trim(),
         joiningDate: form.joiningDate,
         team:        form.team.trim() || 'Sales Team',
-      });
+      };
+      if (capturedPhoto?.descriptor) {
+        const compressed = await compressDataURL(capturedPhoto.dataURL);
+        updates.photoURL       = compressed;
+        updates.faceDescriptor = Array.from(capturedPhoto.descriptor);
+      }
+      await updateDoc(doc(db, 'employees', user.uid), updates);
       setSuccess('Profile updated!');
-      onUpdated?.({ ...employeeData, ...form });
+      onUpdated?.({ ...employeeData, ...updates });
       setTimeout(onClose, 1200);
     } catch (err) {
       setError('Save failed: ' + err.message);
@@ -54,13 +82,15 @@ function EmployeeProfile({ user, employeeData, onClose, onUpdated }) {
     }
   };
 
+  const photoSrc = capturedPhoto?.dataURL || employeeData?.photoURL;
+
   return (
     <div className="space-y-5">
-      {/* Avatar + basic info */}
+      {/* Avatar + basic info + camera button */}
       <div className="flex items-center gap-4 p-4 rounded-xl border" style={{ background: 'var(--surface-s)', borderColor: 'var(--border-s)' }}>
         <div className="w-16 h-16 rounded-2xl overflow-hidden flex-shrink-0 border border-violet-500/30">
-          {employeeData?.photoURL ? (
-            <img src={employeeData.photoURL} alt="" className="w-full h-full object-cover" />
+          {photoSrc ? (
+            <img src={photoSrc} alt="" className="w-full h-full object-cover" />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-2xl font-bold text-violet-400"
                  style={{ background: 'linear-gradient(135deg,#7c3aed22,#3b82f622)' }}>
@@ -68,12 +98,43 @@ function EmployeeProfile({ user, employeeData, onClose, onUpdated }) {
             </div>
           )}
         </div>
-        <div>
+        <div className="flex-1">
           <p className="font-semibold" style={{ color: 'var(--text)' }}>{user.email}</p>
           <p className="text-xs mt-0.5" style={{ color: 'var(--text-3)' }}>ID: {employeeData?.employeeId || '—'}</p>
           <span className="status-badge-green mt-1 inline-flex">Active</span>
         </div>
+        <button
+          onClick={() => { setShowCamera(v => !v); setCapturedPhoto(null); setFaceStatus(null); setError(''); }}
+          className="text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 transition-all flex-shrink-0"
+          style={{ background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-2)' }}
+        >
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          {showCamera ? 'Hide Camera' : 'Update Photo'}
+        </button>
       </div>
+
+      {showCamera && (
+        <div className="rounded-xl overflow-hidden border" style={{ borderColor: 'var(--border)' }}>
+          <WebcamCapture onCapture={handleCapture} onError={m => setError(m)} />
+          {faceStatus === 'detecting' && (
+            <div className="flex items-center gap-2 px-4 py-2 text-xs" style={{ color: 'var(--text-3)' }}>
+              <div className="w-3 h-3 border border-violet-400 border-t-transparent rounded-full animate-spin" />
+              Detecting face…
+            </div>
+          )}
+          {faceStatus === 'ok' && (
+            <div className="flex items-center gap-2 px-4 py-2 text-emerald-400 text-xs">
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              Face captured — will be saved and used for attendance verification
+            </div>
+          )}
+        </div>
+      )}
 
       <div>
         <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: 'var(--text-3)' }}>Your Information</h3>

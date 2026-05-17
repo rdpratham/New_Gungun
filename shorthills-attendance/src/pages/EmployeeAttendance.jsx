@@ -835,7 +835,7 @@ export default function EmployeeAttendance({ user }) {
       if (dismissedRef.current.date !== today) {
         dismissedRef.current = { signin: false, signout: false, date: today };
       }
-      if (!showPopup) {
+      if (!showPopup && !needsPhoto) {
         if (!signInRecord && isSignInWindow() && !dismissedRef.current.signin) {
           setPopupType('signin'); setShowPopup(true);
         } else if (signInRecord && !signOutRecord && isSignOutWindow() && !dismissedRef.current.signout) {
