@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { doc, onSnapshot, setDoc } from 'firebase/firestore';
+import { doc, onSnapshot, setDoc, serverTimestamp } from 'firebase/firestore';
 
 export default function ProfileSetupSettings() {
   const [requirePhoto, setRequirePhoto] = useState(true);
@@ -21,7 +21,9 @@ export default function ProfileSetupSettings() {
     const newVal = !requirePhoto;
     setSaving(true);
     try {
-      await setDoc(CONFIG_DOC, { requirePhotoOnSetup: newVal }, { merge: true });
+      const update = { requirePhotoOnSetup: newVal };
+      if (newVal) update.photoRequiredAt = serverTimestamp();
+      await setDoc(CONFIG_DOC, update, { merge: true });
       setRequirePhoto(newVal);
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);

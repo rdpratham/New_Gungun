@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { doc, onSnapshot, collection, query, where, updateDoc, writeBatch } from 'firebase/firestore';
+import { doc, onSnapshot, collection, query, where, updateDoc, writeBatch, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import Navbar from '../components/Navbar';
 import AttendancePopup from '../components/AttendancePopup';
@@ -125,6 +125,41 @@ function Sidebar({ page, setPage, unreadTasks, mobileOpen, setMobileOpen }) {
         </div>
       )}
     </>
+  );
+}
+
+/* ── Photo Required Banner ───────────────────────────────── */
+function PhotoRequiredBanner({ onAddPhoto, onDismiss }) {
+  return (
+    <div className="fixed top-16 left-0 right-0 z-50 px-4 py-2 flex items-center justify-center">
+      <div className="max-w-xl w-full rounded-2xl overflow-hidden shadow-2xl animate-slide-up"
+           style={{ background: 'linear-gradient(135deg,#7c3aed,#ec4899)', border: '1px solid rgba(167,139,250,0.4)' }}>
+        <div className="px-5 py-3.5 flex items-center gap-3">
+          <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
+            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-white font-semibold text-sm leading-tight">Face photo required for attendance</p>
+            <p className="text-white/70 text-xs mt-0.5">Admin has enabled face verification. Add your photo to mark attendance.</p>
+          </div>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button onClick={onAddPhoto}
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
+              style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)' }}>
+              Add Photo
+            </button>
+            <button onClick={onDismiss} className="p-1.5 rounded-lg transition-all" style={{ background: 'rgba(255,255,255,0.1)' }}>
+              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -707,6 +742,11 @@ export default function EmployeeAttendance({ user }) {
   // My todos for dashboard widget
   const [myTodos, setMyTodos] = useState([]);
 
+  // Photo requirement
+  const [requirePhoto, setRequirePhoto] = useState(false);
+  const [showPhotoBanner, setShowPhotoBanner] = useState(false);
+  const [photoBannerDismissed, setPhotoBannerDismissed] = useState(false);
+
   // Tracks if user dismissed the popup this session so it doesn't re-pop every 30s
   const dismissedRef = useRef({ signin: false, signout: false, date: '' });
 
@@ -767,6 +807,28 @@ export default function EmployeeAttendance({ user }) {
       setMyTodos(todos.filter(t => !t.completed).sort((a, b) => (a.date || '').localeCompare(b.date || '')));
     }, err => console.error('todos listener:', err));
   }, [user]);
+
+  // Listen to photo requirement setting
+  useEffect(() => {
+    return onSnapshot(doc(db, 'appSettings', 'config'), snap => {
+      if (snap.exists()) {
+        const val = snap.data().requirePhotoOnSetup !== false;
+        setRequirePhoto(val);
+      }
+    });
+  }, []);
+
+  // Show photo banner when requirement is active and employee has no photo
+  const hasPhoto = !!(employeeData?.photoURL || employeeData?.photoBase64);
+  const needsPhoto = requirePhoto && !hasPhoto && !loadingData && !!employeeData;
+
+  useEffect(() => {
+    if (needsPhoto && !photoBannerDismissed) {
+      setShowPhotoBanner(true);
+    } else {
+      setShowPhotoBanner(false);
+    }
+  }, [needsPhoto, photoBannerDismissed]);
 
   // Clock tick every minute — auto-popup only once per session per type
   useEffect(() => {
@@ -834,7 +896,14 @@ export default function EmployeeAttendance({ user }) {
     } catch (err) { console.error(err); }
   };
 
-  const openPopup = (type) => { setPopupType(type); setShowPopup(true); };
+  const openPopup = (type) => {
+    if (needsPhoto) {
+      setShowPhotoBanner(true);
+      setPhotoBannerDismissed(false);
+      return;
+    }
+    setPopupType(type); setShowPopup(true);
+  };
   const handleSubmitted = () => setShowPopup(false);
   const handleClosePopup = () => {
     // Mark this type as dismissed so interval doesn't re-show it
@@ -864,6 +933,13 @@ export default function EmployeeAttendance({ user }) {
       {showPopup && (
         <AttendancePopup user={user} employeeData={employeeData}
                          attendanceType={popupType} onSubmitted={handleSubmitted} onClose={handleClosePopup} />
+      )}
+
+      {showPhotoBanner && (
+        <PhotoRequiredBanner
+          onAddPhoto={() => { setShowPhotoBanner(false); setShowProfile(true); }}
+          onDismiss={() => { setShowPhotoBanner(false); setPhotoBannerDismissed(true); }}
+        />
       )}
 
       {showNotification && newTasks.length > 0 && (

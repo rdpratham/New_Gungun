@@ -972,7 +972,8 @@ function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDa
   const pct = tgt > 0 ? Math.min(teamMeet.completed / tgt, 1) : 0;
   const R = 36, CIRC = 2 * Math.PI * R;
 
-  const greetWord = clock.getHours() < 12 ? 'Morning' : clock.getHours() < 17 ? 'Afternoon' : 'Evening';
+  const istHour = parseInt(new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata', hour: 'numeric', hour12: false }).format(clock), 10);
+  const greetWord = istHour < 12 ? 'Morning' : istHour < 17 ? 'Afternoon' : 'Evening';
   const fullDate  = new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(clock);
   const timeStr   = new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }).format(clock);
 
