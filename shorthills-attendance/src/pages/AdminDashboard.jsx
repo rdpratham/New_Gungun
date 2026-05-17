@@ -95,8 +95,8 @@ function Sidebar({ page, setPage, employeeCount, mobileOpen, setMobileOpen }) {
   ];
 
   const NavContent = () => (
-    <div className="flex flex-col h-full overflow-y-auto">
-      <div className="px-4 py-3.5 border-b flex items-center gap-2.5" style={{ borderColor: 'var(--border)' }}>
+    <div className="flex flex-col h-full" style={{ minHeight: 0 }}>
+      <div className="px-4 py-3.5 border-b flex items-center gap-2.5 flex-shrink-0" style={{ borderColor: 'var(--border)' }}>
         <div className="w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
              style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)' }}>G</div>
         <div>
@@ -104,7 +104,7 @@ function Sidebar({ page, setPage, employeeCount, mobileOpen, setMobileOpen }) {
           <p style={{ fontSize: 10, color: 'var(--text-3)' }}>Admin Panel</p>
         </div>
       </div>
-      <nav className="flex-1 px-2 py-3">
+      <nav className="flex-1 overflow-y-auto px-2 py-3" style={{ minHeight: 0 }}>
         {groups.map(group => (
           <div key={group.label} className="mb-4">
             <p className="px-3 mb-1" style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--text-3)' }}>
@@ -995,10 +995,13 @@ function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDa
         </div>
 
         {/* D — Team Target widget */}
-        <div className="rounded-xl overflow-hidden" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
-          <div className="px-4 py-2.5 flex items-center justify-between border-b" style={{ borderColor: 'var(--border)', background: 'var(--surface-s)' }}>
-            <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--text-3)' }}>Team Target</span>
-            <button onClick={() => onNavigate('team-target')} style={{ fontSize: 10, color: '#a78bfa', fontWeight: 500 }}>Manage →</button>
+        <div className="rounded-xl overflow-hidden" style={{ background: 'var(--surface)', border: '1px solid rgba(251,191,36,0.35)', boxShadow: '0 0 0 1px rgba(251,191,36,0.08), 0 4px 16px rgba(251,191,36,0.06)' }}>
+          <div className="px-4 py-2.5 flex items-center justify-between border-b" style={{ borderColor: 'rgba(251,191,36,0.2)', background: 'rgba(251,191,36,0.05)' }}>
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full animate-pulse flex-shrink-0" style={{ background: '#fbbf24' }} />
+              <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#fbbf24' }}>Team Target</span>
+            </div>
+            <button onClick={() => onNavigate('team-target')} style={{ fontSize: 10, color: '#fbbf24', fontWeight: 500 }}>Manage →</button>
           </div>
           <div className="p-4">
             {/* Month label */}
@@ -1132,9 +1135,12 @@ function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDa
       </div>
 
       {/* E — My To-Do */}
-      <div className="rounded-xl overflow-hidden flex flex-col" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
-        <div className="px-4 py-2.5 flex items-center justify-between border-b flex-shrink-0" style={{ borderColor: 'var(--border)', background: 'var(--surface-s)' }}>
-          <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--text-3)' }}>My To-Do</span>
+      <div className="rounded-xl overflow-hidden flex flex-col" style={{ background: 'var(--surface)', border: '1px solid rgba(167,139,250,0.35)', boxShadow: '0 0 0 1px rgba(124,58,237,0.06), 0 4px 16px rgba(124,58,237,0.08)' }}>
+        <div className="px-4 py-2.5 flex items-center justify-between border-b flex-shrink-0" style={{ borderColor: 'rgba(124,58,237,0.2)', background: 'rgba(124,58,237,0.05)' }}>
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse flex-shrink-0" style={{ background: '#a78bfa' }} />
+            <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#a78bfa' }}>My To-Do</span>
+          </div>
           <button onClick={() => onNavigate('my-todo')} style={{ fontSize: 10, color: '#a78bfa', fontWeight: 500 }}>Manage →</button>
         </div>
         <div className="flex-1 overflow-y-auto" style={{ maxHeight: 340 }}>
