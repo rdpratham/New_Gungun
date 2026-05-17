@@ -79,11 +79,14 @@ function ProtectedRoute({ user, role, requiredRole, children }) {
   return children;
 }
 
-export default function App() {
+export default function App({ onMounted }) {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
   const [profileComplete, setProfileComplete] = useState(true);
   const [loading, setLoading] = useState(true);
+
+  // Tell main.jsx we're alive so the splash screen hides
+  useEffect(() => { onMounted?.(); }, []);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {

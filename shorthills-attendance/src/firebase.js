@@ -1,6 +1,6 @@
 import { initializeApp, getApp, getApps } from "firebase/app";
-import { initializeAuth, inMemoryPersistence, browserSessionPersistence } from "firebase/auth";
-import { initializeFirestore, memoryLocalCache } from "firebase/firestore";
+import { initializeAuth, getAuth, inMemoryPersistence, browserSessionPersistence } from "firebase/auth";
+import { initializeFirestore, getFirestore, memoryLocalCache } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey:            import.meta.env.VITE_FIREBASE_API_KEY,
@@ -11,8 +11,6 @@ const firebaseConfig = {
   appId:             import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-// Guard: if env vars are missing (e.g. Render build without env vars set),
-// log a clear error instead of crashing silently with an opaque Firebase exception.
 if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
   console.error(
     '[firebase.js] Firebase env vars are missing. ' +
@@ -20,18 +18,35 @@ if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
   );
 }
 
-// Reuse existing app if hot-reloading in dev (avoids "duplicate app" error)
+// Reuse existing app if hot-reloading (avoids "duplicate app" error)
 const app = getApps().length === 0
   ? initializeApp(firebaseConfig)
   : getApp();
 
 export { app };
 
-// Session persistence — survives refresh in same tab, clears on tab close or new tab
-export const auth = initializeAuth(app, { persistence: browserSessionPersistence });
+// Guard initializeAuth — calling it twice on the same app throws a fatal error
+function getOrInitAuth(appInstance, opts) {
+  try {
+    return initializeAuth(appInstance, opts);
+  } catch {
+    // Already initialized — return existing instance
+    return getAuth(appInstance);
+  }
+}
 
-// Memory-only cache: no IndexedDB, no stale data, always fetches fresh from server
-export const db = initializeFirestore(app, {
+export const auth = getOrInitAuth(app, { persistence: browserSessionPersistence });
+
+// Guard initializeFirestore similarly
+function getOrInitFirestore(appInstance, opts) {
+  try {
+    return initializeFirestore(appInstance, opts);
+  } catch {
+    return getFirestore(appInstance);
+  }
+}
+
+export const db = getOrInitFirestore(app, {
   localCache: memoryLocalCache(),
   ignoreUndefinedProperties: true,
 });
@@ -50,4 +65,4 @@ try {
 } catch {
   _secondaryApp = initializeApp(firebaseConfig, 'secondary');
 }
-export const secondaryAuth = initializeAuth(_secondaryApp, { persistence: inMemoryPersistence });
+export const secondaryAuth = getOrInitAuth(_secondaryApp, { persistence: inMemoryPersistence });
