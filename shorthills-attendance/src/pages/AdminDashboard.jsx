@@ -486,9 +486,8 @@ function AttendancePage({ employees, attendance, loadingEmp, loadingAtt, setExpa
     return days30; // 30d
   })();
 
-  /* ---- filtered employees ---- */
+  /* ---- filtered employees — show ALL employees, setup-pending ones get a badge ---- */
   const filteredEmps = employees.filter(emp => {
-    if (!emp.profileComplete) return false; // exclude employees who haven't completed setup
     if (searchName && !(emp.name || emp.email || '').toLowerCase().includes(searchName.toLowerCase())) return false;
     if (statusFilter !== 'all') {
       const empRecs  = getEmpRecords(attendance, emp);
@@ -709,8 +708,9 @@ function AttendancePage({ employees, attendance, loadingEmp, loadingAtt, setExpa
                             }
                           </div>
                           <div style={{ minWidth: 0 }}>
-                            <div style={{ fontWeight: 600, fontSize: '0.8rem', color: 'var(--text)', maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                              {emp.name || emp.email?.split('@')[0]}
+                            <div style={{ fontWeight: 600, fontSize: '0.8rem', color: 'var(--text)', maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 4 }}>
+                              {emp.name || emp.email?.split('@')[0] || '(no name)'}
+                              {!emp.profileComplete && <span style={{ fontSize: '0.55rem', fontWeight: 700, background: 'rgba(245,158,11,0.2)', color: '#fbbf24', borderRadius: 99, padding: '1px 5px', flexShrink: 0 }}>SETUP</span>}
                             </div>
                             <div style={{ fontSize: '0.68rem', color: 'var(--text-3)' }}>ID {emp.employeeId}</div>
                           </div>

@@ -267,7 +267,7 @@ export default function AssignMeetingTarget({ user, employees = [] }) {
     if (!selectedEmpUid) return addToast('Please select an employee.', 'error');
     if (!target || Number(target) < 1) return addToast('Please enter a valid target.', 'error');
 
-    const emp = employees.find(e => e.uid === selectedEmpUid);
+    const emp = employees.find(e => e.id === selectedEmpUid);
     if (!emp) return addToast('Employee not found.', 'error');
 
     const docId = `${selectedEmpUid}_${month}`;
@@ -307,7 +307,7 @@ export default function AssignMeetingTarget({ user, employees = [] }) {
     }
   }
 
-  const selectedEmp = employees.find(e => e.uid === selectedEmpUid);
+  const selectedEmp = employees.find(e => e.id === selectedEmpUid);
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
@@ -393,8 +393,8 @@ export default function AssignMeetingTarget({ user, employees = [] }) {
                 required
               >
                 <option value="">Select an employee…</option>
-                {employees.map(emp => (
-                  <option key={emp.uid} value={emp.uid}>
+                {employees.filter(emp => emp.profileComplete).map(emp => (
+                  <option key={emp.id} value={emp.id}>
                     {emp.name}{emp.employeeId ? ` (${emp.employeeId})` : ''}
                   </option>
                 ))}
