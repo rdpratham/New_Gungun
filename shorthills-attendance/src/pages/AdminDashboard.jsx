@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { collection, onSnapshot, query, orderBy, doc, getDoc, writeBatch, where } from 'firebase/firestore';
+import { collection, onSnapshot, query, doc, getDoc, writeBatch, where } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import Navbar from '../components/Navbar';
@@ -45,8 +45,12 @@ function greet() {
 function getEmpRecords(attendance, employee) {
   const seen = new Set();
   return attendance.filter(r => {
-    // Match exclusively by Firebase UID — never by company employeeId code which can be non-unique
-    const match = r.employeeUid === employee.id;
+    // Primary: match by Firebase UID (always unique, set in all new records)
+    // Fallback: match by employeeId === employee.id for legacy records where
+    //           employeeId was stored as the Firebase UID (no employeeUid field)
+    const byUid    = r.employeeUid === employee.id;
+    const byLegacy = !r.employeeUid && r.employeeId === employee.id;
+    const match = byUid || byLegacy;
     if (match && !seen.has(r.id)) { seen.add(r.id); return true; }
     return false;
   });
@@ -1095,24 +1099,34 @@ export default function AdminDashboard({ user }) {
     } catch (err) { console.error(err); }
   };
 
-  // Real-time employees listener
+  // Real-time employees listener — sort client-side, no orderBy index dependency
   useEffect(() => {
     setLoadingEmp(true);
     const unsub = onSnapshot(
-      query(collection(db, 'employees'), orderBy('createdAt', 'desc')),
-      snap => { setEmployees(snap.docs.map(d => ({ id: d.id, ...d.data() }))); setLoadingEmp(false); },
-      err  => { console.error(err); setLoadingEmp(false); }
+      collection(db, 'employees'),
+      snap => {
+        const emps = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        emps.sort((a, b) => (b.createdAt?.seconds ?? 0) - (a.createdAt?.seconds ?? 0));
+        setEmployees(emps);
+        setLoadingEmp(false);
+      },
+      err => { console.error('employees listener:', err); setLoadingEmp(false); }
     );
     return () => unsub();
   }, []);
 
-  // Real-time attendance listener
+  // Real-time attendance listener — no orderBy to avoid composite-index requirements
   useEffect(() => {
     setLoadingAtt(true);
     const unsub = onSnapshot(
-      query(collection(db, 'attendance'), orderBy('date', 'desc')),
-      snap => { setAttendance(snap.docs.map(d => ({ id: d.id, ...d.data() }))); setLoadingAtt(false); },
-      err  => { console.error(err); setLoadingAtt(false); }
+      collection(db, 'attendance'),
+      snap => {
+        const recs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        recs.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+        setAttendance(recs);
+        setLoadingAtt(false);
+      },
+      err => { console.error('attendance listener:', err); setLoadingAtt(false); }
     );
     return () => unsub();
   }, []);
@@ -1126,40 +1140,6 @@ export default function AdminDashboard({ user }) {
     })();
   }, [user.uid]);
 
-  // Auto-delete orphaned attendance records once both datasets are loaded
-  const cleanedRef = useRef(false);
-  useEffect(() => {
-    if (loadingEmp || loadingAtt || cleanedRef.current) return;
-    cleanedRef.current = true;
-
-    const validUids   = new Set(employees.map(e => e.id));
-    const validEmpIds = new Set(employees.map(e => e.employeeId).filter(Boolean));
-
-    const orphans = attendance.filter(rec => {
-      if (rec.employeeUid && validUids.has(rec.employeeUid))   return false;
-      if (rec.employeeId  && validUids.has(rec.employeeId))    return false;
-      if (rec.employeeId  && validEmpIds.has(rec.employeeId))  return false;
-      return true;
-    });
-
-    if (orphans.length === 0) return;
-
-    (async () => {
-      try {
-        // Firestore batch limit is 500; chunk if needed
-        for (let i = 0; i < orphans.length; i += 400) {
-          const batch = writeBatch(db);
-          orphans.slice(i, i + 400).forEach(rec =>
-            batch.delete(doc(db, 'attendance', rec.id))
-          );
-          await batch.commit();
-        }
-        setAttendance(prev => prev.filter(r => !orphans.some(o => o.id === r.id)));
-      } catch (err) {
-        console.error('Orphan cleanup failed:', err);
-      }
-    })();
-  }, [loadingEmp, loadingAtt, employees, attendance]);
 
   const filteredAttendance = attendance.filter(rec => {
     const dateMatch = filterDate ? rec.date === filterDate : true;

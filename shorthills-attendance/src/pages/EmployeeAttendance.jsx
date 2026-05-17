@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { doc, onSnapshot, collection, query, where, limit, updateDoc, writeBatch } from 'firebase/firestore';
+import { doc, onSnapshot, collection, query, where, updateDoc, writeBatch } from 'firebase/firestore';
 import { db } from '../firebase';
 import Navbar from '../components/Navbar';
 import AttendancePopup from '../components/AttendancePopup';
@@ -244,17 +244,17 @@ function MyAttendancePage({ user, employeeData }) {
     const applyMap = () => {
       const all = Array.from(mapRef.current.values());
       all.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-      setRecords(all.slice(0, 120));
+      setRecords(all);
       setLoading(false);
     };
 
     const listen = (field, value) => onSnapshot(
-      query(collection(db, 'attendance'), where(field, '==', value), limit(120)),
+      query(collection(db, 'attendance'), where(field, '==', value)),
       snap => { snap.docs.forEach(d => mapRef.current.set(d.id, { id: d.id, ...d.data() })); applyMap(); },
-      err => { console.error(err); setLoading(false); }
+      err => { console.error('MyAttendancePage listen error:', field, err.message); applyMap(); }
     );
 
-    const unsubs = [listen('employeeUid', uid), listen('employeeId', uid)];
+    const unsubs = [listen('employeeUid', uid)];
     if (empId && empId !== uid) unsubs.push(listen('employeeId', empId));
     return () => { unsubs.forEach(u => u()); mapRef.current.clear(); };
   }, [user.uid, employeeData?.employeeId]);
@@ -669,7 +669,7 @@ export default function EmployeeAttendance({ user }) {
     };
 
     const listen = (field, value) => onSnapshot(
-      query(collection(db, 'attendance'), where(field, '==', value), limit(50)),
+      query(collection(db, 'attendance'), where(field, '==', value)),
       snap => {
         snap.docs.forEach(d => attMapRef.current.set(d.id, { id: d.id, ...d.data() }));
         applyMap();
@@ -677,10 +677,7 @@ export default function EmployeeAttendance({ user }) {
       err => console.error('Attendance listener error:', field, value, err.message)
     );
 
-    const unsubs = [
-      listen('employeeUid', uid),
-      listen('employeeId',  uid),
-    ];
+    const unsubs = [listen('employeeUid', uid)];
     if (empId && empId !== uid) {
       unsubs.push(listen('employeeId', empId));
     }
