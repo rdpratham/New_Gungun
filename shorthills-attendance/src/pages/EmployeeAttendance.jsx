@@ -194,11 +194,37 @@ function TaskNotificationPopup({ tasks, onDismiss, onViewTasks }) {
 }
 
 /* ── My Attendance page ──────────────────────────────────── */
+function calcStreak(records) {
+  const dates = [...new Set(records.filter(r => r.type === 'signin').map(r => r.date))].sort().reverse();
+  if (!dates.length) return 0;
+  let streak = 0;
+  let expected = dates[0];
+  for (const d of dates) {
+    if (d === expected) {
+      streak++;
+      const [y, m, day] = expected.split('-').map(Number);
+      const prev = new Date(y, m - 1, day - 1);
+      expected = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(prev);
+    } else break;
+  }
+  return streak;
+}
+
+function calcDuration(inRec, outRec) {
+  if (!inRec || !outRec) return null;
+  const a = inRec.submittedAt?.toDate?.()  || new Date(inRec.submittedAt  || 0);
+  const b = outRec.submittedAt?.toDate?.() || new Date(outRec.submittedAt || 0);
+  const ms = Math.abs(b - a);
+  if (ms < 60000) return null;
+  const h = Math.floor(ms / 3600000);
+  const m = Math.floor((ms % 3600000) / 60000);
+  return h > 0 ? `${h}h ${m}m` : `${m}m`;
+}
+
 function MyAttendancePage({ user, employeeData }) {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Real-time: 3 parallel onSnapshot listeners merged by doc ID
   const mapRef = useRef(new Map());
   useEffect(() => {
     setLoading(true);
@@ -208,93 +234,207 @@ function MyAttendancePage({ user, employeeData }) {
     const applyMap = () => {
       const all = Array.from(mapRef.current.values());
       all.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-      setRecords(all.slice(0, 100));
+      setRecords(all.slice(0, 120));
       setLoading(false);
     };
 
     const listen = (field, value) => onSnapshot(
-      query(collection(db, 'attendance'), where(field, '==', value), limit(100)),
+      query(collection(db, 'attendance'), where(field, '==', value), limit(120)),
       snap => { snap.docs.forEach(d => mapRef.current.set(d.id, { id: d.id, ...d.data() })); applyMap(); },
       err => { console.error(err); setLoading(false); }
     );
 
-    const unsubs = [
-      listen('employeeUid', uid),
-      listen('employeeId',  uid),
-    ];
+    const unsubs = [listen('employeeUid', uid), listen('employeeId', uid)];
     if (empId && empId !== uid) unsubs.push(listen('employeeId', empId));
-
     return () => { unsubs.forEach(u => u()); mapRef.current.clear(); };
   }, [user.uid, employeeData?.employeeId]);
 
-  const signIns  = records.filter(r => r.type === 'signin').length;
-  const signOuts = records.filter(r => r.type === 'signout').length;
-  const uniqueDays = new Set(records.map(r => r.date)).size;
+  /* Date-wise grouping: each date → { signin, signout } */
+  const byDate = {};
+  records.forEach(rec => {
+    if (!byDate[rec.date]) byDate[rec.date] = { signin: null, signout: null };
+    if (rec.type === 'signin'  && !byDate[rec.date].signin)  byDate[rec.date].signin  = rec;
+    if (rec.type === 'signout' && !byDate[rec.date].signout) byDate[rec.date].signout = rec;
+  });
+  const days = Object.entries(byDate).sort((a, b) => b[0].localeCompare(a[0]));
+
+  const today     = getISTDateString();
+  const signIns   = records.filter(r => r.type === 'signin').length;
+  const signOuts  = records.filter(r => r.type === 'signout').length;
+  const daysCount = days.length;
+  const streak    = calcStreak(records);
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="text-2xl lg:text-3xl font-bold" style={{ color: 'var(--text)' }}>My Attendance</h1>
-        <p className="text-sm mt-1" style={{ color: 'var(--text-3)' }}>Your complete attendance history</p>
+    <div className="space-y-5 animate-fade-in">
+
+      {/* Header banner */}
+      <div className="relative rounded-3xl overflow-hidden p-5"
+           style={{ background: 'linear-gradient(135deg,#7c3aed 0%,#3b82f6 60%,#06b6d4 100%)' }}>
+        <div className="absolute inset-0 opacity-10"
+             style={{ backgroundImage: 'radial-gradient(circle at 85% 50%, #fff 0%, transparent 55%)' }} />
+        <div className="relative">
+          <h1 className="text-xl font-black text-white">My Attendance</h1>
+          <p className="text-white/60 text-xs mt-0.5">Complete history · Shift: 5 PM – 2 AM IST</p>
+        </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      {/* Stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { label: 'Sign Ins', value: signIns, color: '#a78bfa', bg: 'rgba(124,58,237,0.12)' },
-          { label: 'Sign Outs', value: signOuts, color: '#34d399', bg: 'rgba(52,211,153,0.12)' },
-          { label: 'Days Present', value: uniqueDays, color: '#60a5fa', bg: 'rgba(59,130,246,0.12)' },
+          { label: 'Sign-Ins',    value: signIns,   color: '#a78bfa', bg: 'rgba(124,58,237,0.12)', border: 'rgba(124,58,237,0.2)' },
+          { label: 'Sign-Outs',   value: signOuts,  color: '#34d399', bg: 'rgba(16,185,129,0.12)', border: 'rgba(16,185,129,0.2)' },
+          { label: 'Active Days', value: daysCount, color: '#60a5fa', bg: 'rgba(59,130,246,0.12)', border: 'rgba(59,130,246,0.2)'  },
+          { label: 'Day Streak',  value: streak,    color: '#fbbf24', bg: 'rgba(245,158,11,0.12)', border: 'rgba(245,158,11,0.2)'  },
         ].map(s => (
-          <div key={s.label} className="rounded-2xl p-4 text-center" style={{ background: s.bg, border: `1px solid ${s.color}33` }}>
-            <p className="text-3xl font-black mb-1" style={{ color: s.color }}>{loading ? '—' : s.value}</p>
-            <p className="text-xs font-medium" style={{ color: 'var(--text-3)' }}>{s.label}</p>
+          <div key={s.label} className="rounded-2xl p-4 text-center transition-all hover:-translate-y-0.5"
+               style={{ background: s.bg, border: `1px solid ${s.border}` }}>
+            <p className="text-3xl font-black" style={{ color: s.color }}>{loading ? '—' : s.value}</p>
+            <p className="text-xs font-semibold mt-0.5" style={{ color: 'var(--text-3)' }}>{s.label}</p>
           </div>
         ))}
       </div>
 
-      <div className="rounded-2xl overflow-hidden" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
-        <div className="px-5 py-4 border-b" style={{ borderColor: 'var(--border)' }}>
-          <h2 className="font-bold" style={{ color: 'var(--text)' }}>Attendance Records</h2>
-          <p className="text-xs mt-0.5" style={{ color: 'var(--text-3)' }}>Last {records.length} records</p>
+      {/* Day-wise cards */}
+      {loading ? (
+        <div className="space-y-3">
+          {[1,2,3,4].map(i => <div key={i} className="h-24 rounded-2xl animate-pulse" style={{ background: 'var(--surface)' }} />)}
         </div>
-        {loading ? (
-          <div className="flex justify-center py-16">
-            <div className="w-7 h-7 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#7c3aed', borderTopColor: 'transparent' }} />
-          </div>
-        ) : records.length === 0 ? (
-          <div className="text-center py-16">
-            <p className="text-sm" style={{ color: 'var(--text-3)' }}>No attendance records yet.</p>
-          </div>
-        ) : (
-          <div>
-            {records.map(rec => (
-              <div key={rec.id} className="flex items-start gap-4 px-5 py-4 border-b last:border-b-0 transition-colors"
-                   style={{ borderColor: 'var(--border)' }}
-                   onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-s)'}
-                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                {(rec.photoBase64 || rec.photoURL) && (
-                  <img src={rec.photoBase64 || rec.photoURL} alt=""
-                       className="w-12 h-12 rounded-xl object-cover flex-shrink-0 hover:scale-105 transition-transform cursor-pointer"
-                       style={{ border: '2px solid var(--border)' }}
-                       onClick={() => window.open(rec.photoBase64 || rec.photoURL, '_blank')} />
-                )}
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center gap-2 mb-1">
-                    <span className="font-semibold text-sm" style={{ color: 'var(--text)' }}>{formatDate(rec.date)}</span>
-                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full"
-                          style={rec.type === 'signin'
-                            ? { background: 'rgba(124,58,237,0.15)', color: '#a78bfa', border: '1px solid rgba(124,58,237,0.3)' }
-                            : { background: 'rgba(52,211,153,0.12)', color: '#34d399', border: '1px solid rgba(52,211,153,0.25)' }}>
-                      {rec.type === 'signin' ? '↗ Sign In' : '↙ Sign Out'}
+      ) : days.length === 0 ? (
+        <div className="flex flex-col items-center gap-4 py-20 rounded-2xl"
+             style={{ border: '1px dashed var(--border)' }}>
+          <div className="text-5xl">📋</div>
+          <p className="font-semibold" style={{ color: 'var(--text-2)' }}>No attendance records yet</p>
+          <p className="text-sm" style={{ color: 'var(--text-3)' }}>Records will appear here after your first sign-in</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {days.map(([dateStr, { signin, signout }]) => {
+            const [y, m, d] = dateStr.split('-').map(Number);
+            const dt        = new Date(y, m - 1, d);
+            const dayName   = dt.toLocaleDateString('en-IN', { weekday: 'short' });
+            const dayNum    = dt.getDate();
+            const monthName = dt.toLocaleDateString('en-IN', { month: 'short' });
+            const isToday   = dateStr === today;
+            const hasBoth   = signin && signout;
+            const duration  = calcDuration(signin, signout);
+            const photo     = signin?.photoBase64 || signout?.photoBase64 || signin?.photoURL || signout?.photoURL;
+
+            const status = hasBoth ? 'full' : signin ? 'in-only' : 'out-only';
+            const STATUS_META = {
+              full:     { label: 'Full Day',     color: '#34d399', bg: 'rgba(16,185,129,0.12)',  border: 'rgba(16,185,129,0.25)'  },
+              'in-only':  { label: 'Sign-In Only', color: '#a78bfa', bg: 'rgba(124,58,237,0.12)', border: 'rgba(124,58,237,0.25)' },
+              'out-only': { label: 'Sign-Out Only',color: '#60a5fa', bg: 'rgba(59,130,246,0.12)', border: 'rgba(59,130,246,0.25)'  },
+            };
+            const sm = STATUS_META[status];
+
+            return (
+              <div key={dateStr}
+                   className="rounded-2xl overflow-hidden transition-all duration-200 hover:shadow-lg"
+                   style={{ background: 'var(--surface)', border: `1.5px solid ${isToday ? 'rgba(124,58,237,0.5)' : 'var(--border)'}` }}>
+                <div className="flex items-stretch">
+
+                  {/* Date column */}
+                  <div className="w-16 flex-shrink-0 flex flex-col items-center justify-center py-4 gap-0.5"
+                       style={{
+                         background: isToday
+                           ? 'linear-gradient(135deg,#7c3aed,#3b82f6)'
+                           : 'var(--surface-s)',
+                         borderRight: '1px solid var(--border)',
+                       }}>
+                    <span className="text-[11px] font-bold"
+                          style={{ color: isToday ? 'rgba(255,255,255,0.7)' : 'var(--text-3)' }}>
+                      {dayName}
                     </span>
+                    <span className="text-2xl font-black leading-none"
+                          style={{ color: isToday ? '#fff' : 'var(--text)' }}>
+                      {dayNum}
+                    </span>
+                    <span className="text-[11px] font-semibold"
+                          style={{ color: isToday ? 'rgba(255,255,255,0.7)' : 'var(--text-3)' }}>
+                      {monthName}
+                    </span>
+                    {isToday && (
+                      <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full mt-1"
+                            style={{ background: 'rgba(255,255,255,0.2)', color: '#fff' }}>
+                        TODAY
+                      </span>
+                    )}
                   </div>
-                  <p className="text-xs mb-1" style={{ color: '#60a5fa' }}>{formatIST(rec.submittedAt?.toDate?.() || new Date())}</p>
-                  <p className="text-sm line-clamp-2" style={{ color: 'var(--text-2)' }}>{rec.workSummary}</p>
+
+                  {/* Main content */}
+                  <div className="flex-1 min-w-0 p-4">
+                    <div className="flex items-start justify-between gap-3">
+
+                      {/* Times */}
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[11px] font-bold px-2 py-0.5 rounded-full flex-shrink-0"
+                                style={{ background: 'rgba(124,58,237,0.12)', color: '#a78bfa', border: '1px solid rgba(124,58,237,0.2)' }}>
+                            ↗ IN
+                          </span>
+                          <span className="text-sm font-semibold"
+                                style={{ color: signin ? 'var(--text)' : 'var(--text-3)' }}>
+                            {signin ? formatTime(signin.submittedAt?.toDate?.() || new Date()) : '—'}
+                          </span>
+                          {signin?.mode && (
+                            <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-md"
+                                  style={{ background: 'var(--surface-s)', color: 'var(--text-3)' }}>
+                              {signin.mode === 'wfh' ? 'WFH' : 'Office'}
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[11px] font-bold px-2 py-0.5 rounded-full flex-shrink-0"
+                                style={{ background: 'rgba(16,185,129,0.12)', color: '#34d399', border: '1px solid rgba(16,185,129,0.2)' }}>
+                            ↙ OUT
+                          </span>
+                          <span className="text-sm font-semibold"
+                                style={{ color: signout ? 'var(--text)' : 'var(--text-3)' }}>
+                            {signout ? formatTime(signout.submittedAt?.toDate?.() || new Date()) : '—'}
+                          </span>
+                          {signout?.mode && (
+                            <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-md"
+                                  style={{ background: 'var(--surface-s)', color: 'var(--text-3)' }}>
+                              {signout.mode === 'wfh' ? 'WFH' : 'Office'}
+                            </span>
+                          )}
+                        </div>
+                        {duration && (
+                          <p className="text-xs font-medium" style={{ color: 'var(--text-3)' }}>
+                            ⏱ {duration} on shift
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Status + photo */}
+                      <div className="flex flex-col items-end gap-2 flex-shrink-0">
+                        <span className="text-[11px] font-bold px-3 py-1 rounded-full"
+                              style={{ background: sm.bg, color: sm.color, border: `1px solid ${sm.border}` }}>
+                          {sm.label}
+                        </span>
+                        {photo && (
+                          <img src={photo} alt=""
+                               className="w-10 h-10 rounded-xl object-cover cursor-pointer hover:scale-105 transition-transform"
+                               style={{ border: '2px solid var(--border)' }}
+                               onClick={() => window.open(photo, '_blank')} />
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Work summary */}
+                    {(signin?.workSummary || signout?.workSummary) && (
+                      <p className="text-xs mt-2.5 pt-2.5 border-t line-clamp-1"
+                         style={{ borderColor: 'var(--border-s)', color: 'var(--text-3)' }}>
+                        {signin?.workSummary || signout?.workSummary}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
