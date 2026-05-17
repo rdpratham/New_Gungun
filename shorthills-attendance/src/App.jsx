@@ -1,9 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Component } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from './firebase';
 import { ThemeProvider } from './context/ThemeContext';
+
+/* ── Global Error Boundary — catches any render crash, shows error UI instead of blank screen ── */
+class ErrorBoundary extends Component {
+  constructor(props) { super(props); this.state = { error: null }; }
+  static getDerivedStateFromError(err) { return { error: err }; }
+  componentDidCatch(err, info) { console.error('App ErrorBoundary caught:', err, info); }
+  render() {
+    if (this.state.error) {
+      return (
+        <div style={{ minHeight: '100vh', background: '#070d1a', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+          <div style={{ maxWidth: 480, textAlign: 'center' }}>
+            <div style={{ width: 64, height: 64, borderRadius: 16, background: 'linear-gradient(135deg,#7c3aed,#3b82f6)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', fontSize: 28, color: '#fff', fontWeight: 900 }}>G</div>
+            <div style={{ color: '#fff', fontSize: 22, fontWeight: 700, marginBottom: 8 }}>Something went wrong</div>
+            <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, marginBottom: 24 }}>{this.state.error?.message || 'An unexpected error occurred'}</div>
+            <button onClick={() => window.location.reload()} style={{ padding: '10px 28px', borderRadius: 10, background: 'linear-gradient(135deg,#7c3aed,#3b82f6)', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14 }}>Reload App</button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
@@ -103,9 +125,10 @@ export default function App() {
     return unsub;
   }, []);
 
-  if (loading) return <ThemeProvider><LoadingScreen /></ThemeProvider>;
+  if (loading) return <ErrorBoundary><ThemeProvider><LoadingScreen /></ThemeProvider></ErrorBoundary>;
 
   return (
+    <ErrorBoundary>
     <ThemeProvider>
       <Router>
         <Routes>
@@ -169,5 +192,6 @@ export default function App() {
         </Routes>
       </Router>
     </ThemeProvider>
+    </ErrorBoundary>
   );
 }
