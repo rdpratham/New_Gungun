@@ -732,29 +732,29 @@ export default function MeetingReport({ user }) {
     <div className="space-y-5 animate-fade-in" style={{ minHeight: '100%' }}>
 
       {/* ── TOP HEADER BAR ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-black" style={{ color: 'var(--text)' }}>Meeting Report</h1>
-          <p className="text-sm mt-0.5" style={{ color: 'var(--text-3)' }}>
-            {records.length} employee{records.length !== 1 ? 's' : ''} · {formatMonth(month)}
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          {/* Tab switcher */}
-          <div className="flex rounded-xl overflow-hidden" style={{ background: 'var(--surface-s)', border: '1px solid var(--border)' }}>
-            {[{ id: 'overview', label: 'Overview' }, { id: 'trend', label: 'Trend' }, { id: 'team', label: 'Team' }].map(t => (
-              <button key={t.id} onClick={() => setActiveTab(t.id)}
-                className="px-4 py-2 text-xs font-semibold transition-all"
-                style={activeTab === t.id
-                  ? { background: 'linear-gradient(135deg,#7c3aed,#3b82f6)', color: '#fff' }
-                  : { color: 'var(--text-2)', background: 'transparent' }}>
-                {t.label}
-              </button>
-            ))}
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <h1 className="text-2xl font-black" style={{ color: 'var(--text)' }}>Meeting Report</h1>
+            <p className="text-sm mt-0.5" style={{ color: 'var(--text-3)' }}>
+              {records.length} employee{records.length !== 1 ? 's' : ''} · {formatMonth(month)}
+            </p>
           </div>
           <select value={month} onChange={e => setMonth(e.target.value)} className="input-field text-sm" style={{ minWidth: 140 }}>
             {months.map(m => <option key={m} value={m}>{formatMonth(m)}</option>)}
           </select>
+        </div>
+        {/* Tab switcher — full width row so all 3 tabs always visible */}
+        <div className="flex rounded-xl overflow-hidden" style={{ background: 'var(--surface-s)', border: '1px solid var(--border)', width: '100%' }}>
+          {[{ id: 'overview', label: 'Overview' }, { id: 'trend', label: 'Trend' }, { id: 'team', label: 'Team' }].map(t => (
+            <button key={t.id} onClick={() => setActiveTab(t.id)}
+              className="flex-1 py-2.5 text-sm font-semibold transition-all"
+              style={activeTab === t.id
+                ? { background: 'linear-gradient(135deg,#7c3aed,#3b82f6)', color: '#fff' }
+                : { color: 'var(--text-2)', background: 'transparent' }}>
+              {t.label}
+            </button>
+          ))}
         </div>
       </div>
 
