@@ -562,31 +562,45 @@ function DashboardPage({ user, employeeData, signInRecord, signOutRecord, recent
       </div>
 
       {/* ── Campaign widget ── */}
-      {employeeData?.campaign?.name && (
-        <div className="rounded-xl flex items-center gap-3 p-4"
-             style={{ background: 'linear-gradient(135deg,rgba(124,58,237,0.1),rgba(59,130,246,0.07))', border: '1px solid rgba(124,58,237,0.25)' }}>
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-               style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)' }}>
-            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-            </svg>
+      {(() => {
+        const allC = employeeData?.campaigns?.length
+          ? employeeData.campaigns
+          : employeeData?.campaign?.name ? [employeeData.campaign] : [];
+        if (!allC.length) return null;
+        return (
+          <div className="rounded-xl p-4"
+               style={{ background: 'linear-gradient(135deg,rgba(124,58,237,0.1),rgba(59,130,246,0.07))', border: '1px solid rgba(124,58,237,0.25)' }}>
+            <div className="flex items-center gap-3 mb-2.5">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                   style={{ background: 'linear-gradient(135deg,#7c3aed,#3b82f6)' }}>
+                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                </svg>
+              </div>
+              <div>
+                <p style={{ fontSize: 10, fontWeight: 600, color: '#a78bfa', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                  Assigned Campaigns ({allC.length})
+                </p>
+              </div>
+              <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ml-auto flex-shrink-0"
+                    style={{ background: 'rgba(16,185,129,0.12)', color: '#34d399', border: '1px solid rgba(16,185,129,0.2)' }}>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Active
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {allC.map((c, i) => (
+                <span key={c.id || i}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold"
+                      style={{ background: 'rgba(124,58,237,0.15)', color: '#a78bfa', border: '1px solid rgba(124,58,237,0.3)' }}>
+                  📣 {c.name}
+                </span>
+              ))}
+            </div>
           </div>
-          <div className="flex-1 min-w-0">
-            <p style={{ fontSize: 10, fontWeight: 600, color: '#a78bfa', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-              Current Campaign
-            </p>
-            <p className="font-bold truncate" style={{ color: 'var(--text)', fontSize: 14 }}>
-              {employeeData.campaign.name}
-            </p>
-          </div>
-          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium flex-shrink-0"
-                style={{ background: 'rgba(16,185,129,0.12)', color: '#34d399', border: '1px solid rgba(16,185,129,0.2)' }}>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            Active
-          </span>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Attendance strip */}
       <div className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--surface)' }}>
@@ -705,9 +719,9 @@ function DashboardPage({ user, employeeData, signInRecord, signOutRecord, recent
           )}
         </div>
 
-        {/* My To-Do */}
-        <div className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)', background: 'var(--surface)' }}>
-          <div className="px-4 py-2.5 flex items-center justify-between border-b" style={{ borderColor: 'var(--border)', background: 'var(--surface-s)' }}>
+        {/* My To-Do + US Clock (split) */}
+        <div className="rounded-xl overflow-hidden flex flex-col" style={{ border: '1px solid var(--border)', background: 'var(--surface)' }}>
+          <div className="px-4 py-2.5 flex items-center justify-between border-b flex-shrink-0" style={{ borderColor: 'var(--border)', background: 'var(--surface-s)' }}>
             <div className="flex items-center gap-2">
               <svg className="w-3.5 h-3.5" style={{ color: '#a78bfa' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -723,40 +737,59 @@ function DashboardPage({ user, employeeData, signInRecord, signOutRecord, recent
               View all →
             </button>
           </div>
-          {todayTodos.length === 0 && upcomingTodos.length === 0 ? (
-            <div className="px-4 py-8 text-center">
-              <p className="text-xs" style={{ color: 'var(--text-3)' }}>No pending to-do items</p>
+          <div className="flex flex-1 divide-x" style={{ borderColor: 'var(--border)' }}>
+            {/* Left: To-Do list */}
+            <div className="flex-1 min-w-0 overflow-y-auto" style={{ maxHeight: 220 }}>
+              {todayTodos.length === 0 && upcomingTodos.length === 0 ? (
+                <div className="px-4 py-6 text-center">
+                  <p className="text-xs" style={{ color: 'var(--text-3)' }}>No pending items</p>
+                </div>
+              ) : (
+                <div>
+                  {todayTodos.map(todo => (
+                    <div key={todo.id} className="px-3 py-2.5 border-b last:border-b-0 flex items-start gap-2"
+                         style={{ borderColor: 'var(--border)' }}>
+                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
+                           style={{ background: PRIORITY_COLOR[todo.priority] || '#a78bfa' }} />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium truncate" style={{ color: 'var(--text)', fontSize: 12 }}>{todo.title}</p>
+                        <p style={{ fontSize: 10, color: '#a78bfa', marginTop: 1 }}>Today</p>
+                      </div>
+                    </div>
+                  ))}
+                  {upcomingTodos.map(todo => (
+                    <div key={todo.id} className="px-3 py-2.5 border-b last:border-b-0 flex items-start gap-2"
+                         style={{ borderColor: 'var(--border)' }}>
+                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
+                           style={{ background: PRIORITY_COLOR[todo.priority] || '#94a3b8' }} />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium truncate" style={{ color: 'var(--text)', fontSize: 12 }}>{todo.title}</p>
+                        <p style={{ fontSize: 10, color: 'var(--text-3)', marginTop: 1 }}>{todo.date}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-          ) : (
-            <div>
-              {todayTodos.map(todo => (
-                <div key={todo.id} className="px-4 py-3 border-b last:border-b-0 flex items-start gap-3 transition-colors"
-                     style={{ borderColor: 'var(--border)' }}
-                     onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-s)'}
-                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                  <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
-                       style={{ background: PRIORITY_COLOR[todo.priority] || '#a78bfa' }} />
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium truncate" style={{ color: 'var(--text)', fontSize: 13 }}>{todo.title}</p>
-                    <p className="text-xs mt-0.5" style={{ color: '#a78bfa' }}>Today</p>
-                  </div>
+            {/* Right: US Clock */}
+            <div className="flex-shrink-0 p-3 flex flex-col justify-center gap-2" style={{ width: 140 }}>
+              <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--text-3)', marginBottom: 4, textAlign: 'center' }}>🇺🇸 US Time</p>
+              {[
+                { label: 'ET', tz: 'America/New_York',    color: '#a78bfa' },
+                { label: 'CT', tz: 'America/Chicago',     color: '#60a5fa' },
+                { label: 'MT', tz: 'America/Denver',      color: '#34d399' },
+                { label: 'PT', tz: 'America/Los_Angeles', color: '#fbbf24' },
+              ].map(z => (
+                <div key={z.label} className="flex items-center justify-between px-2 py-1.5 rounded-lg"
+                     style={{ background: 'var(--surface-s)', border: `1px solid ${z.color}22` }}>
+                  <span style={{ fontSize: 10, fontWeight: 700, color: z.color, minWidth: 22 }}>{z.label}</span>
+                  <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--text)', fontFamily: 'monospace' }}>
+                    {new Intl.DateTimeFormat('en-US', { timeZone: z.tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }).format(currentTime)}
+                  </span>
                 </div>
               ))}
-              {upcomingTodos.map(todo => (
-                <div key={todo.id} className="px-4 py-3 border-b last:border-b-0 flex items-start gap-3 transition-colors"
-                     style={{ borderColor: 'var(--border)' }}
-                     onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-s)'}
-                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                  <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
-                       style={{ background: PRIORITY_COLOR[todo.priority] || '#94a3b8' }} />
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium truncate" style={{ color: 'var(--text)', fontSize: 13 }}>{todo.title}</p>
-                    <p className="text-xs mt-0.5" style={{ color: 'var(--text-3)' }}>{todo.date}</p>
-                  </div>
-                </div>
-              ))}
             </div>
-          )}
+          </div>
         </div>
       </div>
 

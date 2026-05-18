@@ -1232,74 +1232,95 @@ function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDa
           </div>
           <button onClick={() => onNavigate('my-todo')} style={{ fontSize: 10, color: '#a78bfa', fontWeight: 500 }}>Manage →</button>
         </div>
-        <div className="flex-1 overflow-y-auto" style={{ maxHeight: 340 }}>
-          {(overdueTodos.length + todayTodos.length + tomorrowTodos.length) === 0 ? (
-            <div className="text-center py-8">
-              <p style={{ fontSize: 11, color: 'var(--text-3)' }}>All caught up! No pending items.</p>
-            </div>
-          ) : (
-            <div className="p-3 space-y-3">
-              {overdueTodos.length > 0 && (
-                <div>
-                  <p style={{ fontSize: 10, fontWeight: 600, color: '#f87171', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <span>⚠</span> Overdue
-                  </p>
-                  <div className="space-y-1.5">
-                    {overdueTodos.map(t => (
-                      <div key={t.id} className="flex items-start gap-2 px-3 py-2 rounded-lg"
-                           style={{ background: 'rgba(248,113,113,0.06)', border: '1px solid rgba(248,113,113,0.15)' }}>
-                        <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: '#f87171' }} />
-                        <div className="flex-1 min-w-0">
-                          <p className="truncate font-medium" style={{ fontSize: 11, color: 'var(--text)' }}>{t.title}</p>
-                          {t.date && <p style={{ fontSize: 10, color: '#f87171', marginTop: 1 }}>{t.date}</p>}
+        <div className="flex flex-1" style={{ borderColor: 'var(--border)', maxHeight: 340 }}>
+          {/* Left: To-Do list */}
+          <div className="flex-1 min-w-0 overflow-y-auto" style={{ borderRight: '1px solid var(--border)' }}>
+            {(overdueTodos.length + todayTodos.length + tomorrowTodos.length) === 0 ? (
+              <div className="text-center py-8">
+                <p style={{ fontSize: 11, color: 'var(--text-3)' }}>All caught up! No pending items.</p>
+              </div>
+            ) : (
+              <div className="p-3 space-y-3">
+                {overdueTodos.length > 0 && (
+                  <div>
+                    <p style={{ fontSize: 10, fontWeight: 600, color: '#f87171', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <span>⚠</span> Overdue
+                    </p>
+                    <div className="space-y-1.5">
+                      {overdueTodos.map(t => (
+                        <div key={t.id} className="flex items-start gap-2 px-3 py-2 rounded-lg"
+                             style={{ background: 'rgba(248,113,113,0.06)', border: '1px solid rgba(248,113,113,0.15)' }}>
+                          <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: '#f87171' }} />
+                          <div className="flex-1 min-w-0">
+                            <p className="truncate font-medium" style={{ fontSize: 11, color: 'var(--text)' }}>{t.title}</p>
+                            {t.date && <p style={{ fontSize: 10, color: '#f87171', marginTop: 1 }}>{t.date}</p>}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
-              {todayTodos.length > 0 && (
-                <div>
-                  <p style={{ fontSize: 10, fontWeight: 600, color: '#a78bfa', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <span>◈</span> Today
-                  </p>
-                  <div className="space-y-1.5">
-                    {todayTodos.map(t => (
-                      <div key={t.id} className="flex items-start gap-2 px-3 py-2 rounded-lg"
-                           style={{ background: 'rgba(124,58,237,0.06)', border: '1px solid rgba(124,58,237,0.12)' }}>
-                        <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
-                             style={{ background: PRIORITY_COLOR[t.priority] || '#a78bfa' }} />
-                        <div className="flex-1 min-w-0">
-                          <p className="truncate font-medium" style={{ fontSize: 11, color: 'var(--text)' }}>{t.title}</p>
-                          <p style={{ fontSize: 10, color: '#a78bfa', marginTop: 1 }}>Today</p>
+                )}
+                {todayTodos.length > 0 && (
+                  <div>
+                    <p style={{ fontSize: 10, fontWeight: 600, color: '#a78bfa', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <span>◈</span> Today
+                    </p>
+                    <div className="space-y-1.5">
+                      {todayTodos.map(t => (
+                        <div key={t.id} className="flex items-start gap-2 px-3 py-2 rounded-lg"
+                             style={{ background: 'rgba(124,58,237,0.06)', border: '1px solid rgba(124,58,237,0.12)' }}>
+                          <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
+                               style={{ background: PRIORITY_COLOR[t.priority] || '#a78bfa' }} />
+                          <div className="flex-1 min-w-0">
+                            <p className="truncate font-medium" style={{ fontSize: 11, color: 'var(--text)' }}>{t.title}</p>
+                            <p style={{ fontSize: 10, color: '#a78bfa', marginTop: 1 }}>Today</p>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
-              {tomorrowTodos.length > 0 && (
-                <div>
-                  <p style={{ fontSize: 10, fontWeight: 600, color: '#60a5fa', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <span>→</span> Tomorrow
-                  </p>
-                  <div className="space-y-1.5">
-                    {tomorrowTodos.map(t => (
-                      <div key={t.id} className="flex items-start gap-2 px-3 py-2 rounded-lg"
-                           style={{ background: 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.12)' }}>
-                        <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
-                             style={{ background: PRIORITY_COLOR[t.priority] || '#60a5fa' }} />
-                        <div className="flex-1 min-w-0">
-                          <p className="truncate font-medium" style={{ fontSize: 11, color: 'var(--text)' }}>{t.title}</p>
-                          <p style={{ fontSize: 10, color: '#60a5fa', marginTop: 1 }}>Tomorrow</p>
+                )}
+                {tomorrowTodos.length > 0 && (
+                  <div>
+                    <p style={{ fontSize: 10, fontWeight: 600, color: '#60a5fa', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <span>→</span> Tomorrow
+                    </p>
+                    <div className="space-y-1.5">
+                      {tomorrowTodos.map(t => (
+                        <div key={t.id} className="flex items-start gap-2 px-3 py-2 rounded-lg"
+                             style={{ background: 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.12)' }}>
+                          <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
+                               style={{ background: PRIORITY_COLOR[t.priority] || '#60a5fa' }} />
+                          <div className="flex-1 min-w-0">
+                            <p className="truncate font-medium" style={{ fontSize: 11, color: 'var(--text)' }}>{t.title}</p>
+                            <p style={{ fontSize: 10, color: '#60a5fa', marginTop: 1 }}>Tomorrow</p>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
-          )}
+                )}
+              </div>
+            )}
+          </div>
+          {/* Right: US Clock */}
+          <div className="flex-shrink-0 p-3 flex flex-col justify-center gap-2" style={{ width: 148 }}>
+            <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--text-3)', marginBottom: 4, textAlign: 'center' }}>🇺🇸 US Time</p>
+            {[
+              { label: 'ET', tz: 'America/New_York',    color: '#a78bfa' },
+              { label: 'CT', tz: 'America/Chicago',     color: '#60a5fa' },
+              { label: 'MT', tz: 'America/Denver',      color: '#34d399' },
+              { label: 'PT', tz: 'America/Los_Angeles', color: '#fbbf24' },
+            ].map(z => (
+              <div key={z.label} className="flex items-center justify-between px-2 py-1.5 rounded-lg"
+                   style={{ background: 'var(--surface-s)', border: `1px solid ${z.color}22` }}>
+                <span style={{ fontSize: 10, fontWeight: 700, color: z.color, minWidth: 22 }}>{z.label}</span>
+                <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--text)', fontFamily: 'monospace' }}>
+                  {new Intl.DateTimeFormat('en-US', { timeZone: z.tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }).format(clock)}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="px-4 py-2 border-t flex-shrink-0" style={{ borderColor: 'var(--border)', background: 'var(--surface-s)' }}>
           <p style={{ fontSize: 10, color: 'var(--text-3)', textAlign: 'center' }}>

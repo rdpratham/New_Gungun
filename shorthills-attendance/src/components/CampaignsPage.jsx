@@ -43,20 +43,28 @@ export default function CampaignsPage({ user, employees }) {
     if (!selectedCampaign) return;
     const campaign = campaigns.find(c => c.id === selectedCampaign);
     if (!campaign) return;
+    const emp = employees.find(e => e.id === empId);
+    const existing = emp?.campaigns || (emp?.campaign ? [emp.campaign] : []);
+    if (existing.some(c => c.id === campaign.id)) {
+      showSuccess(`"${campaign.name}" is already assigned to ${empName}.`);
+      return;
+    }
     setAssigning(empId);
     try {
-      await updateDoc(doc(db, 'employees', empId), {
-        campaign: { id: campaign.id, name: campaign.name, assignedAt: new Date() },
-      });
+      const updated = [...existing, { id: campaign.id, name: campaign.name }];
+      await updateDoc(doc(db, 'employees', empId), { campaigns: updated, campaign: null });
       showSuccess(`Campaign "${campaign.name}" assigned to ${empName}!`);
     } catch (err) { console.error(err); }
     setAssigning(null);
   };
 
-  const handleUnassign = async (empId, empName) => {
-    setAssigning(empId);
+  const handleUnassign = async (empId, empName, campaignId) => {
+    const emp = employees.find(e => e.id === empId);
+    const existing = emp?.campaigns || (emp?.campaign ? [emp.campaign] : []);
+    setAssigning(empId + campaignId);
     try {
-      await updateDoc(doc(db, 'employees', empId), { campaign: null });
+      const updated = existing.filter(c => c.id !== campaignId);
+      await updateDoc(doc(db, 'employees', empId), { campaigns: updated, campaign: null });
       showSuccess(`Campaign removed from ${empName}.`);
     } catch (err) { console.error(err); }
     setAssigning(null);
@@ -231,54 +239,58 @@ export default function CampaignsPage({ user, employees }) {
             ) : (
               <div>
                 {employees.map(emp => {
-                  const hasCampaign = !!emp.campaign?.id;
-                  const isAssigning = assigning === emp.id;
+                  const empCampaigns = emp.campaigns?.length ? emp.campaigns : (emp.campaign?.id ? [emp.campaign] : []);
                   const empName = emp.name || emp.email?.split('@')[0] || '—';
+                  const isAssigningThis = typeof assigning === 'string' && assigning.startsWith(emp.id);
                   return (
                     <div key={emp.id}
-                         className="px-4 py-3.5 border-b last:border-b-0 flex items-center gap-3 transition-colors"
+                         className="px-4 py-3.5 border-b last:border-b-0 transition-colors"
                          style={{ borderColor: 'var(--border)' }}
                          onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-s)'}
                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                      <div className="w-9 h-9 rounded-xl overflow-hidden flex-shrink-0"
-                           style={{ background: 'linear-gradient(135deg,#7c3aed22,#3b82f622)', border: '1px solid rgba(124,58,237,0.2)' }}>
-                        {emp.photoURL
-                          ? <img src={emp.photoURL} alt="" className="w-full h-full object-cover" />
-                          : <div className="w-full h-full flex items-center justify-center font-bold text-violet-400" style={{ fontSize: 12 }}>
-                              {empName.charAt(0).toUpperCase()}
-                            </div>
-                        }
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-semibold truncate" style={{ color: 'var(--text)', fontSize: 13 }}>{empName}</p>
-                        {hasCampaign ? (
-                          <p className="text-xs mt-0.5 truncate" style={{ color: '#a78bfa' }}>
-                            📣 {emp.campaign.name}
-                          </p>
-                        ) : (
-                          <p className="text-xs mt-0.5" style={{ color: 'var(--text-3)' }}>No campaign assigned</p>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2 flex-shrink-0">
-                        {hasCampaign && (
-                          <button
-                            onClick={() => handleUnassign(emp.id, empName)}
-                            disabled={isAssigning}
-                            className="px-2.5 py-1 rounded-lg text-xs font-semibold transition-all"
-                            style={{ background: 'rgba(239,68,68,0.1)', color: '#f87171', border: '1px solid rgba(239,68,68,0.2)' }}>
-                            {isAssigning ? '…' : 'Remove'}
-                          </button>
-                        )}
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-xl overflow-hidden flex-shrink-0"
+                             style={{ background: 'linear-gradient(135deg,#7c3aed22,#3b82f622)', border: '1px solid rgba(124,58,237,0.2)' }}>
+                          {emp.photoURL
+                            ? <img src={emp.photoURL} alt="" className="w-full h-full object-cover" />
+                            : <div className="w-full h-full flex items-center justify-center font-bold text-violet-400" style={{ fontSize: 12 }}>
+                                {empName.charAt(0).toUpperCase()}
+                              </div>
+                          }
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold truncate" style={{ color: 'var(--text)', fontSize: 13 }}>{empName}</p>
+                          {empCampaigns.length === 0 && (
+                            <p className="text-xs mt-0.5" style={{ color: 'var(--text-3)' }}>No campaign assigned</p>
+                          )}
+                        </div>
                         <button
                           onClick={() => handleAssign(emp.id, empName)}
-                          disabled={isAssigning || !selectedCampaign}
-                          className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
+                          disabled={isAssigningThis || !selectedCampaign}
+                          className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex-shrink-0"
                           style={selectedCampaign
-                            ? { background: 'linear-gradient(135deg,#7c3aed,#3b82f6)', color: '#fff', opacity: isAssigning ? 0.7 : 1 }
+                            ? { background: 'linear-gradient(135deg,#7c3aed,#3b82f6)', color: '#fff', opacity: isAssigningThis ? 0.7 : 1 }
                             : { background: 'var(--surface-s)', color: 'var(--text-3)', cursor: 'not-allowed' }}>
-                          {isAssigning ? 'Assigning…' : 'Assign'}
+                          {isAssigningThis ? '…' : '+ Assign'}
                         </button>
                       </div>
+                      {empCampaigns.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mt-2 ml-12">
+                          {empCampaigns.map(c => (
+                            <span key={c.id} className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full"
+                                  style={{ background: 'rgba(124,58,237,0.12)', color: '#a78bfa', border: '1px solid rgba(124,58,237,0.2)' }}>
+                              📣 {c.name}
+                              <button
+                                onClick={() => handleUnassign(emp.id, empName, c.id)}
+                                disabled={assigning === emp.id + c.id}
+                                className="hover:text-red-400 transition-colors leading-none font-bold"
+                                style={{ fontSize: 13, marginLeft: 1 }}>
+                                ×
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   );
                 })}
