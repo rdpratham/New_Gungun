@@ -958,13 +958,15 @@ function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDa
   useEffect(() => {
     const q = query(collection(db, 'meetings'), where('month', '==', currentMonth));
     return onSnapshot(q, snap => {
-      const comp  = snap.docs.reduce((s, d) => s + (d.data().completed  || 0), 0);
-      const sched = snap.docs.reduce((s, d) => s + (d.data().scheduled  || 0), 0);
-      setTeamMeet({ completed: comp, scheduled: sched });
+      const comp   = snap.docs.reduce((s, d) => s + (d.data().completed || 0), 0);
+      const sched  = snap.docs.reduce((s, d) => s + (d.data().scheduled || 0), 0);
+      const empTgt = snap.docs.reduce((s, d) => s + (d.data().target    || 0), 0);
+      setTeamMeet({ completed: comp, scheduled: sched, empTarget: empTgt });
     });
   }, []);
 
-  const tgt = teamTarget?.target || 0;
+  // Use manual team target if set, otherwise fall back to sum of employee targets
+  const tgt = teamTarget?.target || teamMeet.empTarget || 0;
   const pct = tgt > 0 ? Math.min(teamMeet.completed / tgt, 1) : 0;
   const R = 36, CIRC = 2 * Math.PI * R;
 
@@ -1049,7 +1051,7 @@ function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDa
             <p style={{ fontSize: 10, color: 'var(--text-3)', marginBottom: 10 }}>
               {new Intl.DateTimeFormat('en-IN', { month: 'long', year: 'numeric' }).format(new Date())}
             </p>
-            {tgt === 0 ? (
+            {tgt === 0 && teamMeet.completed === 0 && teamMeet.scheduled === 0 ? (
               <div className="text-center py-4">
                 <p style={{ fontSize: 11, color: 'var(--text-3)' }}>No target set for this month</p>
                 <button onClick={() => onNavigate('team-target')} className="btn-primary mt-2" style={{ fontSize: 11 }}>Set Target</button>
@@ -1076,10 +1078,10 @@ function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDa
                   </svg>
                   <div className="flex-1 space-y-2">
                     {[
-                      { label: 'Target',    value: tgt,                                         color: '#60a5fa' },
+                      { label: 'Target',    value: tgt || '—',                                  color: '#60a5fa' },
                       { label: 'Completed', value: teamMeet.completed,                          color: '#10b981' },
                       { label: 'Scheduled', value: teamMeet.scheduled,                          color: '#f59e0b' },
-                      { label: 'Remaining', value: Math.max(0, tgt - teamMeet.completed),       color: '#f87171' },
+                      { label: 'Remaining', value: tgt > 0 ? Math.max(0, tgt - teamMeet.completed) : '—', color: '#f87171' },
                     ].map(s => (
                       <div key={s.label} className="flex items-center justify-between">
                         <span style={{ fontSize: 10, color: 'var(--text-3)' }}>{s.label}</span>
@@ -1094,6 +1096,11 @@ function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDa
                     <div style={{ height: '100%', width: `${pct * 100}%`, background: 'linear-gradient(90deg,#7c3aed,#3b82f6)', borderRadius: 99, transition: 'width 1s' }} />
                   </div>
                 </div>
+                {!teamTarget?.target && tgt > 0 && (
+                  <p style={{ fontSize: 9, color: 'var(--text-3)', marginTop: 6, textAlign: 'center' }}>
+                    Target auto-calculated from employee assignments
+                  </p>
+                )}
               </>
             )}
           </div>
