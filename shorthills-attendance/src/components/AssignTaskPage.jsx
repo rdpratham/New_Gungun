@@ -204,8 +204,8 @@ function TaskDetailModal({ task, onClose, onCycleStatus, onDelete, confirmDel })
 }
 
 /* ── Main component ──────────────────────────────────────────────── */
-export default function AssignTaskPage({ user, employees = [] }) {
-  const INITIAL_FORM = { title: '', description: '', assignedTo: '', dueDate: '', priority: 'medium' };
+export default function AssignTaskPage({ user, employees = [], initialEmployee = null }) {
+  const INITIAL_FORM = { title: '', description: '', assignedTo: initialEmployee?.id || '', dueDate: '', priority: 'medium' };
 
   const [tasks,          setTasks]          = useState([]);
   const [loading,        setLoading]        = useState(true);
@@ -216,6 +216,13 @@ export default function AssignTaskPage({ user, employees = [] }) {
   const [toast,          setToast]          = useState('');
   const [viewTask,       setViewTask]       = useState(null);
   const [confirmDel,     setConfirmDel]     = useState(null);
+
+  // Pre-select employee when navigated from employee card
+  useEffect(() => {
+    if (initialEmployee?.id) {
+      setForm(f => ({ ...f, assignedTo: initialEmployee.id }));
+    }
+  }, [initialEmployee]);
 
   useEffect(() => {
     setLoading(true);

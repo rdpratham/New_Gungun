@@ -1338,7 +1338,7 @@ function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDa
 }
 
 /* ── Employees page ───────────────────────────────────────── */
-function EmployeesPage({ employees, loadingEmp, onEdit, navigate }) {
+function EmployeesPage({ employees, loadingEmp, onEdit, onAssignTask, navigate }) {
   const [search, setSearch] = useState('');
   const filtered = employees.filter(e =>
     !search ||
@@ -1389,7 +1389,9 @@ function EmployeesPage({ employees, loadingEmp, onEdit, navigate }) {
         </div>
       ) : (
         <div className="grid grid-cols-4 gap-3">
-          {filtered.map(emp => <EmployeeCard key={emp.id} employee={emp} onClick={onEdit} />)}
+          {filtered.map(emp => (
+            <EmployeeCard key={emp.id} employee={emp} onEdit={onEdit} onAssignTask={onAssignTask} />
+          ))}
         </div>
       )}
     </div>
@@ -1407,6 +1409,7 @@ export default function AdminDashboard({ user }) {
   const [loadingAtt, setLoadingAtt]   = useState(true);
   const [expandedPhoto, setExpandedPhoto] = useState(null);
   const [editingEmployee, setEditingEmployee] = useState(null);
+  const [preTaskEmployee, setPreTaskEmployee] = useState(null);
   const [showProfile, setShowProfile] = useState(false);
   const [adminProfile, setAdminProfile] = useState(null);
   const [filterDate, setFilterDate]   = useState('');
@@ -1565,7 +1568,9 @@ export default function AdminDashboard({ user }) {
           )}
           {page === 'employees' && (
             <EmployeesPage employees={employees} loadingEmp={loadingEmp}
-                           onEdit={setEditingEmployee} navigate={navigate} />
+                           onEdit={setEditingEmployee}
+                           onAssignTask={emp => { setPreTaskEmployee(emp); setPage('assign-task'); }}
+                           navigate={navigate} />
           )}
           {page === 'attendance' && (
             <AttendancePage employees={employees} attendance={attendance}
@@ -1573,7 +1578,7 @@ export default function AdminDashboard({ user }) {
                             setExpandedPhoto={setExpandedPhoto} />
           )}
           {page === 'assign-task' && (
-            <AssignTaskPage user={user} employees={employees} />
+            <AssignTaskPage user={user} employees={employees} initialEmployee={preTaskEmployee} />
           )}
           {page === 'my-todo' && (
             <TodoPage user={user} title="My To-Do" />
