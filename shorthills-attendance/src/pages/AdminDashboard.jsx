@@ -958,15 +958,14 @@ function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDa
   useEffect(() => {
     const q = query(collection(db, 'meetings'), where('month', '==', currentMonth));
     return onSnapshot(q, snap => {
-      const comp   = snap.docs.reduce((s, d) => s + (d.data().completed || 0), 0);
-      const sched  = snap.docs.reduce((s, d) => s + (d.data().scheduled || 0), 0);
-      const empTgt = snap.docs.reduce((s, d) => s + (d.data().target    || 0), 0);
-      setTeamMeet({ completed: comp, scheduled: sched, empTarget: empTgt });
+      const comp  = snap.docs.reduce((s, d) => s + (d.data().completed || 0), 0);
+      const sched = snap.docs.reduce((s, d) => s + (d.data().scheduled || 0), 0);
+      setTeamMeet({ completed: comp, scheduled: sched });
     });
   }, []);
 
-  // Use manual team target if set, otherwise fall back to sum of employee targets
-  const tgt = teamTarget?.target || teamMeet.empTarget || 0;
+  // Team target is only the manually set value from TeamTargetPage
+  const tgt = teamTarget?.target || 0;
   const pct = tgt > 0 ? Math.min(teamMeet.completed / tgt, 1) : 0;
   const R = 36, CIRC = 2 * Math.PI * R;
 
@@ -1051,57 +1050,54 @@ function DashboardPage({ employees, attendance, loadingEmp, loadingAtt, filterDa
             <p style={{ fontSize: 10, color: 'var(--text-3)', marginBottom: 10 }}>
               {new Intl.DateTimeFormat('en-IN', { month: 'long', year: 'numeric' }).format(new Date())}
             </p>
-            {tgt === 0 && teamMeet.completed === 0 && teamMeet.scheduled === 0 ? (
-              <div className="text-center py-4">
-                <p style={{ fontSize: 11, color: 'var(--text-3)' }}>No target set for this month</p>
-                <button onClick={() => onNavigate('team-target')} className="btn-primary mt-2" style={{ fontSize: 11 }}>Set Target</button>
+            {/* Meeting stats — always visible when data exists */}
+            <div className="flex items-center gap-3">
+              {tgt > 0 ? (
+                <svg width={88} height={88} style={{ flexShrink: 0 }}>
+                  <defs>
+                    <linearGradient id="dt-ring" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#7c3aed" />
+                      <stop offset="100%" stopColor="#3b82f6" />
+                    </linearGradient>
+                  </defs>
+                  <circle cx={44} cy={44} r={R} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={7} />
+                  <circle cx={44} cy={44} r={R} fill="none" stroke="url(#dt-ring)" strokeWidth={7}
+                    strokeLinecap="round"
+                    strokeDasharray={`${CIRC * pct} ${CIRC}`}
+                    transform="rotate(-90 44 44)"
+                    style={{ transition: 'stroke-dasharray 1s', filter: 'drop-shadow(0 0 5px #7c3aed60)' }} />
+                  <text x={44} y={40} textAnchor="middle" fill="white" fontSize={16} fontWeight={700}>{Math.round(pct * 100)}%</text>
+                  <text x={44} y={54} textAnchor="middle" fill="rgba(255,255,255,0.35)" fontSize={9}>done</text>
+                </svg>
+              ) : (
+                <div className="flex flex-col items-center justify-center rounded-lg flex-shrink-0"
+                     style={{ width: 88, height: 88, background: 'var(--surface-s)', border: '1px dashed rgba(255,255,255,0.1)' }}>
+                  <p style={{ fontSize: 9, color: 'var(--text-3)', textAlign: 'center', lineHeight: 1.4 }}>No target<br/>set</p>
+                  <button onClick={() => onNavigate('team-target')}
+                    style={{ fontSize: 8, color: '#14b8a6', fontWeight: 600, marginTop: 4 }}>Set →</button>
+                </div>
+              )}
+              <div className="flex-1 space-y-2">
+                {[
+                  { label: 'Target',    value: tgt > 0 ? tgt : '—',                              color: '#60a5fa' },
+                  { label: 'Completed', value: teamMeet.completed,                                color: '#10b981' },
+                  { label: 'Scheduled', value: teamMeet.scheduled,                                color: '#f59e0b' },
+                  { label: 'Remaining', value: tgt > 0 ? Math.max(0, tgt - teamMeet.completed) : '—', color: '#f87171' },
+                ].map(s => (
+                  <div key={s.label} className="flex items-center justify-between">
+                    <span style={{ fontSize: 10, color: 'var(--text-3)' }}>{s.label}</span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: s.color }}>{s.value}</span>
+                  </div>
+                ))}
               </div>
-            ) : (
-              <>
-                {/* Ring + numbers */}
-                <div className="flex items-center gap-3">
-                  <svg width={88} height={88} style={{ flexShrink: 0 }}>
-                    <defs>
-                      <linearGradient id="dt-ring" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#7c3aed" />
-                        <stop offset="100%" stopColor="#3b82f6" />
-                      </linearGradient>
-                    </defs>
-                    <circle cx={44} cy={44} r={R} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={7} />
-                    <circle cx={44} cy={44} r={R} fill="none" stroke="url(#dt-ring)" strokeWidth={7}
-                      strokeLinecap="round"
-                      strokeDasharray={`${CIRC * pct} ${CIRC}`}
-                      transform="rotate(-90 44 44)"
-                      style={{ transition: 'stroke-dasharray 1s', filter: 'drop-shadow(0 0 5px #7c3aed60)' }} />
-                    <text x={44} y={40} textAnchor="middle" fill="white" fontSize={16} fontWeight={700}>{Math.round(pct * 100)}%</text>
-                    <text x={44} y={54} textAnchor="middle" fill="rgba(255,255,255,0.35)" fontSize={9}>done</text>
-                  </svg>
-                  <div className="flex-1 space-y-2">
-                    {[
-                      { label: 'Target',    value: tgt || '—',                                  color: '#60a5fa' },
-                      { label: 'Completed', value: teamMeet.completed,                          color: '#10b981' },
-                      { label: 'Scheduled', value: teamMeet.scheduled,                          color: '#f59e0b' },
-                      { label: 'Remaining', value: tgt > 0 ? Math.max(0, tgt - teamMeet.completed) : '—', color: '#f87171' },
-                    ].map(s => (
-                      <div key={s.label} className="flex items-center justify-between">
-                        <span style={{ fontSize: 10, color: 'var(--text-3)' }}>{s.label}</span>
-                        <span style={{ fontSize: 13, fontWeight: 700, color: s.color }}>{s.value}</span>
-                      </div>
-                    ))}
-                  </div>
+            </div>
+            {/* Progress bar — only when target is set */}
+            {tgt > 0 && (
+              <div className="mt-3">
+                <div style={{ height: 4, borderRadius: 99, background: 'var(--surface-s)', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: `${pct * 100}%`, background: 'linear-gradient(90deg,#7c3aed,#3b82f6)', borderRadius: 99, transition: 'width 1s' }} />
                 </div>
-                {/* Progress bar */}
-                <div className="mt-3">
-                  <div style={{ height: 4, borderRadius: 99, background: 'var(--surface-s)', overflow: 'hidden' }}>
-                    <div style={{ height: '100%', width: `${pct * 100}%`, background: 'linear-gradient(90deg,#7c3aed,#3b82f6)', borderRadius: 99, transition: 'width 1s' }} />
-                  </div>
-                </div>
-                {!teamTarget?.target && tgt > 0 && (
-                  <p style={{ fontSize: 9, color: 'var(--text-3)', marginTop: 6, textAlign: 'center' }}>
-                    Target auto-calculated from employee assignments
-                  </p>
-                )}
-              </>
+              </div>
             )}
           </div>
         </div>
