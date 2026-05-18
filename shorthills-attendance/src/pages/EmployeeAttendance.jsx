@@ -905,25 +905,11 @@ export default function EmployeeAttendance({ user }) {
     }
   }, [needsPhoto, photoBannerDismissed]);
 
-  // Clock tick every minute — auto-popup only once per session per type
+  // Live clock — updates every second, no auto-popup
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(new Date());
-      const today = getISTDateString();
-      // Reset dismissed flags on new day
-      if (dismissedRef.current.date !== today) {
-        dismissedRef.current = { signin: false, signout: false, date: today };
-      }
-      if (!showPopup && !needsPhoto) {
-        if (!signInRecord && isSignInWindow() && !dismissedRef.current.signin) {
-          setPopupType('signin'); setShowPopup(true);
-        } else if (signInRecord && !signOutRecord && isSignOutWindow() && !dismissedRef.current.signout) {
-          setPopupType('signout'); setShowPopup(true);
-        }
-      }
-    }, 60000);
-    return () => clearInterval(interval);
-  }, [signInRecord, signOutRecord, showPopup]);
+    const tick = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(tick);
+  }, []);
 
   // Real-time task listener
   useEffect(() => {

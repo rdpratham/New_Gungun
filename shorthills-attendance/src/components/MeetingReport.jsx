@@ -96,11 +96,11 @@ function RadialGauge({ pct = 0, size = 160, color1 = '#7c3aed', color2 = '#3b82f
         style={{ filter: `drop-shadow(0 0 6px ${color2})`, transition: 'all 1s cubic-bezier(0.34,1.56,0.64,1)' }} />}
       {/* Center text */}
       {value !== undefined && (
-        <text x={CX} y={CY - R * 0.1} textAnchor="middle" fill="white"
-          fontSize={size * 0.22} fontWeight="900" style={{ fontVariantNumeric: 'tabular-nums' }}>{value}</text>
+        <text x={CX} y={CY - R * 0.05} textAnchor="middle" fill="white"
+          fontSize={size * 0.17} fontWeight="900" style={{ fontVariantNumeric: 'tabular-nums' }}>{value}</text>
       )}
-      {label && <text x={CX} y={CY + R * 0.35} textAnchor="middle" fill="rgba(255,255,255,0.55)" fontSize={size * 0.1}>{label}</text>}
-      {sublabel && <text x={CX} y={CY + R * 0.65} textAnchor="middle" fill={color2} fontSize={size * 0.11} fontWeight="700">{sublabel}</text>}
+      {label && <text x={CX} y={CY + R * 0.32} textAnchor="middle" fill="rgba(255,255,255,0.5)" fontSize={size * 0.085}>{label}</text>}
+      {sublabel && <text x={CX} y={CY + R * 0.58} textAnchor="middle" fill={color2} fontSize={size * 0.09} fontWeight="700">{sublabel}</text>}
     </svg>
   );
 }
@@ -797,42 +797,42 @@ export default function MeetingReport({ user }) {
       </div>
 
       {/* ── KPI STAT CARDS ── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
           { label: 'Team Target',  value: totalTarget,    c1: '#3b82f6', c2: '#6366f1', icon: '🎯', pct: 1 },
           { label: 'Completed',    value: totalCompleted, c1: '#7c3aed', c2: '#3b82f6', icon: '✅', pct: teamPct },
           { label: 'Scheduled',    value: totalScheduled, c1: '#ec4899', c2: '#f97316', icon: '📅', pct: totalTarget > 0 ? totalScheduled / totalTarget : 0 },
           { label: 'Remaining',    value: totalRemaining, c1: totalRemaining > 0 ? '#f59e0b' : '#10b981', c2: totalRemaining > 0 ? '#ef4444' : '#06b6d4', icon: totalRemaining > 0 ? '⏳' : '🏆', pct: 1 - teamPct },
         ].map((s, i) => {
-          const R = 28, CIRC = 2 * Math.PI * R;
+          const R = 21, CIRC = 2 * Math.PI * R;
           const gid = `kpi-${i}`;
           return (
-            <div key={s.label} className="rounded-2xl p-4 relative overflow-hidden"
+            <div key={s.label} className="rounded-xl p-3 relative overflow-hidden"
               style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
               {/* Glow bg */}
-              <div className="absolute inset-0 opacity-10 rounded-2xl"
+              <div className="absolute inset-0 opacity-10 rounded-xl"
                 style={{ background: `radial-gradient(circle at 80% 20%, ${s.c1}, transparent 70%)` }} />
-              <div className="relative flex items-start justify-between gap-2">
-                <div>
-                  <div className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: 'var(--text-3)' }}>{s.label}</div>
-                  <div className="tabular-nums" style={{ color: 'var(--text)', fontSize: 22, fontWeight: 800, lineHeight: 1.2 }}>
+              <div className="relative flex items-center justify-between gap-2">
+                <div className="min-w-0">
+                  <div style={{ fontSize: 9, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-3)', marginBottom: 3 }}>{s.label}</div>
+                  <div className="tabular-nums" style={{ color: 'var(--text)', fontSize: 18, fontWeight: 800, lineHeight: 1.1 }}>
                     <AnimatedNumber value={s.value} />
                   </div>
-                  <div className="text-xs mt-1 font-semibold" style={{ color: s.c1 }}>{Math.round(clamp(s.pct, 0, 1) * 100)}% of target</div>
+                  <div style={{ fontSize: 10, marginTop: 3, fontWeight: 600, color: s.c1 }}>{Math.round(clamp(s.pct, 0, 1) * 100)}% of target</div>
                 </div>
-                <svg width={72} height={72} style={{ flexShrink: 0 }}>
+                <svg width={54} height={54} style={{ flexShrink: 0 }}>
                   <defs>
                     <linearGradient id={gid} x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stopColor={s.c1} /><stop offset="100%" stopColor={s.c2} />
                     </linearGradient>
                   </defs>
-                  <circle cx={36} cy={36} r={R} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={7} />
-                  <circle cx={36} cy={36} r={R} fill="none" stroke={`url(#${gid})`} strokeWidth={7}
+                  <circle cx={27} cy={27} r={R} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={5} />
+                  <circle cx={27} cy={27} r={R} fill="none" stroke={`url(#${gid})`} strokeWidth={5}
                     strokeLinecap="round"
                     strokeDasharray={`${CIRC * clamp(s.pct, 0, 1)} ${CIRC}`}
-                    transform="rotate(-90 36 36)"
-                    style={{ transition: 'stroke-dasharray 1.2s cubic-bezier(0.34,1.56,0.64,1)', filter: `drop-shadow(0 0 6px ${s.c1}80)` }} />
-                  <text x={36} y={40} textAnchor="middle" fill="white" fontSize={14} fontWeight="800">{s.icon}</text>
+                    transform="rotate(-90 27 27)"
+                    style={{ transition: 'stroke-dasharray 1.2s cubic-bezier(0.34,1.56,0.64,1)', filter: `drop-shadow(0 0 5px ${s.c1}80)` }} />
+                  <text x={27} y={31} textAnchor="middle" fill="white" fontSize={12} fontWeight="800">{s.icon}</text>
                 </svg>
               </div>
             </div>
@@ -844,10 +844,10 @@ export default function MeetingReport({ user }) {
       {activeTab === 'overview' && (
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
           {/* Team radial gauge */}
-          <div className="rounded-2xl p-6 flex flex-col items-center justify-center"
+          <div className="rounded-2xl p-5 flex flex-col items-center justify-center"
             style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
-            <div className="text-sm font-bold uppercase tracking-widest mb-2" style={{ color: 'var(--text-3)' }}>Team Completion</div>
-            <RadialGauge pct={teamPct} size={200} value={`${Math.round(teamPct * 100)}%`} label="of target" sublabel={`${totalCompleted} / ${totalTarget}`} />
+            <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--text-3)', marginBottom: 8 }}>Team Completion</div>
+            <RadialGauge pct={teamPct} size={180} value={`${Math.round(teamPct * 100)}%`} label="of target" sublabel={`${totalCompleted} / ${totalTarget}`} />
             {/* Mini legend */}
             <div className="flex gap-4 mt-2">
               {[
