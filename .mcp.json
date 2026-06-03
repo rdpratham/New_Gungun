@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "linkedin-prospector": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["/home/user/New_Gungun/linkedin_prospector/mcp_server.py"]
+    }
+  }
+}
