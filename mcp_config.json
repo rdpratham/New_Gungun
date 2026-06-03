@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "zoominfo": {
+      "command": "python",
+      "args": ["server.py"],
+      "cwd": "/path/to/zoominfo-mcp",
+      "env": {
+        "ZOOMINFO_CLIENT_ID": "your_client_id",
+        "ZOOMINFO_PRIVATE_KEY": "your_private_key"
+      }
+    }
+  }
+}
