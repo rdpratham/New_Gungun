@@ -4,6 +4,17 @@
       "type": "stdio",
       "command": "python",
       "args": ["/home/user/New_Gungun/linkedin_prospector/mcp_server.py"]
+    },
+    "zoominfo": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["/home/user/New_Gungun/zoominfo_mcp/server.py"],
+      "env": {
+        "ZOOMINFO_USERNAME": "${ZOOMINFO_USERNAME}",
+        "ZOOMINFO_PASSWORD": "${ZOOMINFO_PASSWORD}",
+        "ZOOMINFO_CLIENT_ID": "${ZOOMINFO_CLIENT_ID}",
+        "ZOOMINFO_PRIVATE_KEY": "${ZOOMINFO_PRIVATE_KEY}"
+      }
     }
   }
 }
