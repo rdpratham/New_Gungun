@@ -5,7 +5,9 @@ Enterprise Sales Prospector — MCP Server
 Multi-source contact and company intelligence platform.
 
 Tools:
-  search_prospects          : LinkedIn people search with Claude scoring
+  search_prospects          : LinkedIn people search with Claude scoring (US filter support)
+  scrape_linkedin_profile   : Extract full profile data from a LinkedIn URL
+  scrape_linkedin_profiles  : Bulk scrape multiple LinkedIn profile URLs
   parse_html_prospects      : Score profiles from saved HTML (LinkedIn fallback)
   find_linkedin_url         : Find exact LinkedIn profile URL via Google research
   bulk_find_linkedin_urls   : Batch LinkedIn URL resolution for a list of names
@@ -13,6 +15,7 @@ Tools:
   get_company_directors     : Extract directors from Indian company registry
   google_search_people      : Free-form Google search for professional profiles
   export_to_excel           : Export a list of contacts to a styled Excel file
+  list_us_locations         : List supported US city/state location filters
   cache_stats               : Show cache statistics and storage savings
 """
 
@@ -30,7 +33,7 @@ mcp = FastMCP("enterprise-prospector")
 
 
 # ---------------------------------------------------------------------------
-# Tool: search_prospects (LinkedIn + Claude scoring)
+# Tool: search_prospects  (LinkedIn people search + Claude scoring)
 # ---------------------------------------------------------------------------
 
 @mcp.tool()
@@ -39,6 +42,7 @@ async def search_prospects(
     designation: str = "",
     process: str = "",
     location: str = "",
+    us_only: bool = False,
     company: str = "",
     pages: int = 3,
     min_score: int = 0,
@@ -49,19 +53,20 @@ async def search_prospects(
     """
     Search LinkedIn for prospects and score them with Claude AI.
 
-    Scrapes LinkedIn people search results (requires auth_state.json),
-    then uses Claude to score each profile 0-10 for sales relevance.
-    Results are cached to avoid repeat scraping.
+    Goes directly to linkedin.com/search/results/people and extracts profiles.
+    Requires auth_state.json (run: playwright codegen --save-storage=auth_state.json https://www.linkedin.com).
+    Results are cached to avoid repeat scraping and API costs.
 
     Args:
         keywords: Domain keywords, e.g. "AI automation SaaS"
         designation: Target job title, e.g. "VP of Sales" or "CPO"
         process: Business process, e.g. "procurement" or "digital transformation"
-        location: Location filter, e.g. "France" or "New York"
+        location: Location filter — city, state, or country name (e.g. "New York", "California")
+        us_only: If true, restricts results to United States (overrides location if set)
         company: Company name filter, e.g. "Airbus" or "TCS"
         pages: LinkedIn result pages to scrape (1-5, default 3)
         min_score: Only return profiles with score >= this value (0-10)
-        export_excel: If true, save results to Excel file
+        export_excel: If true, save results to an Excel file
         auth_state_path: Path to saved Playwright auth state (login cookies)
         anthropic_api_key: Anthropic API key (falls back to ANTHROPIC_API_KEY env)
     """
@@ -77,13 +82,17 @@ async def search_prospects(
         process=process or "",
         location=location or "",
         company=company or "",
+        us_only=us_only,
         max_pages=max(1, min(pages, 5)),
         auth_state_path=auth_state_path,
     )
 
     if not profiles_raw:
         return json.dumps({
-            "error": "No profiles found. Check auth_state.json or use parse_html_prospects.",
+            "error": (
+                "No profiles found. Ensure auth_state.json is valid "
+                "or use parse_html_prospects as fallback."
+            ),
             "profiles": [],
         })
 
@@ -93,6 +102,7 @@ async def search_prospects(
     if not api_key:
         return json.dumps({
             "message": "No Anthropic API key — returning unscored profiles.",
+            "total": len(profiles),
             "profiles": profiles,
         })
 
@@ -108,7 +118,6 @@ async def search_prospects(
 
     if min_score > 0:
         scored = [p for p in scored if p.get("score", 0) >= min_score]
-
     scored.sort(key=lambda p: p.get("score", 0), reverse=True)
 
     if export_excel:
@@ -116,11 +125,87 @@ async def search_prospects(
         for p in scored:
             p["_exported_to"] = path
 
-    return json.dumps(scored, ensure_ascii=False, indent=2)
+    return json.dumps({"total": len(scored), "profiles": scored}, ensure_ascii=False, indent=2)
 
 
 # ---------------------------------------------------------------------------
-# Tool: parse_html_prospects (LinkedIn HTML fallback)
+# Tool: scrape_linkedin_profile  (full profile data extraction)
+# ---------------------------------------------------------------------------
+
+@mcp.tool()
+async def scrape_linkedin_profile(
+    linkedin_url: str,
+    auth_state_path: str = "auth_state.json",
+) -> str:
+    """
+    Go to a LinkedIn profile URL and extract all visible data.
+
+    Extracts: name, headline, location, about/summary, full experience history,
+    education, skills, and contact info (if visible).
+    Results are cached for 24 hours.
+
+    Args:
+        linkedin_url: Full LinkedIn profile URL, e.g. https://www.linkedin.com/in/satyanadella/
+        auth_state_path: Path to saved Playwright auth state (required for full data)
+    """
+    from sources.linkedin_source import scrape_profile
+
+    result = await scrape_profile(linkedin_url, auth_state_path)
+    return json.dumps(result, ensure_ascii=False, indent=2)
+
+
+# ---------------------------------------------------------------------------
+# Tool: scrape_linkedin_profiles  (bulk profile extraction)
+# ---------------------------------------------------------------------------
+
+@mcp.tool()
+async def scrape_linkedin_profiles(
+    urls_json: str,
+    auth_state_path: str = "auth_state.json",
+    concurrency: int = 2,
+    export_excel: bool = True,
+) -> str:
+    """
+    Bulk scrape multiple LinkedIn profiles and extract full data from each.
+
+    Visits each profile URL on linkedin.com and extracts name, headline,
+    location, experience, education, skills, and contact info.
+    Runs with controlled concurrency to avoid rate limiting.
+
+    Args:
+        urls_json: JSON array of LinkedIn profile URLs
+                   Example: ["https://www.linkedin.com/in/satyanadella/", ...]
+        auth_state_path: Path to saved Playwright auth state
+        concurrency: Parallel profile requests (1-3, default 2)
+        export_excel: Save all profiles to an Excel file
+    """
+    from sources.linkedin_source import scrape_profiles_bulk
+
+    try:
+        urls = json.loads(urls_json)
+    except json.JSONDecodeError as e:
+        return json.dumps({"error": f"Invalid JSON: {e}"})
+
+    if not isinstance(urls, list):
+        return json.dumps({"error": "urls_json must be a JSON array of strings."})
+
+    concurrency = max(1, min(concurrency, 3))
+    profiles = await scrape_profiles_bulk(urls, auth_state_path, concurrency)
+
+    if export_excel and profiles:
+        path = _export_contacts_excel(profiles, f"linkedin_profiles_{date.today()}", "LinkedIn Profiles")
+        for p in profiles:
+            if isinstance(p, dict):
+                p["_exported_to"] = path
+
+    return json.dumps({
+        "total": len(profiles),
+        "profiles": profiles,
+    }, ensure_ascii=False, indent=2)
+
+
+# ---------------------------------------------------------------------------
+# Tool: parse_html_prospects  (LinkedIn HTML fallback)
 # ---------------------------------------------------------------------------
 
 @mcp.tool()
@@ -138,8 +223,8 @@ async def parse_html_prospects(
     """
     Parse LinkedIn profiles from raw HTML (fallback when scraping is blocked).
 
-    Paste the raw HTML of a LinkedIn people search results page.
-    Profiles are extracted and scored by Claude AI.
+    Save a LinkedIn search results page as HTML from your browser
+    (File → Save Page As) and paste the content here.
 
     Args:
         html: Raw HTML content of a LinkedIn search results page
@@ -178,7 +263,7 @@ async def parse_html_prospects(
         for p in scored:
             p["_exported_to"] = path
 
-    return json.dumps(scored, ensure_ascii=False, indent=2)
+    return json.dumps({"total": len(scored), "profiles": scored}, ensure_ascii=False, indent=2)
 
 
 # ---------------------------------------------------------------------------
@@ -216,7 +301,7 @@ async def find_linkedin_url(
 
 
 # ---------------------------------------------------------------------------
-# Tool: bulk_find_linkedin_urls  (batch resolution)
+# Tool: bulk_find_linkedin_urls  (batch URL resolution)
 # ---------------------------------------------------------------------------
 
 @mcp.tool()
@@ -296,7 +381,6 @@ async def search_indian_company(
         r = await zauba_search(company_name)
         results.extend([{**x, "source": "zaubacorp"} for x in r])
 
-    # De-duplicate by CIN
     seen: set[str] = set()
     deduped = []
     for r in results:
@@ -415,9 +499,9 @@ async def google_search_people(
 
     Use this for broad discovery with no source constraints.
     Examples:
-      "CTO Fintech Mumbai 2024"
-      "Partner McKinsey digital transformation India"
-      "site:linkedin.com/in Chief Procurement Officer Airbus"
+      "CTO Fintech New York 2024"
+      "Partner McKinsey digital transformation"
+      "site:linkedin.com/in VP Engineering San Francisco"
 
     Args:
         query: Google search query string
@@ -434,6 +518,41 @@ async def google_search_people(
         "total": len(results),
         "results": results,
     }, ensure_ascii=False, indent=2)
+
+
+# ---------------------------------------------------------------------------
+# Tool: list_us_locations
+# ---------------------------------------------------------------------------
+
+@mcp.tool()
+async def list_us_locations() -> str:
+    """
+    List all supported US city, state, and metro area location filters.
+
+    Use these names in the 'location' parameter of search_prospects.
+    LinkedIn geo URNs are resolved automatically.
+    """
+    from sources.linkedin_source import US_GEO_URNS
+
+    grouped = {"cities_metros": [], "states": []}
+    state_keywords = [
+        "california", "texas", "florida", "new york state", "illinois",
+        "pennsylvania", "ohio", "georgia", "north carolina", "michigan",
+        "new jersey", "virginia", "washington state", "massachusetts",
+    ]
+    for name in sorted(US_GEO_URNS.keys()):
+        if name in ("us", "usa", "united states"):
+            continue
+        if name in state_keywords:
+            grouped["states"].append(name)
+        else:
+            grouped["cities_metros"].append(name)
+
+    return json.dumps({
+        "tip": "Pass any of these names as the 'location' parameter in search_prospects.",
+        "us_only_shortcut": "Set us_only=true to restrict to all of United States without specifying a city.",
+        **grouped,
+    }, indent=2)
 
 
 # ---------------------------------------------------------------------------
@@ -509,10 +628,11 @@ def _export_contacts_excel(
 
     NAVY, WHITE, GREEN, GRAY = "1F3864", "FFFFFF", "C6EFCE", "F2F2F2"
 
-    all_keys = []
+    # Collect all field keys, skip internal _ fields
+    all_keys: list[str] = []
     for c in contacts:
         for k in c:
-            if k not in all_keys and not k.startswith("_"):
+            if k not in all_keys and not k.startswith("_") and k != "raw":
                 all_keys.append(k)
 
     thin = Side(style="thin", color="BFBFBF")
@@ -526,22 +646,25 @@ def _export_contacts_excel(
         cell = ws.cell(row=1, column=col, value=key.replace("_", " ").title())
         cell.fill = hdr_fill
         cell.font = hdr_font
-        cell.alignment = Alignment(horizontal="center", vertical="center")
+        cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
         cell.border = border
         ws.column_dimensions[get_column_letter(col)].width = max(14, len(key) + 4)
-    ws.row_dimensions[1].height = 24
+    ws.row_dimensions[1].height = 28
 
     url_cols = {i + 1 for i, k in enumerate(all_keys)
-                if any(x in k.lower() for x in ["url", "linkedin", "link"])}
+                if any(x in k.lower() for x in ["url", "linkedin", "link", "website"])}
 
     for row_idx, contact in enumerate(contacts, 2):
         row_fill = green_fill if row_idx % 2 == 0 else gray_fill
         for col, key in enumerate(all_keys, 1):
             val = contact.get(key, "")
+            # Flatten lists/dicts for Excel
+            if isinstance(val, (list, dict)):
+                val = json.dumps(val, ensure_ascii=False)
             cell = ws.cell(row=row_idx, column=col, value=val)
             cell.fill = row_fill
             cell.border = border
-            cell.alignment = Alignment(vertical="center")
+            cell.alignment = Alignment(vertical="center", wrap_text=False)
             cell.font = Font(size=10, name="Calibri")
             if col in url_cols and isinstance(val, str) and val.startswith("http"):
                 cell.hyperlink = val
