@@ -6,11 +6,13 @@
   "main": "dist/index.js",
   "bin": {
     "web-scraper-mcp": "dist/index.js",
+    "web-scraper-mcp-noapi": "dist/server_no_api.js",
     "web-scraper-fetch": "dist/fetch_cli.js"
   },
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
+    "start:noapi": "node dist/server_no_api.js",
     "fetch": "node dist/fetch_cli.js",
     "dev": "ts-node --esm src/index.ts",
     "watch": "tsc --watch",

@@ -137,6 +137,52 @@ Then fully restart Claude Desktop. You should see the `web-scraper` tools availa
 
 ---
 
+## No-API mode (let your host model do the extraction)
+
+If you're using **Claude Code** (or any MCP host with its own model), you don't
+need an Anthropic API key at all. In this mode the scraper only fetches and
+cleans pages; the model already driving your session does the extraction.
+
+Two ways to use it:
+
+### A) As a named MCP tool in Claude Code (recommended)
+
+A project-level `.mcp.json` is included at the repo root that registers a
+**no-API** server (`web-scraper-fetch`) exposing three tools:
+
+| Tool | Returns | The model then… |
+| --- | --- | --- |
+| `fetch_page` | Cleaned page text + title | extracts whatever you asked for |
+| `fetch_links` | All links (absolute URL + text) | filters them by your intent |
+| `fetch_raw` | Cleaned HTML | extracts when structure matters |
+
+Each accepts `url` and an optional `force_puppeteer: true`. After `npm run build`,
+just open Claude Code in the repo and ask:
+
+> "Scrape https://news.ycombinator.com and give me the top 10 titles with points and comments"
+
+Claude Code calls `fetch_page`, reads the text, and extracts the answer itself —
+**no `ANTHROPIC_API_KEY` required.** If the relative path in `.mcp.json` doesn't
+resolve in your setup, change it to the absolute path of
+`web-scraper-mcp/dist/server_no_api.js`.
+
+You can also run the no-API server standalone:
+
+```bash
+npm run start:noapi
+```
+
+### B) As a plain CLI
+
+```bash
+node dist/fetch_cli.js <url>            # cleaned page text  → model extracts
+node dist/fetch_cli.js <url> --links    # all links          → model filters
+node dist/fetch_cli.js <url> --raw      # stripped HTML
+node dist/fetch_cli.js <url> --puppeteer  # force JS rendering
+```
+
+---
+
 ## Development
 
 ```bash
