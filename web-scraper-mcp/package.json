@@ -1,0 +1,49 @@
+{
+  "name": "web-scraper-mcp",
+  "version": "1.0.0",
+  "description": "An intelligent, enterprise-grade MCP server for AI-powered web scraping using Claude.",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "web-scraper-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node --esm src/index.ts",
+    "watch": "tsc --watch",
+    "clean": "rimraf dist"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "web-scraping",
+    "puppeteer",
+    "cheerio",
+    "claude",
+    "anthropic",
+    "ai"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.27.3",
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "cheerio": "^1.0.0",
+    "csv-writer": "^1.6.0",
+    "node-fetch": "^3.3.2",
+    "p-limit": "^6.1.0",
+    "puppeteer": "^23.6.0",
+    "winston": "^3.15.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  }
+}
