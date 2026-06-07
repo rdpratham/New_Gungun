@@ -5,11 +5,13 @@
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "web-scraper-mcp": "dist/index.js"
+    "web-scraper-mcp": "dist/index.js",
+    "web-scraper-fetch": "dist/fetch_cli.js"
   },
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
+    "fetch": "node dist/fetch_cli.js",
     "dev": "ts-node --esm src/index.ts",
     "watch": "tsc --watch",
     "clean": "rimraf dist"
