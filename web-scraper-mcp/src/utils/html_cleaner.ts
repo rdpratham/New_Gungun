@@ -117,17 +117,35 @@ export function detectBlocked(
 ): { blocked: boolean; reason?: string } {
   if (status === 403) return { blocked: true, reason: "HTTP 403 Forbidden" };
   if (status === 429) return { blocked: true, reason: "HTTP 429 Too Many Requests" };
+  if (status === 503) return { blocked: true, reason: "HTTP 503 Service Unavailable" };
 
   const lower = rawHtml.toLowerCase();
-  const markers: Array<[RegExp, string]> = [
-    [/recaptcha|g-recaptcha|hcaptcha/, "CAPTCHA challenge detected"],
-    [/cf-browser-verification|checking your browser|cloudflare/, "Cloudflare challenge detected"],
-    [/are you a robot|verify you are human|unusual traffic/, "Bot verification page detected"],
-    [/access denied|you have been blocked/, "Access denied page detected"],
-  ];
 
-  for (const [re, reason] of markers) {
+  // Keyword markers are only meaningful on SMALL interstitial pages. A full
+  // content page (e.g. 3MB of real data) that merely *references* Cloudflare or
+  // a captcha script is NOT a challenge — guarding on size avoids false
+  // positives that would otherwise discard a perfectly good scrape.
+  const isSmall = rawHtml.length < 50_000;
+
+  // These are specific enough to flag even on larger pages.
+  const strongMarkers: Array<[RegExp, string]> = [
+    [/cf-browser-verification|cf_chl_|challenge-platform\//, "Cloudflare challenge detected"],
+    [/attention required! \| cloudflare/, "Cloudflare block page detected"],
+  ];
+  for (const [re, reason] of strongMarkers) {
     if (re.test(lower)) return { blocked: true, reason };
+  }
+
+  if (isSmall) {
+    const softMarkers: Array<[RegExp, string]> = [
+      [/just a moment\.\.\.|checking your browser/, "Cloudflare challenge detected"],
+      [/g-recaptcha|h-captcha|hcaptcha/, "CAPTCHA challenge detected"],
+      [/are you a robot|verify you are (a )?human|complete the security check|unusual traffic/, "Bot verification page detected"],
+      [/access denied|you have been blocked|you don't have permission to access/, "Access denied page detected"],
+    ];
+    for (const [re, reason] of softMarkers) {
+      if (re.test(lower)) return { blocked: true, reason };
+    }
   }
 
   return { blocked: false };
