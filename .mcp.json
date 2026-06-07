@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "web-scraper-fetch": {
+      "command": "node",
+      "args": ["web-scraper-mcp/dist/server_no_api.js"],
+      "env": {}
+    }
+  }
+}
