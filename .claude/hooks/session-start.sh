@@ -31,4 +31,10 @@ npm install --no-audit --no-fund
 echo "[session-start] Building web-scraper-mcp..."
 npm run build
 
+# Make TLS-inspecting-proxy environments work out of the box for CLI runs too.
+# (The MCP server already gets this via .mcp.json env.)
+if [ -n "${CLAUDE_ENV_FILE:-}" ]; then
+  echo 'export SCRAPE_INSECURE_TLS=true' >> "$CLAUDE_ENV_FILE"
+fi
+
 echo "[session-start] web-scraper-mcp is ready (fetch_page / fetch_links / fetch_raw)."

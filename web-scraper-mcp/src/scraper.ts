@@ -1,9 +1,24 @@
+import https from "node:https";
 import fetch from "node-fetch";
 import type { Browser } from "puppeteer";
 import { logger, logRequest } from "./utils/logger.js";
 import { withRetry } from "./utils/retry.js";
 import { defaultRateLimiter, RateLimiter } from "./utils/rate_limiter.js";
 import { detectBlocked, looksLikeNeedsJs } from "./utils/html_cleaner.js";
+
+/**
+ * Some managed/corporate environments (including Claude Code on the web) route
+ * traffic through a TLS-inspecting proxy whose certificate isn't in the default
+ * trust store, which makes both node-fetch and Chromium reject every HTTPS site.
+ * Setting SCRAPE_INSECURE_TLS=true tells the scraper to accept the proxy's cert
+ * so scraping works inside such sandboxes. Only enable this in trusted
+ * environments — it disables certificate verification for scraped requests.
+ */
+const INSECURE_TLS = process.env.SCRAPE_INSECURE_TLS === "true";
+
+const insecureHttpsAgent = INSECURE_TLS
+  ? new https.Agent({ rejectUnauthorized: false })
+  : undefined;
 
 export type ScrapeMethod = "cheerio" | "puppeteer";
 
@@ -74,12 +89,14 @@ export class Scraper {
       const puppeteer = (await import("puppeteer")).default;
       this.browserPromise = puppeteer.launch({
         headless: true,
+        acceptInsecureCerts: INSECURE_TLS,
         args: [
           "--no-sandbox",
           "--disable-setuid-sandbox",
           "--disable-dev-shm-usage",
           "--disable-gpu",
           "--disable-blink-features=AutomationControlled",
+          ...(INSECURE_TLS ? ["--ignore-certificate-errors"] : []),
         ],
       });
       logger.info("Launched shared Puppeteer browser");
@@ -161,6 +178,7 @@ export class Scraper {
           const res = await fetch(url, {
             redirect: "follow",
             signal: controller.signal,
+            agent: url.startsWith("https:") ? insecureHttpsAgent : undefined,
             headers: {
               "User-Agent": randomUserAgent(),
               Accept:
