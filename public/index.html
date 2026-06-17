@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MOM Generator — Shorthills AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Lora:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+/* ─── RESET & BASE ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0a0c12;
+  --surface: #13161f;
+  --border: #1e2130;
+  --accent: #4f7ef7;
+  --accent-hover: #3d6be0;
+  --text: #e8eaf0;
+  --muted: #8b90a0;
+  --success: #34c97a;
+  --error: #f75f5f;
+  --warn: #f7a84f;
+  --radius: 10px;
+  --font: 'DM Sans', system-ui, sans-serif;
+  --font-doc: 'Lora', Georgia, serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+  padding: 0 16px 80px;
+}
+
+/* ─── LAYOUT ───────────────────────────────────────────────────────────────── */
+.container { max-width: 780px; margin: 0 auto; }
+
+/* ─── HEADER ───────────────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 52px 0 36px;
+  gap: 10px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo svg { width: 36px; height: 36px; }
+
+.logo-text {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.tagline {
+  font-size: 14px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ─── CARDS ────────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 32px;
+  margin-bottom: 20px;
+}
+
+.card-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 20px;
+}
+
+/* ─── FORM ─────────────────────────────────────────────────────────────────── */
+.form-grid { display: grid; gap: 16px; }
+.col-2 { grid-template-columns: 1fr 1fr; }
+.col-1 { grid-template-columns: 1fr; }
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+
+label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+input[type="text"],
+input[type="datetime-local"],
+select,
+textarea {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: var(--font);
+  font-size: 14px;
+  width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238b90a0' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+
+select option { background: #13161f; }
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(79,126,247,0.15);
+}
+
+input.error, textarea.error {
+  border-color: var(--error);
+  box-shadow: 0 0 0 3px rgba(247,95,95,0.12);
+}
+
+textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
+
+.field-error {
+  font-size: 11px;
+  color: var(--error);
+  display: none;
+  margin-top: -2px;
+}
+.field-error.visible { display: block; }
+
+/* ─── TRANSCRIPT TABS ──────────────────────────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tab-btn {
+  padding: 7px 18px;
+  border-radius: 20px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+}
+
+.tab-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
+/* char counter */
+.char-count-wrap { display: flex; justify-content: flex-end; margin-top: 5px; }
+.char-count { font-size: 11px; color: var(--muted); }
+.char-count.warn { color: var(--warn); }
+.char-count.danger { color: var(--error); }
+
+/* ─── DROP ZONE ────────────────────────────────────────────────────────────── */
+.dropzone {
+  border: 1.5px dashed var(--border);
+  border-radius: 12px;
+  padding: 44px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  position: relative;
+}
+
+.dropzone:hover, .dropzone.drag-over {
+  border-color: var(--accent);
+  background: rgba(79,126,247,0.04);
+}
+
+.dropzone input[type="file"] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+
+.dz-icon { margin-bottom: 10px; }
+.dz-title { font-size: 14px; color: var(--text); font-weight: 500; }
+.dz-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+.file-selected {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(52,201,122,0.08);
+  border: 1px solid rgba(52,201,122,0.2);
+  border-radius: 8px;
+  margin-top: 12px;
+}
+.file-selected.visible { display: flex; }
+.file-name { font-size: 13px; color: var(--success); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.remove-file {
+  background: none; border: none; color: var(--muted); cursor: pointer; font-size: 16px; line-height: 1;
+  padding: 2px 4px; border-radius: 4px; transition: color 0.1s;
+}
+.remove-file:hover { color: var(--error); }
+
+/* ─── GENERATE BUTTON ──────────────────────────────────────────────────────── */
+.btn-generate {
+  width: 100%;
+  height: 52px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.btn-generate:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+.btn-generate:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+/* spinner */
+.spinner {
+  width: 20px; height: 20px;
+  border: 2.5px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: none;
+}
+.btn-generate.loading .spinner { display: block; }
+.btn-generate.loading .btn-label::before { content: 'Generating your MOM…'; }
+.btn-generate:not(.loading) .btn-label::before { content: 'Generate Minutes of Meeting'; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── SKELETON ─────────────────────────────────────────────────────────────── */
+.skeleton-wrap { padding: 32px 0; display: none; flex-direction: column; gap: 14px; }
+.skeleton-wrap.visible { display: flex; }
+.skeleton-bar {
+  background: linear-gradient(90deg, var(--surface) 25%, #1a1e2e 50%, var(--surface) 75%);
+  background-size: 200% 100%;
+  border-radius: 6px;
+  animation: shimmer 1.3s infinite;
+}
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+/* ─── PREVIEW SECTION ──────────────────────────────────────────────────────── */
+#preview-section {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  margin-top: 8px;
+}
+#preview-section.visible {
+  display: block;
+}
+#preview-section.faded-in { opacity: 1; }
+
+.preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px 12px 0 0;
+  border-bottom: none;
+}
+
+.preview-label { font-size: 12px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
+
+.preview-actions { display: flex; gap: 8px; align-items: center; }
+
+.icon-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-family: var(--font);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: border-color 0.15s, color 0.15s;
+}
+.icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+.icon-btn.copied { color: var(--success); border-color: var(--success); }
+
+/* Document card — looks like a real A4 */
+.doc-card {
+  background: #ffffff;
+  color: #111111;
+  font-family: var(--font-doc);
+  padding: 48px 56px;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 4px 40px rgba(0,0,0,0.4);
+  min-height: 400px;
+}
+
+.doc-title {
+  font-size: 26px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 4px;
+  font-family: var(--font-doc);
+}
+.doc-subtitle {
+  font-size: 13px;
+  color: #555;
+  text-align: center;
+  margin-bottom: 22px;
+  font-family: 'DM Sans', system-ui, sans-serif;
+}
+.doc-hr { border: none; border-top: 1px solid #ccc; margin: 18px 0 20px; }
+.doc-section-head {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  color: #111;
+}
+.doc-info-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+.doc-info-table td { vertical-align: top; padding: 1.5px 0; font-size: 11px; }
+.info-label-cell { font-weight: 700; font-family: 'DM Sans', system-ui, sans-serif; width: 200px; }
+.info-value-cell { font-family: var(--font-doc); }
+.doc-summary-point { font-size: 11px; line-height: 1.65; margin-bottom: 10px; }
+.doc-next-step { font-size: 11px; padding-left: 14px; margin-bottom: 6px; line-height: 1.55; }
+.doc-footer { font-size: 9px; color: #888; text-align: right; margin-top: 36px; font-family: 'DM Sans', system-ui, sans-serif; }
+
+/* ─── DOWNLOAD ROW ─────────────────────────────────────────────────────────── */
+.download-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  justify-content: flex-end;
+}
+
+.btn-dl {
+  min-width: 160px;
+  height: 44px;
+  border-radius: 8px;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  transition: all 0.15s;
+}
+.btn-dl:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn-dl-outline {
+  background: transparent;
+  border: 1.5px solid var(--accent);
+  color: var(--accent);
+}
+.btn-dl-outline:hover:not(:disabled) { background: rgba(79,126,247,0.08); }
+
+.btn-dl-filled {
+  background: var(--accent);
+  border: 1.5px solid var(--accent);
+  color: #fff;
+}
+.btn-dl-filled:hover:not(:disabled) { background: var(--accent-hover); border-color: var(--accent-hover); }
+
+.dl-spinner {
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: none;
+}
+.btn-dl.loading .dl-spinner { display: block; }
+
+/* ─── TOAST ────────────────────────────────────────────────────────────────── */
+#toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: #1e2236;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 20px;
+  font-size: 13px;
+  max-width: 360px;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.25s ease;
+  z-index: 999;
+  pointer-events: none;
+  line-height: 1.5;
+}
+#toast.show { transform: translateY(0); opacity: 1; }
+#toast.toast-error { border-color: rgba(247,95,95,0.4); background: rgba(247,95,95,0.12); color: #ffd4d4; }
+#toast.toast-success { border-color: rgba(52,201,122,0.4); background: rgba(52,201,122,0.1); color: #b0f0cf; }
+
+/* ─── FOOTER ───────────────────────────────────────────────────────────────── */
+.page-footer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 48px;
+}
+
+/* ─── MOBILE ───────────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .card { padding: 20px 18px; }
+  .col-2 { grid-template-columns: 1fr; }
+  .doc-card { padding: 28px 20px; }
+  .download-row { flex-direction: column; }
+  .btn-dl { min-width: unset; width: 100%; }
+  #toast { left: 16px; right: 16px; bottom: 16px; }
+  .header { padding: 32px 0 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="6" y="4" width="18" height="24" rx="3" fill="#4f7ef7" opacity="0.25"/>
+        <rect x="4" y="8" width="18" height="24" rx="3" fill="#4f7ef7" opacity="0.4"/>
+        <rect x="8" y="6" width="20" height="24" rx="3" fill="#4f7ef7"/>
+        <line x1="12" y1="13" x2="24" y2="13" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+        <line x1="12" y1="17" x2="24" y2="17" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+        <line x1="12" y1="21" x2="19" y2="21" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <span class="logo-text">MOM Generator</span>
+    </div>
+    <p class="tagline">Turn meeting transcripts into boardroom-ready minutes</p>
+  </header>
+
+  <!-- FORM CARD -->
+  <div class="card" id="form-card">
+    <div class="card-title">Meeting Details</div>
+    <div class="form-grid col-1">
+
+      <!-- Row 1: Subject full width -->
+      <div class="field">
+        <label for="subject">Meeting Subject</label>
+        <input type="text" id="subject" placeholder="e.g. Healthcare AI Solutions Discussion"/>
+        <span class="field-error" id="err-subject">Please enter the meeting subject</span>
+      </div>
+
+      <!-- Row 2: DateTime + Platform -->
+      <div class="form-grid col-2">
+        <div class="field">
+          <label for="datetime">Date &amp; Time</label>
+          <input type="datetime-local" id="datetime"/>
+          <span class="field-error" id="err-datetime">Please select date and time</span>
+        </div>
+        <div class="field">
+          <label for="platform">Platform</label>
+          <select id="platform">
+            <option value="Microsoft Teams">Microsoft Teams</option>
+            <option value="Google Meet">Google Meet</option>
+            <option value="Zoom">Zoom</option>
+            <option value="Webex">Webex</option>
+            <option value="In-Person">In-Person</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Row 3: Internal Team + Client -->
+      <div class="form-grid col-2">
+        <div class="field">
+          <label for="internal_team">Internal Team Name</label>
+          <input type="text" id="internal_team" placeholder="e.g. Shorthills AI"/>
+          <span class="field-error" id="err-internal_team">Please enter team name</span>
+        </div>
+        <div class="field">
+          <label for="client_name">Client / Other Party</label>
+          <input type="text" id="client_name" placeholder="e.g. Acme Corp"/>
+          <span class="field-error" id="err-client_name">Please enter client name</span>
+        </div>
+      </div>
+
+      <!-- Row 4: Internal Attendees -->
+      <div class="field">
+        <label for="internal_attendees">Internal Team Attendees</label>
+        <textarea id="internal_attendees" rows="3" placeholder="Aryan Kushwaha (Sales &amp; Solutions)&#10;Pratham Jain (Assistant Head of Partnerships)"></textarea>
+      </div>
+
+      <!-- Row 5: Client Attendees -->
+      <div class="field">
+        <label for="client_attendees">Client Attendees</label>
+        <textarea id="client_attendees" rows="2" placeholder="Paul (Client Contact)"></textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TRANSCRIPT CARD -->
+  <div class="card" id="transcript-card">
+    <div class="card-title">Transcript</div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="paste">Paste Transcript</button>
+      <button class="tab-btn" data-tab="upload">Upload .docx</button>
+    </div>
+
+    <!-- Paste Pane -->
+    <div class="tab-pane active" id="tab-paste">
+      <div class="field">
+        <textarea id="transcript" rows="10" style="min-height:200px" placeholder="Paste your meeting transcript here…"></textarea>
+        <span class="field-error" id="err-transcript">Please add a transcript</span>
+      </div>
+      <div class="char-count-wrap">
+        <span class="char-count" id="char-count">0 / 12,000 characters</span>
+      </div>
+    </div>
+
+    <!-- Upload Pane -->
+    <div class="tab-pane" id="tab-upload">
+      <div class="dropzone" id="dropzone">
+        <input type="file" id="file-input" accept=".docx" />
+        <div class="dz-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <path d="M18 4v18M11 11l7-7 7 7" stroke="#4f7ef7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6 26v3a2 2 0 002 2h20a2 2 0 002-2v-3" stroke="#4f7ef7" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="dz-title">Drag &amp; drop your .docx transcript here</div>
+        <div class="dz-sub">or click to browse</div>
+      </div>
+      <div class="file-selected" id="file-selected">
+        <svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8" fill="#34c97a"/><polyline points="4.5,8.5 7,11 11.5,5.5" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="file-name" id="file-name"></span>
+        <button class="remove-file" id="remove-file" title="Remove">✕</button>
+      </div>
+      <div id="upload-loading" style="display:none; font-size:12px; color:var(--muted); margin-top:10px;">Extracting text…</div>
+    </div>
+  </div>
+
+  <!-- GENERATE BUTTON -->
+  <button class="btn-generate" id="btn-generate">
+    <div class="spinner"></div>
+    <span class="btn-label"></span>
+  </button>
+
+  <!-- SKELETON LOADER -->
+  <div class="skeleton-wrap" id="skeleton">
+    <div class="skeleton-bar" style="height:18px; width:60%;"></div>
+    <div class="skeleton-bar" style="height:12px; width:90%;"></div>
+    <div class="skeleton-bar" style="height:12px; width:75%;"></div>
+  </div>
+
+  <!-- PREVIEW SECTION -->
+  <div id="preview-section">
+    <div class="preview-header">
+      <span class="preview-label">Minutes of Meeting</span>
+      <div class="preview-actions">
+        <button class="icon-btn" id="btn-copy">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M3 11H2a1 1 0 01-1-1V2a1 1 0 011-1h8a1 1 0 011 1v1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <span id="copy-label">Copy Text</span>
+        </button>
+      </div>
+    </div>
+    <div class="doc-card" id="doc-card"></div>
+    <div class="download-row">
+      <button class="btn-dl btn-dl-outline" id="btn-docx">
+        <div class="dl-spinner"></div>
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="9" height="12" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M5 5h6M5 8h6M5 11h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M11 1v4h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <span>Download Word</span>
+      </button>
+      <button class="btn-dl btn-dl-filled" id="btn-pdf">
+        <div class="dl-spinner"></div>
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="9" height="12" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M5 5h6M5 8h6M5 11h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M11 1v4h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <span>Download PDF</span>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<footer class="page-footer">Created by Pratham Jain</footer>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ─── STATE ──────────────────────────────────────────────────────────────────
+let currentMOM = '';
+let currentSubject = '';
+
+// ─── INIT ───────────────────────────────────────────────────────────────────
+(function init() {
+  const now = new Date();
+  now.setSeconds(0, 0);
+  const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+    .toISOString().slice(0, 16);
+  document.getElementById('datetime').value = local;
+})();
+
+// ─── TABS ───────────────────────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ─── CHAR COUNTER ───────────────────────────────────────────────────────────
+const transcriptTA = document.getElementById('transcript');
+const charCount = document.getElementById('char-count');
+
+transcriptTA.addEventListener('input', updateCharCount);
+
+function updateCharCount() {
+  const len = transcriptTA.value.length;
+  charCount.textContent = `${len.toLocaleString()} / 12,000 characters`;
+  charCount.className = 'char-count';
+  if (len >= 12000) charCount.classList.add('danger');
+  else if (len >= 10000) charCount.classList.add('warn');
+}
+
+// ─── FILE UPLOAD ─────────────────────────────────────────────────────────────
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('file-input');
+const fileSelectedEl = document.getElementById('file-selected');
+const fileNameEl = document.getElementById('file-name');
+const removeFileBtn = document.getElementById('remove-file');
+const uploadLoading = document.getElementById('upload-loading');
+
+dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag-over'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag-over'));
+dropzone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropzone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) handleFile(file);
+});
+
+fileInput.addEventListener('change', () => {
+  if (fileInput.files[0]) handleFile(fileInput.files[0]);
+});
+
+removeFileBtn.addEventListener('click', () => {
+  fileInput.value = '';
+  fileSelectedEl.classList.remove('visible');
+  dropzone.style.display = '';
+});
+
+async function handleFile(file) {
+  if (!file.name.endsWith('.docx')) {
+    showToast('Only .docx files are supported.', 'error');
+    return;
+  }
+  fileNameEl.textContent = file.name;
+  fileSelectedEl.classList.add('visible');
+  dropzone.style.display = 'none';
+  uploadLoading.style.display = 'block';
+
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await fetch('/upload-transcript', { method: 'POST', body: formData });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Upload failed');
+    transcriptTA.value = data.transcript;
+    updateCharCount();
+    // Switch to paste tab to show extracted text
+    document.querySelector('[data-tab="paste"]').click();
+    showToast('Transcript extracted successfully.', 'success');
+  } catch (err) {
+    showToast('Failed to extract text: ' + err.message, 'error');
+    fileSelectedEl.classList.remove('visible');
+    dropzone.style.display = '';
+  } finally {
+    uploadLoading.style.display = 'none';
+  }
+}
+
+// ─── VALIDATION ──────────────────────────────────────────────────────────────
+function validateForm() {
+  let valid = true;
+  const required = [
+    { id: 'subject', errId: 'err-subject' },
+    { id: 'datetime', errId: 'err-datetime' },
+    { id: 'internal_team', errId: 'err-internal_team' },
+    { id: 'client_name', errId: 'err-client_name' },
+  ];
+
+  required.forEach(({ id, errId }) => {
+    const el = document.getElementById(id);
+    const err = document.getElementById(errId);
+    if (!el.value.trim()) {
+      el.classList.add('error');
+      err.classList.add('visible');
+      valid = false;
+    } else {
+      el.classList.remove('error');
+      err.classList.remove('visible');
+    }
+  });
+
+  const transcript = transcriptTA.value.trim();
+  const errTA = document.getElementById('err-transcript');
+  if (!transcript) {
+    transcriptTA.classList.add('error');
+    errTA.classList.add('visible');
+    valid = false;
+  } else {
+    transcriptTA.classList.remove('error');
+    errTA.classList.remove('visible');
+  }
+
+  return valid;
+}
+
+// Clear errors on input
+['subject', 'datetime', 'internal_team', 'client_name'].forEach(id => {
+  document.getElementById(id).addEventListener('input', function() {
+    this.classList.remove('error');
+    const err = document.getElementById('err-' + id);
+    if (err) err.classList.remove('visible');
+  });
+});
+transcriptTA.addEventListener('input', () => {
+  transcriptTA.classList.remove('error');
+  document.getElementById('err-transcript').classList.remove('visible');
+});
+
+// ─── GENERATE ───────────────────────────────────────────────────────────────
+document.getElementById('btn-generate').addEventListener('click', generate);
+
+async function generate() {
+  if (!validateForm()) return;
+
+  const btn = document.getElementById('btn-generate');
+  const skeleton = document.getElementById('skeleton');
+  const previewSection = document.getElementById('preview-section');
+
+  btn.classList.add('loading');
+  btn.disabled = true;
+  skeleton.classList.add('visible');
+  previewSection.classList.remove('visible', 'faded-in');
+
+  const payload = {
+    subject: document.getElementById('subject').value.trim(),
+    datetime: document.getElementById('datetime').value,
+    internal_team: document.getElementById('internal_team').value.trim(),
+    internal_attendees: document.getElementById('internal_attendees').value.trim(),
+    client_name: document.getElementById('client_name').value.trim(),
+    client_attendees: document.getElementById('client_attendees').value.trim(),
+    platform: document.getElementById('platform').value,
+    transcript: transcriptTA.value.trim(),
+  };
+
+  currentSubject = payload.subject;
+
+  try {
+    const res = await fetch('/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error + (data.detail ? ': ' + data.detail : ''));
+
+    currentMOM = data.mom;
+    renderPreview(data.mom);
+
+    previewSection.classList.add('visible');
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        previewSection.classList.add('faded-in');
+        previewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  } catch (err) {
+    showToast('Generation failed. ' + err.message, 'error');
+  } finally {
+    btn.classList.remove('loading');
+    btn.disabled = false;
+    skeleton.classList.remove('visible');
+  }
+}
+
+// ─── RENDER PREVIEW ──────────────────────────────────────────────────────────
+function renderPreview(mom) {
+  const parsed = parseMOM(mom);
+  const card = document.getElementById('doc-card');
+
+  let html = `<div class="doc-title">MINUTES OF MEETING</div>`;
+  if (parsed.subtitle) {
+    html += `<div class="doc-subtitle">${esc(parsed.subtitle)}</div>`;
+  }
+  html += `<hr class="doc-hr"/>`;
+
+  if (parsed.infoLines.length > 0) {
+    html += `<div class="doc-section-head">Meeting Information</div>`;
+    html += `<table class="doc-info-table"><tbody>`;
+    parsed.infoLines.forEach(line => {
+      const ci = line.indexOf(':');
+      const label = ci >= 0 ? line.slice(0, ci).trim() : line;
+      const value = ci >= 0 ? line.slice(ci + 1).replace(/^\s+/, '') : '';
+      html += `<tr><td class="info-label-cell">${esc(label)}:</td><td class="info-value-cell">${esc(value)}</td></tr>`;
+    });
+    html += `</tbody></table>`;
+  }
+
+  if (parsed.summaryPoints.length > 0) {
+    html += `<div class="doc-section-head">Summary of Discussion</div>`;
+    parsed.summaryPoints.forEach((pt, i) => {
+      html += `<p class="doc-summary-point">${i + 1}.&nbsp;&nbsp;&nbsp;${esc(pt)}</p>`;
+    });
+  }
+
+  parsed.nextStepsSections.forEach(section => {
+    html += `<div class="doc-section-head">${esc(section.heading)}</div>`;
+    section.items.forEach((item, i) => {
+      html += `<p class="doc-next-step">${i + 1}&nbsp;&nbsp;&nbsp;${esc(item)}</p>`;
+    });
+  });
+
+  if (parsed.preparedBy) {
+    html += `<div class="doc-footer">Confidential — Prepared by ${esc(parsed.preparedBy)}</div>`;
+  }
+
+  card.innerHTML = html;
+}
+
+function parseMOM(text) {
+  const lines = text.split('\n');
+  const result = { subtitle: '', infoLines: [], summaryPoints: [], nextStepsSections: [], preparedBy: '' };
+  let i = 0;
+
+  while (i < lines.length && !lines[i].includes('MINUTES OF MEETING')) i++;
+  i++;
+  while (i < lines.length && !lines[i].trim()) i++;
+  if (i < lines.length) { result.subtitle = lines[i].trim(); i++; }
+
+  while (i < lines.length && !lines[i].includes('MEETING INFORMATION')) i++;
+  i++;
+
+  while (i < lines.length && !lines[i].includes('SUMMARY OF DISCUSSION')) {
+    const line = lines[i].trim();
+    if (line) result.infoLines.push(line);
+    i++;
+  }
+  i++;
+
+  while (i < lines.length && !lines[i].trim().startsWith('NEXT STEPS')) {
+    const line = lines[i].trim();
+    if (/^\d+\.?\s+/.test(line)) {
+      result.summaryPoints.push(line.replace(/^\d+\.?\s+/, '').trim());
+    } else if (line && result.summaryPoints.length > 0) {
+      result.summaryPoints[result.summaryPoints.length - 1] += ' ' + line;
+    }
+    i++;
+  }
+
+  while (i < lines.length) {
+    const line = lines[i].trim();
+    if (line.startsWith('NEXT STEPS')) {
+      const section = { heading: line, items: [] };
+      i++;
+      while (i < lines.length && !lines[i].trim().startsWith('NEXT STEPS')) {
+        const item = lines[i].trim();
+        if (/^\d+\s+/.test(item)) {
+          section.items.push(item.replace(/^\d+\s+/, '').trim());
+        } else if (item && section.items.length > 0) {
+          section.items[section.items.length - 1] += ' ' + item;
+        }
+        i++;
+      }
+      result.nextStepsSections.push(section);
+    } else { i++; }
+  }
+
+  for (const line of result.infoLines) {
+    if (line.toLowerCase().startsWith('prepared by')) {
+      result.preparedBy = line.split(/:\s+/)[1] || '';
+      break;
+    }
+  }
+
+  return result;
+}
+
+function esc(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ─── COPY ────────────────────────────────────────────────────────────────────
+document.getElementById('btn-copy').addEventListener('click', async () => {
+  if (!currentMOM) return;
+  try {
+    await navigator.clipboard.writeText(currentMOM);
+    const btn = document.getElementById('btn-copy');
+    const label = document.getElementById('copy-label');
+    btn.classList.add('copied');
+    label.textContent = 'Copied!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      label.textContent = 'Copy Text';
+    }, 2000);
+  } catch {
+    showToast('Could not copy to clipboard.', 'error');
+  }
+});
+
+// ─── DOWNLOAD DOCX ───────────────────────────────────────────────────────────
+document.getElementById('btn-docx').addEventListener('click', async () => {
+  if (!currentMOM) return;
+  await downloadFile('/download/docx', { mom: currentMOM, subject: currentSubject }, 'btn-docx');
+});
+
+// ─── DOWNLOAD PDF ─────────────────────────────────────────────────────────────
+document.getElementById('btn-pdf').addEventListener('click', async () => {
+  if (!currentMOM) return;
+  await downloadFile('/download/pdf', { mom: currentMOM, subject: currentSubject }, 'btn-pdf');
+});
+
+async function downloadFile(url, body, btnId) {
+  const btn = document.getElementById(btnId);
+  btn.classList.add('loading');
+  btn.disabled = true;
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data.error || 'Download failed');
+    }
+    const blob = await res.blob();
+    const disposition = res.headers.get('Content-Disposition') || '';
+    const match = disposition.match(/filename="([^"]+)"/);
+    const filename = match ? match[1] : 'MOM_document';
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  } catch (err) {
+    showToast('Download failed: ' + err.message, 'error');
+  } finally {
+    btn.classList.remove('loading');
+    btn.disabled = false;
+  }
+}
+
+// ─── TOAST ───────────────────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg, type = 'error') {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = 'show toast-' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { toast.className = ''; }, 5000);
+}
+</script>
+</body>
+</html>
