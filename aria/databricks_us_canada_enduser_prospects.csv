@@ -1,0 +1,37 @@
+#,Signal,Company,Industry,Country,Location,Role Found,Posted,Source,Contact,Notes
+1,WARM,Citi,Banking / Financial Services,USA,"Tampa, FL",Senior PySpark Developer (VP),Today,Dice,not found,Enterprise Spark/Databricks build in capital markets
+2,WARM,JPMorgan Chase & Co.,Banking,USA,"Jersey City, NJ",Data Domain Modeling Associate (Transformation & Innovation),Today,Dice,not found,In-house data platform modernization
+3,WARM,State Street Corporation,Banking / Asset Servicing,USA,"Boston, MA","Data Scientist, VP",Today,Dice,not found,Enterprise data science on Databricks
+4,WARM,Sumitomo Mitsui Financial Group (SMBC),Banking,USA,"Charlotte, NC",VP Full Stack Engineer (Python),Today,Dice,not found,Backend/data platform hiring
+5,WARM,Fisher Investments,Investment Management,USA,"Plano, TX / Camas, WA",Senior Platform Engineer,Today,Dice,not found,In-house platform/data team
+6,WARM,UnitedHealth Group / Optum,Health Insurance / Healthcare,USA,"Eden Prairie, MN / Remote",Senior Data Analytics Engineer; Lead AI/ML Engineer,Today,Dice,not found,Multiple Databricks/AI roles open simultaneously
+7,WARM,Humana Inc,Health Insurance,USA,"Louisville, KY / Remote",Senior Data Engineer,Today,Dice,not found,Healthcare data engineering
+8,WARM,CVS Health,Healthcare / Pharmacy,USA,"Wellesley, MA",Senior Data Scientist - Marketing & Consumer Analytics,Today,Dice,not found,Consumer analytics on cloud data platform
+9,HOT,Cotiviti,Healthcare Data Analytics (product),USA,Remote,Data Engineer - AI (Spark/Databricks/Healthcare),Today,Dice,not found,Pure end-user healthcare analytics; salaried full-time
+10,WARM,Stanford Health Care,Healthcare Provider,USA,"Palo Alto, CA",Sr. Enterprise Data Engineer; Sr. AI Platform Engineer,Today,Dice,not found,Provider building enterprise data/AI platform
+11,WARM,McKesson Corporation,Healthcare Distribution,USA,"Irving, TX",Senior Data Engineer,Today,Dice,not found,Enterprise data engineering
+12,WARM,Johnson & Johnson,Pharma / MedTech,USA,"Raritan, NJ","Technology Manager, Data Platform (CDL)",Today,Dice,not found,Owns data platform program
+13,WARM,Elanco Animal Health,Pharma (Animal Health),USA,"Indianapolis, IN",Senior Data Scientist,Today,Dice,not found,Enterprise data science
+14,WARM,Gainwell Technologies,Healthcare IT (Medicaid platforms),USA,"Dallas / Houston / Austin, TX",Sr. Power BI & Databricks ETL Engineer,Today,Dice,not found,Govt healthcare tech; salaried full-time
+15,WARM,General Motors,Automotive,USA,"Austin, TX",Staff Data Engineer - AI & Cloud,Today,Dice,not found,In-house AI/cloud data platform
+16,WARM,3M Company,Manufacturing,USA,Minnesota / Remote,Lead Data Engineer,Today,Dice,not found,Enterprise data engineering (parsed as "3M")
+17,WARM,Tyson Foods,Food / CPG,USA,"Springdale, AR",Senior IT Data Engineer (Python/SQL),Today,Dice,not found,Onsite enterprise data team
+18,WARM,The J.M. Smucker Co.,Food / CPG,USA,"Orrville, OH","Manager, Data Engineering",Today,Dice,not found,Building data engineering function
+19,WARM,American Airlines,Airline / Travel,USA,"Fort Worth, TX","Data Scientist / Sr Data Scientist, B2B Data",Today,Dice,not found,Enterprise data science
+20,WARM,Royal Caribbean Cruises Ltd,Travel / Cruise,USA,"Miramar, FL","Engineer, Platform",Today,Dice,not found,Platform/data engineering
+21,WARM,Comcast Corporation,Telecom / Media,USA,"Reston, VA",Sr. Data Engineer (FreeWheel),Today,Dice,not found,Media/ad-tech data platform
+22,WARM,T-Mobile,Telecom,USA,"Frisco, TX","Sr Engineer, Data - Finance Domain",Today,Dice,not found,Enterprise data engineering
+23,WARM,Adobe,Software (Product),USA,"San Jose, CA",(Senior) Data Science Engineer,Today,Dice,not found,Product data science
+24,WARM,Relativity,Legal Tech (SaaS),USA,Illinois,Senior Software Engineer,Today,Dice,not found,Product engineering w/ Databricks
+25,WARM,Sigma Computing,BI / Analytics (SaaS),USA,"San Francisco, CA",Senior Security Engineer,Today,Dice,not found,Data product company
+26,WARM,Red Ventures,Digital Media / Marketing,USA,"Fort Mill, SC",Data Engineering Manager,Today,Dice,not found,In-house data engineering org
+27,WARM,H&R Block,Tax / Financial Services,USA,Missouri,Senior Data Engineer - Marketing Technologies,Today,Dice,not found,Marketing data platform
+28,WARM,Boardwalk Pipeline Partners LP,Energy / Midstream,USA,"Houston, TX",Lead Analyst Data Engineer,Today,Dice,not found,Energy enterprise data team
+29,HOT,Hims & Hers Health Inc,Digital Health,USA,Remote,"Staff Software Engineer, AI & Recommendations Platform",Today,Dice,not found,Building AI/recommendations data platform
+30,WARM,Wellmark (Blue Cross Blue Shield),Health Insurance,USA,"Des Moines, IA",Sr. Software Engineer - Azure Ecosystem (open to Lead),Today,Dice,not found,Azure/Databricks ecosystem build-out
+31,WARM,RELX / Reed Elsevier (LexisNexis),Information & Analytics,USA,"Alpharetta, GA",Senior Data Scientist I,Today,Dice,not found,Data/analytics parent; tech-services arm posted it
+32,HOT,Freudenberg Group,Manufacturing / Automotive,USA,"Plymouth, MI",Data Engineer (Azure Databricks/PySpark/Delta Lake/Unity Catalog),~2026-06-16 (reposted),Built In (career page),not found,Active reposted req; medallion lakehouse build
+33,WARM,MeridianLink,Fintech / Lending SaaS,USA,Remote,Sr. Data Engineer (Azure Databricks/Delta Lake),Last 90 days,Ashby ATS,not found,Full Databricks DW stack in-house
+34,WARM,Aledade,Healthcare Analytics,USA,Remote,Senior Data Platform Engineer II (Databricks Lakehouse),2026-03-10,Lever ATS,not found,Databricks + Snowflake + Terraform; HIPAA
+35,WARM,Hinge Health,Digital Health,USA / Canada,"San Francisco, CA + Montreal, QC",Staff Data Engineer - Data & ML Platform (Databricks),Last 90 days,Ashby ATS,not found,Has Montreal (Canada) engineering office
+36,COLD,NISC (Nat'l Information Solutions Cooperative),Utility/Co-op Software (product),USA,"Lake St. Louis, MO / Mandan, ND",Data Engineer (AWS/Databricks),Last 90 days,Greenhouse ATS,not found,End-user product co for utilities
