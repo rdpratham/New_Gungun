@@ -6,6 +6,13 @@
       "env": {
         "SCRAPE_INSECURE_TLS": "true"
       }
+    },
+    "browser-agent": {
+      "command": "node",
+      "args": ["browser-agent/dist/index.js"],
+      "env": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/pw"
+      }
     }
   }
 }

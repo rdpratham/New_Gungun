@@ -38,3 +38,19 @@ if [ -n "${CLAUDE_ENV_FILE:-}" ]; then
 fi
 
 echo "[session-start] web-scraper-mcp is ready (fetch_page / fetch_links / fetch_raw)."
+
+# Build browser-agent MCP server
+BROWSER_AGENT_DIR="$PROJECT_DIR/browser-agent"
+if [ -f "$BROWSER_AGENT_DIR/package.json" ]; then
+  echo "[session-start] Installing browser-agent dependencies..."
+  cd "$BROWSER_AGENT_DIR"
+  npm install --no-audit --no-fund
+
+  echo "[session-start] Building browser-agent..."
+  npm run build
+
+  echo "[session-start] Installing Playwright Chromium..."
+  PLAYWRIGHT_BROWSERS_PATH=/tmp/pw npx playwright install chromium
+
+  echo "[session-start] browser-agent is ready (browser_navigate / browser_click / browser_type / ...)."
+fi
