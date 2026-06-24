@@ -54,42 +54,55 @@ async function login(page) {
     // Take screenshot to see login page
     await page.screenshot({ path: "/tmp/zi_login.png" });
     console.log("📸 Screenshot saved: /tmp/zi_login.png");
-    // ZoomInfo uses Okta: #okta-signin-username, #okta-signin-password, #okta-signin-submit
-    const emailSelectors = ['#okta-signin-username', 'input[name="username"]', 'input[type="text"]'];
+    // ZoomInfo login page has two overlapping forms — use the visible custom form
+    // Visible fields: #usernameInput, #pwInput; Log In button is the last submit
+    const emailSelectors = ['#usernameInput', '#okta-signin-username', 'input[name="username"]'];
     let emailField = null;
     for (const sel of emailSelectors) {
-        if (await page.locator(sel).count() > 0) {
+        const loc = page.locator(sel);
+        if (await loc.count() > 0 && await loc.first().isVisible().catch(() => false)) {
             emailField = sel;
             break;
         }
     }
+    // Fallback: use first visible text input
     if (!emailField) {
-        console.error("❌ Could not find username field. Check /tmp/zi_login.png");
+        const inputs = page.locator('input[type="text"], input[type="email"]');
+        const count = await inputs.count();
+        for (let i = 0; i < count; i++) {
+            if (await inputs.nth(i).isVisible()) {
+                emailField = `(input[type="text"], input[type="email"]):nth-match(${i + 1})`;
+                break;
+            }
+        }
+    }
+    if (!emailField) {
+        console.error("❌ Could not find visible username field.");
         return false;
     }
-    console.log(`✅ Found username field: ${emailField}`);
-    await humanType(page, emailField, ZOOMINFO_EMAIL);
-    await humanMove(page);
+    console.log(`✅ Using username field: ${emailField}`);
+    await page.locator(emailField).first().fill(ZOOMINFO_EMAIL);
     await humanDelay(400, 700);
-    // Password
-    const passSelectors = ['#okta-signin-password', 'input[name="password"]', 'input[type="password"]'];
+    // Password — find visible password input
+    const passSelectors = ['#pwInput', '#okta-signin-password', 'input[name="password"]', 'input[type="password"]'];
     let passField = null;
     for (const sel of passSelectors) {
-        if (await page.locator(sel).count() > 0) {
+        const loc = page.locator(sel);
+        if (await loc.count() > 0 && await loc.first().isVisible().catch(() => false)) {
             passField = sel;
             break;
         }
     }
     if (!passField) {
-        await page.screenshot({ path: "/tmp/zi_after_email.png" });
-        console.error("❌ Could not find password field.");
+        console.error("❌ Could not find visible password field.");
         return false;
     }
-    await humanType(page, passField, ZOOMINFO_PASSWORD);
+    console.log(`✅ Using password field: ${passField}`);
+    await page.locator(passField).first().fill(ZOOMINFO_PASSWORD);
     await humanMove(page);
     await humanDelay(600, 1000);
-    // Submit via Okta submit button
-    const submitBtn = page.locator('#okta-signin-submit, button:has-text("Log In")').first();
+    // Click Log In — last submit button on page (the ZoomInfo one, not Sign Up)
+    const submitBtn = page.locator('button:has-text("Log In")').first();
     await submitBtn.click();
     await humanDelay(5000, 7000);
     await page.screenshot({ path: "/tmp/zi_after_login.png" });
