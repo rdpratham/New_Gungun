@@ -48,20 +48,14 @@ const CONTACTS = [
 ];
 async function login(page) {
     console.log("🔐 Navigating to ZoomInfo login...");
-    await page.goto("https://app.zoominfo.com/#/login", { waitUntil: "networkidle", timeout: 30000 });
-    await humanDelay(1500, 2500);
+    // Use login.zoominfo.com directly — confirmed reachable with --no-proxy-server
+    await page.goto("https://login.zoominfo.com", { waitUntil: "load", timeout: 30000 });
+    await humanDelay(2000, 3000);
     // Take screenshot to see login page
     await page.screenshot({ path: "/tmp/zi_login.png" });
     console.log("📸 Screenshot saved: /tmp/zi_login.png");
-    // Try to find email field
-    const emailSelectors = [
-        'input[name="loginEmail"]',
-        'input[type="email"]',
-        'input[placeholder*="email" i]',
-        'input[placeholder*="Email" i]',
-        "#username",
-        "#email",
-    ];
+    // ZoomInfo uses Okta: #okta-signin-username, #okta-signin-password, #okta-signin-submit
+    const emailSelectors = ['#okta-signin-username', 'input[name="username"]', 'input[type="text"]'];
     let emailField = null;
     for (const sel of emailSelectors) {
         if (await page.locator(sel).count() > 0) {
@@ -70,25 +64,15 @@ async function login(page) {
         }
     }
     if (!emailField) {
-        console.error("❌ Could not find email field. Check /tmp/zi_login.png");
+        console.error("❌ Could not find username field. Check /tmp/zi_login.png");
         return false;
     }
-    console.log(`✅ Found email field: ${emailField}`);
+    console.log(`✅ Found username field: ${emailField}`);
     await humanType(page, emailField, ZOOMINFO_EMAIL);
     await humanMove(page);
-    // Click Next or find password field
-    const nextBtn = page.locator('button:has-text("Next"), button:has-text("Continue"), button[type="submit"]').first();
-    if (await nextBtn.count() > 0) {
-        await humanDelay(500, 900);
-        await nextBtn.click();
-        await humanDelay(1500, 2500);
-    }
-    // Password field
-    const passSelectors = [
-        'input[name="password"]',
-        'input[type="password"]',
-        'input[placeholder*="password" i]',
-    ];
+    await humanDelay(400, 700);
+    // Password
+    const passSelectors = ['#okta-signin-password', 'input[name="password"]', 'input[type="password"]'];
     let passField = null;
     for (const sel of passSelectors) {
         if (await page.locator(sel).count() > 0) {
@@ -98,16 +82,16 @@ async function login(page) {
     }
     if (!passField) {
         await page.screenshot({ path: "/tmp/zi_after_email.png" });
-        console.error("❌ Could not find password field. Check /tmp/zi_after_email.png");
+        console.error("❌ Could not find password field.");
         return false;
     }
     await humanType(page, passField, ZOOMINFO_PASSWORD);
     await humanMove(page);
     await humanDelay(600, 1000);
-    // Submit
-    const submitBtn = page.locator('button[type="submit"], button:has-text("Sign In"), button:has-text("Log In")').first();
+    // Submit via Okta submit button
+    const submitBtn = page.locator('#okta-signin-submit, button:has-text("Log In")').first();
     await submitBtn.click();
-    await humanDelay(3000, 5000);
+    await humanDelay(5000, 7000);
     await page.screenshot({ path: "/tmp/zi_after_login.png" });
     console.log("📸 Post-login screenshot: /tmp/zi_after_login.png");
     // Check if logged in
@@ -301,30 +285,26 @@ async function main() {
     console.log("🚀 ZoomInfo Contact Enrichment Agent Starting...");
     console.log(`📧 Account: ${ZOOMINFO_EMAIL}`);
     console.log(`📋 Contacts to process: ${CONTACTS.length}`);
-    const httpsProxy = process.env.HTTPS_PROXY || "";
+    // Use --no-proxy-server to bypass egress proxy which blocks zoominfo.com
     const launchArgs = [
         "--no-sandbox",
         "--disable-setuid-sandbox",
         "--disable-dev-shm-usage",
         "--disable-blink-features=AutomationControlled",
         "--window-size=1280,800",
+        "--no-proxy-server",
     ];
-    if (httpsProxy) {
-        launchArgs.push(`--proxy-server=${httpsProxy}`);
-        console.log(`🔀 Using proxy: ${httpsProxy}`);
-    }
     const browser = await chromium.launch({
         executablePath: `${BROWSERS_PATH}/chromium-1228/chrome-linux64/chrome`,
         headless: true,
         args: launchArgs,
     });
     const context = await browser.newContext({
-        userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
         viewport: { width: 1280, height: 800 },
         locale: "en-US",
         timezoneId: "America/New_York",
         ignoreHTTPSErrors: true,
-        ...(httpsProxy ? { proxy: { server: httpsProxy } } : {}),
     });
     // Remove automation indicators
     await context.addInitScript(() => {

@@ -15,11 +15,8 @@ async function ensureBrowser() {
             "--disable-setuid-sandbox",
             "--disable-dev-shm-usage",
             "--disable-blink-features=AutomationControlled",
-            `--ignore-certificate-errors-spki-list`,
+            "--no-proxy-server", // bypass egress proxy which blocks zoominfo.com
         ];
-        if (HTTPS_PROXY) {
-            launchArgs.push(`--proxy-server=${HTTPS_PROXY}`);
-        }
         browser = await chromium.launch({
             executablePath: `${BROWSERS_PATH}/chromium-1228/chrome-linux64/chrome`,
             headless: true,
@@ -28,10 +25,9 @@ async function ensureBrowser() {
     }
     if (!context) {
         context = await browser.newContext({
-            userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
             viewport: { width: 1280, height: 800 },
             ignoreHTTPSErrors: true,
-            ...(HTTPS_PROXY ? { proxy: { server: HTTPS_PROXY } } : {}),
         });
     }
     if (!page) {
