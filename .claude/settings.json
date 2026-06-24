@@ -11,5 +11,10 @@
         "ZOOMINFO_PASSWORD": "${ZOOMINFO_PASSWORD}"
       }
     }
+  },
+  "permissions": {
+    "allow": [
+      "mcp__zoominfo__*"
+    ]
   }
 }

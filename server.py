@@ -6,12 +6,15 @@ import os
 from typing import Any
 
 import httpx
+from dotenv import load_dotenv
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp.types import (
     TextContent,
     Tool,
 )
+
+load_dotenv()
 
 ZOOMINFO_BASE_URL = "https://api.zoominfo.com"
 CLIENT_ID = os.environ.get("ZOOMINFO_CLIENT_ID", "")
