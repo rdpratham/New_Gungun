@@ -9,9 +9,14 @@ const BROWSERS_PATH = process.env.PLAYWRIGHT_BROWSERS_PATH || "/tmp/pw";
 async function ensureBrowser() {
     if (!browser) {
         browser = await chromium.launch({
-            executablePath: `${BROWSERS_PATH}/chromium_headless_shell-1194/chrome-linux/headless_shell`,
+            executablePath: `${BROWSERS_PATH}/chromium_headless_shell-1228/chrome-headless-shell-linux64/chrome-headless-shell`,
             headless: true,
-            args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+            args: [
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-blink-features=AutomationControlled",
+            ],
         });
     }
     if (!context) {
@@ -180,6 +185,29 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
             description: "Close the browser session",
             inputSchema: { type: "object", properties: {} },
         },
+        {
+            name: "zoominfo_login",
+            description: "Login to ZoomInfo with email and password (human-like, avoids bot detection)",
+            inputSchema: {
+                type: "object",
+                properties: {
+                    email: { type: "string", description: "ZoomInfo account email" },
+                    password: { type: "string", description: "ZoomInfo account password" },
+                },
+                required: ["email", "password"],
+            },
+        },
+        {
+            name: "zoominfo_get_contact",
+            description: "Navigate to a ZoomInfo contact profile by personId, click View Email + View Phone, and extract the revealed data",
+            inputSchema: {
+                type: "object",
+                properties: {
+                    person_id: { type: "string", description: "ZoomInfo person ID (from search results)" },
+                },
+                required: ["person_id"],
+            },
+        },
     ],
 }));
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
@@ -310,6 +338,98 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             case "browser_close": {
                 await closeBrowser();
                 return { content: [{ type: "text", text: "Browser session closed" }] };
+            }
+            case "zoominfo_login": {
+                const p = await ensureBrowser();
+                const email = args.email;
+                const password = args.password;
+                const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+                const humanDelay = (min = 800, max = 2200) => sleep(Math.floor(Math.random() * (max - min) + min));
+                await p.goto("https://app.zoominfo.com/#/login", { waitUntil: "load", timeout: 30000 });
+                await humanDelay(2000, 3000);
+                // Find and fill email
+                const emailSels = ['input[name="loginEmail"]', 'input[type="email"]', 'input[placeholder*="email" i]', "#username"];
+                let emailFilled = false;
+                for (const sel of emailSels) {
+                    if (await p.locator(sel).count() > 0) {
+                        await p.locator(sel).first().fill("");
+                        for (const ch of email) {
+                            await p.locator(sel).first().type(ch, { delay: Math.floor(Math.random() * 80 + 40) });
+                        }
+                        emailFilled = true;
+                        break;
+                    }
+                }
+                if (!emailFilled)
+                    return { content: [{ type: "text", text: "Could not find email field" }], isError: true };
+                await humanDelay(500, 900);
+                // Click Next if present
+                const nextBtn = p.locator('button:has-text("Next"), button:has-text("Continue")').first();
+                if (await nextBtn.count() > 0) {
+                    await nextBtn.click();
+                    await humanDelay(2000, 3000);
+                }
+                // Password
+                const passSels = ['input[name="password"]', 'input[type="password"]'];
+                let passFilled = false;
+                for (const sel of passSels) {
+                    if (await p.locator(sel).count() > 0) {
+                        await p.locator(sel).first().fill("");
+                        for (const ch of password) {
+                            await p.locator(sel).first().type(ch, { delay: Math.floor(Math.random() * 80 + 40) });
+                        }
+                        passFilled = true;
+                        break;
+                    }
+                }
+                if (!passFilled)
+                    return { content: [{ type: "text", text: "Could not find password field" }], isError: true };
+                await humanDelay(600, 1000);
+                await p.locator('button[type="submit"], button:has-text("Sign In"), button:has-text("Log In")').first().click();
+                await humanDelay(4000, 6000);
+                const url = p.url();
+                if (url.includes("login") || url.includes("signin")) {
+                    return { content: [{ type: "text", text: `Still on login page: ${url} — wrong credentials or 2FA required` }], isError: true };
+                }
+                return { content: [{ type: "text", text: `Logged in! Current URL: ${url}` }] };
+            }
+            case "zoominfo_get_contact": {
+                const p = await ensureBrowser();
+                const personId = args.person_id;
+                const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+                const humanDelay = (min = 800, max = 2200) => sleep(Math.floor(Math.random() * (max - min) + min));
+                await p.goto(`https://app.zoominfo.com/#/apps/profile/person/${personId}`, { waitUntil: "networkidle", timeout: 30000 });
+                await humanDelay(2500, 4000);
+                // Click View Email
+                const emailBtns = ['button:has-text("View Email")', 'button:has-text("Reveal Email")', '[data-testid="view-email"]'];
+                for (const sel of emailBtns) {
+                    if (await p.locator(sel).count() > 0) {
+                        await p.locator(sel).first().click();
+                        await humanDelay(1500, 2500);
+                        break;
+                    }
+                }
+                // Click View Phone
+                const phoneBtns = ['button:has-text("View Phone")', 'button:has-text("View Direct")', '[data-testid="view-phone"]'];
+                for (const sel of phoneBtns) {
+                    if (await p.locator(sel).count() > 0) {
+                        await p.locator(sel).first().click();
+                        await humanDelay(1500, 2500);
+                        break;
+                    }
+                }
+                await humanDelay(1000, 2000);
+                // Extract data
+                const pageText = await p.evaluate(() => document.body.innerText);
+                const emailMatch = pageText.match(/[\w.+\-]+@[\w\-]+\.[\w.]+/);
+                const phoneMatches = pageText.match(/[\+]?1?[\s.\-]?\(?\d{3}\)?[\s.\-]\d{3}[\s.\-]\d{4}/g);
+                const result = {
+                    personId,
+                    email: emailMatch ? emailMatch[0] : "",
+                    phones: phoneMatches ? phoneMatches.slice(0, 3) : [],
+                    url: p.url(),
+                };
+                return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
             }
             default:
                 return { content: [{ type: "text", text: `Unknown tool: ${name}` }], isError: true };
