@@ -11,18 +11,25 @@ let context: BrowserContext | null = null;
 let page: Page | null = null;
 
 const BROWSERS_PATH = process.env.PLAYWRIGHT_BROWSERS_PATH || "/tmp/pw";
+const HTTPS_PROXY = process.env.HTTPS_PROXY || "";
+const CA_BUNDLE = process.env.NODE_EXTRA_CA_CERTS || "/root/.ccr/ca-bundle.crt";
 
 async function ensureBrowser() {
   if (!browser) {
+    const launchArgs = [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-blink-features=AutomationControlled",
+      `--ignore-certificate-errors-spki-list`,
+    ];
+    if (HTTPS_PROXY) {
+      launchArgs.push(`--proxy-server=${HTTPS_PROXY}`);
+    }
     browser = await chromium.launch({
-      executablePath: `${BROWSERS_PATH}/chromium_headless_shell-1228/chrome-headless-shell-linux64/chrome-headless-shell`,
+      executablePath: `${BROWSERS_PATH}/chromium-1228/chrome-linux64/chrome`,
       headless: true,
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-blink-features=AutomationControlled",
-      ],
+      args: launchArgs,
     });
   }
   if (!context) {
@@ -30,6 +37,8 @@ async function ensureBrowser() {
       userAgent:
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
       viewport: { width: 1280, height: 800 },
+      ignoreHTTPSErrors: true,
+      ...(HTTPS_PROXY ? { proxy: { server: HTTPS_PROXY } } : {}),
     });
   }
   if (!page) {

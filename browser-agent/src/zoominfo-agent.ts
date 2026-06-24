@@ -363,16 +363,23 @@ async function main() {
   console.log(`📧 Account: ${ZOOMINFO_EMAIL}`);
   console.log(`📋 Contacts to process: ${CONTACTS.length}`);
 
+  const httpsProxy = process.env.HTTPS_PROXY || "";
+  const launchArgs = [
+    "--no-sandbox",
+    "--disable-setuid-sandbox",
+    "--disable-dev-shm-usage",
+    "--disable-blink-features=AutomationControlled",
+    "--window-size=1280,800",
+  ];
+  if (httpsProxy) {
+    launchArgs.push(`--proxy-server=${httpsProxy}`);
+    console.log(`🔀 Using proxy: ${httpsProxy}`);
+  }
+
   const browser: Browser = await chromium.launch({
     executablePath: `${BROWSERS_PATH}/chromium-1228/chrome-linux64/chrome`,
     headless: true,
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-blink-features=AutomationControlled",
-      "--window-size=1280,800",
-    ],
+    args: launchArgs,
   });
 
   const context: BrowserContext = await browser.newContext({
@@ -381,6 +388,8 @@ async function main() {
     viewport: { width: 1280, height: 800 },
     locale: "en-US",
     timezoneId: "America/New_York",
+    ignoreHTTPSErrors: true,
+    ...(httpsProxy ? { proxy: { server: httpsProxy } } : {}),
   });
 
   // Remove automation indicators

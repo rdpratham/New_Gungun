@@ -301,22 +301,30 @@ async function main() {
     console.log("🚀 ZoomInfo Contact Enrichment Agent Starting...");
     console.log(`📧 Account: ${ZOOMINFO_EMAIL}`);
     console.log(`📋 Contacts to process: ${CONTACTS.length}`);
+    const httpsProxy = process.env.HTTPS_PROXY || "";
+    const launchArgs = [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-blink-features=AutomationControlled",
+        "--window-size=1280,800",
+    ];
+    if (httpsProxy) {
+        launchArgs.push(`--proxy-server=${httpsProxy}`);
+        console.log(`🔀 Using proxy: ${httpsProxy}`);
+    }
     const browser = await chromium.launch({
         executablePath: `${BROWSERS_PATH}/chromium-1228/chrome-linux64/chrome`,
         headless: true,
-        args: [
-            "--no-sandbox",
-            "--disable-setuid-sandbox",
-            "--disable-dev-shm-usage",
-            "--disable-blink-features=AutomationControlled",
-            "--window-size=1280,800",
-        ],
+        args: launchArgs,
     });
     const context = await browser.newContext({
         userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         viewport: { width: 1280, height: 800 },
         locale: "en-US",
         timezoneId: "America/New_York",
+        ignoreHTTPSErrors: true,
+        ...(httpsProxy ? { proxy: { server: httpsProxy } } : {}),
     });
     // Remove automation indicators
     await context.addInitScript(() => {
