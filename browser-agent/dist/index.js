@@ -12,13 +12,19 @@ const HTTPS_PROXY = process.env.HTTPS_PROXY || "";
 const CA_BUNDLE = process.env.NODE_EXTRA_CA_CERTS || "/root/.ccr/ca-bundle.crt";
 // Cookie persistence: stored relative to this script's directory
 const COOKIE_FILE = path.join(path.dirname(new URL(import.meta.url).pathname), "..", "zoominfo_session.json");
+// Heartbeat interval handle — pings ZoomInfo every 25 min to keep session alive
+let heartbeatTimer = null;
 async function saveCookies() {
     if (!context)
         return;
-    const cookies = await context.cookies();
-    // Keep only zoominfo-related cookies
-    const ziCookies = cookies.filter(c => c.domain.includes("zoominfo.com") || c.domain.includes("okta-login.zoominfo"));
-    fs.writeFileSync(COOKIE_FILE, JSON.stringify(ziCookies, null, 2));
+    try {
+        const cookies = await context.cookies();
+        const ziCookies = cookies.filter(c => c.domain.includes("zoominfo.com") || c.domain.includes("okta-login.zoominfo"));
+        if (ziCookies.length > 0) {
+            fs.writeFileSync(COOKIE_FILE, JSON.stringify(ziCookies, null, 2));
+        }
+    }
+    catch { /* ignore */ }
 }
 async function loadCookies() {
     if (!context)
@@ -27,6 +33,8 @@ async function loadCookies() {
         return false;
     try {
         const cookies = JSON.parse(fs.readFileSync(COOKIE_FILE, "utf-8"));
+        if (!Array.isArray(cookies) || cookies.length === 0)
+            return false;
         await context.addCookies(cookies);
         return true;
     }
@@ -34,7 +42,37 @@ async function loadCookies() {
         return false;
     }
 }
+async function isZoomInfoLoggedIn(p) {
+    try {
+        await p.goto("https://app.zoominfo.com/", { waitUntil: "load", timeout: 20000 });
+        await new Promise(r => setTimeout(r, 2000));
+        const url = p.url();
+        const title = await p.title();
+        return !url.includes("login") && !url.includes("signin") &&
+            (title.toLowerCase().includes("zoominfo") || title.toLowerCase().includes("sales"));
+    }
+    catch {
+        return false;
+    }
+}
+async function startHeartbeat(p) {
+    if (heartbeatTimer)
+        return; // already running
+    heartbeatTimer = setInterval(async () => {
+        try {
+            // Navigate to ZoomInfo home silently to refresh session tokens
+            await p.goto("https://app.zoominfo.com/", { waitUntil: "load", timeout: 20000 });
+            await new Promise(r => setTimeout(r, 2000));
+            const url = p.url();
+            if (!url.includes("login") && !url.includes("signin")) {
+                await saveCookies(); // save refreshed cookies
+            }
+        }
+        catch { /* ignore heartbeat errors */ }
+    }, 25 * 60 * 1000); // every 25 minutes
+}
 async function ensureBrowser() {
+    const isNew = !browser;
     if (!browser) {
         const launchArgs = [
             "--no-sandbox",
@@ -55,13 +93,21 @@ async function ensureBrowser() {
             viewport: { width: 1280, height: 800 },
             ignoreHTTPSErrors: true,
         });
+        // Auto-load saved ZoomInfo session on every new context
+        await loadCookies();
     }
     if (!page) {
         page = await context.newPage();
+        // Start background heartbeat to keep session alive
+        startHeartbeat(page);
     }
     return page;
 }
 async function closeBrowser() {
+    if (heartbeatTimer) {
+        clearInterval(heartbeatTimer);
+        heartbeatTimer = null;
+    }
     if (browser) {
         await browser.close();
         browser = null;
@@ -251,6 +297,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 await p.goto(args.url, { waitUntil: waitFor, timeout: 30000 });
                 const title = await p.title();
                 const url = p.url();
+                // Auto-save cookies after any successful ZoomInfo navigation
+                if (url.includes("zoominfo.com") && !url.includes("login")) {
+                    saveCookies().catch(() => { });
+                }
                 return { content: [{ type: "text", text: `Navigated to: ${url}\nPage title: ${title}` }] };
             }
             case "browser_screenshot": {
@@ -376,17 +426,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 const password = args.password;
                 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
                 const humanDelay = (min = 800, max = 2200) => sleep(Math.floor(Math.random() * (max - min) + min));
-                // Try restoring saved session first
-                const cookiesLoaded = await loadCookies();
-                if (cookiesLoaded) {
-                    await p.goto("https://app.zoominfo.com/", { waitUntil: "load", timeout: 30000 });
-                    await sleep(3000);
-                    const url = p.url();
-                    const title = await p.title();
-                    if (!url.includes("login") && !url.includes("signin") && (title.includes("ZoomInfo") || title.includes("Sales"))) {
-                        return { content: [{ type: "text", text: `Session restored from saved cookies! URL: ${url}` }] };
-                    }
-                    // Cookies expired, fall through to full login
+                // Cookies are already loaded in ensureBrowser() — just check if we're logged in
+                const alreadyLoggedIn = await isZoomInfoLoggedIn(p);
+                if (alreadyLoggedIn) {
+                    await saveCookies(); // refresh the saved file
+                    return { content: [{ type: "text", text: `Already logged in via saved session! URL: ${p.url()}` }] };
                 }
                 await p.goto("https://login.zoominfo.com", { waitUntil: "load", timeout: 30000 });
                 await humanDelay(2000, 3000);
