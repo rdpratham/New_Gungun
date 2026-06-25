@@ -1,0 +1,3472 @@
+1
+00:00:00,000 --> 00:00:04,219
+Now, I think another 25 or so got certified, right?
+
+2
+00:00:04,660 --> 00:00:05,000
+Manjush?
+
+3
+00:00:05,700 --> 00:00:08,300
+It should be in the ballpark, 80 to 100.
+
+4
+00:00:09,220 --> 00:00:10,199
+Oh, that's great.
+
+5
+00:00:10,839 --> 00:00:14,259
+What you want to do there is make sure that
+
+6
+00:00:14,259 --> 00:00:17,100
+everyone is reflecting on our list.
+
+7
+00:00:17,300 --> 00:00:19,820
+So maybe you can just create a ticket and send your list.
+
+8
+00:00:21,000 --> 00:00:23,739
+Sometimes they take many cases for portability.
+
+9
+00:00:23,899 --> 00:00:26,000
+They take the exams using their personal email,
+
+10
+00:00:26,120 --> 00:00:27,320
+which is totally fine.
+
+11
+00:00:28,179 --> 00:00:29,980
+But sometimes we don't know.
+
+12
+00:00:30,760 --> 00:00:33,000
+If you don't let us know which email that is.
+
+13
+00:00:33,819 --> 00:00:37,899
+So that typically fixes 80% of the discrepancies.
+
+14
+00:00:38,280 --> 00:00:41,179
+They just need to go to their partner academy profile
+
+15
+00:00:41,179 --> 00:00:45,060
+and add that secondary email very easily.
+
+16
+00:00:45,799 --> 00:00:47,859
+I can show you where that is if you can pull up
+
+17
+00:00:47,859 --> 00:00:48,960
+your academy right now.
+
+18
+00:00:49,259 --> 00:00:53,659
+Or you can go and open a ticket here, send your report.
+
+19
+00:00:53,979 --> 00:00:55,859
+Like these is the people with the emails
+
+20
+00:00:55,859 --> 00:01:00,539
+and let our team in the back end do the synchronization.
+
+21
+00:01:02,200 --> 00:01:07,379
+If you can send the emails, the email they use for testing,
+
+22
+00:01:08,199 --> 00:01:09,840
+that's the one we would need.
+
+23
+00:01:09,920 --> 00:01:11,959
+And we probably won't have unless you let us know
+
+24
+00:01:11,959 --> 00:01:12,560
+which one it is.
+
+25
+00:01:13,120 --> 00:01:14,280
+Sure, I'll do that.
+
+26
+00:01:15,120 --> 00:01:18,260
+Yeah, and then make sure that your sales teams
+
+27
+00:01:18,260 --> 00:01:22,239
+is making sure that everything is being registered
+
+28
+00:01:23,140 --> 00:01:26,159
+so that we know because in many cases,
+
+29
+00:01:28,219 --> 00:01:30,180
+partners work on opportunities.
+
+30
+00:01:31,040 --> 00:01:32,840
+And if we don't know, we don't give you credit
+
+31
+00:01:32,840 --> 00:01:36,260
+because since this is not a resale relationship,
+
+32
+00:01:36,840 --> 00:01:39,459
+you can be working with Databricks all day long
+
+33
+00:01:39,459 --> 00:01:41,439
+and we don't know that you're influencing consumption
+
+34
+00:01:42,480 --> 00:01:45,079
+unless our A's create the use case
+
+35
+00:01:45,960 --> 00:01:48,140
+and puts it on the system.
+
+36
+00:01:49,060 --> 00:01:51,200
+So they create a use case on our system
+
+37
+00:01:51,200 --> 00:01:54,579
+very tactically speaking, tag you to the use case.
+
+38
+00:01:54,879 --> 00:01:58,599
+So that's how we know, okay, once the partner is done
+
+39
+00:01:58,599 --> 00:02:00,239
+implementing and this goes live,
+
+40
+00:02:00,760 --> 00:02:03,180
+we will start giving credit to the partner.
+
+41
+00:02:03,700 --> 00:02:05,620
+But that use case needs to be created,
+
+42
+00:02:05,799 --> 00:02:09,000
+gets created by the by the AE, gets moved through all
+
+43
+00:02:09,000 --> 00:02:12,000
+the stages by the AE all the way until it goes live
+
+44
+00:02:12,520 --> 00:02:16,240
+when the credit kicks in, right?
+
+45
+00:02:16,360 --> 00:02:18,479
+And these AEs are for those accounts.
+
+46
+00:02:18,479 --> 00:02:20,960
+Evan, should you understand who you need to contact?
+
+47
+00:02:21,860 --> 00:02:21,979
+Yeah.
+
+48
+00:02:22,680 --> 00:02:23,080
+Okay.
+
+49
+00:02:23,419 --> 00:02:26,099
+Yes, let me show you really quickly how you see
+
+50
+00:02:26,099 --> 00:02:28,479
+everyone, everything we're giving you credit for today.
+
+51
+00:02:29,080 --> 00:02:31,919
+Because all of this you manage control, yes.
+
+52
+00:02:32,520 --> 00:02:34,900
+You can manage control, visualize everything
+
+53
+00:02:34,900 --> 00:02:36,219
+from your dashboard, okay?
+
+54
+00:02:37,039 --> 00:02:39,300
+Two ways in which you can get contacted
+
+55
+00:02:39,300 --> 00:02:40,979
+with the account team.
+
+56
+00:02:41,280 --> 00:02:44,240
+One, which is the one we promote.
+
+57
+00:02:44,780 --> 00:02:46,379
+If you don't know the account team,
+
+58
+00:02:47,079 --> 00:02:48,479
+register the opportunity.
+
+59
+00:02:49,259 --> 00:02:52,460
+That once approved should trigger two things.
+
+60
+00:02:53,180 --> 00:02:58,539
+One, the SDR with the inside sales reviewing your deal.
+
+61
+00:02:58,900 --> 00:03:01,400
+Once it is approved, they should come back to you
+
+62
+00:03:01,400 --> 00:03:05,860
+and give you options of times and dates
+
+63
+00:03:06,699 --> 00:03:08,139
+to meet with the account executive.
+
+64
+00:03:08,620 --> 00:03:11,080
+That's one of the things that happens when your deal
+
+65
+00:03:11,080 --> 00:03:13,719
+is approved and one of the intentions of the deal
+
+66
+00:03:13,719 --> 00:03:15,819
+is getting you connected with the account team
+
+67
+00:03:15,819 --> 00:03:18,639
+so that you can discuss the causal motion
+
+68
+00:03:18,639 --> 00:03:19,840
+you want to have with us.
+
+69
+00:03:20,479 --> 00:03:23,379
+Whether you want this to be highly involved,
+
+70
+00:03:23,719 --> 00:03:25,139
+not necessarily very involved,
+
+71
+00:03:25,300 --> 00:03:29,879
+just giving you, I don't know, information, collateral,
+
+72
+00:03:30,439 --> 00:03:31,360
+you name it, okay?
+
+73
+00:03:32,419 --> 00:03:34,180
+And then the other thing that it triggers
+
+74
+00:03:34,900 --> 00:03:37,719
+is that based on that connection,
+
+75
+00:03:38,180 --> 00:03:40,379
+the AE knows you're working on an opportunity
+
+76
+00:03:40,379 --> 00:03:42,719
+and create a use case to give you credit
+
+77
+00:03:42,719 --> 00:03:44,599
+on the partner program, okay?
+
+78
+00:03:45,280 --> 00:03:48,800
+So I am impersonating you right now,
+
+79
+00:03:48,879 --> 00:03:50,259
+Himantri, let me go to sharing.
+
+80
+00:03:53,539 --> 00:03:55,439
+So Vanessa, there were a couple of new changes
+
+81
+00:03:55,439 --> 00:03:56,719
+that were introduced this year.
+
+82
+00:03:57,060 --> 00:03:59,159
+So has the PBS been finalized?
+
+83
+00:03:59,240 --> 00:04:01,280
+Because I cannot access the PBS guide for this year.
+
+84
+00:04:03,080 --> 00:04:08,280
+Yes, so the PBS guide is here,
+
+85
+00:04:11,619 --> 00:04:14,300
+partner program network under anything,
+
+86
+00:04:14,520 --> 00:04:16,180
+it's at the bottom here.
+
+87
+00:04:16,620 --> 00:04:19,220
+You can download it here now.
+
+88
+00:04:20,199 --> 00:04:20,579
+Got it.
+
+89
+00:04:20,939 --> 00:04:22,699
+So I was trying to access it by the dashboard
+
+90
+00:04:22,699 --> 00:04:24,800
+and it was not just, it was just not popping up.
+
+91
+00:04:26,600 --> 00:04:29,339
+The dashboard is under more
+
+92
+00:04:30,220 --> 00:04:34,000
+and the guide, it's under resources,
+
+93
+00:04:34,220 --> 00:04:37,139
+brick builder, partner network, FW27 FAQ.
+
+94
+00:04:37,840 --> 00:04:40,180
+Here you go, went to the bottom, yes.
+
+95
+00:04:40,639 --> 00:04:41,699
+But you're right, it was,
+
+96
+00:04:42,139 --> 00:04:46,220
+I think it was published a couple of weeks ago only.
+
+97
+00:04:47,259 --> 00:04:48,699
+So it took us a little, yeah.
+
+98
+00:04:50,240 --> 00:04:53,040
+I'm covering all of those topics on the PDC office hours,
+
+99
+00:04:53,160 --> 00:04:55,920
+by the way, to make sure that I am kind of dissecting
+
+100
+00:04:55,920 --> 00:04:59,040
+all of the changes and all of the metrics and components
+
+101
+00:04:59,600 --> 00:05:01,360
+so that you can come back to the teams,
+
+102
+00:05:01,519 --> 00:05:03,060
+rally the troops, strategize,
+
+103
+00:05:04,340 --> 00:05:06,600
+how you want to progress on the tiering
+
+104
+00:05:06,600 --> 00:05:08,339
+or augment your partner value score.
+
+105
+00:05:09,759 --> 00:05:11,420
+So here in the dashboard,
+
+106
+00:05:12,099 --> 00:05:14,360
+you can see how many points you currently have,
+
+107
+00:05:14,860 --> 00:05:17,720
+what is your current tier
+
+108
+00:05:19,179 --> 00:05:22,259
+and the tier you're trending based on the current numbers.
+
+109
+00:05:23,100 --> 00:05:25,939
+So with 46, we should be in the silver tier still, right?
+
+110
+00:05:26,180 --> 00:05:28,139
+Why is it trending towards bronze tier?
+
+111
+00:05:30,699 --> 00:05:32,220
+Is it something that we're talking about?
+
+112
+00:05:32,860 --> 00:05:35,680
+The table, the table,
+
+113
+00:05:37,439 --> 00:05:39,779
+probably because there are other requirements as well.
+
+114
+00:05:40,199 --> 00:05:42,579
+So we need, let me show you.
+
+115
+00:05:46,900 --> 00:05:49,800
+Let me see the guide really quick.
+
+116
+00:05:56,860 --> 00:06:01,079
+Yeah, we need to make sure we don't trend down to bronze.
+
+117
+00:06:01,079 --> 00:06:03,959
+So whatever it is that we are lagging
+
+118
+00:06:03,959 --> 00:06:06,639
+in terms of maintaining the silver,
+
+119
+00:06:07,040 --> 00:06:12,800
+I mean, we should try to get to gold, not go down.
+
+120
+00:06:13,599 --> 00:06:17,459
+Yes, so right now, yes,
+
+121
+00:06:17,699 --> 00:06:19,100
+in terms of partner values score,
+
+122
+00:06:19,220 --> 00:06:21,879
+you're above the requirement, right?
+
+123
+00:06:22,500 --> 00:06:25,540
+We need, additionally, we need five delivery experts,
+
+124
+00:06:26,439 --> 00:06:28,759
+which is fairly easy to obtain.
+
+125
+00:06:28,759 --> 00:06:32,079
+It could be anyone who is certified within the company.
+
+126
+00:06:32,899 --> 00:06:34,199
+It's going to the academy
+
+127
+00:06:34,759 --> 00:06:37,459
+and take any of the delivery expert badges.
+
+128
+00:06:37,899 --> 00:06:40,399
+Those are from 15 minutes to two hours,
+
+129
+00:06:40,500 --> 00:06:43,420
+I think on the academy and the exam is also on the academy.
+
+130
+00:06:45,339 --> 00:06:47,600
+And then we need four champions.
+
+131
+00:06:48,300 --> 00:06:52,939
+So you can nominate them via partners at databricks.com.
+
+132
+00:06:53,300 --> 00:06:56,939
+I would suggest to do it in October, the latest,
+
+133
+00:06:56,939 --> 00:07:00,420
+so that it allows for some time for processing.
+
+134
+00:07:01,379 --> 00:07:06,079
+The next round of the motions happen in February.
+
+135
+00:07:06,360 --> 00:07:08,879
+So we have all the way until January 31st
+
+136
+00:07:08,879 --> 00:07:10,000
+to have all of the requirements.
+
+137
+00:07:10,899 --> 00:07:13,699
+What I would suggest is make sure
+
+138
+00:07:13,699 --> 00:07:15,959
+that you're subscribed to the newsletter
+
+139
+00:07:16,779 --> 00:07:19,680
+and also that you're looking into the PDC office hours
+
+140
+00:07:19,680 --> 00:07:24,800
+where we're bringing these topics forward.
+
+141
+00:07:25,799 --> 00:07:29,800
+I mean, at this point, the champions are 100% required.
+
+142
+00:07:31,000 --> 00:07:32,360
+And what does champions mean?
+
+143
+00:07:32,939 --> 00:07:35,319
+Is there any relaxation for the champion requirement
+
+144
+00:07:35,319 --> 00:07:36,019
+at this point?
+
+145
+00:07:36,360 --> 00:07:38,759
+Or is it still you need both certifications
+
+146
+00:07:38,759 --> 00:07:39,879
+associated and professional?
+
+147
+00:07:41,579 --> 00:07:44,019
+I'm sorry, can you repeat the question again, please?
+
+148
+00:07:45,519 --> 00:07:46,620
+I don't need to, sorry, you're saying something.
+
+149
+00:07:46,680 --> 00:07:48,939
+I was just asking, what does champion mean
+
+150
+00:07:48,939 --> 00:07:52,259
+and what does it require to have four champions?
+
+151
+00:07:53,279 --> 00:07:56,860
+Yes, so a champion, it is a different profile
+
+152
+00:07:56,860 --> 00:07:58,459
+than a delivery expert.
+
+153
+00:07:58,860 --> 00:08:02,300
+A champion, highly technical, is the person who,
+
+154
+00:08:02,480 --> 00:08:05,540
+you pretty much assigned on your complex projects
+
+155
+00:08:05,540 --> 00:08:07,079
+because of their expertise.
+
+156
+00:08:07,740 --> 00:08:09,819
+And these people that had delivered
+
+157
+00:08:09,819 --> 00:08:12,819
+multiple successful implementations on databricks.
+
+158
+00:08:13,560 --> 00:08:17,399
+So the process for them is one, getting nominated.
+
+159
+00:08:17,600 --> 00:08:19,600
+There are basic requirements to get nominated.
+
+160
+00:08:20,139 --> 00:08:21,459
+You can get them here.
+
+161
+00:08:21,459 --> 00:08:25,980
+I'll send them over the chat so you can grab the alias.
+
+162
+00:08:28,160 --> 00:08:31,379
+There you will get the minimum requirements to nominate them.
+
+163
+00:08:32,440 --> 00:08:34,340
+Once the nomination is accepted,
+
+164
+00:08:34,519 --> 00:08:39,460
+they will go under some additional enablement requirements,
+
+165
+00:08:39,700 --> 00:08:44,039
+a panel interview as well with our champions programs team.
+
+166
+00:08:45,159 --> 00:08:47,679
+So this is kind of our, before the MVP
+
+167
+00:08:47,679 --> 00:08:49,179
+is our highest recognition.
+
+168
+00:08:49,179 --> 00:08:53,679
+So champions are very prestigious engineers.
+
+169
+00:08:54,659 --> 00:08:57,480
+So I would put forward the ones that are really
+
+170
+00:08:58,079 --> 00:09:00,580
+had more successes under their belt.
+
+171
+00:09:02,279 --> 00:09:04,220
+So Vanessa, quick question for you.
+
+172
+00:09:04,340 --> 00:09:06,779
+Has the requirement been a little bit relaxed
+
+173
+00:09:06,779 --> 00:09:08,240
+since you're looking for four champions?
+
+174
+00:09:08,639 --> 00:09:10,259
+Previously it was just one champion.
+
+175
+00:09:10,899 --> 00:09:13,179
+So has this requirement been relaxed a little bit?
+
+176
+00:09:13,320 --> 00:09:15,299
+Do you still require both the associate
+
+177
+00:09:15,299 --> 00:09:17,820
+and professional level certification for these champions
+
+178
+00:09:17,820 --> 00:09:21,100
+or cause for good resources?
+
+179
+00:09:21,360 --> 00:09:23,299
+It is difficult for them to take time out
+
+180
+00:09:23,299 --> 00:09:26,740
+of the existing engagements to focus on an exam.
+
+181
+00:09:27,539 --> 00:09:29,899
+So is that still a hard requirement
+
+182
+00:09:29,899 --> 00:09:32,059
+or is that a bit of a flexibility with them?
+
+183
+00:09:33,259 --> 00:09:37,940
+Okay, so let me check on the requirements.
+
+184
+00:09:39,299 --> 00:09:44,140
+So one, in terms of relaxing the requirement
+
+185
+00:09:44,700 --> 00:09:46,799
+of four champions from the program level,
+
+186
+00:09:46,799 --> 00:09:48,759
+that's why I was suggesting join us
+
+187
+00:09:48,759 --> 00:09:50,399
+on the PDC office hours every month,
+
+188
+00:09:50,620 --> 00:09:55,259
+read the newsletter because we are considering it.
+
+189
+00:09:56,000 --> 00:09:58,179
+But I'm not sure if it's going to go through,
+
+190
+00:09:58,340 --> 00:09:59,980
+but we're considering reducing the amount
+
+191
+00:10:00,000 --> 00:10:06,759
+amount of champions, but for now the reducing the amount of champion or reducing the certification
+
+192
+00:10:06,759 --> 00:10:07,879
+required for champions.
+
+193
+00:10:09,919 --> 00:10:15,759
+Reducing the amount of champions the for the partner program for the actual program so
+
+194
+00:10:15,759 --> 00:10:17,299
+that someone becomes champion.
+
+195
+00:10:18,840 --> 00:10:24,720
+Those requirements are set and are not being considered to be more relaxed because there
+
+196
+00:10:24,720 --> 00:10:28,379
+is certain profile in terms of level of expertise that is required.
+
+197
+00:10:29,399 --> 00:10:33,080
+And it's the perfect, you know, is the is the profile that we're looking for.
+
+198
+00:10:33,220 --> 00:10:37,980
+So that those requirements are not looking to be relaxed at this point that that team
+
+199
+00:10:37,980 --> 00:10:39,480
+is not working on that at all.
+
+200
+00:10:39,779 --> 00:10:42,960
+It's more on the program side on how many do you actually need?
+
+201
+00:10:44,059 --> 00:10:45,679
+Let me check here.
+
+202
+00:10:47,860 --> 00:10:51,279
+Let me see if I have anything here.
+
+203
+00:10:52,279 --> 00:10:55,879
+If not, I think I know on the partner portal we have it.
+
+204
+00:10:56,100 --> 00:10:56,960
+Let me check here.
+
+205
+00:10:57,960 --> 00:11:07,680
+Also side question, if you know we hire new people who are champions, does do we get extra
+
+206
+00:11:07,680 --> 00:11:08,319
+points for that?
+
+207
+00:11:08,580 --> 00:11:11,200
+Like since now that person is part of our team.
+
+208
+00:11:12,319 --> 00:11:17,680
+Would you get that person will be meeting the required the current requirement of the
+
+209
+00:11:17,680 --> 00:11:18,680
+partner program correct?
+
+210
+00:11:19,840 --> 00:11:26,620
+Okay, so if we hire new people who are certified and whatever we get credit for that, right?
+
+211
+00:11:27,180 --> 00:11:28,159
+That is correct.
+
+212
+00:11:28,379 --> 00:11:33,659
+You need to email us so that our team associates them in the backend to you as the new company
+
+213
+00:11:33,659 --> 00:11:34,860
+holding the champion.
+
+214
+00:11:36,779 --> 00:11:37,279
+Yes.
+
+215
+00:11:37,759 --> 00:11:38,960
+So here are he mentioned.
+
+216
+00:11:39,180 --> 00:11:40,480
+Did you see how it got here?
+
+217
+00:11:40,740 --> 00:11:43,840
+Here are the requirements to apply.
+
+218
+00:11:44,960 --> 00:11:47,779
+And yes, it needs to be a professional person.
+
+219
+00:11:47,779 --> 00:11:48,139
+Yes.
+
+220
+00:11:48,799 --> 00:11:57,200
+This is a highly technical program to really recognize highly technical individuals so
+
+221
+00:11:57,200 --> 00:11:57,680
+an associate.
+
+222
+00:11:58,259 --> 00:12:01,779
+It makes sense that they require the professional level before applying.
+
+223
+00:12:02,819 --> 00:12:02,819
+
+
+224
+00:12:03,159 --> 00:12:03,440
+Got it.
+
+225
+00:12:03,919 --> 00:12:04,639
+Correct.
+
+226
+00:12:04,899 --> 00:12:10,500
+So just stay in the loop in case that something around champions gets changed, right?
+
+227
+00:12:11,580 --> 00:12:14,360
+Because it typically affects a hiring decisions.
+
+228
+00:12:14,960 --> 00:12:21,180
+So just want to make sure that you know you consider that as I mentioned in my stay as
+
+229
+00:12:21,180 --> 00:12:27,399
+a hard requirement, but we are in discussions of relaxing this so and maybe reducing it.
+
+230
+00:12:27,440 --> 00:12:31,559
+So just to stay on the loop, join the PDC office hours and read the newsletter.
+
+231
+00:12:34,740 --> 00:12:39,440
+Vanessa, how does he mention when the PDC office hours are there?
+
+232
+00:12:39,440 --> 00:12:48,299
+Is there like a meeting invite that you can forward to him or is it on a standard date
+
+233
+00:12:48,299 --> 00:12:49,100
+every month?
+
+234
+00:12:50,080 --> 00:12:52,200
+Let me show you two things.
+
+235
+00:12:52,480 --> 00:12:57,840
+It gets included on the newsletter that goes out every month.
+
+236
+00:12:58,759 --> 00:12:59,539
+And the second thing is...
+
+237
+00:12:59,539 --> 00:13:01,019
+How does he sign up for that newsletter?
+
+238
+00:13:03,419 --> 00:13:05,440
+Are you already getting that newsletter?
+
+239
+00:13:06,379 --> 00:13:08,539
+I generally get the enablement newsletter.
+
+240
+00:13:08,539 --> 00:13:10,059
+I don't get the PDC notification.
+
+241
+00:13:10,639 --> 00:13:13,340
+I have the enablement newsletter that is going out.
+
+242
+00:13:15,899 --> 00:13:18,819
+And I've signed up for all of the communication preferences.
+
+243
+00:13:20,200 --> 00:13:22,639
+Let me give you the link to the newsletter.
+
+244
+00:13:30,879 --> 00:13:32,740
+I have already signed up for it.
+
+245
+00:13:32,779 --> 00:13:33,759
+I'm not getting it.
+
+246
+00:13:34,519 --> 00:13:38,960
+I signed up for all of the communication that Databricks sends out every month.
+
+247
+00:13:39,299 --> 00:13:43,799
+I've just not received this PDC office hours notification.
+
+248
+00:13:44,740 --> 00:13:53,559
+Oh, the PDC office gets included on the marketing newsletter as one of the things they advertise.
+
+249
+00:13:54,000 --> 00:13:57,200
+It's not specifically for the PDC.
+
+250
+00:13:57,200 --> 00:14:06,340
+So the marketing overall newsletter for partners will include things like PDC office hours
+
+251
+00:14:06,879 --> 00:14:14,340
+or maybe an announcement on a launch or an update on the velocity program or partner-related
+
+252
+00:14:14,340 --> 00:14:15,539
+information.
+
+253
+00:14:15,819 --> 00:14:20,120
+So we just have some real estate on that communication, but it's not exclusive to PDC.
+
+254
+00:14:21,039 --> 00:14:22,259
+The other way...
+
+255
+00:14:22,259 --> 00:14:23,059
+That is what I've been saying.
+
+256
+00:14:23,059 --> 00:14:27,059
+I have already signed up for all of the communication that Databricks sends out.
+
+257
+00:14:27,379 --> 00:14:29,779
+I have just been receiving the enablement notifications.
+
+258
+00:14:30,299 --> 00:14:32,539
+I have not received any other notifications.
+
+259
+00:14:33,140 --> 00:14:38,360
+So I don't have information about the PDC, but I know that there is a Tuesday conversation
+
+260
+00:14:38,360 --> 00:14:46,259
+which is hosted at what, 10.30 IST or 9.30 PM IST for the marketing activities that are
+
+261
+00:14:46,259 --> 00:14:46,740
+carried out.
+
+262
+00:14:47,059 --> 00:14:51,019
+I know about the enablement activities that are going on at this point of time, but I
+
+263
+00:14:51,259 --> 00:14:52,860
+do not know about the PDC activities.
+
+264
+00:14:53,279 --> 00:14:57,139
+So would it be possible to send me an invite for the PDC as well or to include me from
+
+265
+00:14:57,139 --> 00:14:58,899
+the back end into your PDC newsletter?
+
+266
+00:14:59,600 --> 00:15:02,180
+I haven't heard that, so that's interesting.
+
+267
+00:15:02,740 --> 00:15:07,579
+Maybe the marketing team can review if there is something wrong with your emails.
+
+268
+00:15:10,439 --> 00:15:17,139
+And here is how you can not miss any of the events that I recommend.
+
+269
+00:15:18,960 --> 00:15:20,940
+Literally, here is what I do every week.
+
+270
+00:15:21,559 --> 00:15:30,160
+I create the weekly digest and again, so that we don't go through marketing and there is
+
+271
+00:15:30,160 --> 00:15:35,799
+a huge orchestration that needs to happen in the back end to send mass emails to the
+
+272
+00:15:35,799 --> 00:15:36,460
+partner base.
+
+273
+00:15:36,660 --> 00:15:40,120
+So we're limited in amount of emails we can send.
+
+274
+00:15:40,120 --> 00:15:49,039
+And I repeat for privacy rules, I cannot email the entire base every week and it will be
+
+275
+00:15:49,039 --> 00:15:50,100
+very conversant for me.
+
+276
+00:15:50,240 --> 00:15:52,940
+It's not necessarily, you know, it will be very operational on my side.
+
+277
+00:15:54,700 --> 00:16:00,660
+So what I do, I can sign up for that because I have not received the PDC notification.
+
+278
+00:16:00,960 --> 00:16:05,500
+What I do is I keep on checking out the Databricks website and whenever there is a due notification
+
+279
+00:16:05,500 --> 00:16:07,180
+at popsup, hey, PDC is happening.
+
+280
+00:16:07,500 --> 00:16:09,200
+I generally go ahead and sign up for that.
+
+281
+00:16:09,200 --> 00:16:11,720
+So that is how I ignore it.
+
+282
+00:16:12,340 --> 00:16:18,559
+Yeah, so the only way that we send mass invites to the PDC office hours is through the newsletter
+
+283
+00:16:18,559 --> 00:16:19,460
+that marketing sends.
+
+284
+00:16:20,000 --> 00:16:21,240
+So the one that you're not getting.
+
+285
+00:16:21,440 --> 00:16:27,879
+So I just dropped an email on the chat because I haven't heard about someone signing up and
+
+286
+00:16:27,879 --> 00:16:28,600
+not getting it.
+
+287
+00:16:28,700 --> 00:16:34,319
+So please do email them so they can check your profile and see if there is something preventing
+
+288
+00:16:34,319 --> 00:16:37,319
+them from communicating with Google, which I wouldn't see.
+
+289
+00:16:37,319 --> 00:16:42,839
+Because that is kind of the email channel that I use to go out because I need to go
+
+290
+00:16:42,839 --> 00:16:47,379
+through formally through marketing because Databricks needs to have a formal schedule
+
+291
+00:16:47,379 --> 00:16:51,139
+so we don't send X amount of emails to people.
+
+292
+00:16:51,259 --> 00:16:54,299
+So I'm not sending direct invites to the partners.
+
+293
+00:16:54,660 --> 00:16:59,860
+I need to go through the official routes so that they can check the boxes for all privacy
+
+294
+00:16:59,860 --> 00:17:03,600
+rules and, you know, how many emails are we sending so they're not too many.
+
+295
+00:17:03,600 --> 00:17:06,019
+I cannot mass email everyone.
+
+296
+00:17:07,000 --> 00:17:14,240
+But however, what I do every week, I bring what I call the weekly digest to the partners
+
+297
+00:17:14,240 --> 00:17:15,059
+to the portal.
+
+298
+00:17:15,480 --> 00:17:24,000
+OK, so in the partner portal, in the landing page, every week, the weekly digest gets updated.
+
+299
+00:17:24,279 --> 00:17:25,880
+So here you can download it.
+
+300
+00:17:26,759 --> 00:17:30,980
+The events are there, but all and other things that are really great for you to see.
+
+301
+00:17:31,619 --> 00:17:34,619
+They're, you know, one slide only, simple to digest.
+
+302
+00:17:34,860 --> 00:17:39,180
+However, if you only want to see the events, you can continue to scroll down.
+
+303
+00:17:39,380 --> 00:17:45,779
+And what the team does when I send this is that they send which are the events that I'm calling
+
+304
+00:17:45,779 --> 00:17:46,099
+out.
+
+305
+00:17:46,319 --> 00:17:50,380
+OK, so right now, you send my weekly digest yesterday.
+
+306
+00:17:50,700 --> 00:17:56,559
+So the best day to check this will be maybe Thursdays because the team is in India.
+
+307
+00:17:56,880 --> 00:18:00,000
+The team would typically pick set up in less than 24 hours.
+
+308
+00:18:00,000 --> 00:18:07,680
+So Thursdays is when you will see this updated and you will see actually it's already there.
+
+309
+00:18:07,740 --> 00:18:11,639
+But I added a few more events on my weekly digest from yesterday.
+
+310
+00:18:11,839 --> 00:18:13,059
+They haven't updated it.
+
+311
+00:18:13,099 --> 00:18:18,680
+But as I mentioned, Thursdays is the best time to come here and see which events I am
+
+312
+00:18:18,680 --> 00:18:20,259
+suggesting you not to miss.
+
+313
+00:18:20,940 --> 00:18:26,819
+And if you want to see kind of the whole content that I bring, you can download the
+
+314
+00:18:26,819 --> 00:18:33,380
+weekly digest and see it in this format where I have the weekly digest here.
+
+315
+00:18:34,259 --> 00:18:35,119
+These are the events.
+
+316
+00:18:35,340 --> 00:18:38,119
+This is the extraction they take and put it on the main page.
+
+317
+00:18:38,720 --> 00:18:45,599
+And also some recommended content from .com and some recommended enablement, maybe new
+
+318
+00:18:45,599 --> 00:18:49,380
+launches or just content that I, you know, it's great to have in front of you.
+
+319
+00:18:49,380 --> 00:18:53,659
+And then this slide is fairly static.
+
+320
+00:18:54,299 --> 00:18:59,259
+Are just links that, you know, I want partners to have like top of mind.
+
+321
+00:19:00,759 --> 00:19:04,700
+So Vanessa, there are two things that I wanted to have a major conversation with you about.
+
+322
+00:19:04,860 --> 00:19:08,380
+One is obviously the housekeeping activities that we need to do to ensure that we stay in
+
+323
+00:19:08,380 --> 00:19:12,059
+the silver tier and maybe we can progress through the next year of cold year.
+
+324
+00:19:12,400 --> 00:19:15,779
+So wanted to understand with you, hey, how can we, you know,
+
+325
+00:19:17,199 --> 00:19:22,360
+the primary objective is how can we grow or how can we create joint opportunities?
+
+326
+00:19:22,960 --> 00:19:27,519
+And obviously what are the upcoming requirements for, because I heard that a lot of the big
+
+327
+00:19:27,519 --> 00:19:29,279
+builder requirements are going to come up next year.
+
+328
+00:19:30,139 --> 00:19:33,579
+So could you just elaborate a little bit about that?
+
+329
+00:19:33,900 --> 00:19:38,619
+My primary goal is to how can we really close up more opportunities together and how can we
+
+330
+00:19:38,619 --> 00:19:40,460
+enter into your writing hundreds list?
+
+331
+00:19:41,380 --> 00:19:43,079
+That is the primary goal that I'm looking at.
+
+332
+00:19:43,960 --> 00:19:52,299
+Yes. Okay. Awesome. So the rising 100 list, I'll cover it in a second option because I briefly
+
+333
+00:19:52,299 --> 00:19:56,420
+touched to it. I do have a few more minutes to go over.
+
+334
+00:19:57,380 --> 00:19:59,820
+Now, a couple of ways in which
+
+335
+00:20:00,000 --> 00:20:02,519
+we can generate more CoSail opportunities.
+
+336
+00:20:03,299 --> 00:20:04,980
+I understand for what I remembered,
+
+337
+00:20:05,180 --> 00:20:09,500
+your main geo is US, correct?
+
+338
+00:20:09,740 --> 00:20:12,440
+Or Anita, that's where you typically implement.
+
+339
+00:20:12,880 --> 00:20:16,119
+What is your geo, your focus?
+
+340
+00:20:17,759 --> 00:20:19,759
+The clients are mostly based in US, yes.
+
+341
+00:20:20,579 --> 00:20:23,220
+Okay. Yes. As you can imagine,
+
+342
+00:20:23,380 --> 00:20:25,700
+we have a lot of partners in US.
+
+343
+00:20:28,299 --> 00:20:32,900
+The way that the CoSail motion had been generated today,
+
+344
+00:20:33,319 --> 00:20:35,819
+as of today, it's been organic.
+
+345
+00:20:36,279 --> 00:20:40,279
+A lot of that being driven by the partner
+
+346
+00:20:40,279 --> 00:20:42,960
+focusing on generating trust with our teams.
+
+347
+00:20:43,339 --> 00:20:46,740
+By teams, I mean account executives and partner sales managers,
+
+348
+00:20:46,900 --> 00:20:49,240
+who are the ones that are mainly involved
+
+349
+00:20:52,819 --> 00:20:55,640
+directly connected to the customers or the sales teams
+
+350
+00:20:55,640 --> 00:20:58,180
+to generate that CoSail motion going.
+
+351
+00:20:58,579 --> 00:21:01,400
+Okay. How is it that partners have been doing that today?
+
+352
+00:21:02,079 --> 00:21:06,119
+Okay. One, when you work with an account executive internally,
+
+353
+00:21:06,299 --> 00:21:07,859
+you make sure it's a great experience.
+
+354
+00:21:08,039 --> 00:21:11,640
+You let them know what your expertise is and so on.
+
+355
+00:21:11,740 --> 00:21:13,299
+So word of mouth will exist.
+
+356
+00:21:13,539 --> 00:21:16,299
+You actually can ask for introductions to those A's.
+
+357
+00:21:17,960 --> 00:21:19,180
+That's one thing.
+
+358
+00:21:19,480 --> 00:21:22,640
+Second, they create solutions,
+
+359
+00:21:23,880 --> 00:21:26,079
+prepackage solutions that they can easily
+
+360
+00:21:26,079 --> 00:21:30,119
+position within their customers that can help them open the door,
+
+361
+00:21:30,220 --> 00:21:32,500
+more of on the pre-sales phase,
+
+362
+00:21:33,299 --> 00:21:37,799
+like POC-like offers specifically aligned,
+
+363
+00:21:38,019 --> 00:21:40,019
+mainly aligned, that is specifically because they
+
+364
+00:21:40,019 --> 00:21:44,119
+offer them, create them across the board.
+
+365
+00:21:44,119 --> 00:21:50,980
+But the suggestion would be to create them around the key
+
+366
+00:21:50,980 --> 00:21:53,599
+solutions that we're focusing on this year right now,
+
+367
+00:21:53,599 --> 00:21:56,960
+especially because it's very new that all of our teams
+
+368
+00:21:56,960 --> 00:21:58,779
+are even being compensated on.
+
+369
+00:21:59,500 --> 00:22:03,440
+Genie, Lake Base, AI get way, for example.
+
+370
+00:22:04,880 --> 00:22:08,279
+So they're really eager to bump up their numbers
+
+371
+00:22:08,279 --> 00:22:10,880
+and they're really leaning on those partners
+
+372
+00:22:10,880 --> 00:22:12,980
+that are investing in creating solutions
+
+373
+00:22:12,980 --> 00:22:16,579
+that can help them accelerate the sales cycle
+
+374
+00:22:16,579 --> 00:22:17,519
+and break into accounts.
+
+375
+00:22:18,139 --> 00:22:18,139
+
+
+376
+00:22:19,740 --> 00:22:24,880
+Now, if your target is enterprise and strategic accounts,
+
+377
+00:22:26,099 --> 00:22:26,599
+that gets...
+
+378
+00:22:26,599 --> 00:22:27,619
+So I'll tell you a little bit, Vanessa.
+
+379
+00:22:28,160 --> 00:22:30,099
+So we have, instead of going forward with the entire
+
+380
+00:22:30,099 --> 00:22:32,460
+market, we have gone forward with very strategic focus
+
+381
+00:22:32,460 --> 00:22:34,880
+that, hey, we want to focus on a couple of different verticals.
+
+382
+00:22:35,139 --> 00:22:36,819
+So one is financial services,
+
+383
+00:22:36,980 --> 00:22:38,920
+where we have delivered great work on data blitz.
+
+384
+00:22:39,579 --> 00:22:41,420
+That is one thing that we have.
+
+385
+00:22:41,420 --> 00:22:43,339
+For example, one of the customers,
+
+386
+00:22:43,599 --> 00:22:46,400
+that's an eminent advisory firm that is a digital-related business.
+
+387
+00:22:47,700 --> 00:22:50,139
+They have really gone forward with the...
+
+388
+00:22:50,139 --> 00:22:53,079
+being put responsible for the entire data creation for them
+
+389
+00:22:53,079 --> 00:22:54,639
+and then the authentic AI implementation.
+
+390
+00:22:55,279 --> 00:22:56,860
+So that is one such great work we did.
+
+391
+00:22:57,380 --> 00:23:00,860
+Then another one has been the work that we have been doing
+
+392
+00:23:00,860 --> 00:23:02,920
+with the big course about the entire...
+
+393
+00:23:02,920 --> 00:23:05,500
+Again, an authentic platform that we created for them.
+
+394
+00:23:06,360 --> 00:23:07,860
+The other one has been in the...
+
+395
+00:23:07,860 --> 00:23:09,779
+So this is one vertical we have improved, is don't?
+
+396
+00:23:09,779 --> 00:23:11,639
+The other one is healthcare and life sciences.
+
+397
+00:23:12,360 --> 00:23:15,480
+So these are two key verticals that you want to focus on,
+
+398
+00:23:15,559 --> 00:23:17,160
+along with digital-native businesses,
+
+399
+00:23:17,299 --> 00:23:19,920
+because we understand data-based looks at this
+
+400
+00:23:19,920 --> 00:23:22,639
+from three different verticals, financial services, FSI,
+
+401
+00:23:23,480 --> 00:23:24,920
+HLS, healthcare and life sciences,
+
+402
+00:23:25,119 --> 00:23:26,240
+and digital-native businesses.
+
+403
+00:23:26,680 --> 00:23:29,579
+So these are our core verticals which you want to focus on,
+
+404
+00:23:29,779 --> 00:23:33,440
+together with data-based in the US.
+
+405
+00:23:34,299 --> 00:23:37,380
+Financial services, digital...
+
+406
+00:23:37,380 --> 00:23:38,019
+And?
+
+407
+00:23:39,299 --> 00:23:40,400
+Healthcare and life sciences.
+
+408
+00:23:41,539 --> 00:23:41,779
+Okay.
+
+409
+00:23:42,960 --> 00:23:43,519
+Got it.
+
+410
+00:23:43,980 --> 00:23:47,440
+So by the way, these are the use cases
+
+411
+00:23:47,440 --> 00:23:50,200
+that I can see were giving you credit as of today,
+
+412
+00:23:50,279 --> 00:23:53,579
+historic only I can see two joint customers.
+
+413
+00:23:55,779 --> 00:23:56,259
+Yeah.
+
+414
+00:23:57,920 --> 00:24:00,880
+So there should be one more and DCG data
+
+415
+00:24:00,880 --> 00:24:01,980
+have been contrast problems.
+
+416
+00:24:02,160 --> 00:24:04,160
+I'm working together with the account executive over there
+
+417
+00:24:04,160 --> 00:24:05,639
+to how can we...
+
+418
+00:24:05,639 --> 00:24:06,759
+With Isabel Cannon over there,
+
+419
+00:24:06,759 --> 00:24:08,819
+how can we ensure that all of the consumption
+
+420
+00:24:08,819 --> 00:24:10,940
+we are actually driving even reflects on your portal?
+
+421
+00:24:11,460 --> 00:24:12,819
+As of right now, you're not getting
+
+422
+00:24:12,819 --> 00:24:14,519
+the entire picture over there.
+
+423
+00:24:14,839 --> 00:24:16,740
+So I'm already working with Isabel on that.
+
+424
+00:24:17,039 --> 00:24:18,799
+So I wanted to understand how can we really
+
+425
+00:24:18,799 --> 00:24:20,299
+accelerate that entire piece?
+
+426
+00:24:21,440 --> 00:24:23,380
+You want to really go forward all in the data piece.
+
+427
+00:24:23,599 --> 00:24:26,799
+That has been, hey, what can we really create with data mix?
+
+428
+00:24:27,019 --> 00:24:29,559
+How can we really go forward and go out
+
+429
+00:24:29,559 --> 00:24:31,279
+and progress to the TSI?
+
+430
+00:24:31,660 --> 00:24:34,720
+That is the core thing that we have been handed out.
+
+431
+00:24:34,720 --> 00:24:36,819
+Because as of right now, we have stabilized the partnership.
+
+432
+00:24:37,240 --> 00:24:38,539
+Now that we have reached the silver tier,
+
+433
+00:24:38,700 --> 00:24:40,480
+my primary goal for silver tier was
+
+434
+00:24:40,480 --> 00:24:42,160
+I wanted to get a PDM assigned to us
+
+435
+00:24:42,160 --> 00:24:44,559
+so that we can work in a much more dedicated
+
+436
+00:24:44,559 --> 00:24:45,740
+and a focused manner.
+
+437
+00:24:46,559 --> 00:24:49,860
+But with the situation that you've just notified to me,
+
+438
+00:24:49,980 --> 00:24:51,759
+it seems like getting a dedicated PDM
+
+439
+00:24:51,759 --> 00:24:52,900
+would be very tough as,
+
+440
+00:24:53,059 --> 00:24:55,339
+but I would still like to get into the top hundreds
+
+441
+00:24:55,840 --> 00:24:58,940
+and see how we can grow together aggressively.
+
+442
+00:25:00,360 --> 00:25:00,700
+Yeah.
+
+443
+00:25:01,940 --> 00:25:02,380
+100%.
+
+444
+00:25:02,380 --> 00:25:06,539
+So we cover all of those topics via the PDC office hours.
+
+445
+00:25:06,700 --> 00:25:08,839
+Actually, we have one on co-selling with us,
+
+446
+00:25:09,019 --> 00:25:10,119
+and it's called Good to Great.
+
+447
+00:25:10,220 --> 00:25:12,819
+You will find the recording on the PDC landing page.
+
+448
+00:25:13,819 --> 00:25:16,759
+And then what I also recommend you is to watch the,
+
+449
+00:25:17,160 --> 00:25:19,480
+win with us for each of the verticals that you mentioned,
+
+450
+00:25:19,480 --> 00:25:24,160
+where our partner sales managers who are very specialized
+
+451
+00:25:24,860 --> 00:25:29,000
+join with the go-to-market leads that they define
+
+452
+00:25:29,000 --> 00:25:31,339
+the go-to-market for solutions by vertical.
+
+453
+00:25:32,380 --> 00:25:33,880
+Super close to the AEs.
+
+454
+00:25:34,099 --> 00:25:36,619
+They actually talk about how to co-sell with them,
+
+455
+00:25:36,700 --> 00:25:38,000
+specifically for the vertical.
+
+456
+00:25:38,240 --> 00:25:40,400
+So this is a very frequently asked question
+
+457
+00:25:40,400 --> 00:25:41,460
+and asked from the partners.
+
+458
+00:25:41,619 --> 00:25:43,299
+So you would imagine that's one of the things
+
+459
+00:25:43,299 --> 00:25:45,240
+that we have created on a scale version
+
+460
+00:25:45,980 --> 00:25:48,639
+for all of the partners to learn and do that.
+
+461
+00:25:48,799 --> 00:25:51,740
+And believe me, it's the same way a RISC-100
+
+462
+00:25:51,740 --> 00:25:54,079
+will generate this co-sell motion today.
+
+463
+00:25:54,579 --> 00:25:56,579
+It's just how you actually get the information
+
+464
+00:25:56,579 --> 00:25:57,700
+that it will be through a video.
+
+465
+00:25:58,700 --> 00:25:59,139
+Okay.
+
+466
+00:25:59,559 --> 00:26:01,799
+Instead of, you know, or both things will happen
+
+467
+00:26:01,799 --> 00:26:04,759
+for a RISC-100, it becomes part of the conversation.
+
+468
+00:26:05,019 --> 00:26:07,980
+It literally tells you what the recommendations are,
+
+469
+00:26:08,240 --> 00:26:09,279
+you know, create your solutions.
+
+470
+00:26:09,920 --> 00:26:12,240
+It talks about the outcomes maps as well
+
+471
+00:26:12,980 --> 00:26:14,319
+for you to build solutions.
+
+472
+00:26:14,519 --> 00:26:17,259
+So Brick Builder is one of the ways as well.
+
+473
+00:26:18,059 --> 00:26:20,779
+Working on creating your specializations before,
+
+474
+00:26:21,099 --> 00:26:24,319
+let me take one step back so I can kind of wrap up
+
+475
+00:26:24,319 --> 00:26:25,839
+the recommendation at a high level.
+
+476
+00:26:26,380 --> 00:26:28,019
+Watch the win with us by the way.
+
+477
+00:26:28,519 --> 00:26:29,759
+And in terms of the recognition,
+
+478
+00:26:29,759 --> 00:26:31,619
+join us in the next PDC office hours.
+
+479
+00:26:31,819 --> 00:26:34,240
+I'll deep dive into the partner values core points,
+
+480
+00:26:34,440 --> 00:26:37,339
+the recognition, the use cases from the portal.
+
+481
+00:26:38,079 --> 00:26:40,519
+So that is really clear and how we can actually have visibility
+
+482
+00:26:40,519 --> 00:26:42,799
+to everything you're doing, which is going to be considered
+
+483
+00:26:42,799 --> 00:26:44,720
+also when we run the numbers for RISC-100.
+
+484
+00:26:45,119 --> 00:26:47,240
+So as I mentioned, the amount of use cases as well
+
+485
+00:26:47,240 --> 00:26:47,960
+is also important.
+
+486
+00:26:48,400 --> 00:26:50,099
+So it's important that we can see everything.
+
+487
+00:26:50,619 --> 00:26:52,660
+Okay. So as I was mentioning,
+
+488
+00:26:53,259 --> 00:26:55,519
+one of the reasons why I brought this up is because,
+
+489
+00:26:56,319 --> 00:27:00,019
+yes, we have partner sales managers and teams
+
+490
+00:27:00,019 --> 00:27:01,500
+aligned to the verticals.
+
+491
+00:27:01,639 --> 00:27:05,920
+However, not all of the, for example,
+
+492
+00:27:06,059 --> 00:27:10,360
+customers in Finns are part of that team.
+
+493
+00:27:10,740 --> 00:27:12,440
+Why? Because depending on the size
+
+494
+00:27:12,440 --> 00:27:14,259
+that we consider they have for us,
+
+495
+00:27:14,420 --> 00:27:17,240
+we might put them on the emerging bucket,
+
+496
+00:27:17,400 --> 00:27:22,400
+even they are Finns or healthcare or manufacturing,
+
+497
+00:27:23,460 --> 00:27:28,519
+meaning that there is kind of this underlying segment
+
+498
+00:27:29,639 --> 00:27:37,400
+that we call emerging where we put cross vertical customers
+
+499
+00:27:37,400 --> 00:27:38,779
+based on their size.
+
+500
+00:27:39,360 --> 00:27:43,079
+Okay. And that partner sales manager is Arian.
+
+501
+00:27:43,759 --> 00:27:46,680
+So you can see that, and this is actually good news.
+
+502
+00:27:46,920 --> 00:27:49,700
+The reason I say that is because when you're working
+
+503
+00:27:49,700 --> 00:27:54,680
+with the emerging group, the emerging segment of customers,
+
+504
+00:27:55,339 --> 00:27:59,240
+it's a lot easier for you to be in the future
+
+505
+00:27:59,240 --> 00:28:01,660
+in front of a sales team, right?
+
+506
+00:28:01,799 --> 00:28:02,660
+They're more flexible.
+
+507
+00:28:03,099 --> 00:28:04,259
+These accounts have this part,
+
+508
+00:28:04,380 --> 00:28:07,700
+these account executives typically have the hunter teams
+
+509
+00:28:07,700 --> 00:28:10,380
+inside them and they have thousands of accounts
+
+510
+00:28:10,380 --> 00:28:11,139
+they need to target.
+
+511
+00:28:11,360 --> 00:28:13,139
+They will be really hungry to hear from you
+
+512
+00:28:13,700 --> 00:28:14,920
+on how you can help them.
+
+513
+00:28:15,360 --> 00:28:19,079
+They will be open to let's say run events with you, right?
+
+514
+00:28:19,079 --> 00:28:23,920
+They will be very keen to hearing those offers
+
+515
+00:28:23,920 --> 00:28:27,180
+that you might create because they're really meaning
+
+516
+00:28:27,759 --> 00:28:29,380
+the partners to help us lean in.
+
+517
+00:28:29,579 --> 00:28:32,500
+And these are, let's call them emerging accounts, new accounts.
+
+518
+00:28:32,880 --> 00:28:35,900
+Okay. When we're talking about a strategic
+
+519
+00:28:35,900 --> 00:28:37,599
+and named accounts by vertical,
+
+520
+00:28:39,199 --> 00:28:41,000
+you need to go through the PSM
+
+521
+00:28:41,000 --> 00:28:42,159
+because as you can imagine,
+
+522
+00:28:42,299 --> 00:28:45,559
+these are accounts that will have the account executives.
+
+523
+00:28:46,139 --> 00:28:47,460
+Sometimes they have more than one.
+
+524
+00:28:47,980 --> 00:28:51,740
+Really on top of what the customer is doing
+
+525
+00:28:51,740 --> 00:28:55,799
+and various partners are typically there.
+
+526
+00:28:56,099 --> 00:28:58,679
+So getting there, you need to have a really strong why.
+
+527
+00:28:59,759 --> 00:29:02,460
+They would want to bring you in, right?
+
+528
+00:29:03,820 --> 00:29:05,480
+And kind of break into a new account
+
+529
+00:29:05,480 --> 00:29:07,139
+that is not necessarily yours today.
+
+530
+00:29:07,400 --> 00:29:10,539
+So there is a little bit, I would say,
+
+531
+00:29:11,039 --> 00:29:13,700
+I mean, the value prop needs to be very well-defined.
+
+532
+00:29:13,880 --> 00:29:16,139
+It needs to be a true reason why you want to be there.
+
+533
+00:29:16,139 --> 00:29:19,380
+So I think it's great that you, for what I can see,
+
+534
+00:29:20,340 --> 00:29:25,139
+your account teams, your accounts are more on the emerging side.
+
+535
+00:29:25,480 --> 00:29:28,159
+Okay. Again, I would all, for these,
+
+536
+00:29:28,420 --> 00:29:30,659
+they are needing something that they can put in front
+
+537
+00:29:30,659 --> 00:29:31,279
+of the customers.
+
+538
+00:29:31,579 --> 00:29:32,380
+I'll give you examples.
+
+539
+00:29:32,759 --> 00:29:37,500
+I have a partner creating $0 Gini offers.
+
+540
+00:29:37,980 --> 00:29:41,340
+Another one is creating like, you know, small scope,
+
+541
+00:29:41,599 --> 00:29:44,000
+but it's still POCs for free for the customers
+
+542
+00:29:44,000 --> 00:29:45,820
+so they can literally try out some apps
+
+543
+00:29:45,820 --> 00:29:47,240
+on top of their own data.
+
+544
+00:29:48,059 --> 00:29:50,460
+So they can try it and taste it and see it
+
+545
+00:29:50,460 --> 00:29:52,000
+and eventually scaling.
+
+546
+00:29:52,420 --> 00:29:53,860
+And it's kind of the investment on the partners
+
+547
+00:29:53,860 --> 00:29:55,299
+that they're really getting creative
+
+548
+00:29:55,299 --> 00:29:57,920
+on how to have our account teams really accelerate
+
+549
+00:29:57,920 --> 00:29:59,759
+and put something in front of the customer.
+
+550
+00:30:00,000 --> 00:30:01,339
+can really help them move forward.
+
+551
+00:30:02,240 --> 00:30:04,839
+So here is you and your creativity and leaning on
+
+552
+00:30:04,839 --> 00:30:07,019
+those videos for Win With Us.
+
+553
+00:30:07,940 --> 00:30:09,880
+Digest the outcome maps,
+
+554
+00:30:10,579 --> 00:30:13,059
+that it's on the portal as well so you can see where we're
+
+555
+00:30:13,059 --> 00:30:17,140
+seeing the opportunity across all of the use cases as well.
+
+556
+00:30:18,079 --> 00:30:19,099
+Again, on Win With Us,
+
+557
+00:30:19,200 --> 00:30:21,119
+you will be hearing about Biberticle,
+
+558
+00:30:21,279 --> 00:30:23,900
+which maybe use cases we're needing a little bit more of help,
+
+559
+00:30:24,059 --> 00:30:27,420
+and actually logos where we need help is also there in Win With Us.
+
+560
+00:30:28,000 --> 00:30:31,019
+That's the general basic idea.
+
+561
+00:30:31,259 --> 00:30:35,359
+Now, another thing that is on top of that is having brick builders.
+
+562
+00:30:35,599 --> 00:30:38,500
+The brick builders is the product that you create,
+
+563
+00:30:38,720 --> 00:30:42,779
+it could be based on a product or it could be a solution by
+
+564
+00:30:42,779 --> 00:30:48,400
+Biberticle that gets into the brick builder program and we go to market with you.
+
+565
+00:30:48,920 --> 00:30:50,220
+Huge focus for us.
+
+566
+00:30:50,319 --> 00:30:52,240
+You have the basic level which is level,
+
+567
+00:30:52,240 --> 00:30:57,140
+a silver that we need in order to accept brick builder nominations.
+
+568
+00:30:57,339 --> 00:30:58,299
+We are already a brick builder.
+
+569
+00:30:58,539 --> 00:31:00,859
+We are brick builder JNI partners.
+
+570
+00:31:01,480 --> 00:31:02,880
+So my solution is already there in there.
+
+571
+00:31:02,960 --> 00:31:05,420
+We were in the initial cohort that was accepted in December.
+
+572
+00:31:06,220 --> 00:31:07,279
+So December 9th,
+
+573
+00:31:07,279 --> 00:31:10,359
+I believe you onboarded us into the entire brick builder program.
+
+574
+00:31:10,539 --> 00:31:12,099
+So we are not just the marketing partners,
+
+575
+00:31:12,319 --> 00:31:14,160
+we are actual defined partners.
+
+576
+00:31:14,619 --> 00:31:15,759
+I can share the link with you,
+
+577
+00:31:16,960 --> 00:31:18,460
+but tell us about our solution.
+
+578
+00:31:19,900 --> 00:31:22,119
+Awesome. I'm assuming it's
+
+579
+00:31:22,119 --> 00:31:23,779
+on the brick builder page.
+
+580
+00:31:24,200 --> 00:31:24,599
+It's on the Databricks page.
+
+581
+00:31:25,119 --> 00:31:26,980
+It's on the Databricks is a big way to reach.
+
+582
+00:31:27,180 --> 00:31:30,400
+Let me just share the link with you so that you have a time to answer.
+
+583
+00:31:31,880 --> 00:31:33,460
+Awesome. No, that's great.
+
+584
+00:31:34,259 --> 00:31:38,799
+We did have some partners with short.
+
+585
+00:31:40,519 --> 00:31:41,859
+You can see it by the chat.
+
+586
+00:31:42,460 --> 00:31:44,019
+I've just posted it in the chat window.
+
+587
+00:31:44,359 --> 00:31:44,960
+You can check it out.
+
+588
+00:31:47,099 --> 00:31:50,980
+Awesome. Yes.
+
+589
+00:31:50,980 --> 00:31:54,799
+So the brick builders are also exposed to our sales teams.
+
+590
+00:31:55,400 --> 00:32:00,339
+Here we're getting to the data-driven way in how we're doing things today.
+
+591
+00:32:00,859 --> 00:32:02,039
+We're starting to do things today.
+
+592
+00:32:03,400 --> 00:32:08,839
+Brick builders, yes, they get exposed via this page as of today,
+
+593
+00:32:08,960 --> 00:32:12,980
+but now we're taking a more data-driven approach.
+
+594
+00:32:13,960 --> 00:32:15,440
+The thing that I'm saying is,
+
+595
+00:32:15,759 --> 00:32:18,339
+even if I do create my solution that is very specific
+
+596
+00:32:18,339 --> 00:32:20,900
+or very that can qualify for a brick builder,
+
+597
+00:32:21,259 --> 00:32:22,099
+but at the end of the day,
+
+598
+00:32:22,139 --> 00:32:24,279
+I need to have a joint win together with Databricks
+
+599
+00:32:24,279 --> 00:32:29,099
+so that I can get that solution put forward for the brick builder industry page.
+
+600
+00:32:29,440 --> 00:32:32,019
+If my understanding is correct, I need three customers for that.
+
+601
+00:32:33,460 --> 00:32:36,440
+So how can I close this gap?
+
+602
+00:32:37,759 --> 00:32:40,440
+If I need to create a brick builder to get a customer
+
+603
+00:32:40,440 --> 00:32:44,079
+and I cannot get a brick builder until unless I have a customer,
+
+604
+00:32:44,779 --> 00:32:47,039
+that's like a chicken and egg problem that I'm hitting with.
+
+605
+00:32:49,099 --> 00:32:51,759
+Well, this is something similar to the Champions.
+
+606
+00:32:52,139 --> 00:32:54,420
+The intent of the program for a brick builder
+
+607
+00:32:54,420 --> 00:32:56,700
+is to bring proven solutions
+
+608
+00:32:57,240 --> 00:33:01,240
+that we can have Databricks behind
+
+609
+00:33:01,240 --> 00:33:04,460
+and validating and going to market together.
+
+610
+00:33:04,619 --> 00:33:09,380
+So we do expect to be launched into at least one customer successfully.
+
+611
+00:33:10,019 --> 00:33:18,460
+It's one of the requirements so that we actually make it part of the program.
+
+612
+00:33:18,779 --> 00:33:23,059
+Yes. And then the other thing that it's also a requirement to have Databricks,
+
+613
+00:33:23,360 --> 00:33:25,500
+including it on the brick builder program,
+
+614
+00:33:25,880 --> 00:33:31,279
+and making that validation is that the partner obtains the underlying specialization.
+
+615
+00:33:31,500 --> 00:33:35,079
+So for example, for this one, most likely you will need the GNES specialization
+
+616
+00:33:36,940 --> 00:33:42,279
+so that we know the partner has expertise on the area where, you know,
+
+617
+00:33:42,319 --> 00:33:43,759
+in which it's creating the offer.
+
+618
+00:33:44,460 --> 00:33:48,220
+So that's another requirement that it will be needed for a brick builder.
+
+619
+00:33:48,440 --> 00:33:53,240
+So the suggestion will be to continue to obtain the specializations
+
+620
+00:33:53,240 --> 00:34:02,220
+positioned in one customer and then submitted for a brick builder, for sure.
+
+621
+00:34:02,220 --> 00:34:05,539
+I think that being part of the launch gives you visibility,
+
+622
+00:34:05,839 --> 00:34:08,139
+so ideally, you know, it helps a little bit to get,
+
+623
+00:34:08,239 --> 00:34:12,679
+because we want to kind of accelerate to get those parts during customers.
+
+624
+00:34:12,679 --> 00:34:15,280
+But I would put some effort, like go to marketing,
+
+625
+00:34:15,500 --> 00:34:18,860
+go to market effort behind the solution
+
+626
+00:34:18,860 --> 00:34:21,079
+so that you can get it going and implemented.
+
+627
+00:34:23,360 --> 00:34:27,360
+OK, so just to wrap it up,
+
+628
+00:34:28,860 --> 00:34:33,980
+brick builders, we're launching a sales AI tool
+
+629
+00:34:34,779 --> 00:34:38,019
+to really even the field, right?
+
+630
+00:34:38,380 --> 00:34:41,260
+All of the co-sell motion and efforts that I have covered
+
+631
+00:34:41,260 --> 00:34:46,320
+are more on the word of mouth, whether someone knows me, they don't know me.
+
+632
+00:34:46,720 --> 00:34:51,820
+So what we're doing right now is we're launching the sales AI tool,
+
+633
+00:34:51,840 --> 00:34:54,579
+which will be leaving inside of CRM,
+
+634
+00:34:55,380 --> 00:35:00,159
+and it will be recommending the best partner to the AEs
+
+635
+00:35:00,159 --> 00:35:03,760
+based on the use case they're working on, what type of use case it is,
+
+636
+00:35:03,840 --> 00:35:07,519
+what vertical it is, what type of solution it's needed, right?
+
+637
+00:35:07,820 --> 00:35:10,779
+And in the back end, it's going to be based on data
+
+638
+00:35:10,779 --> 00:35:16,139
+suggesting what the best partners to work with that use case are.
+
+639
+00:35:16,720 --> 00:35:21,980
+They're going to be considering things such as whether you have the specialization.
+
+640
+00:35:21,980 --> 00:35:24,139
+It will be considering the tier as well.
+
+641
+00:35:24,340 --> 00:35:26,739
+It will be considering the amount of similar use cases
+
+642
+00:35:26,739 --> 00:35:28,760
+that you have delivered, for example.
+
+643
+00:35:29,820 --> 00:35:31,820
+So it will be more data-driven.
+
+644
+00:35:32,320 --> 00:35:37,579
+So whether you have worked with the account in the past as well.
+
+645
+00:35:37,960 --> 00:35:39,599
+So it's going to be more data-driven.
+
+646
+00:35:40,300 --> 00:35:43,619
+I would totally recommend leveraging that
+
+647
+00:35:44,320 --> 00:35:46,720
+and continue leaning on the formal programs
+
+648
+00:35:46,720 --> 00:35:50,659
+so that you can start more and more showing up
+
+649
+00:35:50,659 --> 00:35:55,159
+as the recommendation, the partner recommended for the use cases.
+
+650
+00:35:55,940 --> 00:35:57,960
+I can also set you up.
+
+651
+00:35:58,039 --> 00:36:02,380
+Another way is we do this for the rising 100s,
+
+652
+00:36:02,380 --> 00:36:06,199
+but I think it might be something that you can take benefit on
+
+653
+00:36:07,239 --> 00:36:10,099
+is giving you, connecting you to our crossbeam account.
+
+654
+00:36:10,320 --> 00:36:14,300
+Have you used crossbeam in the past or know what can crossbeam do?
+
+655
+00:36:14,300 --> 00:36:18,880
+Okay. So it's kind of we authorize you to see
+
+656
+00:36:18,880 --> 00:36:22,119
+who is the accounting for our overlapping accounts.
+
+657
+00:36:22,400 --> 00:36:24,920
+So we'll look into your CRM and our CRM
+
+658
+00:36:24,920 --> 00:36:27,880
+and the accounts that overlap that match.
+
+659
+00:36:28,199 --> 00:36:33,559
+It will give you visibility into who the account executive is.
+
+660
+00:36:34,000 --> 00:36:34,659
+Got it.
+
+661
+00:36:34,900 --> 00:36:38,360
+So you use some proactive engagement there,
+
+662
+00:36:38,739 --> 00:36:41,500
+meaningful proactive engagement, right?
+
+663
+00:36:41,500 --> 00:36:45,179
+And say, you name it, with the intent,
+
+664
+00:36:45,380 --> 00:36:47,900
+and especially as I mentioned, you will also see
+
+665
+00:36:47,900 --> 00:36:49,340
+what type of account it is, right?
+
+666
+00:36:49,420 --> 00:36:54,699
+If it's a strategic prospect or key account, right?
+
+667
+00:36:54,820 --> 00:36:57,420
+So if it is a prospect, I'm pretty sure our A will be
+
+668
+00:36:57,420 --> 00:37:00,619
+very happy to hear that you have your account
+
+669
+00:37:00,619 --> 00:37:04,440
+and that you have all the interest to start working,
+
+670
+00:37:04,579 --> 00:37:07,920
+especially if you have an idea on where can you start
+
+671
+00:37:07,920 --> 00:37:09,139
+and how you can start.
+
+672
+00:37:09,139 --> 00:37:14,820
+And again, if on top of that you have an offer that you want
+
+673
+00:37:14,820 --> 00:37:17,340
+to use to start the engagement even better,
+
+674
+00:37:17,539 --> 00:37:19,139
+pretty sure it will be all ears.
+
+675
+00:37:19,800 --> 00:37:23,139
+And that type of effort that partners do,
+
+676
+00:37:23,400 --> 00:37:27,279
+I really getting spotlight very quickly.
+
+677
+00:37:27,699 --> 00:37:31,800
+Like when you come up with an offer that they can position
+
+678
+00:37:31,800 --> 00:37:36,380
+and replicate and help more on the pre-sale side,
+
+679
+00:37:36,480 --> 00:37:37,720
+that is getting a lot of traction,
+
+680
+00:37:37,720 --> 00:37:41,920
+especially for the new products.
+
+681
+00:37:42,279 --> 00:37:44,119
+If you come up with anything like that,
+
+682
+00:37:44,340 --> 00:37:46,840
+happy to hear what that is, should we an email?
+
+683
+00:37:47,000 --> 00:37:48,960
+What type of offers do you mean, Vanessa?
+
+684
+00:37:49,900 --> 00:37:56,079
+Yeah, so for example, you come up with an offer
+
+685
+00:37:56,079 --> 00:37:58,460
+that an A can take to the customer and say,
+
+686
+00:37:58,639 --> 00:38:04,179
+hey, the partner will do some sort of work for you
+
+687
+00:38:04,179 --> 00:38:07,880
+to try a Gini in this certain amount of data.
+
+688
+00:38:08,139 --> 00:38:09,260
+Of course, you put the guardrails,
+
+689
+00:38:09,320 --> 00:38:10,679
+you're not going to do a full deployment,
+
+690
+00:38:10,900 --> 00:38:13,659
+you actually set aside a few hours of engineering.
+
+691
+00:38:14,019 --> 00:38:18,460
+And so you set up the guardrails, but it's kind of try it.
+
+692
+00:38:18,820 --> 00:38:22,519
+Probably they will keep it most likely with the guardrails
+
+693
+00:38:22,519 --> 00:38:24,199
+of the POC.
+
+694
+00:38:25,720 --> 00:38:29,380
+But it's something that the A can really take.
+
+695
+00:38:29,679 --> 00:38:33,940
+And besides not necessarily focusing on the slide deck,
+
+696
+00:38:34,500 --> 00:38:39,639
+just the selling pitch, but more on just the POC.
+
+697
+00:38:40,019 --> 00:38:42,039
+Yeah, yes, it's a working POC.
+
+698
+00:38:42,779 --> 00:38:43,300
+Okay, yeah.
+
+699
+00:38:44,220 --> 00:38:44,940
+Sure, yeah.
+
+700
+00:38:45,119 --> 00:38:47,099
+We are talking to a couple of account executives
+
+701
+00:38:47,099 --> 00:38:48,619
+regarding the same as well.
+
+702
+00:38:48,840 --> 00:38:53,519
+So I think we can definitely work that out.
+
+703
+00:38:54,420 --> 00:38:57,360
+Yes, and actually you can do this.
+
+704
+00:38:57,500 --> 00:39:00,539
+You can actually ask the AEs to maybe connect you
+
+705
+00:39:00,539 --> 00:39:02,720
+if you're willing to open that up
+
+706
+00:39:02,720 --> 00:39:04,699
+in a way that it can be replicated.
+
+707
+00:39:05,679 --> 00:39:08,820
+You can say, you know, the spin great success blah, blah, blah,
+
+708
+00:39:08,980 --> 00:39:11,559
+and just ask to be introduced to their manager
+
+709
+00:39:11,559 --> 00:39:14,420
+and ask some space on their team meeting.
+
+710
+00:39:15,779 --> 00:39:17,599
+And just to start there, right?
+
+711
+00:39:17,900 --> 00:39:20,420
+And say, okay, and you can actually talk about the capacity,
+
+712
+00:39:20,579 --> 00:39:21,659
+how many of those you can make.
+
+713
+00:39:22,119 --> 00:39:25,639
+You know, and so ideally, say, get the prospecting
+
+714
+00:39:25,639 --> 00:39:29,480
+to this stage that we invest, I don't know, our resources well,
+
+715
+00:39:29,720 --> 00:39:31,320
+you want to have good leads, right?
+
+716
+00:39:31,320 --> 00:39:33,500
+So just structure all that.
+
+717
+00:39:34,119 --> 00:39:37,400
+They can actually give you access to their own teams as well,
+
+718
+00:39:38,599 --> 00:39:41,440
+specifically, especially if, you know, at any level, right?
+
+719
+00:39:41,579 --> 00:39:43,800
+But when you're working with emerging accounts,
+
+720
+00:39:44,139 --> 00:39:46,519
+they're, as I said, they're really hungry for partners to lean in.
+
+721
+00:39:46,940 --> 00:39:52,139
+Actually also offer to a sponsor QVRs for them, for their teams,
+
+722
+00:39:52,619 --> 00:39:58,860
+offer to run events with the customers.
+
+723
+00:39:59,199 --> 00:39:59,980
+Like it could be.
+
+724
+00:40:00,000 --> 00:40:01,360
+virtual or it could be in person.
+
+725
+00:40:02,360 --> 00:40:02,380
+Yeah.
+
+726
+00:40:02,500 --> 00:40:03,880
+Um, you can do that.
+
+727
+00:40:04,199 --> 00:40:07,860
+I know that a lot of the hunter teams are being tasked with
+
+728
+00:40:08,440 --> 00:40:12,099
+launching certain amount of events a month.
+
+729
+00:40:12,719 --> 00:40:12,960
+Yeah.
+
+730
+00:40:13,239 --> 00:40:15,119
+And they've started to have a huge budget.
+
+731
+00:40:15,360 --> 00:40:18,579
+So a lot of them are wanting partners to split in.
+
+732
+00:40:18,860 --> 00:40:21,880
+I have seen half and half and that the investment is not too high.
+
+733
+00:40:22,280 --> 00:40:26,920
+The acquisition of the audience sometimes is the partner putting one resource
+
+734
+00:40:26,920 --> 00:40:31,599
+to call out, but the, the Intel sometimes can be mixed coming from the
+
+735
+00:40:31,599 --> 00:40:32,739
+AE and coming from you.
+
+736
+00:40:33,019 --> 00:40:35,340
+For example, I have seen that happening as well.
+
+737
+00:40:35,579 --> 00:40:40,360
+So if you're focusing on that segment, they're really hungry to co-sell with you.
+
+738
+00:40:41,019 --> 00:40:42,639
+Um, yeah.
+
+739
+00:40:42,860 --> 00:40:46,599
+So if you want some, you know, I would definitely start with the AEs ask for,
+
+740
+00:40:46,780 --> 00:40:50,380
+you know, when you have like the value prop, what are you going to tell them?
+
+741
+00:40:50,679 --> 00:40:52,619
+Ask to be connected with their lead.
+
+742
+00:40:52,619 --> 00:40:58,159
+If not, you know, just with cross beam, you can see who they report into.
+
+743
+00:40:58,860 --> 00:41:01,340
+So would you like me to set you up with cross beam?
+
+744
+00:41:02,559 --> 00:41:04,340
+Yeah, that would be awesome.
+
+745
+00:41:06,300 --> 00:41:06,780
+Me.
+
+746
+00:41:08,519 --> 00:41:10,000
+Request for that access.
+
+747
+00:41:12,860 --> 00:41:13,340
+Yeah.
+
+748
+00:41:13,380 --> 00:41:15,739
+We don't know about how resources are available to us.
+
+749
+00:41:15,780 --> 00:41:16,840
+So this is really helpful.
+
+750
+00:41:17,920 --> 00:41:18,400
+Awesome.
+
+751
+00:41:18,400 --> 00:41:20,500
+I'm happy to hear.
+
+752
+00:41:21,960 --> 00:41:26,260
+Let me set you up.
+
+753
+00:41:26,360 --> 00:41:31,940
+This should give you more visibility on our teams and allow that
+
+754
+00:41:31,940 --> 00:41:34,179
+co-sell motion to speed up a little bit.
+
+755
+00:41:41,039 --> 00:41:47,960
+Sometimes, um, he, uh, Giovanni waits for a good amount of requests on my side.
+
+756
+00:41:49,019 --> 00:41:52,920
+To accumulate, and then he sits down and connects everyone.
+
+757
+00:41:53,760 --> 00:41:55,760
+Uh, might take a few days.
+
+758
+00:41:56,739 --> 00:41:57,219
+Okay.
+
+759
+00:41:58,139 --> 00:41:58,559
+Or you could.
+
+760
+00:41:58,719 --> 00:41:59,860
+I had one more question.
+
+761
+00:41:59,960 --> 00:42:06,559
+For example, you know, if I'm looking at, you know, a potential pick any name like
+
+762
+00:42:06,559 --> 00:42:12,000
+CVS or Walmart, how do I know who is the account executive from Databricks for that,
+
+763
+00:42:12,099 --> 00:42:13,639
+uh, that company?
+
+764
+00:42:13,780 --> 00:42:13,900
+Yeah.
+
+765
+00:42:14,559 --> 00:42:23,280
+So again, if, if you have the account created on your CRM, it will display the
+
+766
+00:42:23,280 --> 00:42:28,059
+account executive name for you because what cross beam does is that it, it, it
+
+767
+00:42:28,059 --> 00:42:32,719
+searches on your CRM and our CRM overlapping accounts gives you the account
+
+768
+00:42:32,719 --> 00:42:33,800
+executive information.
+
+769
+00:42:34,360 --> 00:42:35,739
+Himanshu, do you know how to do that?
+
+770
+00:42:36,599 --> 00:42:38,300
+I would have to check up.
+
+771
+00:42:38,579 --> 00:42:39,559
+I am not aware of that.
+
+772
+00:42:40,159 --> 00:42:40,900
+Mm hmm.
+
+773
+00:42:41,000 --> 00:42:46,360
+There is a, I think there is a quick video or getting a started guidance that you
+
+774
+00:42:46,360 --> 00:42:48,420
+get once we set you up with cross beam.
+
+775
+00:42:48,920 --> 00:42:53,199
+So you can see how to interact, but I have seen the interface is fairly simple.
+
+776
+00:42:53,420 --> 00:42:56,840
+It's literally the, the accounts that we have together.
+
+777
+00:42:56,920 --> 00:42:59,340
+You can see a column with the name of the AE and so on.
+
+778
+00:42:59,739 --> 00:43:05,960
+Those types of accounts for Gita are the ones that, um, if you don't have our
+
+779
+00:43:05,960 --> 00:43:11,639
+relationship with the account and you want to be introduced, those accounts are,
+
+780
+00:43:11,639 --> 00:43:14,119
+you know, one of the, you know, big accounts for us.
+
+781
+00:43:14,219 --> 00:43:16,619
+So they have established relationships and so on.
+
+782
+00:43:16,639 --> 00:43:20,420
+So we will need to have like a strong value prop on and go through the partner
+
+783
+00:43:20,420 --> 00:43:23,480
+sales manager to get introduced to the AE.
+
+784
+00:43:23,820 --> 00:43:29,619
+Like when it comes to key accounts or named accounts, strategic accounts, um,
+
+785
+00:43:29,800 --> 00:43:32,599
+it's a little bit, you know, of course, nothing prevents you from introducing
+
+786
+00:43:32,599 --> 00:43:35,000
+yourself to the AE.
+
+787
+00:43:35,000 --> 00:43:38,920
+The recommendation would be have a strong value add, right?
+
+788
+00:43:39,360 --> 00:43:42,199
+And avoid, and here is a recommendation, right?
+
+789
+00:43:42,300 --> 00:43:48,380
+For what I have seen, avoid, um, the, the, the, the capacity and capability
+
+790
+00:43:48,380 --> 00:43:52,880
+pitch focus more on the true value add, like literally related to the account.
+
+791
+00:43:52,880 --> 00:43:56,159
+So that we step aside, especially in the U S market, where we have so many
+
+792
+00:43:56,159 --> 00:44:01,300
+partners and many, you know, doing this type of approach so that your email does
+
+793
+00:44:01,300 --> 00:44:02,980
+not sound generic.
+
+794
+00:44:03,280 --> 00:44:03,400
+Yes.
+
+795
+00:44:03,860 --> 00:44:07,019
+Talk about capacity and capability, but that's not the whole thing, right?
+
+796
+00:44:07,719 --> 00:44:09,440
+It should be just a portion of it.
+
+797
+00:44:09,579 --> 00:44:13,300
+Just focus on the true value add that you're bringing that makes, makes it
+
+798
+00:44:13,300 --> 00:44:17,220
+special and, you know, they can set you aside from potentially other introductions
+
+799
+00:44:17,220 --> 00:44:17,779
+that they get.
+
+800
+00:44:18,559 --> 00:44:18,760
+Yeah.
+
+801
+00:44:19,079 --> 00:44:24,159
+No, I was thinking from this perspective, like, you know, I, uh, have several
+
+802
+00:44:24,159 --> 00:44:28,940
+of my batch mates from IT Daily Time or, you know, from Georgia Tech or my
+
+803
+00:44:28,940 --> 00:44:32,980
+Columbia, uh, you know, experience who are at, you know, senior leadership
+
+804
+00:44:32,980 --> 00:44:35,639
+positions at several, you know, U S companies.
+
+805
+00:44:35,820 --> 00:44:41,139
+So if I think that, you know, I can, um, get a introductory meeting with them or
+
+806
+00:44:41,139 --> 00:44:45,880
+their team because they are all at, you know, um, you know, leadership roles,
+
+807
+00:44:45,880 --> 00:44:48,480
+which are dealing with data.
+
+808
+00:44:49,019 --> 00:44:50,840
+Reven decisions, et cetera.
+
+809
+00:44:50,840 --> 00:44:56,940
+And if there is a way for us to team up with the Databricks team and then
+
+810
+00:44:56,940 --> 00:45:01,199
+approach them with kind of, you know, my connections, what is the best way to do
+
+811
+00:45:01,199 --> 00:45:01,480
+that?
+
+812
+00:45:01,739 --> 00:45:02,720
+So that will be me.
+
+813
+00:45:02,920 --> 00:45:04,220
+That will be something valuable.
+
+814
+00:45:04,220 --> 00:45:09,920
+For example, that your email literally speaks to your connection with the account.
+
+815
+00:45:10,300 --> 00:45:10,699
+Yeah.
+
+816
+00:45:10,820 --> 00:45:10,980
+Right.
+
+817
+00:45:11,099 --> 00:45:13,659
+And we've said more like, Hey, I want to focus on the account.
+
+818
+00:45:13,779 --> 00:45:18,779
+I think I can, you know, get the door open to talk about so and so in this
+
+819
+00:45:19,340 --> 00:45:21,760
+segment or this organization, specific organization.
+
+820
+00:45:22,000 --> 00:45:25,039
+So that should be something they would consider, right?
+
+821
+00:45:25,039 --> 00:45:29,320
+You know, and you calling out that name, of course, as I mentioned, you talk about
+
+822
+00:45:29,320 --> 00:45:32,880
+who you are, the trust piece, but I think it's just a minor piece of it.
+
+823
+00:45:33,059 --> 00:45:37,340
+They will be focused more on what you can bring to the table and your connections.
+
+824
+00:45:37,579 --> 00:45:37,900
+Of course.
+
+825
+00:45:37,960 --> 00:45:38,159
+Yes.
+
+826
+00:45:38,519 --> 00:45:41,019
+That would be something that can get their attention.
+
+827
+00:45:41,199 --> 00:45:46,279
+I'm pretty sure they both AES and PSMs, they get a lot of emails saying, Hey,
+
+828
+00:45:46,360 --> 00:45:50,380
+we're great here and we're done this for other customers.
+
+829
+00:45:50,820 --> 00:45:52,739
+And, you know, how can we, how can I help you?
+
+830
+00:45:52,739 --> 00:45:57,039
+And, you know, and that those, those, of course, we appreciate all of the partners.
+
+831
+00:45:57,639 --> 00:46:01,519
+However, for strategic and big accounts, reality is, you know, with so many
+
+832
+00:46:01,519 --> 00:46:05,420
+partners and most of them being in the U.S., that becomes at some point like
+
+833
+00:46:06,039 --> 00:46:09,300
+where we have a great ecosystem that can do pretty much everything.
+
+834
+00:46:09,559 --> 00:46:11,059
+And we, that's the reality.
+
+835
+00:46:11,420 --> 00:46:15,920
+So what it's really driving traction on those accounts, it's more, OK, what makes
+
+836
+00:46:15,920 --> 00:46:19,260
+you special for this customer specifically, right?
+
+837
+00:46:19,260 --> 00:46:23,960
+And that those things, again, can totally, you know,
+
+838
+00:46:25,760 --> 00:46:29,460
+differentiate your introduction versus the ones that you can put.
+
+839
+00:46:29,460 --> 00:46:35,159
+So we can put some names there in that portal, see who the account executive is
+
+840
+00:46:35,159 --> 00:46:38,099
+and try to kind of.
+
+841
+00:46:39,480 --> 00:46:41,659
+Build a relationship and see if we can pitch together.
+
+842
+00:46:42,059 --> 00:46:43,599
+OK, that that is one kind of question.
+
+843
+00:46:44,159 --> 00:46:44,360
+Yes.
+
+844
+00:46:45,000 --> 00:46:47,639
+And at the same time, you continue to invest, right?
+
+845
+00:46:47,639 --> 00:46:51,019
+Record those opportunities so that they feed sales AI.
+
+846
+00:46:51,480 --> 00:46:56,079
+Join me on the PDC office hour, Himantji, so that you can see how, you know,
+
+847
+00:46:56,220 --> 00:47:00,199
+just recommendations, sounds like you have already done a lot and understand
+
+848
+00:47:00,199 --> 00:47:01,880
+a lot of how we do things.
+
+849
+00:47:02,260 --> 00:47:06,220
+You might learn a few things on the next one, just to make sure we're always
+
+850
+00:47:06,220 --> 00:47:08,599
+have this ability into all of the influence you have.
+
+851
+00:47:08,659 --> 00:47:13,840
+And we can truly see your capacity, capability, the influence you're having
+
+852
+00:47:13,840 --> 00:47:15,760
+with the with our joint customers as well.
+
+853
+00:47:16,880 --> 00:47:17,360
+Sure.
+
+854
+00:47:17,360 --> 00:47:17,360
+
+
+855
+00:47:18,739 --> 00:47:20,800
+This is very helpful, Vanessa.
+
+856
+00:47:21,599 --> 00:47:22,400
+You know, we'll be in touch.
+
+857
+00:47:22,739 --> 00:47:24,579
+We really appreciate your guidance here.
+
+858
+00:47:25,340 --> 00:47:26,220
+Sure. Of course.
+
+859
+00:47:26,679 --> 00:47:27,440
+Thank you so much.
+
+860
+00:47:27,519 --> 00:47:30,500
+And looking forward to see all of that you will continue to accomplish.
+
+861
+00:47:31,420 --> 00:47:32,599
+Thank you. Take care.
+
+862
+00:47:32,940 --> 00:47:35,579
+You know, get into your underlist this year and.
+
+863
+00:47:35,639 --> 00:47:35,900
+Exactly.
+
+864
+00:47:36,159 --> 00:47:36,559
+Getting the.
+
+865
+00:47:36,940 --> 00:47:38,260
+We'll be happy to see you there.
+
+866
+00:47:39,039 --> 00:47:40,119
+Thank you. Take care.
+
+867
+00:47:40,360 --> 00:47:40,980
+Thank you, Vanessa.
+
+868
+00:47:41,539 --> 00:47:41,539
+
+
