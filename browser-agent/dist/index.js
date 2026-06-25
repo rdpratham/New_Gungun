@@ -2,12 +2,38 @@ import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { CallToolRequestSchema, ListToolsRequestSchema, } from "@modelcontextprotocol/sdk/types.js";
 import { chromium } from "playwright";
+import * as fs from "fs";
+import * as path from "path";
 let browser = null;
 let context = null;
 let page = null;
 const BROWSERS_PATH = process.env.PLAYWRIGHT_BROWSERS_PATH || "/tmp/pw";
 const HTTPS_PROXY = process.env.HTTPS_PROXY || "";
 const CA_BUNDLE = process.env.NODE_EXTRA_CA_CERTS || "/root/.ccr/ca-bundle.crt";
+// Cookie persistence: stored relative to this script's directory
+const COOKIE_FILE = path.join(path.dirname(new URL(import.meta.url).pathname), "..", "zoominfo_session.json");
+async function saveCookies() {
+    if (!context)
+        return;
+    const cookies = await context.cookies();
+    // Keep only zoominfo-related cookies
+    const ziCookies = cookies.filter(c => c.domain.includes("zoominfo.com") || c.domain.includes("okta-login.zoominfo"));
+    fs.writeFileSync(COOKIE_FILE, JSON.stringify(ziCookies, null, 2));
+}
+async function loadCookies() {
+    if (!context)
+        return false;
+    if (!fs.existsSync(COOKIE_FILE))
+        return false;
+    try {
+        const cookies = JSON.parse(fs.readFileSync(COOKIE_FILE, "utf-8"));
+        await context.addCookies(cookies);
+        return true;
+    }
+    catch {
+        return false;
+    }
+}
 async function ensureBrowser() {
     if (!browser) {
         const launchArgs = [
@@ -350,53 +376,69 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 const password = args.password;
                 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
                 const humanDelay = (min = 800, max = 2200) => sleep(Math.floor(Math.random() * (max - min) + min));
-                await p.goto("https://app.zoominfo.com/#/login", { waitUntil: "load", timeout: 30000 });
+                // Try restoring saved session first
+                const cookiesLoaded = await loadCookies();
+                if (cookiesLoaded) {
+                    await p.goto("https://app.zoominfo.com/", { waitUntil: "load", timeout: 30000 });
+                    await sleep(3000);
+                    const url = p.url();
+                    const title = await p.title();
+                    if (!url.includes("login") && !url.includes("signin") && (title.includes("ZoomInfo") || title.includes("Sales"))) {
+                        return { content: [{ type: "text", text: `Session restored from saved cookies! URL: ${url}` }] };
+                    }
+                    // Cookies expired, fall through to full login
+                }
+                await p.goto("https://login.zoominfo.com", { waitUntil: "load", timeout: 30000 });
                 await humanDelay(2000, 3000);
-                // Find and fill email
-                const emailSels = ['input[name="loginEmail"]', 'input[type="email"]', 'input[placeholder*="email" i]', "#username"];
+                // Accept cookies banner if present
+                const cookieBtn = p.locator('button#onetrust-accept-btn-handler');
+                if (await cookieBtn.count() > 0) {
+                    await cookieBtn.click();
+                    await sleep(1000);
+                }
+                // Fill #usernameInput (ZoomInfo custom visible form)
+                const emailSels = ['#usernameInput', 'input[name="loginEmail"]', 'input[type="email"]', "#username"];
                 let emailFilled = false;
                 for (const sel of emailSels) {
-                    if (await p.locator(sel).count() > 0) {
-                        await p.locator(sel).first().fill("");
-                        for (const ch of email) {
-                            await p.locator(sel).first().type(ch, { delay: Math.floor(Math.random() * 80 + 40) });
-                        }
+                    const loc = p.locator(sel).first();
+                    if (await loc.count() > 0 && await loc.isVisible().catch(() => false)) {
+                        await loc.fill(email);
                         emailFilled = true;
                         break;
                     }
                 }
                 if (!emailFilled)
                     return { content: [{ type: "text", text: "Could not find email field" }], isError: true };
-                await humanDelay(500, 900);
-                // Click Next if present
-                const nextBtn = p.locator('button:has-text("Next"), button:has-text("Continue")').first();
-                if (await nextBtn.count() > 0) {
-                    await nextBtn.click();
-                    await humanDelay(2000, 3000);
-                }
-                // Password
-                const passSels = ['input[name="password"]', 'input[type="password"]'];
+                await humanDelay(400, 700);
+                // Fill #pwInput
+                const passSels = ['#pwInput', 'input[name="password"]', 'input[type="password"]'];
                 let passFilled = false;
                 for (const sel of passSels) {
-                    if (await p.locator(sel).count() > 0) {
-                        await p.locator(sel).first().fill("");
-                        for (const ch of password) {
-                            await p.locator(sel).first().type(ch, { delay: Math.floor(Math.random() * 80 + 40) });
-                        }
+                    const loc = p.locator(sel).first();
+                    if (await loc.count() > 0 && await loc.isVisible().catch(() => false)) {
+                        await loc.fill(password);
                         passFilled = true;
                         break;
                     }
                 }
                 if (!passFilled)
                     return { content: [{ type: "text", text: "Could not find password field" }], isError: true };
-                await humanDelay(600, 1000);
-                await p.locator('button[type="submit"], button:has-text("Sign In"), button:has-text("Log In")').first().click();
+                await humanDelay(500, 900);
+                // Click Log In button
+                const loginBtn = p.locator('#login-form-submit-btn, button:has-text("Log In")').first();
+                if (await loginBtn.count() > 0)
+                    await loginBtn.click();
                 await humanDelay(4000, 6000);
-                const url = p.url();
-                if (url.includes("login") || url.includes("signin")) {
-                    return { content: [{ type: "text", text: `Still on login page: ${url} — wrong credentials or 2FA required` }], isError: true };
+                const urlAfter = p.url();
+                if (urlAfter.includes("sms") || urlAfter.includes("factor") || await p.locator('input[placeholder="e.g. 123456"]').count() > 0) {
+                    return { content: [{ type: "text", text: `2FA required — SMS code sent. Please provide the code using browser_type on selector 'input[placeholder="e.g. 123456"]', then click the Verify button.` }] };
                 }
-                return { content: [{ type: "text", text: `Logged in! Current URL: ${url}` }] };
+                if (urlAfter.includes("login") || urlAfter.includes("signin")) {
+                    return { content: [{ type: "text", text: `Still on login page: ${urlAfter} — wrong credentials or 2FA required` }], isError: true };
+                }
+                // Successful login — save cookies for future sessions
+                await saveCookies();
+                return { content: [{ type: "text", text: `Logged in! Cookies saved. URL: ${urlAfter}` }] };
             }
             case "zoominfo_get_contact": {
                 const p = await ensureBrowser();
