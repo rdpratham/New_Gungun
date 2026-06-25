@@ -1,0 +1,13 @@
+{
+  "name": "greythr-agent",
+  "version": "1.0.0",
+  "description": "GreyHR Sign In/Out automation agent using Playwright",
+  "main": "agent.js",
+  "scripts": {
+    "signin": "node agent.js signin",
+    "signout": "node agent.js signout"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0"
+  }
+}
