@@ -175,14 +175,18 @@ async function run(action) {
     process.exit(1);
   }
 
-  const browser = await chromium.launch({
-    headless: false,
+  const proxyUrl = process.env.HTTPS_PROXY || process.env.https_proxy;
+  const launchOptions = {
+    headless: true,
     executablePath: process.env.CHROMIUM_PATH || '/opt/pw-browsers/chromium',
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
-  });
+    proxy: proxyUrl ? { server: proxyUrl } : undefined,
+  };
+  const browser = await chromium.launch(launchOptions);
 
   const context = await browser.newContext({
     viewport: { width: 1280, height: 800 },
+    ignoreHTTPSErrors: true,
   });
   const page = await context.newPage();
 
