@@ -1,0 +1,284 @@
+1
+00:00:00,000 --> 00:00:02,720
+opportunity for us to collaborate together.
+
+2
+00:00:02,720 --> 00:00:06,960
+We'll be happy to put in some investment from our side,
+
+3
+00:00:06,960 --> 00:00:10,599
+work on a POC with any of your clients.
+
+4
+00:00:10,599 --> 00:00:13,480
+See how we can scale together.
+
+5
+00:00:13,480 --> 00:00:17,920
+Yeah, that works. I have a list ready. Talk through.
+
+6
+00:00:17,920 --> 00:00:20,800
+Yeah. Should we do that first or do you want
+
+7
+00:00:20,800 --> 00:00:25,359
+Tamancha to walk you through some of the,
+
+8
+00:00:25,359 --> 00:00:26,760
+we can do either first.
+
+9
+00:00:26,800 --> 00:00:33,719
+Yeah. Where I've seen us accelerate partner engagement,
+
+10
+00:00:33,719 --> 00:00:34,799
+so for example,
+
+11
+00:00:34,799 --> 00:00:39,600
+like V4C is partner of the year and they started
+
+12
+00:00:39,600 --> 00:00:42,560
+last year as a lesser known partner.
+
+13
+00:00:42,560 --> 00:00:43,359
+Which one?
+
+14
+00:00:43,359 --> 00:00:44,799
+V4C.
+
+15
+00:00:44,799 --> 00:00:45,920
+V4C.
+
+16
+00:00:45,920 --> 00:00:46,679
+Okay.
+
+17
+00:00:46,679 --> 00:00:51,119
+What they've done really well is just become
+
+18
+00:00:51,119 --> 00:00:55,399
+an extension of our sales team versus
+
+19
+00:00:56,000 --> 00:00:59,799
+a partner led engagement.
+
+20
+00:00:59,799 --> 00:01:04,680
+I want us to get to that steady state because we are,
+
+21
+00:01:04,680 --> 00:01:06,159
+for the most part,
+
+22
+00:01:06,159 --> 00:01:09,799
+it's just really easy to bring them in because they
+
+23
+00:01:09,799 --> 00:01:15,159
+always come in and they land their programs and then they'll
+
+24
+00:01:15,159 --> 00:01:20,879
+push customers back to us and say sign the data versus contract,
+
+25
+00:01:20,879 --> 00:01:25,000
+and then that will unlock all of these additional services for
+
+26
+00:01:25,079 --> 00:01:26,879
+you around Short Hills.
+
+27
+00:01:26,879 --> 00:01:33,959
+Then we're using that as pipeline building for the Short Hills team as well.
+
+28
+00:01:33,959 --> 00:01:36,799
+So we've done that for the V4C team similarly.
+
+29
+00:01:36,799 --> 00:01:38,599
+That's why it's really easy to work with them.
+
+30
+00:01:38,599 --> 00:01:42,000
+So I love to understand your offering and then figure out how we can
+
+31
+00:01:42,000 --> 00:01:47,920
+tailored it to that story to accelerate more engagement for you guys
+
+32
+00:01:47,920 --> 00:01:52,519
+and bring in more teammates to the short-term product offerings.
+
+33
+00:01:52,719 --> 00:01:55,519
+Then I'd be to share more about my accounts and see if there's
+
+34
+00:01:55,519 --> 00:02:01,120
+any current engagements with you guys there or pick a few out to run that together.
+
+35
+00:02:01,120 --> 00:02:02,120
+Does that sound good?
+
+36
+00:02:02,120 --> 00:02:03,040
+Yeah.
+
+37
+00:02:03,040 --> 00:02:04,959
+Cool.
+
+38
+00:02:06,640 --> 00:02:08,659
+Right.
+
+39
+00:02:08,659 --> 00:02:11,319
+Jivisin, just one small thing.
+
+40
+00:02:11,319 --> 00:02:15,120
+You are bringing up your screen or should I just read?
+
+41
+00:02:15,120 --> 00:02:16,120
+Yeah.
+
+42
+00:02:16,120 --> 00:02:19,360
+Himanshu, you should just quickly walk through some of
+
+43
+00:02:19,360 --> 00:02:23,800
+the use cases that we have worked on.
+
+44
+00:02:23,800 --> 00:02:24,919
+Got it.
+
+45
+00:02:24,919 --> 00:02:32,120
+Then Jefferson will have a better idea on what we have done with other plans.
+
+46
+00:02:32,120 --> 00:02:33,120
+Got it.
+
+47
+00:02:33,120 --> 00:02:34,120
+Great.
+
+48
+00:02:34,120 --> 00:02:36,599
+Jivisin, I would give you a very quick run on.
+
+49
+00:02:36,599 --> 00:02:39,759
+I created a small deck.
+
+50
+00:02:39,759 --> 00:02:43,360
+Let me know once my screen is visible to you.
+
+51
+00:02:43,360 --> 00:02:48,360
+Let me know once it's visible.
+
+52
+00:02:49,360 --> 00:02:50,360
+Yeah.
+
+53
+00:02:50,360 --> 00:02:52,360
+Yes, visible.
+
+54
+00:02:52,360 --> 00:02:54,360
+All right.
+
+55
+00:02:54,360 --> 00:02:55,360
+Great.
+
+56
+00:02:55,360 --> 00:02:58,360
+I'll give you a little bit of a rundown.
+
+57
+00:02:58,360 --> 00:03:02,360
+Ranjitha already mentioned that we are Databricks' Silver Tier partners.
+
+58
+00:03:02,360 --> 00:03:05,360
+In addition to being Silver Tier partners, we are also BrickBuilder partners.
+
+59
+00:03:05,360 --> 00:03:09,360
+We carry at this point of time BrickBuilder Genai badge with us.
+
+60
+00:03:09,360 --> 00:03:11,360
+It's not just the marketing badge.
+
+61
+00:03:11,360 --> 00:03:16,360
+We actually have used our Accelbate code bricks that we created to bring customers
+
+62
+00:03:16,360 --> 00:03:18,360
+to Databricks faster.
+
+63
+00:03:18,360 --> 00:03:19,360
+Awesome.
+
+64
+00:03:19,360 --> 00:03:24,360
+Then these clients, they're also Databricks' customers as well?
+
+65
+00:03:24,360 --> 00:03:25,360
+Yeah.
+
+66
+00:03:25,360 --> 00:03:26,360
+Great.
+
+67
+00:03:26,360 --> 00:03:32,360
+Some of these customers are on various different platforms, but these are some of our customers.
+
+68
+00:03:32,360 --> 00:03:37,360
+I think one of them is also on Databricks.
+
+69
+00:03:37,360 --> 00:03:38,360
+Okay.
+
+70
+00:03:38,360 --> 00:03:39,360
+Which one?
+
+71
+00:03:39,360 --> 00:03:40,360
+This one.
+

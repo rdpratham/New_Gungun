@@ -1,0 +1,1324 @@
+1
+00:00:00,000 --> 00:00:09,119
+up the story because a lot of times we need to build the story the right way for people to
+
+2
+00:00:09,119 --> 00:00:13,839
+latch on and I'm open to working with you guys to building that story together. So my questions
+
+3
+00:00:13,839 --> 00:00:17,199
+are around just like trying to understand the offering, trying to understand how you work
+
+4
+00:00:18,879 --> 00:00:22,719
+because the more I can simplify it in my mind the easier I can kind of bring that to my director
+
+5
+00:00:22,719 --> 00:00:27,440
+and then expand you guys through the team. So don't take my questions as maybe like discounting
+
+6
+00:00:27,440 --> 00:00:30,879
+what you're putting on the slide. It's just to try to understand like how it works because
+
+7
+00:00:31,679 --> 00:00:38,399
+we need to tailor this story to more of just the Databricks motion if the goal is to elevate
+
+8
+00:00:38,399 --> 00:00:46,320
+more engagement and kind of help continue to progress your tiers. So yeah. Okay cool. So industries
+
+9
+00:00:46,320 --> 00:00:52,960
+that you focus in on, yeah if we can just shift this slide to whatever you've done with Databricks
+
+10
+00:00:53,520 --> 00:00:56,960
+and the customers there that you can show that'd be awesome but yeah feel free to continue.
+
+11
+00:00:57,759 --> 00:01:01,759
+Got it. Cool. We'll do that in a few minutes. Jefferson if you could just confirm to me you're
+
+12
+00:01:01,759 --> 00:01:06,959
+also looking after the financial services customers primarily. Is that understanding correct or
+
+13
+00:01:06,959 --> 00:01:14,480
+hey you're off the mark completely? Yeah financial services. Good. So for us as well we have you know
+
+14
+00:01:14,480 --> 00:01:19,599
+decided to focus on a couple of different industries three of them in particular to be more exact.
+
+15
+00:01:19,599 --> 00:01:23,760
+One of them is financial services the other one is healthcare and life sciences and then this
+
+16
+00:01:23,840 --> 00:01:30,319
+third automotive, D&D and real estate club into one. So over there we primarily focus on automotive
+
+17
+00:01:30,319 --> 00:01:36,480
+and digital that is the sort of stuff that we have been doing over there. I'll just give you a
+
+18
+00:01:36,480 --> 00:01:41,760
+little bit of a rundown. These are a couple of our accelerators which we have created in-house to
+
+19
+00:01:41,760 --> 00:01:50,000
+you know do the work faster. This is a little bit of a rundown on our existing strengths with Databricks.
+
+20
+00:01:50,000 --> 00:01:54,799
+So this needs to be updated a little bit. So at this point of time we are carrying about 80 to 90
+
+21
+00:01:54,799 --> 00:02:00,799
+odd certified associates on Databricks with 60% of the population being data engineers and the
+
+22
+00:02:00,799 --> 00:02:06,719
+remaining 40% being the machine learning engineer associates. So we carry both of them.
+
+23
+00:02:08,800 --> 00:02:16,479
+Sorry Dan and Rob. And then in your minds the IBM partnership, the Azure Microsoft
+
+24
+00:02:16,479 --> 00:02:24,879
+partnership, the AWS partnership. So are you helping migrate like data warehouses over to
+
+25
+00:02:24,879 --> 00:02:32,159
+Databricks? I see like SAP here at SharePoint. So is it like mostly building up like a
+
+26
+00:02:34,639 --> 00:02:39,199
+like a GD space is what kind of team is specialized in? Just kind of curious what that looks like.
+
+27
+00:02:39,280 --> 00:02:47,680
+So Genia I believe has expanded this year to even cover up the AIBI Databricks one and other aspects.
+
+28
+00:02:47,680 --> 00:02:52,240
+So as of right now we have focused much more on bringing customers onto the data lake itself.
+
+29
+00:02:54,000 --> 00:02:58,400
+So once the data lake has been created on top of that we create custom solutions for them,
+
+30
+00:02:58,400 --> 00:03:03,120
+custom agent solutions for them which are able to resolve their particular queries or
+
+31
+00:03:03,120 --> 00:03:08,479
+particular problems. So bringing everything from your different injection sources that can be
+
+32
+00:03:08,479 --> 00:03:14,080
+unstructured, structured, semi-structured from SAP SharePoint, your email tracking because a lot
+
+33
+00:03:14,080 --> 00:03:19,199
+of things from your PDF files, from your Excel files for financial services customers that we
+
+34
+00:03:19,199 --> 00:03:24,719
+have seen. Bringing all of this information onto a single data lake and on top of that creating
+
+35
+00:03:24,719 --> 00:03:30,000
+the analytics systems. So it can be done via a custom agent solutions or it can be powered up by
+
+36
+00:03:31,599 --> 00:03:37,759
+front-ended by Databricks one and then powered by custom applications at the back end.
+
+37
+00:03:38,479 --> 00:03:41,840
+Does that make sense or no you're off the mark for me?
+
+38
+00:03:42,800 --> 00:03:46,319
+And then the custom applications are they built on Databricks or where are they built?
+
+39
+00:03:46,319 --> 00:03:48,319
+Yeah they have it on Databricks.
+
+40
+00:03:49,120 --> 00:03:53,439
+Okay so you're using like Databricks apps like base, agent breaks?
+
+41
+00:03:54,800 --> 00:04:00,000
+Not the by default provided Databricks applications because a lot of custom
+
+42
+00:04:00,000 --> 00:04:04,960
+integration is required for the applications that we end up creating and for the customers the
+
+43
+00:04:05,840 --> 00:04:10,560
+custom piece is much more relevant rather than taking up what Databricks apps provides out of
+
+44
+00:04:10,560 --> 00:04:15,680
+the door. For example I'll take the example for one of the recent applications that we created on
+
+45
+00:04:15,680 --> 00:04:21,519
+Databricks. So that is an APQR acceleration that is for the automotive marketplace that we have
+
+46
+00:04:21,519 --> 00:04:28,879
+you know gone covered with. Sorry APQR is for the farm manufacturing space. So what they are
+
+47
+00:04:28,879 --> 00:04:33,839
+looking for is the entire application is it requires a lot of custom connectors.
+
+48
+00:04:35,920 --> 00:04:39,759
+It is because of the customer requirement. So all of those custom connectors are then being
+
+49
+00:04:39,759 --> 00:04:44,399
+created or mapped into the Databricks application space wherever it is possible we leverage the
+
+50
+00:04:44,399 --> 00:04:48,480
+in-house application of in-house connectors but if it's not available we end up creating those
+
+51
+00:04:48,480 --> 00:04:57,360
+connectors so that we can have a seamless integration. Okay I guess what I'm trying to
+
+52
+00:04:57,920 --> 00:05:05,839
+I'm trying. Sorry so I think you know with different clients we have had different types
+
+53
+00:05:05,839 --> 00:05:13,439
+of use cases that we have worked on. So for some I think you know what Ivanshu mentioned
+
+54
+00:05:13,439 --> 00:05:22,720
+you know it was bringing them on the Databricks data lake house platform depending upon
+
+55
+00:05:22,720 --> 00:05:28,879
+wherever they needed to ingest data from and then for example for clients like Jump IQ
+
+56
+00:05:29,680 --> 00:05:37,600
+it was also building an application on top of that data to serve whatever analytics need they
+
+57
+00:05:38,399 --> 00:05:45,360
+had. So Ivanshu do you want to bring up that site for the Jump IQ thing that might kind of you know
+
+58
+00:05:45,439 --> 00:05:57,279
+give a solid idea. So I will just bring up this website. Let me know once the screen is visible.
+
+59
+00:05:58,720 --> 00:06:06,560
+Yeah yeah so Jump IQ yeah yeah I'll give you a quick rundown of what exactly it is. So this
+
+60
+00:06:06,560 --> 00:06:12,480
+is for an MND advisory firm. Now what happened is all of these data points that you're seeing all
+
+61
+00:06:12,480 --> 00:06:17,600
+of these small points or bullets or all of these small bullets that you're seeing over here these
+
+62
+00:06:17,600 --> 00:06:26,720
+are all of the dealers that are currently operating in the US. Now say you have the for example some
+
+63
+00:06:28,000 --> 00:06:33,759
+in that high network or some individuals would like to identify hey this dealership seems to
+
+64
+00:06:33,759 --> 00:06:39,839
+perform well and hey these are having good numbers. Would it be financially or would it make a financial
+
+65
+00:06:39,839 --> 00:06:44,800
+sense for me to go ahead and you know straight out purchase them out of the way. Maybe they are a
+
+66
+00:06:44,800 --> 00:06:48,720
+local dealer that is operating or maybe they are a national dealer that is operating out of
+
+67
+00:06:48,720 --> 00:06:55,199
+or a statewide dealer that is operating maybe say in Texas. So for example this one I'm just paying
+
+68
+00:06:55,199 --> 00:07:02,720
+out a random dealer over here. So this is this they are looking after a Chevy dealership.
+
+69
+00:07:03,759 --> 00:07:07,920
+What we have done is we have gone forward for this particular customer what we ended up was
+
+70
+00:07:07,920 --> 00:07:13,839
+hey let's create an entire data lake on the Databricks platform that was step number one that
+
+71
+00:07:13,839 --> 00:07:18,399
+was completed. Once that was done the customer came back with hey what can we really do so as to
+
+72
+00:07:19,040 --> 00:07:24,720
+make the entire experience seamless for our end customers. What is the extra information that
+
+73
+00:07:24,720 --> 00:07:30,319
+can be provided to them. How can we provide it as soon as possible so that they can make the
+
+74
+00:07:30,319 --> 00:07:35,920
+relevant financial decision to maybe work together with them on a joint partnership or maybe outright
+
+75
+00:07:35,920 --> 00:07:43,680
+purchase them. So this is a couple of scores that they have created in-house which we assisted
+
+76
+00:07:43,680 --> 00:07:48,000
+them with hey what is the momentum looking like for them over the last two or three months. What
+
+77
+00:07:48,000 --> 00:07:52,879
+is their performance so far. What is the environment looking like for them in their particular county.
+
+78
+00:07:53,439 --> 00:08:01,360
+What is their valuation that is powered by DCG's in-house systems. What is their ranking for this.
+
+79
+00:08:02,319 --> 00:08:08,160
+How high is this particular dealership being ranked up all of these demographics. This is just a
+
+80
+00:08:08,160 --> 00:08:13,920
+very quick overview for them and on top of this what happens is once a report request is generated
+
+81
+00:08:13,920 --> 00:08:20,160
+for this particular customer at the same time the backend system it input or it pulls in data
+
+82
+00:08:20,160 --> 00:08:26,079
+from the existing data lake at the same time it also leverages the external data sources which
+
+83
+00:08:26,079 --> 00:08:29,680
+they have specified which they trusted data sources. They have all the coolant information
+
+84
+00:08:29,680 --> 00:08:33,919
+from these trusted data sources. So at this point we have 20 plus different data sources
+
+85
+00:08:34,799 --> 00:08:40,159
+all of this information comes in via the streaming platform of Databricks and then it is pumped out
+
+86
+00:08:40,159 --> 00:08:46,080
+to the customer. Now creating this entire dashboard or creating this entire report and putting it in
+
+87
+00:08:46,080 --> 00:08:51,440
+front of the customer as accurately as possible and ensuring that hey there's no hallucination that
+
+88
+00:08:51,440 --> 00:08:55,759
+is happening in the entire report. Those are some of the metrics that we had to take care of and
+
+89
+00:08:55,840 --> 00:09:00,240
+getting it in front of the customer as soon as possible that was another thing that we had to
+
+90
+00:09:00,240 --> 00:09:09,120
+really put down our thinking hats on. Got it. So the one thing I'm kind of struggling with here
+
+91
+00:09:09,120 --> 00:09:14,240
+on this story is how is this driving compute for the Databricks team?
+
+92
+00:09:16,080 --> 00:09:21,440
+So there are two ways in which the entire compute is being driven up. The entire medallion
+
+93
+00:09:21,440 --> 00:09:25,279
+architecture it is currently being hosted on the Databricks platform so bronze, silver, gold all
+
+94
+00:09:25,279 --> 00:09:29,519
+of your three layers are on Databricks. In addition to that all of the backend analytics that
+
+95
+00:09:29,519 --> 00:09:35,120
+happens that is powered by the Databricks system. So these are the two primary drivers for the entire
+
+96
+00:09:37,039 --> 00:09:44,399
+data debut consumption as you want to you know as you put it forward for DCG for Databricks.
+
+97
+00:09:45,519 --> 00:09:51,919
+Got it. So it's some sort of like ETL pipeline and then you're also using the warehouse.
+
+98
+00:09:52,639 --> 00:09:58,320
+Yeah so because there's data refresh in terms of you know when you get so they're using some
+
+99
+00:09:58,320 --> 00:10:02,559
+external data sources I think.
+
+100
+00:10:00,000 --> 00:10:03,919
+from JD Power Associates or other external data sources.
+
+101
+00:10:03,919 --> 00:10:08,919
+So that is all loaded into the Databricks platform.
+
+102
+00:10:11,179 --> 00:10:14,259
+And then your team loaded it in.
+
+103
+00:10:15,679 --> 00:10:17,299
+We established the Connectus.
+
+104
+00:10:17,299 --> 00:10:18,139
+Okay.
+
+105
+00:10:18,139 --> 00:10:21,600
+And then is kind of the goal for your team
+
+106
+00:10:21,600 --> 00:10:26,159
+to get to the more custom application work?
+
+107
+00:10:26,159 --> 00:10:27,360
+Is that kind of the goal?
+
+108
+00:10:27,360 --> 00:10:28,720
+Okay.
+
+109
+00:10:28,720 --> 00:10:33,000
+So in this case, we have a team working with them,
+
+110
+00:10:33,000 --> 00:10:37,080
+which has worked all the way from the initial,
+
+111
+00:10:37,080 --> 00:10:39,240
+you know, this was like kind of a startup idea.
+
+112
+00:10:39,240 --> 00:10:41,200
+So we worked with them all the way
+
+113
+00:10:41,200 --> 00:10:46,200
+from initial discussions, technical architecture,
+
+114
+00:10:46,639 --> 00:10:50,639
+you know, help them kind of put together
+
+115
+00:10:50,639 --> 00:10:53,919
+the whole ETL process, the data platform,
+
+116
+00:10:53,919 --> 00:10:56,720
+and then building the application on top of it as well.
+
+117
+00:10:57,720 --> 00:10:58,559
+Got it.
+
+118
+00:11:01,159 --> 00:11:02,679
+So it's a little bit hard for me to follow it
+
+119
+00:11:02,679 --> 00:11:06,519
+because this motion kind of geared towards the,
+
+120
+00:11:06,519 --> 00:11:10,360
+and do you mostly work with the Databricks Hunter teams
+
+121
+00:11:10,360 --> 00:11:13,600
+or more of the core teams in the current engagement?
+
+122
+00:11:15,059 --> 00:11:18,860
+So in this case, for example, you know,
+
+123
+00:11:18,860 --> 00:11:21,440
+we had our own relationship with the client.
+
+124
+00:11:21,440 --> 00:11:23,799
+So we worked directly with the client.
+
+125
+00:11:23,799 --> 00:11:27,240
+This was not through a Databricks account executive, right?
+
+126
+00:11:27,240 --> 00:11:29,879
+We recently are trying to build relationships
+
+127
+00:11:29,879 --> 00:11:34,240
+with the account executives so that we can co-sell together.
+
+128
+00:11:34,240 --> 00:11:36,519
+But for example, this was kind of, you know,
+
+129
+00:11:37,559 --> 00:11:41,600
+totally run by our team directly with the client.
+
+130
+00:11:41,600 --> 00:11:42,440
+Got it.
+
+131
+00:11:42,440 --> 00:11:43,960
+And then was the client already on Databricks
+
+132
+00:11:43,960 --> 00:11:45,279
+or they were in that new?
+
+133
+00:11:45,279 --> 00:11:48,159
+No, we helped them on board to Databricks.
+
+134
+00:11:48,159 --> 00:11:52,919
+Similarly for AscentDS, which is in real estate financing,
+
+135
+00:11:53,840 --> 00:11:58,039
+we worked with them directly and influenced them to,
+
+136
+00:11:58,840 --> 00:12:01,600
+you know, in that case, they load a lot of data
+
+137
+00:12:01,600 --> 00:12:05,559
+from county real estate transactional records.
+
+138
+00:12:05,559 --> 00:12:07,720
+And they use, they consume all that data.
+
+139
+00:12:07,720 --> 00:12:10,320
+There's a lot of hygiene that needs to be done there
+
+140
+00:12:10,320 --> 00:12:14,039
+because there could be a parent LLC that, you know,
+
+141
+00:12:14,919 --> 00:12:19,759
+built one particular real estate, you know, construction
+
+142
+00:12:19,759 --> 00:12:21,559
+and there could be child entities.
+
+143
+00:12:21,559 --> 00:12:24,200
+So we do a lot of cleaning on that data
+
+144
+00:12:26,039 --> 00:12:31,039
+kind of with some manual, you know, interjection if needed
+
+145
+00:12:31,200 --> 00:12:33,240
+to kind of, you know, match up a couple of things.
+
+146
+00:12:33,240 --> 00:12:35,440
+And then on top of that,
+
+147
+00:12:35,440 --> 00:12:38,120
+they run their whole lead generation platform,
+
+148
+00:12:38,120 --> 00:12:40,480
+lead generation, you know, analytics.
+
+149
+00:12:40,480 --> 00:12:44,759
+So in that case as well, we started working with them
+
+150
+00:12:44,759 --> 00:12:46,600
+right from the start in terms of
+
+151
+00:12:46,600 --> 00:12:49,000
+what are the different types of data they're ingesting?
+
+152
+00:12:49,000 --> 00:12:50,399
+Where is it coming from?
+
+153
+00:12:50,399 --> 00:12:52,960
+There are some structured, some unstructured data.
+
+154
+00:12:52,960 --> 00:12:57,960
+How will that be ingested and loaded at what rate
+
+155
+00:12:58,519 --> 00:13:00,519
+is that data being refreshed?
+
+156
+00:13:01,440 --> 00:13:04,159
+You know, how often those loads need to be run.
+
+157
+00:13:04,159 --> 00:13:07,080
+And so, you know, we had, you know, some relationship
+
+158
+00:13:07,080 --> 00:13:10,919
+with these clients where they had use cases that, you know,
+
+159
+00:13:10,919 --> 00:13:15,039
+Databricks was the right platform to be used.
+
+160
+00:13:15,039 --> 00:13:16,759
+And now we're trying to kind of, you know,
+
+161
+00:13:16,759 --> 00:13:18,879
+establish relationships with account executives
+
+162
+00:13:18,879 --> 00:13:20,720
+so that we can start to co-sell.
+
+163
+00:13:20,720 --> 00:13:24,320
+You know, we have built strong capabilities in the area
+
+164
+00:13:24,320 --> 00:13:26,840
+and how can we kind of, you know, work together
+
+165
+00:13:26,840 --> 00:13:30,480
+to scale both of us further?
+
+166
+00:13:30,480 --> 00:13:31,320
+Yeah.
+
+167
+00:13:32,159 --> 00:13:35,159
+Do you know what our activated logo motion is?
+
+168
+00:13:35,159 --> 00:13:36,000
+No.
+
+169
+00:13:37,240 --> 00:13:40,840
+So, kind of just when talking about it
+
+170
+00:13:40,840 --> 00:13:42,720
+and talking through your programs,
+
+171
+00:13:42,720 --> 00:13:46,000
+this is what I would recommend kind of framing up the story.
+
+172
+00:13:46,000 --> 00:13:46,840
+Yeah.
+
+173
+00:13:46,840 --> 00:13:48,039
+So thanks for the partnership so far
+
+174
+00:13:48,080 --> 00:13:50,639
+on growing some of these accounts.
+
+175
+00:13:50,639 --> 00:13:53,799
+So what an activated logo for us is getting an account
+
+176
+00:13:53,799 --> 00:13:58,799
+to spend at least $1,000 a month, two months in a row,
+
+177
+00:13:59,759 --> 00:14:04,720
+or signing a Databricks committed baseline contract.
+
+178
+00:14:04,720 --> 00:14:07,360
+So those are the two ways that...
+
+179
+00:14:07,360 --> 00:14:09,440
+Which is 15K, I believe.
+
+180
+00:14:09,440 --> 00:14:14,440
+Yeah, those are the two ways that AEs get compensated.
+
+181
+00:14:15,240 --> 00:14:17,120
+So that's kind of the story we have to tell
+
+182
+00:14:17,120 --> 00:14:19,240
+when bringing up your slides is,
+
+183
+00:14:19,240 --> 00:14:23,919
+how do you help account executives activate customers?
+
+184
+00:14:23,919 --> 00:14:27,279
+So if we wanna use existing stories,
+
+185
+00:14:27,279 --> 00:14:29,679
+whether from a sense, DS or whatnot,
+
+186
+00:14:30,759 --> 00:14:32,840
+like I would encourage you to review
+
+187
+00:14:32,840 --> 00:14:34,440
+what that engagement looked like,
+
+188
+00:14:35,519 --> 00:14:37,840
+work with the existing AE to understand
+
+189
+00:14:37,840 --> 00:14:40,279
+how much consumption that drove.
+
+190
+00:14:40,279 --> 00:14:42,740
+What drove that consumption?
+
+191
+00:14:43,740 --> 00:14:48,740
+And then focus less on maybe the end application build first.
+
+192
+00:14:51,779 --> 00:14:55,220
+And then, right, this is how Short Hills AI
+
+193
+00:14:55,220 --> 00:14:59,179
+helps you activate accounts and customers, right?
+
+194
+00:14:59,179 --> 00:15:02,299
+That's how we can quickly just understand what you do
+
+195
+00:15:02,299 --> 00:15:04,860
+and then start introducing the customers.
+
+196
+00:15:04,860 --> 00:15:07,440
+In terms of the end state use cases,
+
+197
+00:15:08,440 --> 00:15:13,039
+probably a little bit less important at this time.
+
+198
+00:15:13,039 --> 00:15:15,519
+Like if it's building a data application,
+
+199
+00:15:15,519 --> 00:15:16,960
+if that's where your bread and butter is,
+
+200
+00:15:16,960 --> 00:15:18,679
+like I'll keep that in my back of mind.
+
+201
+00:15:18,679 --> 00:15:23,279
+But I guess based on the customer engagements,
+
+202
+00:15:23,279 --> 00:15:25,399
+like where do you feel like really helped
+
+203
+00:15:25,399 --> 00:15:27,200
+grow these customers on Databricks?
+
+204
+00:15:28,840 --> 00:15:30,200
+So that's probably a question back to you guys.
+
+205
+00:15:30,200 --> 00:15:32,320
+Yeah, Fesan, two things for you.
+
+206
+00:15:32,320 --> 00:15:33,679
+The thing that you mentioned about,
+
+207
+00:15:33,759 --> 00:15:36,600
+hey, what is this really,
+
+208
+00:15:36,600 --> 00:15:37,919
+what is this stuff that we're doing?
+
+209
+00:15:37,919 --> 00:15:40,080
+Is this really driving the end goal for you?
+
+210
+00:15:40,080 --> 00:15:42,279
+Is this helping you meet your metrics?
+
+211
+00:15:42,279 --> 00:15:44,720
+That is, I believe, one important thing for you.
+
+212
+00:15:44,720 --> 00:15:47,720
+So the amount of consumption that the solutions
+
+213
+00:15:47,720 --> 00:15:51,320
+that we create, it could allow you to meet
+
+214
+00:15:51,320 --> 00:15:53,879
+or exceed your targets within the month itself.
+
+215
+00:15:53,879 --> 00:15:54,799
+Let me just put it that way.
+
+216
+00:15:54,799 --> 00:15:57,240
+I cannot tell about the exact consumption that...
+
+217
+00:15:57,240 --> 00:15:58,679
+Yeah, sorry, it's okay.
+
+218
+00:15:58,679 --> 00:15:59,840
+You don't have to sell me on it.
+
+219
+00:15:59,840 --> 00:16:00,799
+That needs to be on the slide,
+
+220
+00:16:00,799 --> 00:16:03,240
+if you want to be successful is what I'm trying to say.
+
+221
+00:16:03,279 --> 00:16:05,600
+So these are just feedback points.
+
+222
+00:16:05,600 --> 00:16:09,919
+I know the information is maybe loose right now, that's okay.
+
+223
+00:16:09,919 --> 00:16:11,759
+But I'm just trying to help you sell this story
+
+224
+00:16:11,759 --> 00:16:15,120
+because the slide as it stands now is a little bit confusing
+
+225
+00:16:15,120 --> 00:16:16,960
+on why I would choose you guys versus another partner
+
+226
+00:16:16,960 --> 00:16:18,720
+because it's more focused on you.
+
+227
+00:16:18,720 --> 00:16:21,879
+And you just have a slide that's more focused on
+
+228
+00:16:21,879 --> 00:16:24,840
+being an extension of the Databricks AE team
+
+229
+00:16:24,840 --> 00:16:26,320
+and how we activate customers.
+
+230
+00:16:26,320 --> 00:16:27,759
+And you don't have to sell me on this now.
+
+231
+00:16:27,759 --> 00:16:29,639
+I know you can do this work,
+
+232
+00:16:29,639 --> 00:16:31,960
+but we're talking to get some feedback because...
+
+233
+00:16:32,799 --> 00:16:33,639
+Definitely.
+
+234
+00:16:33,639 --> 00:16:36,440
+I can't visualize it today
+
+235
+00:16:36,440 --> 00:16:38,879
+based on what I've seen and what I've heard.
+
+236
+00:16:38,879 --> 00:16:39,720
+Got it.
+
+237
+00:16:40,639 --> 00:16:42,519
+So if we can reframe that story
+
+238
+00:16:42,519 --> 00:16:45,679
+and then come back together with some different slides,
+
+239
+00:16:45,679 --> 00:16:49,559
+focus on the activation piece versus...
+
+240
+00:16:50,559 --> 00:16:54,639
+And then the accolades that you have around IBM and video,
+
+241
+00:16:54,639 --> 00:16:58,919
+like how does that tie back into like growing consumption
+
+242
+00:16:58,919 --> 00:17:01,559
+and the customer base at Databricks?
+
+243
+00:17:01,559 --> 00:17:03,759
+It's like, are you migrating from those?
+
+244
+00:17:03,759 --> 00:17:04,880
+Or do you have expertise there?
+
+245
+00:17:04,880 --> 00:17:07,240
+So you're helping with warehouse migrations
+
+246
+00:17:07,240 --> 00:17:08,440
+or do you have expertise there?
+
+247
+00:17:08,440 --> 00:17:13,200
+So you're like building models on Databricks.
+
+248
+00:17:13,200 --> 00:17:18,039
+So like that kind of needs to be a story to help grow the...
+
+249
+00:17:18,039 --> 00:17:19,200
+That's valuable feedback.
+
+250
+00:17:19,200 --> 00:17:24,200
+So that it's clear to you where can we quickly go after together.
+
+251
+00:17:26,160 --> 00:17:27,200
+Yeah, exactly.
+
+252
+00:17:27,200 --> 00:17:28,559
+And if it's financial services,
+
+253
+00:17:28,559 --> 00:17:33,559
+like what are the use cases that resonate well that you've solved?
+
+254
+00:17:35,279 --> 00:17:37,519
+And we even have this.
+
+255
+00:17:37,519 --> 00:17:39,279
+I'll just share this with you.
+
+256
+00:17:39,279 --> 00:17:40,119
+Yeah.
+
+257
+00:17:55,839 --> 00:17:58,319
+And this is what I like to do with other partners as well.
+
+258
+00:17:58,400 --> 00:18:00,039
+If you want to send me your deck,
+
+259
+00:18:00,039 --> 00:18:02,279
+I'll plug it into our internal Glean,
+
+260
+00:18:02,279 --> 00:18:05,079
+map it back to our partner cell motion
+
+261
+00:18:05,079 --> 00:18:07,799
+and also our activated cells motion,
+
+262
+00:18:07,799 --> 00:18:09,480
+and then Glean will spit out some feedback
+
+263
+00:18:09,480 --> 00:18:11,559
+on how to better resonate with the AE team
+
+264
+00:18:11,559 --> 00:18:12,920
+if you want me to do that.
+
+265
+00:18:14,200 --> 00:18:15,160
+I appreciate that.
+
+266
+00:18:19,599 --> 00:18:20,440
+So like...
+
+267
+00:18:29,279 --> 00:18:32,160
+I don't know if our partner rep has shared this with you,
+
+268
+00:18:32,160 --> 00:18:34,440
+but we need to map back what you do
+
+269
+00:18:34,440 --> 00:18:36,599
+to like launching these use cases quickly
+
+270
+00:18:38,480 --> 00:18:39,680
+in these three themes.
+
+271
+00:18:41,920 --> 00:18:42,759
+Okay.
+
+272
+00:18:42,759 --> 00:18:43,799
+You don't need to sell me on that.
+
+273
+00:18:43,799 --> 00:18:44,799
+You've done this right now,
+
+274
+00:18:44,799 --> 00:18:47,680
+but just take that as an ask back
+
+275
+00:18:47,680 --> 00:18:50,799
+and kind of tweak those slides the tailor towards
+
+276
+00:18:50,799 --> 00:18:53,400
+like launching use cases within this vertical
+
+277
+00:18:53,400 --> 00:18:54,559
+if you've done it before.
+
+278
+00:18:55,799 --> 00:18:58,039
+And then also the activated logo motion.
+
+279
+00:18:58,759 --> 00:19:02,319
+So that would be my recommendation
+
+280
+00:19:02,319 --> 00:19:06,559
+because it's to make sure this partnership is successful.
+
+281
+00:19:06,559 --> 00:19:07,400
+Okay. Got it.
+
+282
+00:19:09,079 --> 00:19:10,359
+That helped.
+
+283
+00:19:10,359 --> 00:19:13,119
+So this is drive growth, protect the firm,
+
+284
+00:19:13,119 --> 00:19:14,640
+operate more efficiently.
+
+285
+00:19:14,640 --> 00:19:15,480
+Okay.
+
+286
+00:19:15,480 --> 00:19:17,759
+So these are the different...
+
+287
+00:19:22,240 --> 00:19:24,559
+And this is what every vertical is thinking about.
+
+288
+00:19:24,559 --> 00:19:27,839
+Like from capital markets to insurance,
+
+289
+00:19:27,839 --> 00:19:29,559
+these are the three themes, right?
+
+290
+00:19:29,559 --> 00:19:31,039
+Drive growth, protect the firm
+
+291
+00:19:31,039 --> 00:19:32,920
+and operate more efficiently.
+
+292
+00:19:32,920 --> 00:19:35,640
+So we can map out like whatever your brick builder
+
+293
+00:19:35,640 --> 00:19:38,000
+solutions are to one of these themes.
+
+294
+00:19:38,000 --> 00:19:38,839
+Like I can...
+
+295
+00:19:38,839 --> 00:19:40,920
+Here's a story I want to tell, right?
+
+296
+00:19:40,920 --> 00:19:44,880
+Short Hills can help us activate new logos
+
+297
+00:19:45,960 --> 00:19:50,559
+for any of the banking and insurance drive growth initiatives
+
+298
+00:19:50,559 --> 00:19:52,559
+around customer 360, blah, blah, blah.
+
+299
+00:19:53,680 --> 00:19:56,440
+How they do it is they help customers and guests
+
+300
+00:19:56,440 --> 00:19:58,960
+from XYZ data sources that are not generalized
+
+301
+00:19:58,960 --> 00:20:00,200
+but industry specific.
+
+302
+00:20:00,000 --> 00:20:04,500
+They use Lakeflow Connect,
+
+303
+00:20:04,500 --> 00:20:07,940
+they use Databricks SQL Warehouse,
+
+304
+00:20:07,940 --> 00:20:12,059
+and then they use Asian bricks for PDF parsing to do blah, blah, blah.
+
+305
+00:20:12,059 --> 00:20:17,779
+That's the story that needs to be told here for it to actually resonate.
+
+306
+00:20:17,779 --> 00:20:20,940
+Got it. That helps out.
+
+307
+00:20:20,940 --> 00:20:24,099
+Or else be a very clean story of like,
+
+308
+00:20:24,099 --> 00:20:25,660
+we will be an extension of your team.
+
+309
+00:20:25,660 --> 00:20:28,700
+This is a six to 12-week no-cost program
+
+310
+00:20:28,700 --> 00:20:33,539
+that you can leverage us for to help with data ingestion quickly.
+
+311
+00:20:33,539 --> 00:20:39,180
+We'll bring together a zero-dollar blank SOW.
+
+312
+00:20:39,180 --> 00:20:40,579
+We'll jump into the accounts,
+
+313
+00:20:40,579 --> 00:20:42,180
+do whatever you need us to do,
+
+314
+00:20:42,180 --> 00:20:45,480
+and then we'll earn the right to win the rest of the business,
+
+315
+00:20:45,480 --> 00:20:46,980
+which is the application build.
+
+316
+00:20:46,980 --> 00:20:51,059
+Those are the story that's clean and easy for us to just reference.
+
+317
+00:20:51,059 --> 00:20:56,740
+That'd be my recommendation if we were to go forward with this.
+
+318
+00:20:57,380 --> 00:20:59,900
+Yeah, we can work on that.
+
+319
+00:20:59,900 --> 00:21:03,900
+Awesome. Awesome team.
+
+320
+00:21:03,900 --> 00:21:07,140
+Any other questions with thinking about just partnering in general,
+
+321
+00:21:07,140 --> 00:21:10,740
+like what they use care about, things like that?
+
+322
+00:21:13,220 --> 00:21:17,900
+We would love to also see which accounts you are covering
+
+323
+00:21:17,900 --> 00:21:24,099
+and act as your extension.
+
+324
+00:21:24,460 --> 00:21:27,779
+I'll send you that list for sure as I follow on.
+
+325
+00:21:27,779 --> 00:21:34,299
+Yeah. Sounds good. We'll work on redesigning the deck.
+
+326
+00:21:34,299 --> 00:21:36,779
+Manchu can share the current deck with you.
+
+327
+00:21:36,779 --> 00:21:39,619
+Whatever feedback you want to send,
+
+328
+00:21:39,619 --> 00:21:43,019
+that will be helpful in customizing it further.
+
+329
+00:21:43,019 --> 00:21:45,259
+Awesome. Thanks team. I got a job. Have a good one.
+
+330
+00:21:45,259 --> 00:21:48,500
+Okay. Thank you, Jefferson. Talk to you soon again. Bye.
+
+331
+00:21:48,500 --> 00:21:49,019
+Bye.
+
