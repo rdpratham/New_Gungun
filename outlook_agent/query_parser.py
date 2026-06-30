@@ -195,7 +195,10 @@ def parse(question: str) -> ParsedQuery:
     # Subject: "about X", "subject X", "with subject X", "re: X"
     m = re.search(r"\b(?:about|subject(?:ed)?|re:|regarding)\s+['\"]?([^'\"]+?)['\"]?(?:\s+(?:from|in|on|sent)|$)", text, re.I)
     if m:
-        pq.subject_keyword = m.group(1).strip()
+        kw = m.group(1).strip()
+        # strip leading articles so "the Q3 budget" → "Q3 budget"
+        kw = re.sub(r"^(?:the|a|an)\s+", "", kw, flags=re.I)
+        pq.subject_keyword = kw
         text = text[:m.start()] + text[m.end():]
 
     # Read/unread

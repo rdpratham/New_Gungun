@@ -181,8 +181,15 @@ def fetch_for_search(
         clauses.append("date_received <= ?")
         params.append(date_to)
     if subject_keyword:
-        clauses.append("LOWER(subject) LIKE ?")
-        params.append(f"%{subject_keyword.lower()}%")
+        # Match any significant word in the keyword phrase (OR logic)
+        words = [w for w in subject_keyword.lower().split() if len(w) > 2]
+        if words:
+            sub_clauses = ["LOWER(subject) LIKE ?" for _ in words]
+            clauses.append("(" + " OR ".join(sub_clauses) + ")")
+            params.extend(f"%{w}%" for w in words)
+        else:
+            clauses.append("LOWER(subject) LIKE ?")
+            params.append(f"%{subject_keyword.lower()}%")
     if is_read is not None:
         clauses.append("is_read=?")
         params.append(1 if is_read else 0)
