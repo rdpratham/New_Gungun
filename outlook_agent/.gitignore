@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+mail_store.db
+agent.log
+~/.outlook_agent_token_cache.json
