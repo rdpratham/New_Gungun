@@ -17,7 +17,6 @@ logger = logging.getLogger(__name__)
 GRAPH_SCOPES = [
     "https://graph.microsoft.com/Mail.Read",
     "https://graph.microsoft.com/Mail.ReadBasic",
-    "offline_access",
 ]
 
 GRAPH_BASE = "https://graph.microsoft.com/v1.0"
