@@ -1,0 +1,13 @@
+models/
+uploads/
+outputs/
+debug_thumbnails/
+ocr_jobs.db
+__pycache__/
+*.pyc
+.env
+*.egg-info/
+dist/
+.pytest_cache/
+.coverage
+htmlcov/
