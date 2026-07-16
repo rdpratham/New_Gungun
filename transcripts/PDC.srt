@@ -1,0 +1,4192 @@
+1
+00:00:00,000 --> 00:00:06,080
+Welcome everybody. So first thing I'm going to do is kick off today with partner program.
+
+2
+00:00:06,080 --> 00:00:10,720
+The intent here is give you a clear understanding of the requirements and the timelines that are
+
+3
+00:00:10,720 --> 00:00:16,320
+coming up for that. Again, here's a picture of me maybe 15 years ago if I haven't met you in person
+
+4
+00:00:17,039 --> 00:00:21,440
+and then Vanessa as well. If we want to go to the next slide, I'll go straight into this.
+
+5
+00:00:22,160 --> 00:00:26,160
+So again, what I'm going to review is the partner program. It's going to be a high-level
+
+6
+00:00:26,160 --> 00:00:33,359
+overview. I'll call out some of the changes that have happened around data in AI summit that we
+
+7
+00:00:33,359 --> 00:00:39,679
+announced to make sure that we're all on the same understanding of what's required. Good news is
+
+8
+00:00:40,799 --> 00:00:45,280
+some of the requirements have been pulled back. So I think this is going to help everybody progress
+
+9
+00:00:45,280 --> 00:00:50,399
+a little bit as we hit that mid-year point. So first off, I'm going to speak to the tiers.
+
+10
+00:00:50,399 --> 00:00:54,640
+Because I think this is important that everybody understands up front how we're structured. So
+
+11
+00:00:54,640 --> 00:00:59,280
+at the very top, we've got our Platinum tiers. Now for everybody in here, it's important to
+
+12
+00:00:59,280 --> 00:01:04,719
+understand that the Platinum tier is really designated as an invite only for our global
+
+13
+00:01:04,719 --> 00:01:11,840
+partners. Again, so this is deep investment, deep relationships. This sits at the very top,
+
+14
+00:01:11,840 --> 00:01:18,400
+covering multiple regions. Again, think GSIs, think global. Now as we go one step lower in that,
+
+15
+00:01:18,400 --> 00:01:24,480
+we have gold. Now this is where we have our most strategic delivery partners with a mature
+
+16
+00:01:24,480 --> 00:01:30,879
+Databricks practice. Everybody in this tier is a proven track record of multiple use cases and go
+
+17
+00:01:30,879 --> 00:01:36,959
+to market efforts with Databricks. This one is open to every partner in our ecosystem who's going
+
+18
+00:01:36,959 --> 00:01:42,159
+to be able to climb and attain this. And again, within this, it has the highest set of benefit
+
+19
+00:01:42,799 --> 00:01:49,760
+offerings at a program level. One step below, we have silver. Now silver for us is where we have
+
+20
+00:01:49,760 --> 00:01:55,760
+Databricks practices that are growing. Their bench is building. They have a trained certified team,
+
+21
+00:01:55,760 --> 00:02:01,200
+successful implementations, and all of our core products and offerings. But again, it's also
+
+22
+00:02:01,200 --> 00:02:06,799
+very important to remember that these tiers are really based on a point in time. And with our
+
+23
+00:02:06,799 --> 00:02:11,439
+program only really being maybe two to three years old at this point, you see a lot of partners,
+
+24
+00:02:11,439 --> 00:02:16,400
+especially in certain regions who are still moving through these gears. Now if we go down,
+
+25
+00:02:16,400 --> 00:02:21,840
+we're at the bronze. Now bronze is probably where we have the most partners today. And it really is
+
+26
+00:02:21,840 --> 00:02:27,840
+a case of again, a point in time on where you're at in your journey. This is the entry point for
+
+27
+00:02:27,840 --> 00:02:34,800
+partners coming in. But at data and AI, what we actually launched is we no longer have a requirement
+
+28
+00:02:34,879 --> 00:02:42,000
+here to be silvers for specializations. Now what that means, as soon as you enter and you come
+
+29
+00:02:42,000 --> 00:02:46,080
+into bronze, you can start to utilize those benefits to start attaining specializations
+
+30
+00:02:46,080 --> 00:02:51,840
+to differentiate in this space. So again, mileage may vary here, right? You may have some partners
+
+31
+00:02:51,840 --> 00:02:56,000
+who have just entered in, you might have some that are right on the cusp of going into silver.
+
+32
+00:02:56,560 --> 00:03:02,159
+And again, this is broadly how we present and position our partners internally and externally,
+
+33
+00:03:02,159 --> 00:03:08,479
+is through this tier program. I'm going to go to the next slide, because the next natural question
+
+34
+00:03:08,479 --> 00:03:13,840
+here is, you know, how do I get, how do I get into those tiers? So we have it based on a partner
+
+35
+00:03:13,840 --> 00:03:19,599
+value score system. Now it's important to understand what you have to do in order to pick up these
+
+36
+00:03:19,599 --> 00:03:24,719
+points that'll let you progress through those tiers, pick up additional benefits. So we've
+
+37
+00:03:24,719 --> 00:03:29,280
+kind of split up into three categories. Now the first one is going to be customer impact. Now
+
+38
+00:03:29,280 --> 00:03:34,560
+this follows the sales motion. I like to think of this as the performance metrics from our partners.
+
+39
+00:03:34,560 --> 00:03:38,800
+First one we have here is going to be sourced MRR. This is where a partner has initiated
+
+40
+00:03:39,599 --> 00:03:45,599
+use cases. And then the MRR of that use case as it goes live will help you earn points. We also
+
+41
+00:03:45,599 --> 00:03:50,639
+have implemented use cases based on MRR and then unique active customers. Now the great news here
+
+42
+00:03:51,280 --> 00:03:56,560
+is all three of these can double up, right? If you have an opportunity to use case that you register
+
+43
+00:03:56,560 --> 00:04:01,759
+in source, you implement that. That would actually give you points both for source implemented and
+
+44
+00:04:01,759 --> 00:04:06,960
+a unique active customer. So again, you've got a chance to hit on these multiple times. The next
+
+45
+00:04:06,960 --> 00:04:12,719
+category is readiness and enablement. And again, I think, think capability, think capacity. This is
+
+46
+00:04:12,719 --> 00:04:17,360
+where we want to give you points where you have certified individuals and active badges. We want
+
+47
+00:04:17,360 --> 00:04:21,519
+to make sure that you can position data bricks appropriately, drive your go to market, but then
+
+48
+00:04:21,519 --> 00:04:26,319
+also have the capacity to execute as well. Now all the way over to the right, this is where we
+
+49
+00:04:26,399 --> 00:04:30,720
+have go to market collaboration. Because it's important that we have a metric to look at success.
+
+50
+00:04:30,720 --> 00:04:36,079
+Now the best way for us to do that today is through customer stories and CSAT, right? Customer
+
+51
+00:04:36,079 --> 00:04:40,959
+survey results that come back on use cases where you've implemented. So again, all of this is pulled
+
+52
+00:04:40,959 --> 00:04:47,279
+together to give you a point total. If you want to go to the next slide, I'll show how that is applied.
+
+53
+00:04:48,399 --> 00:04:55,279
+So we look here, we have it calibrated across the different regions. So if we look at the absolute
+
+54
+00:04:55,360 --> 00:05:02,399
+gold standard in a mayor, we're at 95, LATAM 70, AMIA 80, APJ 70, right? So there's a calibration
+
+55
+00:05:02,399 --> 00:05:08,079
+that takes place based on the maturity of that market and where we're at in progressing. Now,
+
+56
+00:05:08,079 --> 00:05:14,399
+above and beyond the partner value scores here, we do have two additional requirements that sit
+
+57
+00:05:14,399 --> 00:05:22,639
+outside of that scoring system. The first one is delivery experts. So globally, if you have attained
+
+58
+00:05:22,639 --> 00:05:28,560
+your PVS score that gets you into the silver category, you'll also need five delivery experts
+
+59
+00:05:28,560 --> 00:05:33,759
+and four champions. And again, that's not calibrated for regions. That's a global requirement that
+
+60
+00:05:33,759 --> 00:05:40,560
+sits on top of that PVS scoring. For gold, same structure except the delivery expert requirement
+
+61
+00:05:40,560 --> 00:05:46,399
+is going to be 20 and the champions will be 10. Now, again, just remember, this sits outside of
+
+62
+00:05:46,480 --> 00:05:52,959
+that today. So again, the partner value score again is going to be a collection of those
+
+63
+00:05:53,600 --> 00:05:58,079
+scoring systems that we just went through. Additional requirements are going to sit on top
+
+64
+00:05:58,079 --> 00:06:04,399
+of that, not calibrated for regions. It's going to be set globally. Okay, next slide, please.
+
+65
+00:06:07,759 --> 00:06:11,600
+Now, one of the reasons we're going through this today is because we're actually coming up on our
+
+66
+00:06:11,680 --> 00:06:17,759
+mid-year. So what we do in the middle of our fiscal year, that is when we look to do promotions.
+
+67
+00:06:18,639 --> 00:06:25,519
+So you've got a full four quarters, one year, and where the first half of the year allows you to ramp
+
+68
+00:06:25,519 --> 00:06:32,720
+up. Come the end of this month, we're going to check where everybody sits. Anybody who has now
+
+69
+00:06:32,720 --> 00:06:38,720
+moved up to silver from bronze and gold from silver, we're going to make sure that we get you
+
+70
+00:06:38,720 --> 00:06:44,079
+promotions mid-year so you can start marketing yourself as such, receive those benefits, and then
+
+71
+00:06:44,079 --> 00:06:48,000
+we can use that internally as well to make sure that our sales teams are aware of the changes.
+
+72
+00:06:49,439 --> 00:06:55,040
+Now, that means for everybody in there, and we're going to go through the analytics dashboard soon,
+
+73
+00:06:55,040 --> 00:06:58,399
+make sure you know where you're at and how close you are and any gaps because you might have a
+
+74
+00:06:58,399 --> 00:07:02,639
+couple things that might be low hanging fruit for us to get submitted that can move you across
+
+75
+00:07:02,639 --> 00:07:06,879
+that line between now and the end of the month. Now, the other question that typically comes up
+
+76
+00:07:06,879 --> 00:07:12,000
+is when do demotions occur? What if I've slipped back somehow? We don't look at that until the end
+
+77
+00:07:12,000 --> 00:07:17,360
+of the year. So again, we do promotions twice a year. Demotions or any drops happen once a year,
+
+78
+00:07:17,360 --> 00:07:23,519
+and that'll be at the end of our fiscal year once we go into February. So again, a timely conversation,
+
+79
+00:07:24,079 --> 00:07:28,000
+it's a good chance for everybody to review their dashboard, understand where they're at,
+
+80
+00:07:28,000 --> 00:07:32,160
+to make sure they're either on pace or if they even have an opportunity to get to that promotion
+
+81
+00:07:33,120 --> 00:07:38,639
+coming up at the end of the month. All right. I think, Venos, I think now actually,
+
+82
+00:07:38,639 --> 00:07:41,759
+I'm going to hand this back to you and you can do the deep dive into that.
+
+83
+00:07:42,319 --> 00:07:50,560
+Awesome. Great. Thank you. If we have questions to tackle so far, you let us know, Jose, if that's
+
+84
+00:07:50,560 --> 00:07:57,120
+okay? Not I will carry on. Awesome. So in this segment, I'm going to deep dive into the partner
+
+85
+00:07:57,120 --> 00:08:03,199
+value score and then wrap up with the analytics dashboard overview so that you can see where
+
+86
+00:08:03,199 --> 00:08:10,639
+your company's journey is today and give you some tips so that you can continue to manage that and
+
+87
+00:08:10,639 --> 00:08:16,480
+build a plan around it for promotions or maintain your current year as well. So before diving into
+
+88
+00:08:16,480 --> 00:08:24,079
+that, I have two slides covering basic terms that are important as we go through the deep dive. So
+
+89
+00:08:24,079 --> 00:08:32,879
+the first slide is covering the registration versus use case. So think about the use case as the
+
+90
+00:08:32,879 --> 00:08:42,000
+entry door to start collaborating with our sales teams in the opportunities. As the opportunity
+
+91
+00:08:42,000 --> 00:08:49,519
+progresses and it's validated by our AEs as a consumption producing opportunity, then it will
+
+92
+00:08:49,519 --> 00:08:56,320
+be converted by the AE in a use case, which ultimately gives you recognition for MRR.
+
+93
+00:08:56,960 --> 00:09:03,759
+One key thing to call out in this slide is that when you know the AE, it could become optional
+
+94
+00:09:03,759 --> 00:09:09,440
+that you register the opportunity. The AE might go directly into creating the use case for you,
+
+95
+00:09:09,440 --> 00:09:15,600
+which as I mentioned, once it goes live, it is what will start giving you credit on the MRR and
+
+96
+00:09:16,159 --> 00:09:20,720
+going flowing into the specializations and the tier progression metrics as well.
+
+97
+00:09:22,639 --> 00:09:28,879
+One key thing to call out, even if the registration becomes optional when you know the AE, many of
+
+98
+00:09:28,879 --> 00:09:36,000
+you have lived this multiple cases, for programs such as Velocity, which is our activated logo
+
+99
+00:09:36,000 --> 00:09:42,799
+benefit, the lead registration is actually the kickstart of the process. So even though it becomes
+
+100
+00:09:42,879 --> 00:09:48,799
+optional in order to participate in some of the rebate programs such as Velocity, and I think it's
+
+101
+00:09:48,799 --> 00:09:54,559
+the main one we have, you do need to register the opportunity regardless so that it kicks
+
+102
+00:09:54,559 --> 00:09:58,799
+start the process and you get to the payout part portion of that.
+
+103
+00:10:00,000 --> 00:10:02,399
+The key thing here, the use case is what gives us credit.
+
+104
+00:10:02,399 --> 00:10:05,120
+In the deep dive, I'll let you know where to see the use cases
+
+105
+00:10:05,120 --> 00:10:06,720
+that had been created.
+
+106
+00:10:06,720 --> 00:10:08,320
+The task here would be,
+
+107
+00:10:08,320 --> 00:10:10,320
+if you don't see a use case you're working on,
+
+108
+00:10:10,320 --> 00:10:13,039
+you want to have a discussion with the aid, okay?
+
+109
+00:10:13,039 --> 00:10:15,200
+Let's go to the next slide.
+
+110
+00:10:17,879 --> 00:10:20,960
+One of the most common points of confusion in the program
+
+111
+00:10:20,960 --> 00:10:23,600
+are how the use cases get credited.
+
+112
+00:10:23,600 --> 00:10:26,200
+So we already know that the use case is the key thing.
+
+113
+00:10:26,200 --> 00:10:28,179
+We have two types of use cases.
+
+114
+00:10:28,179 --> 00:10:30,100
+One is the influence use case,
+
+115
+00:10:30,100 --> 00:10:32,580
+and the other one is the source use case.
+
+116
+00:10:32,580 --> 00:10:34,700
+So first, the sourcing distinction.
+
+117
+00:10:34,700 --> 00:10:37,259
+The use case is sourced when you, the partner,
+
+118
+00:10:37,259 --> 00:10:41,100
+initiates the use case before the account team is involved.
+
+119
+00:10:41,100 --> 00:10:43,059
+So you're bringing us something new
+
+120
+00:10:43,059 --> 00:10:45,460
+and sourcing it to Databricks.
+
+121
+00:10:45,460 --> 00:10:48,860
+It is influenced when you join a use case
+
+122
+00:10:48,860 --> 00:10:51,220
+in the account team is already working on it.
+
+123
+00:10:51,220 --> 00:10:53,779
+That's the difference between the left and the right
+
+124
+00:10:53,779 --> 00:10:55,139
+up to the top.
+
+125
+00:10:55,139 --> 00:10:57,700
+So if you built up the slide, Joseb,
+
+126
+00:10:57,700 --> 00:11:01,940
+what we're tracking on the metric side for implementation,
+
+127
+00:11:01,940 --> 00:11:06,700
+for tier progression are sourced and implemented, okay?
+
+128
+00:11:06,700 --> 00:11:09,179
+So implemented down in the bar simply means
+
+129
+00:11:09,179 --> 00:11:12,340
+that you're doing the Hanson keyboard implementation work,
+
+130
+00:11:12,340 --> 00:11:13,179
+okay?
+
+131
+00:11:13,179 --> 00:11:15,179
+Now here's the part that I really want to land
+
+132
+00:11:15,179 --> 00:11:16,539
+because this is the correction
+
+133
+00:11:16,539 --> 00:11:18,700
+from how people often think about it.
+
+134
+00:11:18,700 --> 00:11:22,179
+You get credited for all implemented work,
+
+135
+00:11:22,179 --> 00:11:25,500
+regardless whether if it's sourced or influenced.
+
+136
+00:11:25,500 --> 00:11:28,700
+Sourcing and implementing are rewarded separately.
+
+137
+00:11:28,700 --> 00:11:32,059
+So, walking through these three scenarios,
+
+138
+00:11:32,059 --> 00:11:35,860
+if a use case is both sourced and implemented,
+
+139
+00:11:35,860 --> 00:11:37,460
+it counts in both buckets.
+
+140
+00:11:37,460 --> 00:11:39,620
+You see that we have a bucket for implemented
+
+141
+00:11:39,620 --> 00:11:41,700
+and a bucket for sourcing.
+
+142
+00:11:41,700 --> 00:11:45,100
+You get the credit twice, as Brandon was saying,
+
+143
+00:11:45,100 --> 00:11:49,019
+you can kind of double dip across the metrics.
+
+144
+00:11:49,019 --> 00:11:52,340
+Once for sourcing and once for implementing.
+
+145
+00:11:52,340 --> 00:11:55,460
+If you sourced it, but didn't implemented,
+
+146
+00:11:55,460 --> 00:11:58,059
+it is still counts in the source bucket.
+
+147
+00:11:59,179 --> 00:12:00,899
+And if it was influenced,
+
+148
+00:12:00,899 --> 00:12:03,059
+meaning the accounting was already there,
+
+149
+00:12:03,059 --> 00:12:05,299
+but you implemented it,
+
+150
+00:12:05,299 --> 00:12:08,179
+that counts too in the implemented bucket.
+
+151
+00:12:09,379 --> 00:12:11,700
+So hope the examples helped a little bit.
+
+152
+00:12:12,779 --> 00:12:15,659
+I'll pause here for questions, just in case,
+
+153
+00:12:15,659 --> 00:12:17,460
+to make sure that it's clear.
+
+154
+00:12:17,460 --> 00:12:22,220
+And if not, we can move along to double clicking
+
+155
+00:12:22,220 --> 00:12:23,620
+on the actual scoring.
+
+156
+00:12:23,620 --> 00:12:28,019
+Now that we cleared up those key terms.
+
+157
+00:12:28,019 --> 00:12:29,700
+Yeah, we have a couple.
+
+158
+00:12:29,700 --> 00:12:31,620
+I think that Brandon is typing an answer,
+
+159
+00:12:31,620 --> 00:12:34,059
+but maybe you can speak to this, Vanessa.
+
+160
+00:12:34,059 --> 00:12:38,620
+So, how are extensions of existing use cases handled?
+
+161
+00:12:38,620 --> 00:12:42,700
+So let's say the use case was registered a while ago,
+
+162
+00:12:42,700 --> 00:12:45,379
+it went live, and then the partner wants to register
+
+163
+00:12:45,379 --> 00:12:47,220
+an extension of that existing use case.
+
+164
+00:12:47,220 --> 00:12:48,059
+Go ahead, Brandon.
+
+165
+00:12:48,059 --> 00:12:48,899
+Yeah.
+
+166
+00:12:48,899 --> 00:12:49,740
+Yeah, so I can speak to that.
+
+167
+00:12:49,740 --> 00:12:51,700
+So there's two ways to approach this, right?
+
+168
+00:12:51,700 --> 00:12:54,740
+The easiest way and the fastest way to take control
+
+169
+00:12:54,740 --> 00:12:57,139
+on any use case that you're driving,
+
+170
+00:12:57,139 --> 00:12:59,460
+especially if you're doing it proactively,
+
+171
+00:12:59,460 --> 00:13:01,500
+is to register as a new use case.
+
+172
+00:13:01,500 --> 00:13:04,860
+One that lets you qualify the outcome,
+
+173
+00:13:04,860 --> 00:13:07,059
+how you're involved in the MRR.
+
+174
+00:13:07,059 --> 00:13:08,940
+Essentially, our deal registration form
+
+175
+00:13:08,940 --> 00:13:11,159
+is set at a U2 level, right?
+
+176
+00:13:11,159 --> 00:13:13,779
+Which meaning it's scoped and it's qualified.
+
+177
+00:13:13,779 --> 00:13:16,980
+That is the easiest way, if you're initiating something,
+
+178
+00:13:16,980 --> 00:13:18,419
+to drive that through.
+
+179
+00:13:18,419 --> 00:13:20,659
+Now, if it's a true extension,
+
+180
+00:13:20,659 --> 00:13:22,580
+and it's not being seen as a different use case,
+
+181
+00:13:22,580 --> 00:13:25,340
+it's important that you collaborate with the account team.
+
+182
+00:13:25,340 --> 00:13:27,320
+Now, the account team actually has the discretion
+
+183
+00:13:27,320 --> 00:13:30,139
+to break up use cases into multiple use cases.
+
+184
+00:13:30,139 --> 00:13:32,179
+And sometimes extensions are better suited
+
+185
+00:13:32,179 --> 00:13:35,100
+to be multiple use cases, which again, is why,
+
+186
+00:13:35,100 --> 00:13:37,460
+if it's something that you're initiating and driving,
+
+187
+00:13:37,460 --> 00:13:40,580
+it might make sense to put that in as a deal registration
+
+188
+00:13:40,580 --> 00:13:42,100
+or to have that conversation directly
+
+189
+00:13:42,100 --> 00:13:43,460
+with the account executive.
+
+190
+00:13:45,620 --> 00:13:46,620
+Thank you for that.
+
+191
+00:13:47,620 --> 00:13:48,460
+Very good.
+
+192
+00:13:48,460 --> 00:13:51,659
+I think that we don't have any other questions
+
+193
+00:13:51,659 --> 00:13:54,019
+pertaining to this topic, so you can carry on, Vanessa.
+
+194
+00:13:54,019 --> 00:13:55,299
+Wonderful.
+
+195
+00:13:55,299 --> 00:13:56,139
+Awesome.
+
+196
+00:13:56,139 --> 00:13:56,980
+Thank you.
+
+197
+00:13:56,980 --> 00:13:59,220
+So the next slide, it's a double click
+
+198
+00:13:59,220 --> 00:14:01,659
+on the metrics of the partner value score
+
+199
+00:14:01,659 --> 00:14:03,299
+with the thresholds.
+
+200
+00:14:03,299 --> 00:14:05,740
+So I'll start, you can see that to the left,
+
+201
+00:14:05,740 --> 00:14:07,779
+we have the three big metrics
+
+202
+00:14:07,779 --> 00:14:10,220
+that Brandon covered at a high level.
+
+203
+00:14:10,220 --> 00:14:11,980
+So now we're gonna deep dive into the metrics
+
+204
+00:14:11,980 --> 00:14:12,820
+and the thresholds.
+
+205
+00:14:12,820 --> 00:14:14,460
+So it's starting with the customer impact,
+
+206
+00:14:14,460 --> 00:14:16,220
+which is the first pillar.
+
+207
+00:14:16,220 --> 00:14:18,220
+This is all about consumption,
+
+208
+00:14:18,220 --> 00:14:19,899
+how you're influencing consumption
+
+209
+00:14:19,899 --> 00:14:23,460
+and the presence that you have on our joint customers.
+
+210
+00:14:23,460 --> 00:14:25,100
+So there are key three things
+
+211
+00:14:25,100 --> 00:14:28,659
+that we're providing points for in this section,
+
+212
+00:14:28,659 --> 00:14:30,980
+which are implemented MRR,
+
+213
+00:14:30,980 --> 00:14:34,059
+which as I mentioned is when you do the hands-on keyboard
+
+214
+00:14:35,220 --> 00:14:38,259
+work, regardless if you source or influenced,
+
+215
+00:14:38,259 --> 00:14:41,580
+unique customers, which is the joint customers
+
+216
+00:14:41,580 --> 00:14:43,700
+that you have implemented for throughout the year
+
+217
+00:14:43,700 --> 00:14:45,779
+or source for throughout the year.
+
+218
+00:14:45,779 --> 00:14:49,980
+And then source is when you initiate the use case
+
+219
+00:14:49,980 --> 00:14:52,740
+and the Databricks team was not involved yet.
+
+220
+00:14:52,740 --> 00:14:53,659
+Okay.
+
+221
+00:14:53,659 --> 00:14:54,940
+So it started with the first one,
+
+222
+00:14:54,940 --> 00:14:58,580
+implemented MRR here for every 20K,
+
+223
+00:14:58,580 --> 00:15:00,659
+you accumulate one point.
+
+224
+00:15:00,659 --> 00:15:03,419
+And we have a maximum of 20 points available
+
+225
+00:15:03,419 --> 00:15:05,580
+for this subcategory.
+
+226
+00:15:05,580 --> 00:15:06,700
+Okay.
+
+227
+00:15:06,700 --> 00:15:10,899
+So it's very important to say, just one step back,
+
+228
+00:15:10,899 --> 00:15:13,940
+one of the changes we did this beginning of the year
+
+229
+00:15:13,940 --> 00:15:17,179
+was that every February 1st,
+
+230
+00:15:17,179 --> 00:15:19,779
+which is when our fiscal year starts,
+
+231
+00:15:19,779 --> 00:15:23,340
+this particular pillar resets to zero.
+
+232
+00:15:23,340 --> 00:15:26,379
+So all of the partners will start with zero
+
+233
+00:15:26,379 --> 00:15:31,379
+partner values score points in the customer impact pillar.
+
+234
+00:15:32,419 --> 00:15:35,500
+And this aligns to how we actually work internally
+
+235
+00:15:35,500 --> 00:15:36,539
+with our sales teams,
+
+236
+00:15:36,539 --> 00:15:40,460
+where we have new goals every year and every half.
+
+237
+00:15:40,460 --> 00:15:42,779
+So what we're doing is that you will start to see
+
+238
+00:15:42,779 --> 00:15:44,620
+how your partner values score points
+
+239
+00:15:44,620 --> 00:15:48,259
+to start to increase gradually as your use cases
+
+240
+00:15:48,259 --> 00:15:50,299
+start to go live,
+
+241
+00:15:50,299 --> 00:15:55,059
+meaning your handsome key words face completes finishes
+
+242
+00:15:55,059 --> 00:15:58,419
+after February 1st, meaning within our fiscal year.
+
+243
+00:15:58,419 --> 00:16:01,659
+So every year you're going to see this,
+
+244
+00:16:01,659 --> 00:16:03,659
+this pillar resetting to zero
+
+245
+00:16:03,659 --> 00:16:06,860
+and it will start to increase as your use cases go live.
+
+246
+00:16:06,860 --> 00:16:08,980
+So you might have noticed that,
+
+247
+00:16:08,980 --> 00:16:10,779
+you might have seen a difference
+
+248
+00:16:10,779 --> 00:16:14,980
+between the DVUs that you had before February 1st
+
+249
+00:16:14,980 --> 00:16:17,059
+and you were visible to you
+
+250
+00:16:17,059 --> 00:16:19,139
+from the ones that are visible today
+
+251
+00:16:19,139 --> 00:16:21,100
+and that's the reason why.
+
+252
+00:16:21,100 --> 00:16:22,740
+Now we give you the full view
+
+253
+00:16:22,740 --> 00:16:24,179
+of the partner values score points
+
+254
+00:16:24,179 --> 00:16:27,100
+that you accumulate after February 1st.
+
+255
+00:16:27,100 --> 00:16:29,580
+So perfect, with the next one, you need customers.
+
+256
+00:16:29,580 --> 00:16:34,220
+This means customers for whom you have implemented
+
+257
+00:16:34,220 --> 00:16:38,139
+solutions after February 1st that already went live as well.
+
+258
+00:16:38,139 --> 00:16:41,139
+So we will count that as one unique customer
+
+259
+00:16:41,139 --> 00:16:43,899
+and of course the associated MRR to it,
+
+260
+00:16:43,899 --> 00:16:46,059
+it's going to be influencing the other two,
+
+261
+00:16:47,019 --> 00:16:48,259
+the other two buckets.
+
+262
+00:16:48,259 --> 00:16:51,179
+Here for every three unique customers,
+
+263
+00:16:51,179 --> 00:16:52,980
+you accumulate one point
+
+264
+00:16:52,980 --> 00:16:57,980
+and we have a maximum of 10 points for this subcategory.
+
+265
+00:16:58,179 --> 00:17:00,820
+The next subcategory is sourced MRR.
+
+266
+00:17:00,820 --> 00:17:03,740
+We already covered the concept of it,
+
+267
+00:17:03,740 --> 00:17:07,259
+but as a quick recap is when you initiate the use case
+
+268
+00:17:07,259 --> 00:17:10,500
+and the account team was not involved in the conversations,
+
+269
+00:17:10,500 --> 00:17:13,140
+one was not aware of the opportunity
+
+270
+00:17:13,140 --> 00:17:16,980
+and you pretty much bring data bricks into the use case.
+
+271
+00:17:16,980 --> 00:17:21,059
+So here for every 5K, you accumulate one point.
+
+272
+00:17:22,220 --> 00:17:24,660
+Okay, we have a maximum of 15 points available
+
+273
+00:17:24,660 --> 00:17:27,099
+for this subcategory.
+
+274
+00:17:27,099 --> 00:17:30,019
+All of this you can see from your analytics dashboard
+
+275
+00:17:30,019 --> 00:17:32,099
+when I will go there in a moment.
+
+276
+00:17:32,099 --> 00:17:35,099
+You can actually see what you're being taught
+
+277
+00:17:35,099 --> 00:17:38,700
+as implemented, sourced, influenced and so on.
+
+278
+00:17:38,700 --> 00:17:40,220
+So we give you visibility,
+
+279
+00:17:40,220 --> 00:17:43,059
+so you have a good management and control
+
+280
+00:17:43,059 --> 00:17:44,819
+of your partner value score points.
+
+281
+00:17:44,819 --> 00:17:47,539
+Okay, so the next section,
+
+282
+00:17:47,539 --> 00:17:49,779
+you let me know Jose if at some point I need to stop.
+
+283
+00:17:49,779 --> 00:17:50,819
+Happy to do that.
+
+284
+00:17:51,700 --> 00:17:54,539
+Just a clarification and good catch.
+
+285
+00:17:54,539 --> 00:17:57,579
+There's a typo under the GTM in brackets.
+
+286
+00:17:57,579 --> 00:18:00,099
+It should be 10 points instead of 45,
+
+287
+00:18:00,099 --> 00:18:03,619
+but yes, so just to reiterate customer impact 45,
+
+288
+00:18:03,619 --> 00:18:07,539
+readiness and enablement 45 and then GTM 10 points.
+
+289
+00:18:07,539 --> 00:18:08,380
+Yes, good catch.
+
+290
+00:18:08,380 --> 00:18:09,619
+Good catch, thank you.
+
+291
+00:18:09,619 --> 00:18:11,299
+Very important clarification.
+
+292
+00:18:11,299 --> 00:18:13,700
+We need to make sure we update that before uploading.
+
+293
+00:18:13,700 --> 00:18:15,660
+Okay, awesome, perfect.
+
+294
+00:18:15,660 --> 00:18:17,099
+So readiness and enablement,
+
+295
+00:18:17,099 --> 00:18:19,140
+this is also 45 points at some maximum.
+
+296
+00:18:19,140 --> 00:18:21,339
+We have two subcategories.
+
+297
+00:18:21,339 --> 00:18:25,579
+One is the technical certified unique individuals.
+
+298
+00:18:25,579 --> 00:18:28,460
+To clarify there, here we're tracking
+
+299
+00:18:28,460 --> 00:18:31,299
+amount of unique certified individuals.
+
+300
+00:18:31,299 --> 00:18:33,779
+So think about those that had obtained
+
+301
+00:18:33,779 --> 00:18:36,220
+their first certification at a minimum,
+
+302
+00:18:36,220 --> 00:18:38,819
+we will count them as one individual.
+
+303
+00:18:38,819 --> 00:18:41,299
+If we have an individual who obtains
+
+304
+00:18:41,299 --> 00:18:44,059
+more than one certification,
+
+305
+00:18:44,059 --> 00:18:47,180
+that individual will continue to count as one individual
+
+306
+00:18:47,180 --> 00:18:49,700
+because we're counting amount of individuals,
+
+307
+00:18:49,700 --> 00:18:52,980
+not necessarily amount of certifications.
+
+308
+00:18:52,980 --> 00:18:55,579
+So that differentiation is important here.
+
+309
+00:18:55,579 --> 00:18:58,779
+And for every two certified individuals,
+
+310
+00:18:58,779 --> 00:19:00,660
+you accumulate one point
+
+311
+00:19:00,660 --> 00:19:03,180
+and we have a maximum of 30 points available
+
+312
+00:19:03,180 --> 00:19:07,220
+in this subcategory out of the 45, okay?
+
+313
+00:19:07,220 --> 00:19:10,059
+So the next one is active badges.
+
+314
+00:19:10,059 --> 00:19:12,779
+These are the badges that you can obtain
+
+315
+00:19:12,779 --> 00:19:15,859
+in Partner Academy in a click through experience,
+
+316
+00:19:15,859 --> 00:19:17,019
+totally for free.
+
+317
+00:19:17,019 --> 00:19:21,019
+They span from 14 minutes to 1.5 hours approximately.
+
+318
+00:19:21,019 --> 00:19:24,180
+We have an offer for the various roles,
+
+319
+00:19:24,180 --> 00:19:28,660
+sales, technical leadership, pre-sales, delivery.
+
+320
+00:19:28,660 --> 00:19:31,500
+We have over 35 plus, I would say,
+
+321
+00:19:31,500 --> 00:19:34,500
+from 35 to 40 badges that will qualify.
+
+322
+00:19:34,500 --> 00:19:38,059
+Any badge in the Partner Academy will qualify for this.
+
+323
+00:19:38,059 --> 00:19:41,180
+Every four badges gives you one point
+
+324
+00:19:41,180 --> 00:19:43,980
+and you have a maximum of 15 points to accumulate
+
+325
+00:19:43,980 --> 00:19:46,740
+in this subcategory out of the 45.
+
+326
+00:19:47,700 --> 00:19:51,700
+One key thing, frequently asked questions
+
+327
+00:19:51,700 --> 00:19:55,539
+is that the difference between a certification and a badge.
+
+328
+00:19:55,539 --> 00:19:58,500
+So I already explained what a badge is, right?
+
+329
+00:19:58,500 --> 00:20:00,339
+Just going back to the certification.
+
+330
+00:20:00,000 --> 00:20:08,559
+for a moment. The certification is are the industry recognized certifications where you do have a
+
+331
+00:20:08,559 --> 00:20:15,759
+proctored exam. It's highly technical. We have two types associated professional. That's the
+
+332
+00:20:15,759 --> 00:20:23,440
+certification and professional and associate will be the same for us in the partner program.
+
+333
+00:20:23,440 --> 00:20:29,279
+So if someone, if you have two individuals obtaining associate level, they will accumulate
+
+334
+00:20:30,079 --> 00:20:34,319
+one point. If you have two individuals obtaining professional level, you will accumulate one
+
+335
+00:20:34,319 --> 00:20:43,359
+point. Okay. The next section is the go to market section, correct, 10 points, not 45 as it says on
+
+336
+00:20:43,359 --> 00:20:52,000
+the screen. Here we have two ways to accumulate. Right now we're focusing on one as we prep internally
+
+337
+00:20:52,000 --> 00:20:57,119
+to recognize the customer satisfaction survey. We're establishing that and once ready,
+
+338
+00:20:58,079 --> 00:21:04,240
+it's going to be included in a more active way across and throughout our programs. For now,
+
+339
+00:21:04,240 --> 00:21:10,799
+the recommendation is that you submit two success stories. Each success story will give you five
+
+340
+00:21:10,799 --> 00:21:17,440
+points. So for two success stories, you will be maxing out the 10 points available in this
+
+341
+00:21:17,440 --> 00:21:23,759
+in this pillar. Frequently asked questions here. They do not need to be an implementation from
+
+342
+00:21:23,759 --> 00:21:29,839
+this year. It can be a previous implementation, but you need to submit it this year. Okay. Meaning
+
+343
+00:21:29,839 --> 00:21:35,680
+after February 1st, so you can accrue the 10 points meaning if you submitted customer success
+
+344
+00:21:35,680 --> 00:21:42,079
+stories before February 1st, those won't be counting or carrying on to this year. We will
+
+345
+00:21:42,079 --> 00:21:51,039
+continue to ask fresh customer success stories each year, which means that this this pillar also
+
+346
+00:21:51,119 --> 00:21:58,079
+resets to zero. So the only pillar that does not reset to zero is not subject to that rule,
+
+347
+00:21:58,079 --> 00:22:04,400
+is the capacity and capability, the one for certifications and badges. Here, this is tied
+
+348
+00:22:04,400 --> 00:22:12,559
+to the validity of your certifications and the badges. They have a two year validity
+
+349
+00:22:13,440 --> 00:22:20,160
+timeframe. So as long as you keep your certified individuals valid and the badges are still active,
+
+350
+00:22:20,160 --> 00:22:28,480
+they will still count. Okay, I'll pause there before moving on to the demo of the analytic
+
+351
+00:22:28,480 --> 00:22:36,960
+dashboard. Okay. If we don't have questions, I think we can move on.
+
+352
+00:22:40,960 --> 00:22:45,039
+Brandon is typing furiously. I think that he has answered most of the questions.
+
+353
+00:22:45,839 --> 00:22:53,599
+Okay. So Ali has a question regarding customer success stories. Do the customer stories have
+
+354
+00:22:53,599 --> 00:23:04,000
+to be public references? No, today they do not. But I would say if you do give us a public story,
+
+355
+00:23:04,000 --> 00:23:09,359
+we'll be able to do that and share that more internally, which will benefit you, right?
+
+356
+00:23:09,359 --> 00:23:14,079
+Obviously, if it's anonymous, you'll still get the credit for it, but it limits what we can do as far
+
+357
+00:23:14,079 --> 00:23:21,519
+as promoting you on that story. Yeah. Thank you for that. So that's in terms of whether you have
+
+358
+00:23:21,519 --> 00:23:29,119
+the permission of disclosing the name of the account or not, right? So 100% aligned with what
+
+359
+00:23:29,119 --> 00:23:35,920
+Brandon said. On the other hand, we do need to require to be publicly published anywhere, right,
+
+360
+00:23:35,920 --> 00:23:44,880
+in your website or blog, or even if it's kind of an anonymous success story, but we do require
+
+361
+00:23:44,880 --> 00:23:52,400
+it to be publicly published. So we will ask for a link on the form. The other thing is that when
+
+362
+00:23:52,400 --> 00:23:57,200
+you're submitting, you might be asked for the name of the customer. This does not mean that we're
+
+363
+00:23:57,200 --> 00:24:03,599
+going to be disclosing or doing any sort of marketing effort around it. So just FYI, when
+
+364
+00:24:03,599 --> 00:24:09,279
+you're completing the form, it's totally under NDA if it's an anonymous customer success story.
+
+365
+00:24:09,839 --> 00:24:16,000
+That's another common question we get. Okay. Yeah. So just for clarification in terms of
+
+366
+00:24:17,440 --> 00:24:24,000
+the weightage for each of these success stories, so it's up to five points each if the logo is
+
+367
+00:24:24,000 --> 00:24:31,839
+public up to two points if it's anonymized. So you can max out at 10 points with two public
+
+368
+00:24:32,799 --> 00:24:40,559
+logos or with five public logos, right? So that's how you can combine them. Or you can do a combination
+
+369
+00:24:40,559 --> 00:24:46,720
+of CSAT, a customer satisfaction survey, plus a success story, for example. That's another way of
+
+370
+00:24:47,759 --> 00:24:53,119
+getting those 10 points in the GTM. And then there's one question around,
+
+371
+00:24:55,039 --> 00:24:59,359
+are there examples of how to word the success stories and where do they live?
+
+372
+00:25:02,799 --> 00:25:07,839
+So the answer to this is yes, there are great examples and they're available on our dot com. So
+
+373
+00:25:07,839 --> 00:25:13,920
+if you go to databricks.com, you will find lots of success stories that are publicly available to
+
+374
+00:25:13,920 --> 00:25:21,759
+anyone. That gives you an idea of the language that we use. Those are reviewed by our branding team,
+
+375
+00:25:21,759 --> 00:25:28,720
+by our marketing teams as well. And then you can also follow some of our other partners in
+
+376
+00:25:28,720 --> 00:25:36,079
+the ecosystem. They constantly publish stories on their LinkedIn pages. Those have been reviewed
+
+377
+00:25:36,079 --> 00:25:42,880
+many times. So if you see that they're tagging us or tagging different teams across data bricks,
+
+378
+00:25:42,880 --> 00:25:48,000
+you will find some good examples there. My recommendation though is to make sure that you
+
+379
+00:25:48,000 --> 00:25:53,440
+also download the marketing guides that are available on the partner portal and that you also
+
+380
+00:25:53,440 --> 00:25:59,440
+align the language to the industry outcome maps so that it's very tangible. What was the impact
+
+381
+00:25:59,440 --> 00:26:05,519
+of your intervention or your implementation in terms of customer outcomes? So the industry
+
+382
+00:26:05,519 --> 00:26:11,680
+outcome maps are your best friends also in terms of how to frame the story in a compelling way.
+
+383
+00:26:13,759 --> 00:26:20,720
+All right. Thank you for that Jose. Awesome. Let me know. Do we have more questions?
+
+384
+00:26:20,720 --> 00:26:24,880
+Do we jump to the analytics dashboard and chair my screen? I think just real quick,
+
+385
+00:26:24,880 --> 00:26:28,000
+I'll jump on a couple of these. So I think the first one was, and it's come up,
+
+386
+00:26:28,559 --> 00:26:33,279
+that we had dashboard data that was stale. So you've probably seen that note in there.
+
+387
+00:26:34,480 --> 00:26:39,839
+That is being addressed this week. I think we actually updated that earlier this week,
+
+388
+00:26:40,720 --> 00:26:44,480
+but we're doing some just final tests on it so that we can get that back in sync.
+
+389
+00:26:44,480 --> 00:26:49,759
+But if you were looking at that and you saw that note previously, we were about a month delayed
+
+390
+00:26:49,839 --> 00:26:55,759
+in doing a data sync on some of the data points in there. So again, coming in on Monday,
+
+391
+00:26:55,759 --> 00:27:03,920
+check again. That should be cleared. Yeah. Okay. Let's carry on. I'm just going to go through a
+
+392
+00:27:03,920 --> 00:27:08,559
+couple of these real quick. Go ahead. This is the other one we're here for. So yeah. So today,
+
+393
+00:27:08,559 --> 00:27:16,079
+we do not have an export data capability from the PBS dashboard. We've taken that in as feedback.
+
+394
+00:27:16,079 --> 00:27:19,519
+We're just working with our compliance team on that, but there is no functionality. So if you're
+
+395
+00:27:19,519 --> 00:27:25,680
+looking for it in there, it's not available. I think the other one we had is what is the lifespan
+
+396
+00:27:25,680 --> 00:27:31,279
+of these points? So this works on our fiscal year. So you'll have all these points for a year
+
+397
+00:27:31,279 --> 00:27:35,440
+until it carries, until you, sorry, it cuts over to the next year where you essentially start again.
+
+398
+00:27:36,079 --> 00:27:41,119
+So again, everything you're earning in this program, we look and measure this at an annual level.
+
+399
+00:27:41,440 --> 00:27:51,440
+Yeah. The capacity and capability points, which are your unique certified individuals and badges,
+
+400
+00:27:51,440 --> 00:27:57,680
+will carry on as long as they're still active. So those points will probably be there at the
+
+401
+00:27:57,680 --> 00:28:02,880
+beginning of the year. If they're still active, even, you know, the customer impact pillar will
+
+402
+00:28:02,880 --> 00:28:09,200
+reset and the go to market pillar will reset to zero. But the readiness and enablement points,
+
+403
+00:28:09,200 --> 00:28:15,440
+as long as everyone is active, that you will see them carry over in your dashboard.
+
+404
+00:28:18,559 --> 00:28:26,079
+And we do that February 1st. Awesome. Great. Okay. All right. Any other questions? Okay.
+
+405
+00:28:26,640 --> 00:28:34,240
+Good. So I'll go to sharing for the analytics dashboard deep dive. So hopefully you have yours
+
+406
+00:28:34,240 --> 00:28:43,680
+up so you can follow along. I think I saw some of the new partners on the last NPO. So hopefully
+
+407
+00:28:43,680 --> 00:28:49,200
+you had the time to get to the 10 points through badges and are able to see the analytics dashboard.
+
+408
+00:28:50,960 --> 00:28:57,440
+Okay, let me go to sharing. I think I sent a request to share. Who say? Yeah, I allowed it,
+
+409
+00:28:57,519 --> 00:29:06,480
+but seems like there was an issue. Can you try again? Sure. There you go. Awesome. Thank you.
+
+410
+00:29:08,880 --> 00:29:16,480
+Wow. I'll hide this. Awesome. So this is the landing page of the partner portal. The way you
+
+411
+00:29:16,480 --> 00:29:23,279
+navigate to the analytics dashboard, it's on there more. If you've been recently navigating,
+
+412
+00:29:23,279 --> 00:29:29,599
+you probably do a lot on the sales deal dashboard where you can see the lead registrations that
+
+413
+00:29:30,160 --> 00:29:35,200
+you and your team have submitted. If you are the admin, you can actually see what everyone has
+
+414
+00:29:35,200 --> 00:29:40,720
+submitted. If you're not the admin, you only see your submissions of lit registrations.
+
+415
+00:29:40,720 --> 00:29:46,880
+As I mentioned, lit registration opens the door to co-selling with us. And then as the
+
+416
+00:29:46,880 --> 00:29:55,200
+opportunity is validated by DAE as an opportunity that will start generating consumption, it will
+
+417
+00:29:55,200 --> 00:30:00,000
+be converted into a use case by the accounting, which is what all
+
+418
+00:30:00,000 --> 00:30:02,859
+ultimately gives you the credit.
+
+419
+00:30:02,859 --> 00:30:06,160
+So that's why you want to always be on top of
+
+420
+00:30:06,160 --> 00:30:07,920
+the analytics dashboard over here
+
+421
+00:30:08,920 --> 00:30:11,480
+and work with your use cases.
+
+422
+00:30:11,480 --> 00:30:15,880
+So the use case dashboard leaves,
+
+423
+00:30:15,880 --> 00:30:18,160
+second, personally, send it, minimize,
+
+424
+00:30:18,160 --> 00:30:23,160
+leaves in this section of the analytics dashboard
+
+425
+00:30:23,200 --> 00:30:24,920
+that is called use case.
+
+426
+00:30:24,920 --> 00:30:28,279
+We're going to get there in a moment, right?
+
+427
+00:30:28,279 --> 00:30:31,240
+Because as I said, this is what really drives
+
+428
+00:30:31,240 --> 00:30:34,279
+recognition of the customer impact pillar.
+
+429
+00:30:34,279 --> 00:30:37,640
+You need customers, MRR, sourcing, implementation.
+
+430
+00:30:37,640 --> 00:30:40,359
+Before that, I would like to give you a quick view
+
+431
+00:30:40,359 --> 00:30:44,000
+into your high level partner value score,
+
+432
+00:30:44,000 --> 00:30:46,680
+the breakdown on the metrics so you can see where you are.
+
+433
+00:30:46,680 --> 00:30:48,640
+So a little bit on how to read this.
+
+434
+00:30:48,640 --> 00:30:50,759
+So in this graphic, you're going to have
+
+435
+00:30:50,759 --> 00:30:53,359
+the current partner value score your company has
+
+436
+00:30:53,359 --> 00:30:54,319
+as a high level.
+
+437
+00:30:54,319 --> 00:30:59,319
+You know that our range goes from one to 100.
+
+438
+00:31:01,920 --> 00:31:03,839
+In order to progress based on the geo
+
+439
+00:31:03,839 --> 00:31:06,119
+with the table that Brandon showed before,
+
+440
+00:31:06,119 --> 00:31:08,640
+you know what your target is for to progression
+
+441
+00:31:08,640 --> 00:31:10,519
+or to maintain your current tier.
+
+442
+00:31:10,519 --> 00:31:14,400
+Okay, here where it says assigned tier,
+
+443
+00:31:14,400 --> 00:31:19,240
+you can see the current tier you have for this year.
+
+444
+00:31:21,079 --> 00:31:23,680
+It means that you're going to hold that tier
+
+445
+00:31:23,680 --> 00:31:26,960
+because we do D motions all the way
+
+446
+00:31:26,960 --> 00:31:29,839
+until the beginning of next year.
+
+447
+00:31:29,839 --> 00:31:32,599
+So if you get promoted in August,
+
+448
+00:31:32,599 --> 00:31:34,000
+you will see this changing.
+
+449
+00:31:34,000 --> 00:31:35,680
+If you don't get promoted in August,
+
+450
+00:31:35,680 --> 00:31:37,640
+you will maintain this current tier
+
+451
+00:31:37,640 --> 00:31:41,640
+that you see in this field all the way until January 31st
+
+452
+00:31:42,920 --> 00:31:45,960
+when we do all the calculations again
+
+453
+00:31:45,960 --> 00:31:47,960
+for promotions and D motions.
+
+454
+00:31:47,960 --> 00:31:50,640
+But that's, are you sharing your screen?
+
+455
+00:31:50,640 --> 00:31:51,559
+I am.
+
+456
+00:31:51,559 --> 00:31:55,119
+Okay, so it's not been up, I think for the dashboard.
+
+457
+00:31:55,119 --> 00:31:56,759
+Here.
+
+458
+00:31:56,759 --> 00:31:57,680
+There you go, perfect.
+
+459
+00:31:57,680 --> 00:31:58,599
+Yeah, we can see that now.
+
+460
+00:31:58,599 --> 00:31:59,440
+Thank you.
+
+461
+00:31:59,440 --> 00:32:00,960
+Okay, thank you for letting me know.
+
+462
+00:32:00,960 --> 00:32:03,759
+Okay, so again, in this part,
+
+463
+00:32:03,759 --> 00:32:06,400
+this graph is where you see your current
+
+464
+00:32:06,400 --> 00:32:10,000
+high level partner values score points of the company,
+
+465
+00:32:10,000 --> 00:32:11,640
+you know, from one to 100,
+
+466
+00:32:11,640 --> 00:32:14,079
+this is the high level points that will be used
+
+467
+00:32:14,079 --> 00:32:15,759
+for progression, right?
+
+468
+00:32:15,759 --> 00:32:17,480
+Or the motion, okay?
+
+469
+00:32:17,480 --> 00:32:20,799
+So in this section here where it says assigned tier,
+
+470
+00:32:20,799 --> 00:32:24,720
+you see the current tier that you have for the year
+
+471
+00:32:24,720 --> 00:32:27,240
+unless you get promoted.
+
+472
+00:32:27,240 --> 00:32:30,960
+D motions are going to happen in January 31st, right?
+
+473
+00:32:30,960 --> 00:32:35,240
+So you have this tier all the way until January 31st
+
+474
+00:32:35,240 --> 00:32:38,240
+unless you get promoted, okay?
+
+475
+00:32:38,240 --> 00:32:42,319
+Now, here we give you an example of, okay,
+
+476
+00:32:42,319 --> 00:32:45,480
+looking at the current numbers where you are,
+
+477
+00:32:45,480 --> 00:32:48,839
+what is the tier that you most likely will have
+
+478
+00:32:48,839 --> 00:32:50,599
+in the next round?
+
+479
+00:32:50,599 --> 00:32:52,519
+If you say assist, right?
+
+480
+00:32:52,519 --> 00:32:54,599
+So here's giving you a sneak peek on, okay,
+
+481
+00:32:54,599 --> 00:32:56,079
+this is your current one,
+
+482
+00:32:56,079 --> 00:33:01,079
+but this is the prediction of the next tier
+
+483
+00:33:02,400 --> 00:33:04,640
+looking at the numbers that you already have.
+
+484
+00:33:04,640 --> 00:33:07,200
+So for example, you might be a silver partner
+
+485
+00:33:07,200 --> 00:33:08,359
+throughout the entire year
+
+486
+00:33:08,359 --> 00:33:10,359
+because you obtained that in the past.
+
+487
+00:33:10,359 --> 00:33:12,319
+And maybe you have been doing a lot of work
+
+488
+00:33:12,319 --> 00:33:14,720
+and you might see gold here
+
+489
+00:33:14,720 --> 00:33:17,599
+and pretty much predicting, okay, maybe in the next round,
+
+490
+00:33:17,599 --> 00:33:18,640
+you're kind of getting there
+
+491
+00:33:18,640 --> 00:33:20,279
+in terms of partner values score points.
+
+492
+00:33:20,279 --> 00:33:22,319
+It gives you a little bit of visibility
+
+493
+00:33:22,319 --> 00:33:24,400
+on your partner values score points
+
+494
+00:33:24,400 --> 00:33:28,440
+and how you're tracking against the various tiers up and down,
+
+495
+00:33:28,440 --> 00:33:29,519
+okay?
+
+496
+00:33:29,519 --> 00:33:33,559
+So here we give you two ways of looking at the breakdown
+
+497
+00:33:33,559 --> 00:33:34,960
+of the partner value score
+
+498
+00:33:34,960 --> 00:33:37,200
+of this overall partner value score
+
+499
+00:33:37,200 --> 00:33:39,480
+because we know we have three pillars
+
+500
+00:33:39,480 --> 00:33:43,000
+that add up to the overall partner values score points, right?
+
+501
+00:33:43,000 --> 00:33:44,839
+So we give you two ways.
+
+502
+00:33:44,839 --> 00:33:48,240
+One is the bar view and the other one is the table view.
+
+503
+00:33:48,240 --> 00:33:50,480
+So the bar view, you have in orange
+
+504
+00:33:50,480 --> 00:33:52,720
+the amount of maximum points
+
+505
+00:33:52,720 --> 00:33:57,400
+that you can accumulate per category, right?
+
+506
+00:33:57,400 --> 00:34:00,480
+And then you can see in the blueish one,
+
+507
+00:34:00,480 --> 00:34:02,640
+where you are today and what you have obtained
+
+508
+00:34:02,640 --> 00:34:06,980
+out of the total available points, okay?
+
+509
+00:34:06,980 --> 00:34:09,039
+This is your bar view, very simple.
+
+510
+00:34:09,039 --> 00:34:10,280
+And here is a table view
+
+511
+00:34:10,280 --> 00:34:13,599
+that might be a little bit more like on point
+
+512
+00:34:13,599 --> 00:34:17,559
+because you will actually see out of each subcategory
+
+513
+00:34:17,559 --> 00:34:21,320
+the amount that you have obtained,
+
+514
+00:34:21,320 --> 00:34:24,880
+the translation of that to points
+
+515
+00:34:24,880 --> 00:34:27,880
+out of the maximum points, okay?
+
+516
+00:34:27,880 --> 00:34:31,280
+So maybe you have, and I will, you know,
+
+517
+00:34:31,280 --> 00:34:33,599
+please carry on with me and use your imagination.
+
+518
+00:34:33,599 --> 00:34:38,599
+Maybe you have implemented 20K MRR,
+
+519
+00:34:39,480 --> 00:34:42,760
+which will give you one point based on the table
+
+520
+00:34:42,760 --> 00:34:46,719
+that we saw before out of the 20 that are available,
+
+521
+00:34:46,719 --> 00:34:47,559
+for example.
+
+522
+00:34:47,559 --> 00:34:49,659
+So here you will be able to see the amount
+
+523
+00:34:49,659 --> 00:34:51,519
+of implemented MRR you have,
+
+524
+00:34:51,519 --> 00:34:55,039
+uni customers you have, source MRR you have,
+
+525
+00:34:55,039 --> 00:34:58,699
+and how many points that translates to, okay?
+
+526
+00:34:58,699 --> 00:35:02,480
+Same for the capacity and capability one.
+
+527
+00:35:02,480 --> 00:35:04,760
+In the table view, you will see the amount
+
+528
+00:35:04,760 --> 00:35:07,039
+of certified individuals,
+
+529
+00:35:07,039 --> 00:35:09,280
+the amount of points that translates to
+
+530
+00:35:09,280 --> 00:35:11,480
+and will give you a visibility of your goal,
+
+531
+00:35:11,480 --> 00:35:13,119
+like the maximum amount of points
+
+532
+00:35:13,119 --> 00:35:17,280
+that you have available to max out that subcategory.
+
+533
+00:35:17,280 --> 00:35:21,380
+Same for active badges and the success of stories same.
+
+534
+00:35:21,380 --> 00:35:23,659
+Actually, in this example here, you can see, okay,
+
+535
+00:35:23,659 --> 00:35:26,360
+you have two success stories,
+
+536
+00:35:26,360 --> 00:35:31,119
+which equates to 10 partner values core points out of 10.
+
+537
+00:35:31,119 --> 00:35:35,699
+So this is kind of the view on the high level
+
+538
+00:35:35,699 --> 00:35:39,199
+for your full analytic dashboard partner values core breakdown,
+
+539
+00:35:39,199 --> 00:35:40,079
+okay?
+
+540
+00:35:40,079 --> 00:35:43,039
+So besides that, we have various segments
+
+541
+00:35:43,039 --> 00:35:45,380
+within the analytic dashboard,
+
+542
+00:35:45,380 --> 00:35:48,400
+because we're focusing today on proper recognition
+
+543
+00:35:48,400 --> 00:35:50,639
+for partner program.
+
+544
+00:35:50,639 --> 00:35:55,639
+It's all about use cases and also the enablement part, okay?
+
+545
+00:35:57,000 --> 00:36:00,000
+So I want to dive into the enablement
+
+546
+00:36:01,239 --> 00:36:03,579
+analytic dashboard component today.
+
+547
+00:36:03,579 --> 00:36:04,920
+I will show you a little bit.
+
+548
+00:36:04,920 --> 00:36:06,599
+So for example, in the enablement,
+
+549
+00:36:06,599 --> 00:36:08,800
+if you click on see more,
+
+550
+00:36:08,800 --> 00:36:10,960
+then I'll have a lot of data on this test account,
+
+551
+00:36:10,960 --> 00:36:15,960
+but you do have down here a way to search
+
+552
+00:36:15,960 --> 00:36:17,400
+by training category.
+
+553
+00:36:17,400 --> 00:36:19,559
+So we should say technical certified,
+
+554
+00:36:19,559 --> 00:36:20,920
+you can click there, select,
+
+555
+00:36:20,920 --> 00:36:22,239
+and we'll give you a list of the ones
+
+556
+00:36:22,239 --> 00:36:24,760
+that are technically certified for you.
+
+557
+00:36:24,760 --> 00:36:28,280
+If they have opted in for us to show their PII,
+
+558
+00:36:28,280 --> 00:36:29,119
+you will see them.
+
+559
+00:36:29,119 --> 00:36:32,039
+If not, you will probably see a dash or something.
+
+560
+00:36:32,039 --> 00:36:33,480
+So you can kind of see, you know,
+
+561
+00:36:33,480 --> 00:36:35,920
+who is certified already in your company.
+
+562
+00:36:35,920 --> 00:36:37,840
+You can start working with that.
+
+563
+00:36:37,840 --> 00:36:39,519
+Another option that you will see here,
+
+564
+00:36:39,519 --> 00:36:42,239
+that we don't see it because it's a test account,
+
+565
+00:36:42,239 --> 00:36:43,400
+are the active badges.
+
+566
+00:36:43,400 --> 00:36:44,840
+You can also filter by that
+
+567
+00:36:44,840 --> 00:36:47,519
+and you can see who has obtained badges already.
+
+568
+00:36:47,519 --> 00:36:49,000
+Those are kind of the two main things
+
+569
+00:36:49,000 --> 00:36:51,480
+that are the enablement side can help you.
+
+570
+00:36:51,480 --> 00:36:54,119
+Now, we know that in order to progress,
+
+571
+00:36:54,119 --> 00:36:56,000
+you need delivery experts.
+
+572
+00:36:56,000 --> 00:36:58,320
+We're working on having the delivery experts visible
+
+573
+00:36:58,320 --> 00:37:00,719
+on the dashboard, they're not visible today.
+
+574
+00:37:00,719 --> 00:37:03,719
+So for anything that is related to training,
+
+575
+00:37:03,719 --> 00:37:07,320
+maybe your internal records are not matching up
+
+576
+00:37:07,360 --> 00:37:12,360
+your capacity and capability numbers here.
+
+577
+00:37:12,920 --> 00:37:15,960
+We do have a ticket that you can open.
+
+578
+00:37:15,960 --> 00:37:19,000
+They can actually do some health check for you
+
+579
+00:37:19,000 --> 00:37:21,199
+and start having a conversation with you
+
+580
+00:37:21,199 --> 00:37:23,880
+about those discrepancies and helping you,
+
+581
+00:37:23,880 --> 00:37:26,159
+giving you visibility into the delivery experts
+
+582
+00:37:26,159 --> 00:37:28,760
+you already have, giving you visibility
+
+583
+00:37:28,760 --> 00:37:31,880
+and an export of the technical certified individuals
+
+584
+00:37:31,880 --> 00:37:33,800
+for those who have opted in.
+
+585
+00:37:33,800 --> 00:37:35,519
+And they can start working with you
+
+586
+00:37:35,519 --> 00:37:38,079
+on any discrepancy you might see.
+
+587
+00:37:38,079 --> 00:37:42,039
+The badges tend to be not an issue
+
+588
+00:37:42,039 --> 00:37:47,039
+because they get auto recognized on our partner academy,
+
+589
+00:37:48,400 --> 00:37:50,639
+but sometimes with certified individuals
+
+590
+00:37:50,639 --> 00:37:54,760
+considering that a lot of people take the proctored exam
+
+591
+00:37:54,760 --> 00:37:58,039
+using their own personal email for portability.
+
+592
+00:37:58,039 --> 00:37:59,719
+We do have some scenarios there
+
+593
+00:37:59,719 --> 00:38:02,000
+where we need a collaboration with you,
+
+594
+00:38:02,000 --> 00:38:05,920
+given a visibility on who had obtained certifications
+
+595
+00:38:05,920 --> 00:38:07,480
+that we might not be seeing, right?
+
+596
+00:38:07,480 --> 00:38:10,719
+We need that information in order to recognize it.
+
+597
+00:38:10,719 --> 00:38:12,360
+So maybe, Jose, I don't know if you can help me
+
+598
+00:38:12,360 --> 00:38:16,119
+with the link to open the ticket on the enablement side
+
+599
+00:38:16,119 --> 00:38:20,239
+so that the partners can have a conversation
+
+600
+00:38:20,239 --> 00:38:22,239
+with the enablement team and start making sure
+
+601
+00:38:22,239 --> 00:38:24,480
+that everything that there's-
+
+602
+00:38:24,480 --> 00:38:25,719
+I put it in the chat.
+
+603
+00:38:25,719 --> 00:38:27,599
+Awesome, awesome.
+
+604
+00:38:27,599 --> 00:38:31,719
+So now going on the customer impact pillar
+
+605
+00:38:31,719 --> 00:38:33,960
+recognition best practices, same,
+
+606
+00:38:33,960 --> 00:38:37,000
+I'm in the landing page still, so you can see.
+
+607
+00:38:37,000 --> 00:38:38,639
+Now I'm going to the use case section
+
+608
+00:38:38,639 --> 00:38:40,360
+and I'm going to click on see more.
+
+609
+00:38:41,719 --> 00:38:44,840
+Okay, one piece of recommendation here,
+
+610
+00:38:44,840 --> 00:38:48,280
+it will auto default to customer fiscal year,
+
+611
+00:38:48,280 --> 00:38:50,639
+meaning it's going to show you the use cases
+
+612
+00:38:50,639 --> 00:38:55,639
+that were created by the account team after February 1st.
+
+613
+00:38:56,639 --> 00:38:59,360
+Okay, we know that the sell cycle can span,
+
+614
+00:38:59,360 --> 00:39:02,239
+you know, from a few weeks to a couple of months,
+
+615
+00:39:02,239 --> 00:39:03,960
+sometimes even years.
+
+616
+00:39:03,960 --> 00:39:07,119
+So my recommendation is so that you can see everything
+
+617
+00:39:07,119 --> 00:39:09,360
+regardless of when it was created.
+
+618
+00:39:10,639 --> 00:39:14,079
+You go and select all time and hit on apply.
+
+619
+00:39:14,079 --> 00:39:16,800
+If you don't hit on apply, it will remain in fiscal year.
+
+620
+00:39:16,800 --> 00:39:18,400
+You might be thinking it filtered,
+
+621
+00:39:18,400 --> 00:39:20,000
+but no, you need to hit on apply.
+
+622
+00:39:20,960 --> 00:39:24,480
+And now I'm able to see all of the use cases
+
+623
+00:39:24,480 --> 00:39:27,840
+that had been created regardless of the creation date.
+
+624
+00:39:27,840 --> 00:39:31,079
+Mm-hmm, and now I have a visibility
+
+625
+00:39:31,079 --> 00:39:35,480
+into the stage column, meaning which ones are still not live
+
+626
+00:39:36,480 --> 00:39:38,760
+and which ones are already live.
+
+627
+00:39:38,760 --> 00:39:42,000
+So our stages go from one to six,
+
+628
+00:39:42,000 --> 00:39:46,960
+you can see that you have the use case stage two,
+
+629
+00:39:46,960 --> 00:39:50,280
+for example, for us that is scoping, right?
+
+630
+00:39:50,280 --> 00:39:52,559
+And we have all the way, the sell cycle,
+
+631
+00:39:52,559 --> 00:39:56,400
+all the way to wrapping up your hands on keyboard face,
+
+632
+00:39:56,400 --> 00:39:58,159
+which is the implementation.
+
+633
+00:39:58,159 --> 00:40:00,159
+That's when the A will move it to live.
+
+634
+00:40:00,000 --> 00:40:02,400
+and the recognition will start.
+
+635
+00:40:02,400 --> 00:40:03,320
+Okay?
+
+636
+00:40:03,320 --> 00:40:05,039
+So first, as I mentioned,
+
+637
+00:40:05,039 --> 00:40:07,239
+the lead registration becomes optional.
+
+638
+00:40:07,239 --> 00:40:11,880
+So one thing that as an alliance person
+
+639
+00:40:11,880 --> 00:40:13,400
+or in charge of making sure
+
+640
+00:40:13,400 --> 00:40:16,000
+that the recognition is happening properly,
+
+641
+00:40:16,000 --> 00:40:18,440
+one key thing you want to do is regardless
+
+642
+00:40:18,440 --> 00:40:21,199
+if you see the lead on the deal dashboard
+
+643
+00:40:22,119 --> 00:40:23,900
+that we saw outside of this,
+
+644
+00:40:23,900 --> 00:40:26,159
+the most important thing is that you see everything
+
+645
+00:40:26,159 --> 00:40:29,739
+that you're working on in a line item in this dashboard.
+
+646
+00:40:29,739 --> 00:40:32,300
+You need to see it on the use case dashboard.
+
+647
+00:40:32,300 --> 00:40:35,619
+As long as you see it here listed,
+
+648
+00:40:35,619 --> 00:40:39,139
+it means that you're set up for proper recognition.
+
+649
+00:40:39,139 --> 00:40:41,219
+And it's just a matter of a few key points
+
+650
+00:40:41,219 --> 00:40:43,980
+that I'm going to work you through for best practices.
+
+651
+00:40:43,980 --> 00:40:45,940
+And once the AI moves it to live,
+
+652
+00:40:45,940 --> 00:40:48,219
+you know that the recognition will kick in.
+
+653
+00:40:48,219 --> 00:40:49,059
+Okay?
+
+654
+00:40:49,059 --> 00:40:51,300
+First thing, make sure everything you're working on
+
+655
+00:40:51,300 --> 00:40:52,659
+is listed here.
+
+656
+00:40:52,659 --> 00:40:53,820
+This is what you need to know.
+
+657
+00:40:53,820 --> 00:40:56,539
+If you don't see it here,
+
+658
+00:40:56,539 --> 00:41:00,179
+as I mentioned, the AI helps you create the use case.
+
+659
+00:41:00,179 --> 00:41:02,099
+So it's a conversation with the AI.
+
+660
+00:41:02,099 --> 00:41:04,699
+If you already are talking to the AI,
+
+661
+00:41:04,699 --> 00:41:06,300
+you can simply say,
+
+662
+00:41:06,300 --> 00:41:08,780
+can you create the use case for me?
+
+663
+00:41:08,780 --> 00:41:12,659
+This is what provides us credit on the partner program.
+
+664
+00:41:12,659 --> 00:41:16,380
+And so one, very good conversation to have.
+
+665
+00:41:16,380 --> 00:41:18,820
+They are not compensated by use cases.
+
+666
+00:41:18,820 --> 00:41:22,619
+They use use cases to project sales, right?
+
+667
+00:41:22,619 --> 00:41:26,019
+So again, perfectly good conversation to have.
+
+668
+00:41:26,019 --> 00:41:28,699
+Most of them are aware that use case
+
+669
+00:41:28,699 --> 00:41:30,579
+is how you get recognized,
+
+670
+00:41:30,579 --> 00:41:32,980
+but you might find some that might not know.
+
+671
+00:41:32,980 --> 00:41:36,179
+So again, perfectly conversation to have, right?
+
+672
+00:41:36,179 --> 00:41:39,579
+So let's say that we have the use case here, wonderful.
+
+673
+00:41:39,579 --> 00:41:42,380
+Okay, that's one key thing to be in the look out.
+
+674
+00:41:42,380 --> 00:41:44,380
+Now, as I mentioned,
+
+675
+00:41:44,380 --> 00:41:46,780
+we give you partner values core points
+
+676
+00:41:46,780 --> 00:41:48,619
+for two types of use cases.
+
+677
+00:41:48,619 --> 00:41:49,460
+Okay?
+
+678
+00:41:49,460 --> 00:41:50,300
+The use case is here.
+
+679
+00:41:50,300 --> 00:41:52,059
+Now I want to see,
+
+680
+00:41:52,059 --> 00:41:55,820
+am I properly set up to influence the right buckets?
+
+681
+00:41:55,820 --> 00:41:58,139
+Okay, that is implementation.
+
+682
+00:41:58,139 --> 00:42:00,059
+Everything that you implement should count,
+
+683
+00:42:00,059 --> 00:42:02,579
+regardless if you source it or influence it.
+
+684
+00:42:02,579 --> 00:42:05,860
+And then we give you extra points for sourcing, right?
+
+685
+00:42:05,860 --> 00:42:08,300
+So we give you visibility into that
+
+686
+00:42:08,300 --> 00:42:10,219
+also in this same dashboard.
+
+687
+00:42:10,219 --> 00:42:13,739
+So we have the implementation column.
+
+688
+00:42:13,739 --> 00:42:16,739
+What you want to do is make sure that you're properly tagged
+
+689
+00:42:16,739 --> 00:42:18,659
+as the implementation partner
+
+690
+00:42:18,659 --> 00:42:21,619
+if you're doing the handsome keyboard work, okay?
+
+691
+00:42:21,619 --> 00:42:23,460
+For example, here in line four,
+
+692
+00:42:23,460 --> 00:42:27,099
+I have a non-roll,
+
+693
+00:42:27,099 --> 00:42:31,659
+like if you're not tagged as the implementation partner.
+
+694
+00:42:31,659 --> 00:42:32,500
+In this case,
+
+695
+00:42:32,500 --> 00:42:34,699
+it could be that the customer is doing
+
+696
+00:42:34,699 --> 00:42:36,780
+the self-implementation
+
+697
+00:42:36,780 --> 00:42:41,099
+or professional services to do an implementation
+
+698
+00:42:41,099 --> 00:42:42,940
+or something else.
+
+699
+00:42:42,940 --> 00:42:44,619
+So in this case,
+
+700
+00:42:44,619 --> 00:42:47,659
+it's not going to influence the implementation bucket.
+
+701
+00:42:47,659 --> 00:42:50,500
+So if you're doing the implementation,
+
+702
+00:42:50,500 --> 00:42:53,139
+you want to make sure that you're tagged as the implementation.
+
+703
+00:42:53,139 --> 00:42:55,260
+This is manually done by DAE
+
+704
+00:42:55,260 --> 00:42:57,780
+because they're the ones close to the opportunity
+
+705
+00:42:57,780 --> 00:43:01,539
+and how things are being developed.
+
+706
+00:43:01,539 --> 00:43:03,940
+So again, perfectly good conversation to have.
+
+707
+00:43:03,940 --> 00:43:07,099
+This does not impact the DAE whatsoever.
+
+708
+00:43:07,099 --> 00:43:10,139
+Definitely, especially before going live,
+
+709
+00:43:10,139 --> 00:43:12,940
+you want to make sure you've come into your use case dashboard
+
+710
+00:43:12,940 --> 00:43:15,980
+and check on these columns that you're properly tagged
+
+711
+00:43:15,980 --> 00:43:18,139
+and that you agree with the current tagging
+
+712
+00:43:18,139 --> 00:43:20,500
+for each of the use cases, okay?
+
+713
+00:43:20,500 --> 00:43:21,579
+So that's the implementation.
+
+714
+00:43:21,579 --> 00:43:23,900
+And then the Cosell column tells you
+
+715
+00:43:23,900 --> 00:43:27,019
+if the DAE is tagging you as sourcing it to Databricks
+
+716
+00:43:27,019 --> 00:43:30,780
+or Influencing, meaning helping a segment consumption
+
+717
+00:43:30,780 --> 00:43:33,219
+and you have a role, but you didn't source it, right?
+
+718
+00:43:33,219 --> 00:43:35,980
+So you also want to make sure you agree
+
+719
+00:43:35,980 --> 00:43:37,980
+with the way you're being tagged here.
+
+720
+00:43:37,980 --> 00:43:40,780
+Same thing, this does not affect the DAE's compensation,
+
+721
+00:43:40,780 --> 00:43:43,019
+whether it's your sourcing or influencing,
+
+722
+00:43:43,019 --> 00:43:46,900
+perfectly good conversation to have as well, okay?
+
+723
+00:43:46,900 --> 00:43:49,460
+Now, I know it's not the topic of today's call,
+
+724
+00:43:49,460 --> 00:43:51,260
+but I wanted to take the opportunity,
+
+725
+00:43:51,260 --> 00:43:54,179
+if you're pursuing a specializations,
+
+726
+00:43:54,179 --> 00:43:55,860
+this is how you know that,
+
+727
+00:43:55,860 --> 00:43:58,420
+made you may know that one of the requirements is
+
+728
+00:43:58,420 --> 00:44:01,820
+the annual recurrent revenue consuming
+
+729
+00:44:01,820 --> 00:44:04,099
+of at least three joint customers
+
+730
+00:44:04,099 --> 00:44:07,260
+for the product specializations.
+
+731
+00:44:07,260 --> 00:44:09,500
+Just to point out, this is how we track that, right?
+
+732
+00:44:09,500 --> 00:44:12,420
+So the MRR of each use case will be associated
+
+733
+00:44:12,420 --> 00:44:15,059
+to the products, the DAE tags here.
+
+734
+00:44:15,059 --> 00:44:18,500
+Again, same thing, if a product might be missing,
+
+735
+00:44:18,500 --> 00:44:22,340
+talk to the DAE so that we're recognizing the MRR
+
+736
+00:44:22,340 --> 00:44:27,219
+all on the right buckets 100% all of the time, okay?
+
+737
+00:44:27,219 --> 00:44:28,579
+So that's that.
+
+738
+00:44:30,380 --> 00:44:31,539
+Do we have questions?
+
+739
+00:44:31,539 --> 00:44:34,420
+Because I think those were kind of the key things
+
+740
+00:44:34,420 --> 00:44:37,260
+that I wanted to call out.
+
+741
+00:44:40,659 --> 00:44:44,420
+I think that Brandon has answered most of them,
+
+742
+00:44:44,420 --> 00:44:46,820
+but there's one around use cases.
+
+743
+00:44:46,820 --> 00:44:48,300
+Brandon, do you want to come up mute
+
+744
+00:44:48,300 --> 00:44:51,219
+and just answer Nicholas's question?
+
+745
+00:44:51,219 --> 00:44:54,460
+Yeah, so the question is, how do we define a use case?
+
+746
+00:44:54,460 --> 00:44:57,340
+Is it better to have more use cases with less MRR
+
+747
+00:44:57,340 --> 00:45:00,900
+or less use cases with more MRR?
+
+748
+00:45:00,900 --> 00:45:03,900
+I think this, first off, it's important to know
+
+749
+00:45:03,900 --> 00:45:06,059
+that the way that we've set up use cases,
+
+750
+00:45:06,059 --> 00:45:09,380
+our account executives at Databricks have a lot of autonomy
+
+751
+00:45:09,380 --> 00:45:11,460
+because what you're seeing here is pulled directly
+
+752
+00:45:11,460 --> 00:45:13,139
+from their CRM, right?
+
+753
+00:45:13,139 --> 00:45:15,420
+So again, you can influence that through registrations
+
+754
+00:45:15,420 --> 00:45:19,380
+that go through and get approved or via collaboration, right?
+
+755
+00:45:19,380 --> 00:45:21,860
+But ultimately that number you see in there is dictated
+
+756
+00:45:21,860 --> 00:45:25,699
+by the AE or the SA on that account within Databricks.
+
+757
+00:45:27,059 --> 00:45:29,099
+So definitely collaborate wherever possible.
+
+758
+00:45:29,099 --> 00:45:33,059
+Now the question is, it's gonna come down to
+
+759
+00:45:33,059 --> 00:45:36,340
+what makes the most sense and what is most efficient, right?
+
+760
+00:45:36,340 --> 00:45:39,380
+I have seen some large use cases that might span
+
+761
+00:45:39,380 --> 00:45:41,739
+a three year rollout that then breaks off
+
+762
+00:45:41,739 --> 00:45:45,219
+into multiple smaller use cases as it starts
+
+763
+00:45:45,219 --> 00:45:48,900
+to deploy, again, for efficiency purposes.
+
+764
+00:45:48,900 --> 00:45:52,139
+Sometimes that requires a conversation with the account team
+
+765
+00:45:52,139 --> 00:45:56,699
+on how to strategically set that up based on the customer needs.
+
+766
+00:45:56,699 --> 00:46:01,699
+What I would say is most use cases that AEs
+
+767
+00:46:02,420 --> 00:46:06,739
+will view, take on board, it's typically measured
+
+768
+00:46:06,739 --> 00:46:09,500
+at around that $5,000 MRR mark.
+
+769
+00:46:09,500 --> 00:46:11,900
+So I think 60K ARR.
+
+770
+00:46:12,820 --> 00:46:15,219
+So again, what you're probably not gonna wanna do
+
+771
+00:46:15,219 --> 00:46:17,860
+is put in a whole bunch of use cases
+
+772
+00:46:17,860 --> 00:46:20,019
+that are less than $5,000 and MRR,
+
+773
+00:46:20,019 --> 00:46:21,780
+if they are truly packed together,
+
+774
+00:46:21,780 --> 00:46:23,340
+it makes more sense to put that together
+
+775
+00:46:23,340 --> 00:46:25,739
+and to get that above that 5K mark.
+
+776
+00:46:25,739 --> 00:46:27,380
+It just makes it more efficient.
+
+777
+00:46:31,500 --> 00:46:32,940
+All right.
+
+778
+00:46:32,940 --> 00:46:33,940
+Yeah.
+
+779
+00:46:33,940 --> 00:46:37,260
+And then Rafaul has another question.
+
+780
+00:46:37,260 --> 00:46:38,539
+I think I can take this one.
+
+781
+00:46:38,539 --> 00:46:43,539
+So how did you recognize who is the AE for the use case?
+
+782
+00:46:44,420 --> 00:46:47,260
+So the way this works, Rafaul,
+
+783
+00:46:47,260 --> 00:46:51,340
+is you will register the deal using the deal registration
+
+784
+00:46:51,340 --> 00:46:54,059
+form and then there will be an SDR
+
+785
+00:46:54,059 --> 00:46:55,980
+who will be working with you
+
+786
+00:46:55,980 --> 00:46:58,380
+and facilitating that introduction
+
+787
+00:46:58,380 --> 00:47:00,460
+to the account executive.
+
+788
+00:47:00,460 --> 00:47:05,460
+So the SDR will be qualifying the lead that you submitted
+
+789
+00:47:05,659 --> 00:47:07,699
+and then facilitating that warm introduction
+
+790
+00:47:07,739 --> 00:47:09,739
+between you and the sales team.
+
+791
+00:47:09,739 --> 00:47:12,179
+Typically there's other individuals involved
+
+792
+00:47:12,179 --> 00:47:13,739
+at the account level also.
+
+793
+00:47:13,739 --> 00:47:18,739
+So you may have an AE and solutions architect, for example.
+
+794
+00:47:18,739 --> 00:47:21,340
+So they will facilitate that introduction with you.
+
+795
+00:47:21,340 --> 00:47:23,300
+So you don't need to figure this out.
+
+796
+00:47:23,300 --> 00:47:28,300
+Once the deal registration is converted into a use case,
+
+797
+00:47:28,619 --> 00:47:33,619
+then it will become available in the use case view
+
+798
+00:47:34,539 --> 00:47:35,699
+for the analytics dashboard.
+
+799
+00:47:35,699 --> 00:47:37,260
+You go to the analytics dashboard,
+
+800
+00:47:37,260 --> 00:47:40,739
+you click on use cases, you click on similar,
+
+801
+00:47:40,739 --> 00:47:43,500
+and you will see what Vanessa is showing here.
+
+802
+00:47:43,500 --> 00:47:45,780
+It will show you who the account owner
+
+803
+00:47:45,780 --> 00:47:47,860
+is at the use case level.
+
+804
+00:47:47,860 --> 00:47:49,699
+And you will have additional details
+
+805
+00:47:49,699 --> 00:47:52,500
+like who is the partner sales manager
+
+806
+00:47:52,500 --> 00:47:54,139
+because we are verticalized.
+
+807
+00:47:54,139 --> 00:47:59,139
+So you will be able to see who's the right partner counterpart
+
+808
+00:47:59,500 --> 00:48:02,179
+in the use case level.
+
+809
+00:48:02,179 --> 00:48:04,059
+So all of that information will appear
+
+810
+00:48:04,059 --> 00:48:06,300
+in the use case dashboard
+
+811
+00:48:06,300 --> 00:48:09,619
+that you're seeing right now on the screen.
+
+812
+00:48:09,619 --> 00:48:11,340
+Yeah, pretty much this account owner,
+
+813
+00:48:11,340 --> 00:48:14,099
+it's the account executive, is the AE.
+
+814
+00:48:14,099 --> 00:48:14,940
+Correct.
+
+815
+00:48:14,940 --> 00:48:16,659
+The main for the customer.
+
+816
+00:48:16,659 --> 00:48:18,460
+Yes, awesome.
+
+817
+00:48:18,460 --> 00:48:21,539
+By the way, the stages are also progressed by the AE
+
+818
+00:48:21,539 --> 00:48:23,900
+because they're close to how the sales cycle is progressing.
+
+819
+00:48:23,900 --> 00:48:26,139
+That's another frequently asked question.
+
+820
+00:48:26,139 --> 00:48:27,900
+So that's also important.
+
+821
+00:48:29,300 --> 00:48:30,139
+Awesome.
+
+822
+00:48:30,219 --> 00:48:33,659
+So that's it.
+
+823
+00:48:33,659 --> 00:48:37,059
+Do we have any other questions regarding the dashboard?
+
+824
+00:48:38,219 --> 00:48:40,059
+Because that's all I had.
+
+825
+00:48:40,059 --> 00:48:41,780
+There's one about crediting 10 points.
+
+826
+00:48:41,780 --> 00:48:43,019
+I'll let you take that one.
+
+827
+00:48:43,019 --> 00:48:43,860
+I don't know.
+
+828
+00:48:43,860 --> 00:48:46,099
+Can you read the question for me?
+
+829
+00:48:46,099 --> 00:48:48,739
+It says, last week during the partner onboarding webinar
+
+830
+00:48:48,739 --> 00:48:51,539
+series session, there was a big campaign call
+
+831
+00:48:51,539 --> 00:48:56,380
+to join this today, and we will credit them with 10 points.
+
+832
+00:48:56,380 --> 00:48:58,099
+Oh, no, no, no.
+
+833
+00:48:58,099 --> 00:49:02,099
+So just to clarify, the call to action
+
+834
+00:49:02,099 --> 00:49:05,780
+was if you have not, if you don't have access
+
+835
+00:49:05,780 --> 00:49:08,699
+to the analytics dashboard, that you can obtain
+
+836
+00:49:08,699 --> 00:49:12,019
+your first part, 10 partner values, core points.
+
+837
+00:49:12,019 --> 00:49:14,900
+The suggestion was completing sales badges,
+
+838
+00:49:14,900 --> 00:49:19,380
+then email partner up so that you can get access
+
+839
+00:49:19,380 --> 00:49:21,619
+to your analytics dashboard and can follow along
+
+840
+00:49:21,619 --> 00:49:23,780
+in this session.
+
+841
+00:49:23,780 --> 00:49:26,260
+So I'll just say further confusion,
+
+842
+00:49:26,260 --> 00:49:31,340
+but the ask was to obtain the 10 partner values core points
+
+843
+00:49:31,340 --> 00:49:34,699
+required to get access to the analytics dashboard
+
+844
+00:49:34,699 --> 00:49:38,940
+via completing 40 sales badges.
+
+845
+00:49:38,940 --> 00:49:40,139
+Hope that clarifies.
+
+846
+00:49:43,179 --> 00:49:45,539
+OK, anything else?
+
+847
+00:49:45,539 --> 00:49:49,179
+If not, I think we're wrapping up,
+
+848
+00:49:49,179 --> 00:49:52,860
+and we're going to update the slide
+
+849
+00:49:52,860 --> 00:49:58,139
+and then upload it into the PDC office hours and the recording
+
+850
+00:49:58,139 --> 00:49:58,699
+as well.
+
+851
+00:49:58,699 --> 00:49:59,099
+Let me see.
+
+852
+00:49:59,099 --> 00:49:59,599
+Do it.
+
+853
+00:49:59,599 --> 00:50:01,139
+Yeah.
+
+854
+00:50:00,000 --> 00:50:04,880
+We do have one additional question regarding certifications from Kendra.
+
+855
+00:50:04,880 --> 00:50:08,800
+So what does the train not certified mean?
+
+856
+00:50:08,800 --> 00:50:10,760
+Yeah, that's a great question Kendra.
+
+857
+00:50:10,760 --> 00:50:12,159
+Looking at the Q&A.
+
+858
+00:50:12,159 --> 00:50:15,280
+So yeah, you're probably looking at the enablement part,
+
+859
+00:50:15,280 --> 00:50:17,920
+which is great love to see that you're exploring.
+
+860
+00:50:17,920 --> 00:50:19,719
+Yeah, what that means is again,
+
+861
+00:50:19,719 --> 00:50:21,559
+not much data on the enablement site.
+
+862
+00:50:21,559 --> 00:50:25,000
+So for that, but follow along, I'll walk you through it.
+
+863
+00:50:25,000 --> 00:50:28,119
+So what that means is that we're giving you
+
+864
+00:50:28,119 --> 00:50:34,800
+a visibility on who in your company had taken courses
+
+865
+00:50:34,800 --> 00:50:40,440
+that are aligned as preparation to a certification,
+
+866
+00:50:40,440 --> 00:50:44,079
+but they have not taken the step of testing.
+
+867
+00:50:44,079 --> 00:50:49,119
+So for partner values core, we look at certified individuals.
+
+868
+00:50:49,119 --> 00:50:51,400
+So we're giving you visibility on your pipeline
+
+869
+00:50:51,400 --> 00:50:54,719
+and who could be ready to add up to those points.
+
+870
+00:50:54,719 --> 00:50:57,320
+So it's kind of a low hanging fruit on your side
+
+871
+00:50:57,400 --> 00:50:59,440
+to target those individuals and say,
+
+872
+00:50:59,440 --> 00:51:00,599
+hey, you're really close.
+
+873
+00:51:00,599 --> 00:51:03,480
+You're ready to the course you prepped.
+
+874
+00:51:03,480 --> 00:51:06,719
+Let's talk about when you can take the exam
+
+875
+00:51:06,719 --> 00:51:09,760
+that will actually add up to the partner values core points.
+
+876
+00:51:11,079 --> 00:51:12,079
+Okay.
+
+877
+00:51:14,000 --> 00:51:16,320
+I think that's all.
+
+878
+00:51:16,320 --> 00:51:17,079
+Yeah.
+
+879
+00:51:17,079 --> 00:51:18,480
+There's just two more open questions.
+
+880
+00:51:18,480 --> 00:51:21,960
+If you don't mind, I think one with Nicholas and one with Wendy.
+
+881
+00:51:23,159 --> 00:51:24,880
+If you can just add more context in there,
+
+882
+00:51:24,880 --> 00:51:27,880
+because I think I'm missing the first half of the questions,
+
+883
+00:51:27,880 --> 00:51:29,719
+but I can answer those offline.
+
+884
+00:51:30,639 --> 00:51:31,280
+Yeah.
+
+885
+00:51:31,280 --> 00:51:34,880
+I think Nicholas, your question is about the customer success stories.
+
+886
+00:51:35,480 --> 00:51:39,519
+So do they need to be separate different customers
+
+887
+00:51:39,519 --> 00:51:44,079
+or can they submit to success stories for the same customer
+
+888
+00:51:44,079 --> 00:51:46,199
+and still earn the same 10 points?
+
+889
+00:51:48,559 --> 00:51:52,320
+It is use case based, so it can be the same customer
+
+890
+00:51:52,320 --> 00:51:55,199
+as long as it's a different use case.
+
+891
+00:51:55,199 --> 00:51:59,000
+We'll be happy to proceed those and provide points.
+
+892
+00:52:00,039 --> 00:52:01,480
+Okay.
+
+893
+00:52:01,480 --> 00:52:03,400
+Yes, does that happen upon completion?
+
+894
+00:52:03,400 --> 00:52:04,400
+Is that low?
+
+895
+00:52:06,760 --> 00:52:07,199
+Okay.
+
+896
+00:52:07,199 --> 00:52:12,079
+Wendy, I think your question has to do with how we do promotions.
+
+897
+00:52:12,880 --> 00:52:13,320
+Right?
+
+898
+00:52:13,320 --> 00:52:15,840
+So you were asking at what point
+
+899
+00:52:17,559 --> 00:52:20,639
+you will be able to get promoted to the next tier.
+
+900
+00:52:20,639 --> 00:52:23,760
+So as we mentioned, there's one mid-year review
+
+901
+00:52:23,760 --> 00:52:28,599
+where we do only promotions and that's at the end of July.
+
+902
+00:52:28,599 --> 00:52:31,840
+So all the metrics for the current fiscal year
+
+903
+00:52:31,840 --> 00:52:35,639
+will help you get to that milestone
+
+904
+00:52:35,639 --> 00:52:40,039
+if you have met both the partner value score
+
+905
+00:52:40,039 --> 00:52:43,559
+and the qualification gates of the delivery experts
+
+906
+00:52:43,559 --> 00:52:47,639
+and champions by the deadline of July 31st.
+
+907
+00:52:48,360 --> 00:52:53,400
+But if you don't make that first mid-year review,
+
+908
+00:52:53,400 --> 00:52:56,159
+you still have another opportunity to get promoted
+
+909
+00:52:56,159 --> 00:53:00,000
+by the end of fiscal year on January 31st.
+
+910
+00:53:00,000 --> 00:53:02,960
+So all of the metrics for your current fiscal year
+
+911
+00:53:02,960 --> 00:53:07,960
+will continue to accrue all the way up to January 31st.
+
+912
+00:53:08,840 --> 00:53:12,679
+So you have some runway seal from here to January 31st
+
+913
+00:53:12,679 --> 00:53:15,119
+to complete those qualification gates
+
+914
+00:53:15,119 --> 00:53:19,400
+and to reach the minimum thresholds for promotion.
+
+915
+00:53:19,400 --> 00:53:21,440
+I hope that clarifies your question.
+
+916
+00:53:22,559 --> 00:53:24,000
+Yeah.
+
+917
+00:53:24,000 --> 00:53:24,320
+Good.
+
+918
+00:53:24,320 --> 00:53:25,639
+I'll answer Kendra's.
+
+919
+00:53:25,639 --> 00:53:28,199
+So it says, for customer success stories,
+
+920
+00:53:28,199 --> 00:53:31,880
+I haven't approved a story that just got approved,
+
+921
+00:53:31,880 --> 00:53:33,880
+but it is from a previous fiscal year.
+
+922
+00:53:33,880 --> 00:53:37,119
+Is that why he's not reflecting the partner value score points?
+
+923
+00:53:37,119 --> 00:53:38,199
+Thank you for the question, Kendra,
+
+924
+00:53:38,199 --> 00:53:41,480
+because this could be happening for various partners.
+
+925
+00:53:41,480 --> 00:53:45,840
+So the use case can be a story of an implementation
+
+926
+00:53:45,840 --> 00:53:48,039
+that was done before the fiscal year.
+
+927
+00:53:48,039 --> 00:53:49,599
+That's totally fine.
+
+928
+00:53:49,599 --> 00:53:52,400
+You're just submitting it this year and it just got approved.
+
+929
+00:53:52,400 --> 00:53:55,280
+So it should be counting within this fiscal year
+
+930
+00:53:55,280 --> 00:53:56,840
+for the partner value score points,
+
+931
+00:53:56,840 --> 00:54:00,599
+like the go-to-market pillar for these year's points.
+
+932
+00:54:00,599 --> 00:54:01,159
+Okay?
+
+933
+00:54:01,159 --> 00:54:04,039
+So the reason why you might not be seeing it,
+
+934
+00:54:04,039 --> 00:54:06,679
+it's because we're kind of in the process
+
+935
+00:54:06,679 --> 00:54:08,760
+of updating the dashboard.
+
+936
+00:54:08,760 --> 00:54:11,320
+So that's what Brandon mentioned.
+
+937
+00:54:11,320 --> 00:54:14,119
+The team is aiming to do by the end of the week.
+
+938
+00:54:14,119 --> 00:54:17,639
+We've been working on it for a few times.
+
+939
+00:54:17,639 --> 00:54:20,840
+Apologies to everyone for that.
+
+940
+00:54:20,840 --> 00:54:26,480
+If you want to see the updated numbers as we fix this,
+
+941
+00:54:26,480 --> 00:54:27,719
+as we work through this,
+
+942
+00:54:27,719 --> 00:54:30,159
+you can email partnerops at databricks.com
+
+943
+00:54:30,159 --> 00:54:34,840
+and they can give you kind of a fresher look
+
+944
+00:54:34,840 --> 00:54:37,480
+into your numbers on the partner values score points.
+
+945
+00:54:38,760 --> 00:54:39,760
+Okay.
+
+946
+00:54:46,119 --> 00:54:50,920
+Yeah, and I'm going to take one from Pratam regarding CSAT.
+
+947
+00:54:50,920 --> 00:54:53,880
+I'm going to put in the Q&A, the email address
+
+948
+00:54:53,880 --> 00:54:55,400
+that you can use.
+
+949
+00:54:55,400 --> 00:55:00,440
+One caveat though, when you email that email address,
+
+950
+00:55:00,440 --> 00:55:06,119
+please do not copy partners at or partnerops.
+
+951
+00:55:06,119 --> 00:55:08,920
+There are some routing issues that can happen
+
+952
+00:55:08,920 --> 00:55:11,960
+if you copy more than one shared inbox
+
+953
+00:55:11,960 --> 00:55:14,199
+when you send that email.
+
+954
+00:55:14,199 --> 00:55:16,480
+So please just email that email address
+
+955
+00:55:16,480 --> 00:55:18,440
+that I'm going to share with you in the Q&A.
+
+956
+00:55:18,440 --> 00:55:21,000
+I'm going to put it in the chat as well
+
+957
+00:55:21,000 --> 00:55:24,039
+so that they can trigger the CSAT process for you.
+
+958
+00:55:24,039 --> 00:55:25,039
+Okay?
+
+959
+00:55:28,920 --> 00:55:32,519
+So I think there were some questions regarding the
+
+960
+00:55:32,519 --> 00:55:35,400
+relaxed requirements.
+
+961
+00:55:35,400 --> 00:55:36,760
+So sorry about that.
+
+962
+00:55:36,760 --> 00:55:39,880
+These are the current requirements to move up
+
+963
+00:55:39,880 --> 00:55:41,880
+to the tiers remaining in your current tier.
+
+964
+00:55:41,880 --> 00:55:45,400
+So this is the partner values score required per geo.
+
+965
+00:55:45,400 --> 00:55:47,079
+And these are the additional requirements.
+
+966
+00:55:47,079 --> 00:55:50,400
+So delivery experts and champions.
+
+967
+00:55:50,400 --> 00:55:54,519
+So we didn't dive into the process for these two.
+
+968
+00:55:54,519 --> 00:55:56,880
+However, we do a previous recording
+
+969
+00:55:56,880 --> 00:55:58,960
+on the PDC office hours landing page
+
+970
+00:55:58,960 --> 00:56:01,840
+where you will see very clearly you can hit a replay.
+
+971
+00:56:01,840 --> 00:56:04,280
+We covered delivery expert champions
+
+972
+00:56:04,280 --> 00:56:05,679
+and actually a specializations,
+
+973
+00:56:05,679 --> 00:56:09,480
+even though specializations are not tied to tier progression,
+
+974
+00:56:09,480 --> 00:56:13,519
+but it'll be great that you can start looking at those.
+
+975
+00:56:13,519 --> 00:56:16,360
+We explain that the process for delivery experts,
+
+976
+00:56:16,360 --> 00:56:17,960
+we explain what they are
+
+977
+00:56:17,960 --> 00:56:20,400
+and we explain the same thing for champions.
+
+978
+00:56:20,400 --> 00:56:24,280
+At a really high level, delivery expert is the next step
+
+979
+00:56:24,280 --> 00:56:27,960
+after completing any data break certification
+
+980
+00:56:28,000 --> 00:56:32,760
+to focus on one particular product.
+
+981
+00:56:32,760 --> 00:56:36,440
+So we have an offer of courses there.
+
+982
+00:56:37,559 --> 00:56:40,840
+And again, they are in the academy,
+
+983
+00:56:40,840 --> 00:56:42,000
+they're totally for free.
+
+984
+00:56:42,000 --> 00:56:45,360
+DXM is hands-on, but it's also in the academy.
+
+985
+00:56:45,360 --> 00:56:47,880
+It's not a proctored experience
+
+986
+00:56:47,880 --> 00:56:51,840
+like our industry recognized certifications.
+
+987
+00:56:53,079 --> 00:56:54,840
+So in the champions,
+
+988
+00:56:54,840 --> 00:56:59,840
+you do want to think about your highest technical profile,
+
+989
+00:56:59,840 --> 00:57:02,320
+those individuals who you align
+
+990
+00:57:02,320 --> 00:57:05,199
+to the most complex projects
+
+991
+00:57:06,159 --> 00:57:09,679
+that are your champions internally for Databricks.
+
+992
+00:57:09,679 --> 00:57:10,519
+Those are the ones
+
+993
+00:57:10,519 --> 00:57:13,320
+that you want to put forward for nomination.
+
+994
+00:57:13,320 --> 00:57:16,199
+You can email partners at Databricks.com.
+
+995
+00:57:16,199 --> 00:57:20,960
+They will share the nomination requirements with you.
+
+996
+00:57:20,960 --> 00:57:24,199
+So very high level key things that they need to have
+
+997
+00:57:24,199 --> 00:57:26,239
+is there a lot of hands-on experience.
+
+998
+00:57:26,239 --> 00:57:28,719
+They will undergo a selection process
+
+999
+00:57:28,719 --> 00:57:31,360
+that includes an interview.
+
+1000
+00:57:31,360 --> 00:57:36,159
+And you will be required to say which use cases
+
+1001
+00:57:36,159 --> 00:57:41,159
+they have led on the technical side as the technical experts
+
+1002
+00:57:41,480 --> 00:57:42,559
+leading the project.
+
+1003
+00:57:45,239 --> 00:57:47,719
+We used to have specializations here.
+
+1004
+00:57:47,719 --> 00:57:51,239
+So that's why Brandon was referring to
+
+1005
+00:57:51,239 --> 00:57:56,239
+so we relaxed the requirements as well.
+
+1006
+00:57:57,039 --> 00:58:00,400
+And accelerators, we used to have accelerators as well
+
+1007
+00:58:00,400 --> 00:58:01,800
+at the beginning of the year.
+
+1008
+00:58:03,079 --> 00:58:05,800
+Yep, and I can just touch on that just real quickly.
+
+1009
+00:58:05,800 --> 00:58:07,599
+Part of the reason for doing that was
+
+1010
+00:58:07,599 --> 00:58:09,920
+we wanted to enable partners who are bronze
+
+1011
+00:58:09,920 --> 00:58:13,280
+who already have a go-to-market capability.
+
+1012
+00:58:13,280 --> 00:58:16,760
+Again, that bronze tier really being a point in time.
+
+1013
+00:58:16,760 --> 00:58:19,360
+We wanted to give them a better chance to differentiate
+
+1014
+00:58:19,360 --> 00:58:21,159
+based on the specializations available
+
+1015
+00:58:21,159 --> 00:58:23,000
+because we do plan to push more of those
+
+1016
+00:58:23,960 --> 00:58:28,599
+into especially some of the emerging regions and markets.
+
+1017
+00:58:28,599 --> 00:58:31,800
+So what happened is we actually decided to pull off
+
+1018
+00:58:31,800 --> 00:58:34,599
+that specialization requirement from the program
+
+1019
+00:58:34,599 --> 00:58:35,719
+to make it more accessible.
+
+1020
+00:58:35,719 --> 00:58:37,920
+We also pulled the blogs, right?
+
+1021
+00:58:37,920 --> 00:58:42,920
+So again, it made it easier to attain silver and then gold,
+
+1022
+00:58:45,480 --> 00:58:47,760
+but also it's a nod to say everybody on this call
+
+1023
+00:58:47,760 --> 00:58:49,519
+should also be looking at how can I pursue
+
+1024
+00:58:49,519 --> 00:58:52,480
+specializations going forward to start to differentiate
+
+1025
+00:58:52,480 --> 00:58:56,519
+right out the gate rather than a tier-based approach
+
+1026
+00:58:56,519 --> 00:58:57,440
+being the end game.
+
+1027
+00:59:00,199 --> 00:59:01,559
+All right, thank you.
+
+1028
+00:59:02,679 --> 00:59:03,519
+Awesome.
+
+1029
+00:59:08,039 --> 00:59:10,639
+Yes, the champions and the delivery experts
+
+1030
+00:59:10,639 --> 00:59:12,400
+could be the same person, correct.
+
+1031
+00:59:16,960 --> 00:59:18,360
+Awesome.
+
+1032
+00:59:18,360 --> 00:59:19,480
+I think this is great.
+
+1033
+00:59:19,480 --> 00:59:21,719
+I mean, thank you everyone for all the questions.
+
+1034
+00:59:21,719 --> 00:59:24,320
+There's been very interactive, very valuable questions
+
+1035
+00:59:24,320 --> 00:59:27,280
+and it's a pleasure for us to host you as always.
+
+1036
+00:59:27,280 --> 00:59:30,360
+We invite you to join us into the PDC office hours
+
+1037
+00:59:30,360 --> 00:59:32,599
+coming towards the end of the month.
+
+1038
+00:59:32,599 --> 00:59:36,400
+We're going to cover key things and key opportunities
+
+1039
+00:59:36,400 --> 00:59:39,639
+after all of the announcements and data and AI summit.
+
+1040
+00:59:39,639 --> 00:59:41,320
+So don't miss that one.
+
+1041
+00:59:41,320 --> 00:59:43,280
+It's coming up in the next couple of weeks.
+
+1042
+00:59:43,280 --> 00:59:45,119
+So if you haven't seen it,
+
+1043
+00:59:45,159 --> 00:59:47,360
+the PDC office hours landing page
+
+1044
+00:59:47,360 --> 00:59:50,480
+is on the Get Started tab in the partner portal.
+
+1045
+00:59:50,480 --> 00:59:52,159
+Join us every month.
+
+1046
+00:59:52,159 --> 00:59:55,760
+This is the main webinar where we really walk you
+
+1047
+00:59:55,760 --> 00:59:59,760
+throughout and accompany you on your Databricks matured.
+
+1048
+01:00:00,000 --> 01:00:10,000
+journey. So thank you again for joining us and see you in the next one. Bye. Thank you. Bye.
+
