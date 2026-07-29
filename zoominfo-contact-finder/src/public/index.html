@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ZoomInfo Contact Finder</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>ZoomInfo Contact Finder</h1>
+      <p class="subtitle">Paste a LinkedIn profile URL to look up business contact details from your authorised ZoomInfo account.</p>
+    </header>
+
+    <section class="search-card">
+      <label for="linkedinUrl">LinkedIn Profile URL</label>
+      <input
+        id="linkedinUrl"
+        type="url"
+        placeholder="https://www.linkedin.com/in/jane-doe"
+        autocomplete="off"
+      />
+
+      <label for="companyHint">Company (optional, helps disambiguate common names)</label>
+      <input id="companyHint" type="text" placeholder="Acme Corp" autocomplete="off" />
+
+      <div class="actions">
+        <button id="findBtn" class="btn primary">Find Contact</button>
+        <button id="clearBtn" class="btn secondary">Clear / New Search</button>
+      </div>
+
+      <div id="loading" class="loading hidden">
+        <span class="spinner" aria-hidden="true"></span> Searching ZoomInfo…
+      </div>
+
+      <div id="errorBox" class="error-box hidden" role="alert"></div>
+    </section>
+
+    <section id="candidatesCard" class="candidates-card hidden">
+      <h2>Multiple possible matches</h2>
+      <p>We found more than one likely contact. Select the correct one:</p>
+      <ul id="candidatesList" class="candidates-list"></ul>
+    </section>
+
+    <section id="resultCard" class="result-card hidden">
+      <div class="result-header">
+        <h2>Contact Found</h2>
+        <span id="confidenceBadge" class="badge"></span>
+      </div>
+
+      <dl class="contact-fields">
+        <dt>Name</dt><dd id="fieldName">—</dd>
+        <dt>Title</dt><dd id="fieldTitle">—</dd>
+        <dt>Company</dt><dd id="fieldCompany">—</dd>
+        <dt>Email</dt><dd id="fieldEmail">—</dd>
+        <dt>Phone</dt><dd id="fieldPhone">—</dd>
+        <dt>Mobile</dt><dd id="fieldMobile">—</dd>
+        <dt>Location</dt><dd id="fieldLocation">—</dd>
+        <dt>LinkedIn</dt><dd id="fieldLinkedin">—</dd>
+        <dt>ZoomInfo</dt><dd id="fieldZoominfo">—</dd>
+      </dl>
+
+      <div class="actions">
+        <button id="copyEmailBtn" class="btn secondary">Copy Email</button>
+        <button id="copyPhoneBtn" class="btn secondary">Copy Phone</button>
+        <button id="copyAllBtn" class="btn secondary">Copy All Details</button>
+      </div>
+    </section>
+
+    <section class="history-card">
+      <div class="result-header">
+        <h2>Recent Searches</h2>
+        <div class="actions">
+          <a id="exportCsvLink" class="btn secondary" href="/api/history/export">Export CSV</a>
+          <button id="clearHistoryBtn" class="btn secondary">Clear History</button>
+        </div>
+      </div>
+      <table id="historyTable" class="history-table">
+        <thead>
+          <tr><th>Date</th><th>Name</th><th>Company</th><th>Email</th><th>Phone</th><th>Confidence</th></tr>
+        </thead>
+        <tbody id="historyBody"></tbody>
+      </table>
+      <p id="historyEmpty" class="muted hidden">No searches yet.</p>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
