@@ -288,6 +288,16 @@ def draw_stars(draw, color, seed, count=12):
                (x,y+s),(x-s//3,y+s//3),(x-s,y),(x-s//3,y-s//3)]
         draw.polygon(pts, fill=(*color[:3], alpha))
 
+# ─── Background cache (computed once per member) ──────────────────────────
+_bg_cache = {}
+def get_cached_bg(member):
+    key = member["key"]
+    if key not in _bg_cache:
+        dark, mid, light, pale = member["palette"]
+        _bg_cache[key] = watercolor_bg(dark, mid, light, pale,
+                                        seed=hash(key)%9999)
+    return _bg_cache[key].copy()
+
 # ─── Main card frame renderer ─────────────────────────────────────────────
 def render_member_card(member, f_local, total_f=150):
     """Render one frame of a member's intro card."""
@@ -305,8 +315,8 @@ def render_member_card(member, f_local, total_f=150):
         anim_t = ease_in(1 - (t - 0.8) / 0.2)
         phase = "out"
 
-    # Background
-    bg = watercolor_bg(dark, mid, light, pale, seed=hash(member["key"])%9999)
+    # Background (cached — computed once per member)
+    bg = get_cached_bg(member)
 
     # Bokeh animated
     bg = add_bokeh(bg, [mid,light,pale], t*6, seed=hash(member["key"])%777)
