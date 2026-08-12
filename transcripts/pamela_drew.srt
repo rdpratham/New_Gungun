@@ -1,0 +1,3284 @@
+1
+00:00:00,000 --> 00:00:10,279
+I'm just going to grab this Yubi key real quick.
+
+2
+00:00:10,279 --> 00:00:16,280
+One moment please.
+
+3
+00:00:16,280 --> 00:00:41,280
+Do you guys use these Yubi keys for work?
+
+4
+00:00:41,280 --> 00:00:43,280
+Which one?
+
+5
+00:00:43,280 --> 00:00:48,280
+Yubi keys are secure like sign in with your applications and stuff.
+
+6
+00:00:48,280 --> 00:00:51,280
+Nope, I don't bother with that.
+
+7
+00:00:51,280 --> 00:00:54,280
+It's like if I lose it, I can't even get into my laptop.
+
+8
+00:00:54,280 --> 00:00:58,280
+So I was like, where did that little piece go?
+
+9
+00:00:58,280 --> 00:01:02,280
+That's a very expensive piece of hardware to take care of then.
+
+10
+00:01:02,280 --> 00:01:06,280
+I'd have to call in a new laptop that takes three days.
+
+11
+00:01:06,280 --> 00:01:10,280
+I'd lose three days of work just for a small little widget, right?
+
+12
+00:01:11,280 --> 00:01:13,280
+Hi, Pam. How are you?
+
+13
+00:01:13,280 --> 00:01:15,280
+How's it going?
+
+14
+00:01:15,280 --> 00:01:18,280
+Yeah, doing well.
+
+15
+00:01:18,280 --> 00:01:21,280
+How about yourself? You doing well?
+
+16
+00:01:21,280 --> 00:01:22,280
+Yep.
+
+17
+00:01:22,280 --> 00:01:24,280
+Nice. Nice. Okay, great.
+
+18
+00:01:24,280 --> 00:01:28,280
+Well, I know we have about 45 minutes here.
+
+19
+00:01:28,280 --> 00:01:32,280
+I think the teams are roughly briefed on both ends,
+
+20
+00:01:32,280 --> 00:01:35,280
+but maybe we could just do some brief introductions for two minutes
+
+21
+00:01:35,280 --> 00:01:39,280
+and we can kind of get started with the contacts.
+
+22
+00:01:39,280 --> 00:01:41,280
+I think both parties know us.
+
+23
+00:01:41,280 --> 00:01:43,280
+So, you know, for them,
+
+24
+00:01:43,280 --> 00:01:46,280
+would you all like to maybe get started on your side with introductions
+
+25
+00:01:46,280 --> 00:01:50,280
+and then maybe Pam can introduce herself and we can get started?
+
+26
+00:02:10,280 --> 00:02:13,280
+Hey, Pam. Good morning.
+
+27
+00:02:13,280 --> 00:02:19,280
+Much of this site, I look out into our partnership ecosystem over here at Short-Hills.
+
+28
+00:02:19,280 --> 00:02:23,280
+We even formed for quite one and a half year now almost.
+
+29
+00:02:23,280 --> 00:02:27,280
+Started out as a cybersecurity consultant with E-Vite.
+
+30
+00:02:27,280 --> 00:02:30,280
+They sent over there for quite some time.
+
+31
+00:02:30,280 --> 00:02:35,280
+Then transitioned into more of a consulting piece and then moved.
+
+32
+00:02:35,280 --> 00:02:40,280
+I did that for US customers for about two, three years
+
+33
+00:02:40,280 --> 00:02:43,280
+and then transitioned into a partnership ecosystem.
+
+34
+00:02:43,280 --> 00:02:46,280
+I was primarily looking into data analytics and the IA.
+
+35
+00:02:46,280 --> 00:02:47,280
+At that point of time,
+
+36
+00:02:47,280 --> 00:02:50,280
+it was, Chai Teebity was just coming around the corner.
+
+37
+00:02:50,280 --> 00:02:52,280
+The murders were not really out on the market.
+
+38
+00:02:52,280 --> 00:02:56,280
+Were you working on this before when we used to have to use like high torch
+
+39
+00:02:56,280 --> 00:02:58,280
+and like open CV and stuff like that?
+
+40
+00:02:58,280 --> 00:03:02,280
+High torch and Mistral were the older pieces that, you know, were,
+
+41
+00:03:02,280 --> 00:03:05,280
+there was one more thing that was very popular,
+
+42
+00:03:05,280 --> 00:03:08,280
+gained a lot of traction with the developers,
+
+43
+00:03:08,280 --> 00:03:12,280
+but they kind of died out once these policies were implemented.
+
+44
+00:03:12,280 --> 00:03:16,280
+Right. But that's what I had to learn on because I learned before just like,
+
+45
+00:03:16,280 --> 00:03:18,280
+you know, that wasn't around.
+
+46
+00:03:18,280 --> 00:03:20,280
+So we had to like make our own, you know.
+
+47
+00:03:20,280 --> 00:03:22,280
+I was experimenting with PyTorch.
+
+48
+00:03:22,280 --> 00:03:24,280
+So me and my friend, we were quite firm.
+
+49
+00:03:24,280 --> 00:03:26,280
+We were just trying things out.
+
+50
+00:03:26,280 --> 00:03:28,280
+Hey, this is such an interesting piece of hardware.
+
+51
+00:03:28,280 --> 00:03:29,280
+Yeah.
+
+52
+00:03:29,280 --> 00:03:32,280
+It's such an interesting piece of thing that you can play around with.
+
+53
+00:03:32,280 --> 00:03:35,280
+He always had a source for another one.
+
+54
+00:03:35,280 --> 00:03:37,280
+I failed to recall his name.
+
+55
+00:03:37,280 --> 00:03:40,280
+He had a source for that one.
+
+56
+00:03:40,280 --> 00:03:41,280
+Yeah, I know.
+
+57
+00:03:41,280 --> 00:03:46,280
+And like we use like, it's like usually open CV, PyTorch and this other third,
+
+58
+00:03:46,280 --> 00:03:49,280
+the third one that I can't think of right now that I'm pretty sure.
+
+59
+00:03:49,280 --> 00:03:51,280
+But yeah, there's a lot of fun.
+
+60
+00:03:54,280 --> 00:03:55,280
+Yeah.
+
+61
+00:03:55,280 --> 00:03:57,280
+So if you look around the junkies,
+
+62
+00:03:57,280 --> 00:04:01,280
+TensorFlow, sorry, TensorFlow was one of the other ones.
+
+63
+00:04:01,280 --> 00:04:03,280
+TensorFlow, TensorFlow. Yeah, TensorFlow.
+
+64
+00:04:03,280 --> 00:04:05,280
+He had a source for TensorFlow.
+
+65
+00:04:05,280 --> 00:04:06,280
+Yeah.
+
+66
+00:04:06,280 --> 00:04:09,280
+And I was like, hey, why are you so crazy about TensorFlow?
+
+67
+00:04:09,280 --> 00:04:12,280
+And he's like, hey, dude, this, this, this new thing that TensorFlow is just
+
+68
+00:04:12,280 --> 00:04:15,280
+really, hey, this is just, this is just off the shelf.
+
+69
+00:04:15,280 --> 00:04:16,279
+This is just come out.
+
+70
+00:04:16,279 --> 00:04:17,279
+Yeah, exactly.
+
+71
+00:04:17,279 --> 00:04:20,279
+Those are the crazy days now.
+
+72
+00:04:20,279 --> 00:04:22,279
+Hey, you don't have to do this.
+
+73
+00:04:22,279 --> 00:04:23,279
+It's easier, right?
+
+74
+00:04:23,279 --> 00:04:28,279
+But like when I originally had a homework project on TensorFlow and I went and I
+
+75
+00:04:28,279 --> 00:04:29,279
+couldn't understand it really.
+
+76
+00:04:29,279 --> 00:04:32,279
+It was like my first time and someone told me this is going to take 20,
+
+77
+00:04:32,279 --> 00:04:33,279
+20 hours.
+
+78
+00:04:33,279 --> 00:04:34,279
+And I was like, what?
+
+79
+00:04:34,279 --> 00:04:39,279
+And I was like, it takes like a long time to do what that LLM just does in two seconds.
+
+80
+00:04:45,279 --> 00:04:49,279
+So yeah, would love to understand a little bit more about what you're,
+
+81
+00:04:49,279 --> 00:04:52,279
+let's see, I have a little bit of a gist about what you're looking to have,
+
+82
+00:04:52,279 --> 00:04:56,279
+but would love to hear more from it from such as in the horses mouth to understand
+
+83
+00:04:56,279 --> 00:04:59,279
+more about your vision, what you're looking to achieve.
+
+84
+00:04:59,279 --> 00:05:02,279
+And at the end of the day, what is it that you're looking to close up?
+
+85
+00:05:02,279 --> 00:05:04,279
+What is the end goal that you're looking to have?
+
+86
+00:05:04,279 --> 00:05:07,279
+What is the, the things that you're looking to have in place?
+
+87
+00:05:07,279 --> 00:05:12,279
+The, the idea was really, and that's like, what's, what's an anonymous autonomous
+
+88
+00:05:12,279 --> 00:05:15,279
+system and really how do you set that up and really what's a smart system, right?
+
+89
+00:05:15,279 --> 00:05:19,279
+And so a system that can just call an LLM every time and just do that.
+
+90
+00:05:19,279 --> 00:05:21,279
+It's not really a smart system for me, right?
+
+91
+00:05:21,279 --> 00:05:23,279
+Cause you're just, you're calling LLM, you're doing that.
+
+92
+00:05:23,279 --> 00:05:27,279
+You're not like, it can't flow by itself, agentically, right?
+
+93
+00:05:27,279 --> 00:05:33,279
+But if I have an agent that goes in and finds every time it calls that LLM API and then
+
+94
+00:05:33,279 --> 00:05:37,279
+it takes that and it distills it into its knowledge base, right?
+
+95
+00:05:37,279 --> 00:05:42,279
+Next time it comes to finding that pattern, well, it's set up in this way.
+
+96
+00:05:42,279 --> 00:05:45,279
+The agent is set up in this way where there's three levels to it, right?
+
+97
+00:05:45,279 --> 00:05:52,279
+So the first, the first path, the first level is, is this, is this security, is my guardrails?
+
+98
+00:05:52,279 --> 00:05:57,279
+Like that's always number one, like whatever's going on at level is always checking those guardrails
+
+99
+00:05:57,279 --> 00:05:59,279
+and every system is going to have different guardrails, right?
+
+100
+00:05:59,279 --> 00:06:03,279
+So that's guardrails meaning like, you have the right credentials, that's guardrails.
+
+101
+00:06:03,279 --> 00:06:05,279
+Like, is this my system overflowing right now?
+
+102
+00:06:05,279 --> 00:06:11,279
+Is this, is this reading to LLM tree right now that like is a simple, like it needs to shut off the system.
+
+103
+00:06:11,279 --> 00:06:12,279
+Right?
+
+104
+00:06:12,279 --> 00:06:13,279
+On off.
+
+105
+00:06:13,279 --> 00:06:15,279
+So they're simple, like if then statements really simple coded.
+
+106
+00:06:15,279 --> 00:06:19,279
+We, when we weren't doing data bricks, we were like, okay, we're going to do this in Rust, right?
+
+107
+00:06:19,279 --> 00:06:25,279
+Because it takes really, it's going to be an MCP and your agents are going to be one in the MCP is the other.
+
+108
+00:06:25,279 --> 00:06:29,279
+The Rust is going to be that first layer that's always listening to what's going on.
+
+109
+00:06:29,279 --> 00:06:31,279
+And then it's going to move up to the second layer.
+
+110
+00:06:31,279 --> 00:06:34,279
+It's going to take, okay, whatever the inputted to that prompt.
+
+111
+00:06:34,279 --> 00:06:37,279
+Is this a, is this a pattern I've seen before?
+
+112
+00:06:37,279 --> 00:06:40,279
+Have I asked this question before and gotten an answer and can I use it again?
+
+113
+00:06:40,279 --> 00:06:41,279
+Okay.
+
+114
+00:06:41,279 --> 00:06:43,279
+And then if it does, it just does that.
+
+115
+00:06:43,279 --> 00:06:44,279
+It doesn't call the API.
+
+116
+00:06:44,279 --> 00:06:49,279
+And so you, you're what you're doing is you're saving tokens, you're saving time and it's getting smarter, right?
+
+117
+00:06:49,279 --> 00:06:51,279
+Because it's learning what to do on by itself.
+
+118
+00:06:51,279 --> 00:06:59,279
+And the more that it runs, well, the more solutions it's solving and the more solutions it's then being able to save.
+
+119
+00:06:59,279 --> 00:07:03,279
+And then the less times you're running the API, you're saving tokens, right?
+
+120
+00:07:03,279 --> 00:07:05,279
+So it's meant to your savings tokens.
+
+121
+00:07:05,279 --> 00:07:08,279
+It's getting smarter and it's getting cheaper, right?
+
+122
+00:07:08,279 --> 00:07:13,279
+And those are all those things that we want right now in AI because of the data centers, right?
+
+123
+00:07:13,279 --> 00:07:19,279
+Because of what we're doing to the environment, like that the AI guzzles more water these days than we do, right?
+
+124
+00:07:19,279 --> 00:07:22,279
+That AI takes more water than we do.
+
+125
+00:07:22,279 --> 00:07:29,279
+And so there's got to be a way that you design agents that don't work like this, because if you just go on design agents like this,
+
+126
+00:07:29,279 --> 00:07:34,279
+and it's just one idea that we had, which was basically, you know, that everybody jumped on board,
+
+127
+00:07:34,279 --> 00:07:37,279
+that everybody's agent like sort of looks like a light change, right?
+
+128
+00:07:37,279 --> 00:07:39,279
+It's got that prompt, it's got the thing, right?
+
+129
+00:07:39,279 --> 00:07:42,279
+But what if we were just like, wait, we were building this wrong?
+
+130
+00:07:42,279 --> 00:07:45,279
+And we went back to robotics and we went, well, robotics, we already did this.
+
+131
+00:07:45,279 --> 00:07:54,279
+We did this all, but we made these mistakes before and that building real life representations of things that were, it becomes clunky, right?
+
+132
+00:07:54,279 --> 00:08:03,279
+And so subsumption architecture and inactivism and cognitive, cognitive and body cognition, right?
+
+133
+00:08:03,279 --> 00:08:07,279
+Where things become decoupled and decentralized.
+
+134
+00:08:07,279 --> 00:08:16,279
+So you're looking at like the brain and you're looking at, okay, well, when my hand goes on the stove, right?
+
+135
+00:08:16,279 --> 00:08:18,279
+It doesn't think, it doesn't go to the LMM to think.
+
+136
+00:08:18,279 --> 00:08:20,279
+It's got to do something really quick.
+
+137
+00:08:20,279 --> 00:08:21,279
+It's not going to, right?
+
+138
+00:08:21,279 --> 00:08:28,279
+So why don't we design, so suspension architecture is this, where tasks are based on tasks, based on tasks, right?
+
+139
+00:08:28,279 --> 00:08:30,279
+So the most important tasks come first, right?
+
+140
+00:08:30,279 --> 00:08:33,279
+Because they need to be cleared first before you can do anything.
+
+141
+00:08:33,279 --> 00:08:38,279
+So like if your robot's on the wall and stuck on the wall, it can't roam the round, right?
+
+142
+00:08:38,279 --> 00:08:40,279
+So it's checking first, okay, is my bump sensor?
+
+143
+00:08:40,279 --> 00:08:41,279
+Is it knocked?
+
+144
+00:08:41,279 --> 00:08:42,279
+Is it knocked?
+
+145
+00:08:42,279 --> 00:08:43,279
+Okay.
+
+146
+00:08:43,279 --> 00:08:45,279
+If it's not, I've got to figure out how to get out of this.
+
+147
+00:08:45,279 --> 00:08:46,279
+Is it not knocked?
+
+148
+00:08:46,279 --> 00:08:47,279
+Okay, I can move on to the next action.
+
+149
+00:08:47,279 --> 00:08:53,279
+In terms of suspension architecture, when I apply it to this, it becomes the developer's environment, right?
+
+150
+00:08:53,279 --> 00:08:56,279
+So you're sort of thinking like, that's the robot in that environment.
+
+151
+00:08:56,279 --> 00:09:00,279
+In this environment, what we want is the security to come first, and that being passed.
+
+152
+00:09:00,279 --> 00:09:03,279
+Second, well, okay, do we go to a pattern?
+
+153
+00:09:03,279 --> 00:09:06,279
+And then if it were pattern, we keep the pattern, we don't call the API.
+
+154
+00:09:06,279 --> 00:09:08,279
+If we don't find the pattern, we call the API.
+
+155
+00:09:08,279 --> 00:09:11,279
+Once we're done calling the API, we distill the pattern down.
+
+156
+00:09:11,279 --> 00:09:15,279
+And next time it runs, we don't have to do the same thing twice.
+
+157
+00:09:15,279 --> 00:09:16,279
+That makes sense.
+
+158
+00:09:16,279 --> 00:09:23,279
+And so after time, you would have a system that was in fact very smart itself that could run itself,
+
+159
+00:09:23,279 --> 00:09:29,279
+that could, with some oversight, could just take care of itself, right?
+
+160
+00:09:29,279 --> 00:09:33,279
+Because if you're looking at like an intelligent city and telemetry, and you're reading all this stuff,
+
+161
+00:09:33,279 --> 00:09:39,279
+and you're getting this stuff, and okay, a road's flooded, and you send out a crew to solve it,
+
+162
+00:09:39,279 --> 00:09:41,279
+okay, well, that's a solution.
+
+163
+00:09:41,279 --> 00:09:46,279
+And you take that, and you save it, and then the next agent that comes along, right?
+
+164
+00:09:46,279 --> 00:09:49,279
+Does that make sense?
+
+165
+00:09:49,279 --> 00:09:52,279
+It does, but I would still like to get a couple of things clarified.
+
+166
+00:09:52,279 --> 00:09:58,279
+So at the end of the day, you're looking to have an agent created, not a specialized agent,
+
+167
+00:09:58,279 --> 00:10:00,279
+but a more of a generalized agent.
+
+168
+00:10:00,000 --> 00:10:07,600
+which would be more of a framework. So it's a level of, so the level, I mean, they're not
+
+169
+00:10:07,600 --> 00:10:11,759
+exactly agents. So you put it this way, but not exactly agents. But I'm going to visualize
+
+170
+00:10:11,759 --> 00:10:17,919
+at the end of the day after, you know, after you've put it on. So you put the layers, you get the
+
+171
+00:10:17,919 --> 00:10:22,799
+layers and you're on layer two and now you're past the pattern and then you have an organ, now
+
+172
+00:10:22,799 --> 00:10:28,480
+you're okay, we got a call on LMM, right? So we have an orchestrator. So you have like, let's say
+
+173
+00:10:28,559 --> 00:10:32,320
+you're a farm, you're a farm person, right? We start with specialized agents for your farm,
+
+174
+00:10:32,320 --> 00:10:41,039
+like a irrigation agent, but you're just embodying the LMM from everything else, right? So like,
+
+175
+00:10:41,039 --> 00:10:45,279
+you're having several specialized agents or whatever you need to work on whatever project
+
+176
+00:10:45,279 --> 00:10:49,840
+you have, right? So like, let's say like a lane chain, you have a lane chain flow of like these
+
+177
+00:10:49,840 --> 00:10:54,399
+specialized agents, right? All you're doing is taking the prompts and prompting them out,
+
+178
+00:10:54,399 --> 00:11:00,639
+separating off the like the mind from the body. Does that make sense? And so once you get to calling
+
+179
+00:11:00,639 --> 00:11:07,600
+the API, you'd model server and call it. You call and so and the orchestrator, sorry.
+
+180
+00:11:07,600 --> 00:11:12,559
+I could just pause you for one quick minute. Let's just take a step back. I'll just go
+
+181
+00:11:12,559 --> 00:11:17,200
+from step by step and then we'll look at the final step. So you mentioned you're looking to have
+
+182
+00:11:17,200 --> 00:11:23,600
+layer zero at your guardrails. So I just like to give you a little bit of an input dump on it,
+
+183
+00:11:23,600 --> 00:11:32,480
+sort of thing. So the most recent things that have come out are people, hey, I create an agent and I
+
+184
+00:11:32,480 --> 00:11:37,679
+then continuously keep on asking it. So for example, I'm working in the data picks, I then
+
+185
+00:11:37,679 --> 00:11:44,159
+continue to ask it, Hey, what is the salary of my CEO? What is the salary of my CEO? On the first prompt,
+
+186
+00:11:44,159 --> 00:11:50,480
+it will be a guardrail hit. Hey, this is outside of roles and responsibilities and this does not
+
+187
+00:11:50,480 --> 00:11:57,679
+fall on your case. If I hit it second time or if I hit it third time, or if I twist the way in which
+
+188
+00:11:57,679 --> 00:12:03,360
+I'm asking the question, I can confuse the LLM into giving me the right answer. This is one of the
+
+189
+00:12:03,360 --> 00:12:10,559
+earliest problems that we saw. So now already, I believe database already has the ability to
+
+190
+00:12:10,559 --> 00:12:16,639
+implement guardrails into the system so that such events do not occur.
+
+191
+00:12:17,360 --> 00:12:21,919
+But what I'm saying is that's a guard that's would be for data bricks, right? But you're talking
+
+192
+00:12:21,919 --> 00:12:28,480
+about building agents in a whole other way now, right? So while you'd be on data bricks, I would
+
+193
+00:12:28,480 --> 00:12:35,440
+have to, what you would do is that level that they have inserted so that the prompt hits it first,
+
+194
+00:12:35,440 --> 00:12:39,600
+right? And that's all that would, right? And that's all that would be necessary. But the idea
+
+195
+00:12:39,600 --> 00:12:44,960
+really is to come up with a framework for a new agent design, a new agent, a design of a new agent.
+
+196
+00:12:44,960 --> 00:12:53,039
+Does that make sense? Somewhat. Instead of, I know, so it's a three step agent,
+
+197
+00:12:53,039 --> 00:12:57,039
+like it's a you, right? It's to go through the, the guardrails which are always on,
+
+198
+00:12:57,039 --> 00:13:02,399
+you go through the pattern, you go through the LLM and you repeat. Yeah. So guardrails are
+
+199
+00:13:02,399 --> 00:13:07,519
+something that are always on. So that would be something that could be that can be done.
+
+200
+00:13:07,519 --> 00:13:11,679
+So that is, I'm getting to it step by step. Layer zero, we have a address that guardrails
+
+201
+00:13:11,679 --> 00:13:16,080
+implementation can be easy address. We go with data bricks. We have the guardrails.
+
+202
+00:13:16,080 --> 00:13:22,399
+We just call it an agent. We just, the idea is to call it an agent is to say it's the agent.
+
+203
+00:13:22,399 --> 00:13:28,399
+We can have it. Do you understand? In this format,
+
+204
+00:13:30,240 --> 00:13:34,320
+Oh, let's call it guardrail agent. Let's call it guardrail agent. Yeah. It's level,
+
+205
+00:13:34,320 --> 00:13:39,919
+it's a guardrail agent one, right? But it's level one. Whatever comes in, whatever I'm taking in first
+
+206
+00:13:39,919 --> 00:13:45,679
+is that needs to be taken in, right? And so while data bricks can do that and do that also,
+
+207
+00:13:45,679 --> 00:13:49,840
+like other systems can't, right? So you have to put that in, right? So that's the reason.
+
+208
+00:13:50,720 --> 00:13:58,000
+That's okay. So it hits the guardrails. Then you're looking at semantic caching.
+
+209
+00:13:58,000 --> 00:14:04,240
+So here's why I said, just hold on. So we're looking at two things. We've done two things. One is we
+
+210
+00:14:04,240 --> 00:14:10,960
+look at semantic, vector, coastline similarity, vector similarity. But then we looked at TDA.
+
+211
+00:14:11,519 --> 00:14:18,159
+And then we looked at putting them together, topography, top, top, you know what I'm talking about?
+
+212
+00:14:18,159 --> 00:14:23,440
+Top and B. Yeah, yeah, yeah. And so, and then putting them together, right? And that seems to be
+
+213
+00:14:23,440 --> 00:14:28,000
+like the best, that was like the best way to do it. And so like you could either have, you could,
+
+214
+00:14:28,000 --> 00:14:33,600
+on this, you could do it where you had the semantic or you had the TDA or you had both.
+
+215
+00:14:35,200 --> 00:14:41,759
+I would just honestly, I've seen semantic caching. I've done it. So I know that semantic caching
+
+216
+00:14:41,759 --> 00:14:47,840
+can be done. When you're looking at TDAs, that is where a lot of competition heavy processing
+
+217
+00:14:47,840 --> 00:14:52,720
+goes in. I'll tell you why. Because you were involved in creating pedigree charts. And in
+
+218
+00:14:52,720 --> 00:14:57,279
+pedigree charts, you're required to go through, hey, what is the genetic defect that this person
+
+219
+00:14:57,279 --> 00:15:02,799
+is suffering from? Match it against their ancestors and then have those mapped out against the edges,
+
+220
+00:15:02,879 --> 00:15:06,960
+the vertices and all that. So you're looking at more of a polygon based. I believe you mentioned
+
+221
+00:15:06,960 --> 00:15:12,159
+the hexagon based. So this is a much more complex and data heavy and complex.
+
+222
+00:15:14,159 --> 00:15:19,600
+Sure. But there's a way in which you could do it, not as hard as, and I found out that there's not
+
+223
+00:15:19,600 --> 00:15:28,080
+as much, there's a space API or something like that, or that you could run. There was an easier
+
+224
+00:15:28,159 --> 00:15:32,720
+way actually of implementing it on Databricks because there was, and I could pull up from the
+
+225
+00:15:32,720 --> 00:15:40,240
+code. Do you have the code in front of you? I could pull up from the code. I don't know if you have
+
+226
+00:15:41,279 --> 00:15:52,639
+the app that I sent that generates the Databricks code. I just sent them the two files that you
+
+227
+00:15:52,639 --> 00:15:56,480
+shared with me, Pam, but I don't think they have the link to that Gini-Mini app that you
+
+228
+00:15:57,200 --> 00:16:02,000
+would be referring to. Could you send them that link? Yeah, absolutely. Let me pull that up.
+
+229
+00:16:03,039 --> 00:16:05,360
+If I try to send it, I'll get off this and I'll cut me.
+
+230
+00:16:10,559 --> 00:16:13,919
+I wanted to address one of the other elephants in the room that I was visualizing.
+
+231
+00:16:14,799 --> 00:16:19,759
+At the end of the day, what is the end goal that you are looking to achieve? Are you looking to
+
+232
+00:16:19,759 --> 00:16:26,080
+create an agent that you will sell to the market because you also need to have an
+
+233
+00:16:26,080 --> 00:16:32,720
+ally with that? The idea is to create a different way of building agents itself, a whole different
+
+234
+00:16:32,720 --> 00:16:43,600
+way of building them where you built them in these three-layer formats. That's the way that you get
+
+235
+00:16:43,600 --> 00:16:49,919
+to have autonomous systems that are smart themselves. It's a way I'm trying of introducing
+
+236
+00:16:49,919 --> 00:16:56,960
+into the market, hey, you can build not this one, but the Databricks one. Is that it?
+
+237
+00:16:58,080 --> 00:17:04,240
+Yeah. If you click on, I think, I don't have my contacts in. If you click on Topogos,
+
+238
+00:17:05,119 --> 00:17:08,160
+the middle one there, I just go through it.
+
+239
+00:17:09,039 --> 00:17:11,119
+Like, generate? Yeah, generate.
+
+240
+00:17:15,279 --> 00:17:19,599
+Hope you're familiar with the entire Databricks architecture system and how it works. This is
+
+241
+00:17:19,599 --> 00:17:25,200
+also something that I wanted to have a conversation with. I'm trying to think of everything's going
+
+242
+00:17:25,200 --> 00:17:32,799
+everywhere because I really just want to just, the idea is to create an agent that works completely
+
+243
+00:17:32,880 --> 00:17:37,519
+different, an agent that works completely different. Instead of doing it this way where
+
+244
+00:17:38,880 --> 00:17:45,839
+you're having, in this way, you're decoupling the agents. You're not having them have
+
+245
+00:17:47,200 --> 00:17:51,759
+memory. Everything's decoupled. Your memory's decoupled. Your tools are decoupled. You got it.
+
+246
+00:17:51,759 --> 00:17:58,640
+And the idea is speed, accuracy. And when you do it this way, your accuracy only, so when we run
+
+247
+00:17:58,640 --> 00:18:04,480
+this and we've done this, timing, let's use, if you see an agent go through emails, categorize
+
+248
+00:18:04,480 --> 00:18:09,039
+the email. Every time they got a categorized email, they got to call the API. Now, if you run that
+
+249
+00:18:09,039 --> 00:18:14,240
+and you do that agent, that's going to take as many emails. It was like a thousand emails that
+
+250
+00:18:14,240 --> 00:18:23,039
+took up the day to do it. Doing it this way and just looking for the subject line and
+
+251
+00:18:23,039 --> 00:18:28,640
+categorizing the agents that way, it took us three minutes and like 50 seconds, 50 cents,
+
+252
+00:18:29,279 --> 00:18:34,640
+rather than all those API calls. So you're building an agent a completely different way to save time,
+
+253
+00:18:34,640 --> 00:18:40,000
+to save money, to improve accuracy under some conditions, although you lose a little bit.
+
+254
+00:18:41,119 --> 00:18:46,240
+And so over time, if you see this code, this is what it was supposed to be. If you were going to
+
+255
+00:18:46,319 --> 00:18:54,720
+deploy that code and do it like microservices or do it in that way, that's the code.
+
+256
+00:18:59,839 --> 00:19:04,160
+And so, I mean, those are the directions to run it. But the idea is, so do it this whole
+
+257
+00:19:04,160 --> 00:19:08,319
+before. So I understand you're saying Databricks has this guardrail thing and it has already,
+
+258
+00:19:08,319 --> 00:19:12,880
+we just use it, but that's the thing. We just use it. The idea is the flow. That's the important
+
+259
+00:19:12,880 --> 00:19:17,839
+thing. The flow needs to go, but the guardrails are always on. And that's what we had. So they're
+
+260
+00:19:17,839 --> 00:19:25,920
+always on. So the flow needs to still hit it first and then go to the pattern and then see if it's
+
+261
+00:19:25,920 --> 00:19:34,000
+got a pattern, implement it and then go to the next or call the API for a solution. It's a
+
+262
+00:19:34,000 --> 00:19:40,400
+different way of building an agent. That's it. Absolutely. And Pam, did that make sense to you?
+
+263
+00:19:40,640 --> 00:19:45,920
+Yeah, I know. Yeah. And one thing, Pam, too, I know we're already at the 20 minute mark of this 45
+
+264
+00:19:45,920 --> 00:19:52,000
+minute meeting. I think to better understand how we can step forward, I know that Montia has a few
+
+265
+00:19:52,000 --> 00:19:57,200
+other questions. If we could let him kind of speak, ask those questions so he can better
+
+266
+00:19:57,200 --> 00:19:59,839
+understand how he can advise and how to move.
+
+267
+00:20:00,000 --> 00:20:06,119
+I would really appreciate that just to make sure that we make the most of this call. I thought I was answering the you had answered
+
+268
+00:20:06,119 --> 00:20:08,119
+Yes, yeah, absolutely
+
+269
+00:20:08,680 --> 00:20:15,039
+I'll kick it to you if there's any other questions you have on this or other questions you want to ask about the outcome things like that please
+
+270
+00:20:15,640 --> 00:20:17,359
+so
+
+271
+00:20:17,359 --> 00:20:23,799
+What I'm looking at is say you have finalized everything for this swarm architecture
+
+272
+00:20:24,279 --> 00:20:27,279
+Everything has been created. You're ready to take it to the market
+
+273
+00:20:27,640 --> 00:20:34,480
+What did be an agent that you would be taking forward to the market maybe say right exactly what that's I don't here's the thing
+
+274
+00:20:34,480 --> 00:20:38,279
+It's like this. It's like you see this generator this app generator thing
+
+275
+00:20:38,920 --> 00:20:44,259
+Only thing I could think of was something along the lines of that was like well bringing it to the market is like well
+
+276
+00:20:44,259 --> 00:20:48,220
+You just put in every agent is built the same way like
+
+277
+00:20:48,599 --> 00:20:53,359
+Like lynching or whatever you have your tools, right? You have your agent prompt, right?
+
+278
+00:20:53,359 --> 00:20:58,759
+And so you could simply take your agents that you already had like let's say your clunky system
+
+279
+00:20:58,759 --> 00:21:02,799
+That's going through all these you know and change it into an SPL system
+
+280
+00:21:02,799 --> 00:21:05,880
+Which runs which I'm trying to explain it runs all the better, right?
+
+281
+00:21:05,880 --> 00:21:10,240
+So you would just make it easy you would have an app like this which I built
+
+282
+00:21:10,359 --> 00:21:13,640
+Which you just put in what you already have from your other system
+
+283
+00:21:13,640 --> 00:21:15,319
+Which is your personas, right?
+
+284
+00:21:15,319 --> 00:21:21,319
+The only thing you would have really at this point from another system to make it be built basic or what are your tools, right?
+
+285
+00:21:21,319 --> 00:21:26,759
+And there's a there's a tab for putting in the tools whether you do it by Python line or eight or wasp
+
+286
+00:21:27,039 --> 00:21:29,759
+whatever you do, right? There's ways to do that and then
+
+287
+00:21:31,839 --> 00:21:35,240
+And then you put in your persona your specialized agents, right?
+
+288
+00:21:35,240 --> 00:21:39,400
+Like what do they do because that's what's what's across crew AI?
+
+289
+00:21:39,400 --> 00:21:46,079
+What's across every agent right tools and personas you take out you pull out their tools their personas they inject it
+
+290
+00:21:46,079 --> 00:21:48,079
+And this thing just spins it up differently
+
+291
+00:21:48,680 --> 00:21:55,400
+That's it you understand and so it like it like it just it takes what you already have
+
+292
+00:21:55,799 --> 00:22:00,599
+Your agents or even if you don't if you just want to start, you know, hey, I want to specialize agents
+
+293
+00:22:00,599 --> 00:22:06,880
+I want them like this put it in this app. It'll output the code run the code or run it for you, right?
+
+294
+00:22:06,960 --> 00:22:11,140
+That that's what I want on Databricks is okay
+
+295
+00:22:12,099 --> 00:22:17,740
+But I mean that the thing was I think this is better for services right coming in and do services because I could
+
+296
+00:22:17,740 --> 00:22:22,660
+It's hard to release something that does this you understand which was kind of like my thing
+
+297
+00:22:22,660 --> 00:22:27,359
+It's like what am I releasing right because I'm releasing a different kind of building an agent
+
+298
+00:22:27,460 --> 00:22:31,099
+Am I building an app that builds an app right? You understand?
+
+299
+00:22:31,099 --> 00:22:36,299
+How would I do that? How do you go like I would have to build like a lane chain basically you understand?
+
+300
+00:22:36,299 --> 00:22:41,460
+And so I didn't from the very beginning I knew that and I did not when I came to him with this
+
+301
+00:22:41,460 --> 00:22:46,259
+I was like, I don't know what I'm releasing and I don't think he understood that but this is exactly what you're asking
+
+302
+00:22:46,259 --> 00:22:49,980
+Right. I don't know. I don't know how to do this in this way
+
+303
+00:22:51,019 --> 00:22:57,140
+To get this but only a thing I could think of was it that you put in this and we spun up your code
+
+304
+00:22:57,140 --> 00:22:59,140
+And if you did it in Databricks
+
+305
+00:22:59,579 --> 00:23:00,819
+I
+
+306
+00:23:00,819 --> 00:23:03,779
+Don't know using something as the infrastructure's code or something like that
+
+307
+00:23:03,779 --> 00:23:09,019
+Well, you spin it up and have a YAML and and so basically you you'd have access to this app
+
+308
+00:23:09,019 --> 00:23:16,019
+Right you put in your stuff in Databricks and it would spin up the agents in your in your in your space
+
+309
+00:23:34,700 --> 00:23:38,299
+Yeah, what was the last you said?
+
+310
+00:23:44,299 --> 00:23:50,299
+Yeah, yeah, yes. Yes. Yes, that's it right specialised agents the whole thing just created with that infrastructure. That makes sense
+
+311
+00:23:50,299 --> 00:24:01,220
+Yeah, yes, and do you think this is an idea like I thought this was a genius idea because it saves tokens and time and and all these things
+
+312
+00:24:01,220 --> 00:24:03,859
+But if you don't think it's an idea that's worth all this time
+
+313
+00:24:03,859 --> 00:24:07,140
+You got to tell me like now because you'd be the only person I'd be in front of you
+
+314
+00:24:07,140 --> 00:24:10,339
+And you'd be the only person I'd be in front of you
+
+315
+00:24:10,339 --> 00:24:13,019
+I wouldn't be the only person in front of you
+
+316
+00:24:13,019 --> 00:24:15,740
+And I wouldn't be the only person in front of you
+
+317
+00:24:15,740 --> 00:24:18,779
+think it's an idea that's worth all this time. You got to tell me like now,
+
+318
+00:24:18,779 --> 00:24:21,980
+because you'd be the only person I'd be in front of you guys who would know more
+
+319
+00:24:21,980 --> 00:24:25,420
+than me kind of about this. And we could tell me that this was worth it.
+
+320
+00:24:25,660 --> 00:24:28,740
+How I'm doing it and how I'm understanding it and why I would do it that way.
+
+321
+00:24:34,299 --> 00:24:38,140
+Pam, I'll come forward with two particular statements for you. Uh,
+
+322
+00:24:38,220 --> 00:24:39,140
+when they're thinking of,
+
+323
+00:24:39,180 --> 00:24:43,180
+I believe one of the things that you had mentioned was for a swarm to be created.
+
+324
+00:24:43,339 --> 00:24:48,380
+So it would not be one particular data set that would be overburdened with a
+
+325
+00:24:48,380 --> 00:24:51,579
+lot of resources. It would be distributed across different systems. That was a
+
+326
+00:24:51,579 --> 00:24:55,539
+different thing. Can I, can I, can I, uh, no, I don't mean that by swarm.
+
+327
+00:24:55,579 --> 00:24:59,500
+What I mean just by swarm is more of that.
+
+328
+00:25:00,220 --> 00:25:03,259
+If the tasks get overloaded, more specialized agents get spun up.
+
+329
+00:25:04,099 --> 00:25:08,180
+Got it. All right. Uh, so a couple of things that I wanted to be, uh,
+
+330
+00:25:08,220 --> 00:25:09,779
+clear with you about data,
+
+331
+00:25:09,779 --> 00:25:12,059
+analytics or with any other platform for that matter,
+
+332
+00:25:12,339 --> 00:25:17,019
+even if you're thinking of any other serverless module, for example, say, uh,
+
+333
+00:25:17,819 --> 00:25:21,259
+as your, uh, uh, or any other platform.
+
+334
+00:25:21,700 --> 00:25:24,779
+So what happened is in a serverless module, uh,
+
+335
+00:25:24,819 --> 00:25:28,539
+it's not that whenever you hit a service and then it would start up,
+
+336
+00:25:28,940 --> 00:25:32,339
+it takes a little bit of a time for that service to start.
+
+337
+00:25:33,140 --> 00:25:34,099
+There's a cold start. Yeah.
+
+338
+00:25:35,140 --> 00:25:37,180
+Even for a serverless module, even for a serverless module,
+
+339
+00:25:37,420 --> 00:25:39,140
+it can be as less as one second,
+
+340
+00:25:39,460 --> 00:25:42,779
+but that would be a hit that you would be taking to your production environment.
+
+341
+00:25:43,700 --> 00:25:47,779
+And that's a, you know, that's, yeah, that's okay. I mean, I, you know,
+
+342
+00:25:48,259 --> 00:25:51,579
+because you're saving it so much, but do you want, but can I just ask you guys
+
+343
+00:25:51,579 --> 00:25:55,220
+from, from a perspective of, do you think it's a good idea that people would,
+
+344
+00:25:55,259 --> 00:25:58,500
+would understand it and use it? And it, and it does something for a,
+
+345
+00:25:58,579 --> 00:26:00,619
+like it does something for any, right?
+
+346
+00:26:00,619 --> 00:26:02,380
+It's doing the things that we're wanting to do.
+
+347
+00:26:07,779 --> 00:26:11,740
+See, I'm much more aligned with the, uh,
+
+348
+00:26:11,819 --> 00:26:15,059
+topographical model that you are looking at, but customizing,
+
+349
+00:26:15,059 --> 00:26:15,380
+okay.
+
+350
+00:26:16,380 --> 00:26:19,460
+Customizing a lot of customization for,
+
+351
+00:26:19,539 --> 00:26:24,380
+are required for each and every tasks for each and every industry that you're
+
+352
+00:26:24,380 --> 00:26:26,019
+looking at. For example, I'll be very honest with you.
+
+353
+00:26:26,259 --> 00:26:29,299
+If you're looking at financial data, and if I just feed it to a general LLM,
+
+354
+00:26:29,299 --> 00:26:31,259
+it might do an all right job.
+
+355
+00:26:31,859 --> 00:26:35,380
+But if I train that model first and I have it, you know,
+
+356
+00:26:35,500 --> 00:26:40,380
+specialize for that particular task or let it understand that task better.
+
+357
+00:26:41,380 --> 00:26:45,539
+I think that was a result that would be much more aligned with my expectations.
+
+358
+00:26:46,140 --> 00:26:49,299
+Okay. So that is, that is a,
+
+359
+00:26:49,660 --> 00:26:54,299
+that is an inevitable amount of investment that is required in those
+
+360
+00:26:54,299 --> 00:26:58,819
+initial phases. Yeah, it's good to have, but you need to train that up properly.
+
+361
+00:26:59,259 --> 00:27:03,740
+I, I'm not sure how you're looking at,
+
+362
+00:27:03,740 --> 00:27:06,660
+you're looking at a general model, which would be able to do your,
+
+363
+00:27:06,980 --> 00:27:11,339
+or break down your agent. It's, I cannot tell you if it is good or not.
+
+364
+00:27:11,339 --> 00:27:14,380
+It's novel that I can, I can say for sure that's novel.
+
+365
+00:27:14,380 --> 00:27:19,380
+I've not seen a hybrid model because that is an intensive activity and
+
+366
+00:27:19,380 --> 00:27:20,460
+require a lot of time for that.
+
+367
+00:27:20,859 --> 00:27:24,140
+And topographical is a very heavy industry.
+
+368
+00:27:24,140 --> 00:27:26,539
+You need specialized people to take that up as well.
+
+369
+00:27:27,420 --> 00:27:27,740
+Right.
+
+370
+00:27:30,259 --> 00:27:33,539
+But okay. So we don't shop for graphical, we just do Samantha, right?
+
+371
+00:27:34,339 --> 00:27:36,660
+Semantic is already semantic is there.
+
+372
+00:27:37,460 --> 00:27:38,299
+Semantic action.
+
+373
+00:27:42,539 --> 00:27:48,099
+What is it that you're looking to have that would set you out and would allow
+
+374
+00:27:48,099 --> 00:27:50,140
+you to stand out and
+
+375
+00:27:50,140 --> 00:27:52,779
+Casting the answers from the API and then just,
+
+376
+00:27:53,220 --> 00:27:57,220
+and then just not calling the API remembering the answers and, and,
+
+377
+00:27:59,420 --> 00:28:02,660
+actions versus answers. So there, the current semantic model,
+
+378
+00:28:02,660 --> 00:28:05,940
+I believe works more on the questions and responses model.
+
+379
+00:28:06,380 --> 00:28:08,140
+I believe you're looking more of a,
+
+380
+00:28:08,740 --> 00:28:14,299
+I gave it a task and you execute that task action rather than a text based
+
+381
+00:28:14,299 --> 00:28:16,140
+response. If I'm not wrong.
+
+382
+00:28:19,660 --> 00:28:20,500
+Okay.
+
+383
+00:28:22,339 --> 00:28:25,259
+I don't understand. I don't understand the question. I don't understand.
+
+384
+00:28:28,259 --> 00:28:30,579
+So Samantha, like caching at this point of time,
+
+385
+00:28:30,980 --> 00:28:34,140
+it looks more at stuff from a question.
+
+386
+00:28:35,180 --> 00:28:38,299
+And, hey, this was the question that came to me.
+
+387
+00:28:38,539 --> 00:28:40,579
+Is there anything fuzzy matching that can,
+
+388
+00:28:41,180 --> 00:28:45,099
+is there anything else that comes up with fuzzy models with my existing
+
+389
+00:28:45,619 --> 00:28:48,579
+knowledge base or this particular question? Hey, if it matches,
+
+390
+00:28:49,259 --> 00:28:51,980
+they use cosine similarity, right? They're using cosine similarity.
+
+391
+00:28:52,980 --> 00:28:54,460
+Cosine similarity. Yeah.
+
+392
+00:28:54,460 --> 00:28:57,700
+Okay. So, but, okay. So, so is this already being done?
+
+393
+00:28:57,700 --> 00:28:59,700
+Like it's already, it's already looking for answers.
+
+394
+00:28:59,819 --> 00:29:01,500
+Semantic caching is already there. Yes.
+
+395
+00:29:02,259 --> 00:29:06,019
+But it takes a little bit of a time to invest, to set that up.
+
+396
+00:29:07,380 --> 00:29:10,059
+If you're offering that right out of the way, that would be great.
+
+397
+00:29:10,259 --> 00:29:14,539
+If you can have those topographical models that you're looking at implemented,
+
+398
+00:29:14,980 --> 00:29:19,619
+that would be something else, but level zero guardrails,
+
+399
+00:29:19,660 --> 00:29:24,099
+that's already there. Level one of caching in architecture mode,
+
+400
+00:29:24,299 --> 00:29:27,140
+that might be something that you might want to look at.
+
+401
+00:29:28,059 --> 00:29:29,259
+Semantic is already there.
+
+402
+00:29:30,180 --> 00:29:33,940
+Topographical, I'm not sure how complicated it would be.
+
+403
+00:29:33,940 --> 00:29:36,819
+Without actually doing it, I cannot say for sure, hey,
+
+404
+00:29:36,819 --> 00:29:38,539
+this is very easy or this is very complicated.
+
+405
+00:29:38,740 --> 00:29:42,460
+But when we ran this with regular, with length chain agents or whatever,
+
+406
+00:29:42,460 --> 00:29:45,900
+we just ran this. They don't, they don't do semantic caching or anything like that.
+
+407
+00:29:45,900 --> 00:29:47,980
+Our agents, they don't do it.
+
+408
+00:29:47,980 --> 00:29:51,420
+Like our agents ran and took those answers and like, I mean, no agent,
+
+409
+00:29:51,660 --> 00:29:57,180
+no agent, no agent we ran, ran faster or use the answers that like,
+
+410
+00:29:57,180 --> 00:30:00,019
+if you run, can you run the farm, the farm?
+
+411
+00:30:00,000 --> 00:30:01,000
+something.
+
+412
+00:30:01,000 --> 00:30:06,720
+Yeah, and when I asked my engineers to set up certain systems for me, they make sure
+
+413
+00:30:06,720 --> 00:30:10,400
+that because this is one of the questions that I always ask them. Hey, have you set this
+
+414
+00:30:10,400 --> 00:30:16,000
+up for me? If I asked this repeated question because this, I recently asked this question
+
+415
+00:30:16,000 --> 00:30:22,680
+for my dashboarding partners. Hey, for one question, which my system has not seen, it
+
+416
+00:30:22,680 --> 00:30:28,400
+takes me roughly about 41 seconds to one and a half.
+
+417
+00:30:28,559 --> 00:30:34,079
+But once because I've implemented caching layer on top of it. Now, if you ask it, similar
+
+418
+00:30:34,079 --> 00:30:38,480
+question, anybody within the organization asks it that question, it would respond within
+
+419
+00:30:38,480 --> 00:30:41,319
+a subsequent time frame because it has already cast data.
+
+420
+00:30:43,240 --> 00:30:48,279
+Right. So I'm what I'm saying is most of you just don't do that.
+
+421
+00:30:49,279 --> 00:30:54,359
+OK, so you need to have that implementation. So if you build it up within your agent, that
+
+422
+00:30:54,359 --> 00:30:58,839
+would be good. Another thing that you can take a look at is generally this caching is
+
+423
+00:30:58,839 --> 00:31:04,880
+done on a chat by chat basis. So if this can be done for a complete back in instead of
+
+424
+00:31:04,880 --> 00:31:08,599
+just by chat by chat, that is also something that you can consider.
+
+425
+00:31:10,680 --> 00:31:11,880
+Does that give you some?
+
+426
+00:31:11,880 --> 00:31:18,440
+This is the thing is, is that it's not by itself, it's nothing. But if you put it on a
+
+427
+00:31:18,440 --> 00:31:22,480
+different platform and you're building it a different way, you understand, becomes building
+
+428
+00:31:22,480 --> 00:31:24,160
+an agent agent differently.
+
+429
+00:31:25,720 --> 00:31:26,920
+So I did not get the question.
+
+430
+00:31:26,920 --> 00:31:30,799
+I mean, or that's the point of the whole thing is that I've been asking everybody, but
+
+431
+00:31:30,799 --> 00:31:34,039
+nobody's had like the answer to tell me that this is not a worthwhile project because we
+
+432
+00:31:34,039 --> 00:31:39,400
+already did it and that we're halfway in. And and that's that was always the question.
+
+433
+00:31:39,400 --> 00:31:43,440
+Was this a valid idea? Was there anything here I was missing? And there is something
+
+434
+00:31:43,440 --> 00:31:48,119
+I'm hugely missing, which is semantic caching, which makes this idea completely void of any
+
+435
+00:31:48,119 --> 00:31:48,599
+profit.
+
+436
+00:31:48,759 --> 00:31:56,119
+See, I'm just telling you about semantic caching. There might be other benefits that you can
+
+437
+00:31:56,119 --> 00:31:59,960
+visualize and that you can understand that would be able to deliver value for you.
+
+438
+00:32:01,119 --> 00:32:05,960
+For example, the topographical model that you were looking at, it is complex. I am not sure
+
+439
+00:32:05,960 --> 00:32:12,680
+how it could be done. But it sounds interesting. But I want to be frank about pitfalls as well.
+
+440
+00:32:12,839 --> 00:32:19,000
+Semantic caching is already there. So I'm not able to visualize how is it how your SPL is
+
+441
+00:32:19,000 --> 00:32:23,240
+different. So you explained it. Hey, I'm just not looking at semantic caching. I'm also looking
+
+442
+00:32:23,240 --> 00:32:24,200
+at topographical.
+
+443
+00:32:24,200 --> 00:32:27,720
+Well, like the code itself, right? When you're writing this code and you're writing everything,
+
+444
+00:32:27,720 --> 00:32:31,960
+right? You're putting you're putting the tools you're giving the model tools like the rules.
+
+445
+00:32:32,920 --> 00:32:39,079
+The original, the original framework for this was if you were to do this, you'd have an MCP
+
+446
+00:32:39,079 --> 00:32:43,880
+server, right? And you had agents on one side and the agents would communicate for the MCP
+
+447
+00:32:43,880 --> 00:32:49,319
+server for their tools and like they're listening, like they're listening to messages, their
+
+448
+00:32:49,319 --> 00:32:58,200
+subscriptions, right? And so it's going from one to the other. And that's the way that was built.
+
+449
+00:32:58,200 --> 00:33:01,799
+And that is sort of very, very different. When you take it onto Databricks, and that's what
+
+450
+00:33:01,799 --> 00:33:06,759
+I was trying to say to Databricks was like, I didn't think that this really supported what
+
+451
+00:33:06,759 --> 00:33:07,720
+this product was.
+
+452
+00:33:08,920 --> 00:33:10,279
+No, Databricks has nothing.
+
+453
+00:33:10,279 --> 00:33:13,960
+For example, the things that you're looking at, for example, semantic caching is quite easy.
+
+454
+00:33:13,960 --> 00:33:17,720
+Yeah. Spaces, you mentioned that there is a separate workspace that has already been created.
+
+455
+00:33:17,720 --> 00:33:22,039
+So that can be addressed easily. Apart from that, guardrails I've already mentioned to you.
+
+456
+00:33:22,039 --> 00:33:29,240
+Guardrails can be easily implemented. So you also need to take a, just take a call at whether
+
+457
+00:33:30,200 --> 00:33:34,920
+all of the things that you have mentioned, they can be created on Databricks. I just want you to
+
+458
+00:33:34,920 --> 00:33:39,559
+be sure of, hey, this is how you're going to take to the market so that you have a clear vision of
+
+459
+00:33:39,559 --> 00:33:40,119
+how you're going to...
+
+460
+00:33:40,119 --> 00:33:41,960
+But there's nothing in there.
+
+461
+00:33:41,960 --> 00:33:43,319
+You said it already exists.
+
+462
+00:33:45,400 --> 00:33:50,920
+This model creation does not, for example, one of the things that you can take up is you can
+
+463
+00:33:51,799 --> 00:33:58,039
+offer it on the Databricks marketplace for other people to try out or buy out or can be provisioned
+
+464
+00:33:58,039 --> 00:34:03,799
+as part of Databricks agents. That, hey, this can be, this can reduce your existing agents,
+
+465
+00:34:03,799 --> 00:34:07,240
+smoke loads, because a lot of people are trying out AI. So this can be
+
+466
+00:34:08,119 --> 00:34:14,199
+leveraged by Databricks internally if it is taken to a such a stage that it is useful for them.
+
+467
+00:34:14,199 --> 00:34:18,599
+That is a couple of ideas that I'm thinking of. At this point of time, you also need to have a
+
+468
+00:34:18,599 --> 00:34:22,440
+close idea. For example, if you, if we start working together, if you...
+
+469
+00:34:24,119 --> 00:34:28,920
+I would also need to bring in my solution architect. I would need to bring in my data engineers.
+
+470
+00:34:28,920 --> 00:34:33,719
+I would need to give them the, I would need to be reimbursing them for the time that they are spending
+
+471
+00:34:33,719 --> 00:34:39,559
+for having these conversations. So they need to be a tangible plan of how all of the costs can be
+
+472
+00:34:39,559 --> 00:34:43,880
+addressed. What is the model that you're looking at the end of the day for you to recover your
+
+473
+00:34:43,880 --> 00:34:47,400
+investment that you are making at the end of the day? For example, you're also investing a lot of
+
+474
+00:34:47,400 --> 00:34:53,880
+time and effort into this activity. So how would you be recovering the amount that you have spent
+
+475
+00:34:53,880 --> 00:34:59,880
+already? Does that kind of make sense? Or have I caught up? Yeah. The idea was to change the way
+
+476
+00:34:59,880 --> 00:35:05,400
+that people build agents. Okay. That's great. I mean that...
+
+477
+00:35:08,039 --> 00:35:14,440
+Agents model or a framework or an MCP model that can ingest any sort of code or maybe say
+
+478
+00:35:14,440 --> 00:35:20,760
+cloud code. Somebody, a lot of people are creating cloud code right now. So ingesting that, creating
+
+479
+00:35:20,760 --> 00:35:26,760
+a complete skill out of it or creating a complete agent out of it, which the person can take and
+
+480
+00:35:26,760 --> 00:35:33,800
+deploy. Now this agent would be much more efficient than their existing model. That is the idea.
+
+481
+00:35:33,800 --> 00:35:38,920
+Would that be right? Or hey, you're completely off the mark. So taking somebody... Somebody has
+
+482
+00:35:38,920 --> 00:35:45,960
+already created or taken an idea, create a code for it or take, create an agent for it and then
+
+483
+00:35:46,840 --> 00:35:51,880
+that is given out as an output to them. For example, I come to you, I have a skill created.
+
+484
+00:35:51,960 --> 00:36:01,159
+I put that skill in SPL. Now this SPL pumps out a new agent for me. I take that agent back. Now
+
+485
+00:36:01,159 --> 00:36:06,679
+this agent is able to reduce my token cost. That is the entire idea that you're looking at. Right?
+
+486
+00:36:08,119 --> 00:36:14,920
+Right. So you're taking... Hopefully any kind of agent. Yeah. So that is what you're looking at.
+
+487
+00:36:14,920 --> 00:36:19,800
+Is it able to have that in place? That is something that you would need to evaluate or create.
+
+488
+00:36:19,800 --> 00:36:25,480
+This is an extensive activity. This would require a lot of time and effort investment. I'm very
+
+489
+00:36:25,480 --> 00:36:30,599
+honest with you about it. You need to make a call on how this can be done, how you're looking to visualize
+
+490
+00:36:30,599 --> 00:36:38,280
+and taking it forward. This is novel approach. I have not seen others seeing that. At least I have
+
+491
+00:36:38,280 --> 00:36:43,880
+not seen it. Maybe it is being done, but I at least have not seen it. So that is something that I'm
+
+492
+00:36:43,880 --> 00:36:48,440
+honestly putting forward to you. But you're saying semantic caching doesn't mean...
+
+493
+00:36:48,440 --> 00:36:59,480
+The semantic caching exists. Yes, it does. It requires at least two to three days of investment
+
+494
+00:36:59,480 --> 00:37:05,719
+from a good AI engineer to actually implement that into a project. I know that because I'm
+
+495
+00:37:05,719 --> 00:37:11,320
+delivering engagements for my customers. For my enterprise. So that could be the thing you
+
+496
+00:37:11,320 --> 00:37:20,440
+solve semantic caching. Yeah, it needs to be taken to a production level. It needs to be
+
+497
+00:37:21,079 --> 00:37:29,000
+seamless enough for it to make sense. Right? By seamless enough, it needs to be able to be
+
+498
+00:37:29,000 --> 00:37:36,199
+leveraged by somebody or deployed or to be used by somebody else as well. Right. But that's why
+
+499
+00:37:36,519 --> 00:37:41,719
+I'm working. Okay. That's why the agent. That's why I'm making the agent. Does that make sense?
+
+500
+00:37:44,679 --> 00:37:48,599
+You're putting in semantic caching for someone else. That's what I'm trying to do is put in a layer
+
+501
+00:37:49,480 --> 00:37:54,679
+between guardrails and putting in some semantic caching so that whatever you have,
+
+502
+00:37:54,679 --> 00:37:58,199
+whatever you take, can easily insert that. That's all I'm looking to do.
+
+503
+00:37:58,920 --> 00:38:04,760
+Got it. Pamela, this is a good thing to have. But what I want you to also have an understanding
+
+504
+00:38:04,760 --> 00:38:10,920
+about this or have something at the end of the road is how is it that you're going to monetize this?
+
+505
+00:38:10,920 --> 00:38:17,639
+Because at the end of the day, you're going to be paying back. Well, it's four data bricks.
+
+506
+00:38:18,280 --> 00:38:24,360
+For example, I'll give you an example. If we start working together, I'll just give an example.
+
+507
+00:38:24,360 --> 00:38:27,800
+I would be honest, this would require a significant amount of time and investment from
+
+508
+00:38:27,800 --> 00:38:33,639
+my side to help you out with the creation activity. I would need to put in my engineers.
+
+509
+00:38:33,639 --> 00:38:39,719
+I would need to devote a lot of time to create the idea that you have at this point created
+
+510
+00:38:39,719 --> 00:38:44,440
+into a fully functioning production level engagement. It would require time and effort.
+
+511
+00:38:45,480 --> 00:38:50,679
+I would have to- Can I just- Before you go on for one second, Drew, does my money that you gave me,
+
+512
+00:38:50,679 --> 00:38:55,960
+does it- If I want to hire instead of DBUs, if I want to hire these people, does it cover that or no?
+
+513
+00:38:56,920 --> 00:39:03,079
+No, we went with the minimum contract. There's no decent fund to apply towards a partner engagement.
+
+514
+00:39:03,639 --> 00:39:09,880
+If we wanted to, could I do it? If you wanted to buy DeSIF, it would be the same-
+
+515
+00:39:10,679 --> 00:39:15,159
+You can't turn the DBUs that you bought into DeSIF. Right. Can I add?
+
+516
+00:39:16,440 --> 00:39:22,840
+No, you cannot convert DBUs into DeSIF funds. No, can I add on to the contract?
+
+517
+00:39:25,000 --> 00:39:30,039
+I mean, it would be the same thing as moving forward with an SOW with them. It would be saying,
+
+518
+00:39:30,119 --> 00:39:35,960
+hey, our minimum jumpstart that we didn't enroll because it was more expensive is usually 12,000
+
+519
+00:39:35,960 --> 00:39:44,760
+DBUs and then $2,500 of DeSIF. In this scenario, you would have applied $2,500 to them. However,
+
+520
+00:39:44,760 --> 00:39:49,960
+if you wanted to add that to your contract, it would be the same thing as giving them the same
+
+521
+00:39:49,960 --> 00:39:55,000
+line item. To buy through Databricks would be- Because they are a Databricks partner in our
+
+522
+00:39:55,000 --> 00:39:58,679
+partner ecosystem, which is why we have such a strong partner ecosystem.
+
+523
+00:40:00,000 --> 00:40:02,239
+can kind of figure out, do I have to pay any more money
+
+524
+00:40:02,239 --> 00:40:04,920
+if I wanna hire them or can we do something where,
+
+525
+00:40:04,920 --> 00:40:06,559
+do I have to pay out of pocket
+
+526
+00:40:06,559 --> 00:40:09,579
+or can this go on a tab like a bill?
+
+527
+00:40:11,000 --> 00:40:14,280
+Yeah, so I'm not exactly sure how there,
+
+528
+00:40:14,280 --> 00:40:16,800
+I work with a lot of different partners.
+
+529
+00:40:16,800 --> 00:40:19,079
+So I don't wanna speak on exactly how that engagement works,
+
+530
+00:40:19,079 --> 00:40:21,179
+but Pam, just to be clear,
+
+531
+00:40:21,179 --> 00:40:23,199
+if you were to buy DCIF through Databricks
+
+532
+00:40:23,199 --> 00:40:26,320
+to apply to them, it would be the exact same thing
+
+533
+00:40:26,320 --> 00:40:31,239
+as initially doing an SOW with Short Hills AI.
+
+534
+00:40:31,239 --> 00:40:32,239
+Does that make sense?
+
+535
+00:40:32,239 --> 00:40:33,400
+Right, yeah.
+
+536
+00:40:33,400 --> 00:40:36,719
+So it would essentially just be talking to Manchu
+
+537
+00:40:36,719 --> 00:40:39,800
+and the team on how to move forward
+
+538
+00:40:39,800 --> 00:40:44,239
+with some sort of partnership that is funded by,
+
+539
+00:40:44,239 --> 00:40:45,679
+Jason Works, things like that.
+
+540
+00:40:47,440 --> 00:40:52,440
+I mean, I just, yeah, I just don't have any money
+
+541
+00:40:52,599 --> 00:40:55,159
+off the top to give anybody like that.
+
+542
+00:40:55,159 --> 00:40:56,679
+Like can you give anything else
+
+543
+00:40:56,679 --> 00:40:59,079
+that we can work any other way?
+
+544
+00:40:59,079 --> 00:41:03,079
+But I had put a $15,000 into this contract.
+
+545
+00:41:03,079 --> 00:41:06,360
+If it ends up that, I really need services instead,
+
+546
+00:41:06,360 --> 00:41:09,260
+I had to say I have the $15,000 in that contract.
+
+547
+00:41:10,960 --> 00:41:12,719
+Just to be clear too, Pam,
+
+548
+00:41:12,719 --> 00:41:13,960
+I know you keep saying the $15,000,
+
+549
+00:41:13,960 --> 00:41:18,199
+I think that was, it's actually $13,800.
+
+550
+00:41:18,199 --> 00:41:19,039
+So you've been-
+
+551
+00:41:19,039 --> 00:41:21,119
+They had me signed to, yeah, whatever.
+
+552
+00:41:21,119 --> 00:41:22,719
+I know, I know, yeah.
+
+553
+00:41:22,719 --> 00:41:27,719
+Whatever it is, but because I had this idea
+
+554
+00:41:27,920 --> 00:41:30,559
+and I kept saying this idea and I kept asking anybody
+
+555
+00:41:30,559 --> 00:41:32,199
+and of course, semantic caching.
+
+556
+00:41:32,199 --> 00:41:34,599
+I had heard that, I had heard that had been a thing,
+
+557
+00:41:34,599 --> 00:41:35,639
+but if it was such a thing,
+
+558
+00:41:35,639 --> 00:41:37,119
+I had figured someone would say it today.
+
+559
+00:41:37,119 --> 00:41:38,880
+And that's why I was trying to get in front of people
+
+560
+00:41:38,880 --> 00:41:40,559
+who really knew what they were talking about
+
+561
+00:41:40,559 --> 00:41:43,639
+because I'm down the road with this idea and all the way.
+
+562
+00:41:43,639 --> 00:41:47,320
+And now we've hit a bump where, so if-
+
+563
+00:41:47,320 --> 00:41:50,920
+I wouldn't say semantic caching is like,
+
+564
+00:41:50,920 --> 00:41:53,800
+hey, the thing that's stuck for everybody.
+
+565
+00:41:53,800 --> 00:41:56,679
+But because I've been dealing with such situations
+
+566
+00:41:56,679 --> 00:42:00,480
+more recently and I have implemented that,
+
+567
+00:42:00,480 --> 00:42:02,480
+that is why it is a common thing for me.
+
+568
+00:42:03,440 --> 00:42:05,440
+I implement that for my customers.
+
+569
+00:42:05,440 --> 00:42:07,480
+So that is why I know about semantic caching
+
+570
+00:42:07,480 --> 00:42:09,480
+and hey, this is something that I'm offering.
+
+571
+00:42:09,480 --> 00:42:12,480
+So that a lot of the customers that I'm dealing with,
+
+572
+00:42:12,480 --> 00:42:15,000
+they want to save our,
+
+573
+00:42:15,000 --> 00:42:17,719
+it is good for us to save the cost for them.
+
+574
+00:42:18,719 --> 00:42:22,360
+At the end of the day, that really gives us
+
+575
+00:42:22,360 --> 00:42:23,599
+a tangible value for them.
+
+576
+00:42:23,599 --> 00:42:25,079
+So that is why we have-
+
+577
+00:42:25,079 --> 00:42:27,679
+I should implement semantic caching for us.
+
+578
+00:42:27,679 --> 00:42:30,480
+So you don't think that I can do that?
+
+579
+00:42:30,480 --> 00:42:32,360
+But okay, but you don't think that I myself
+
+580
+00:42:32,360 --> 00:42:35,079
+could do something-
+
+581
+00:42:35,079 --> 00:42:36,559
+See, I don't know about,
+
+582
+00:42:36,559 --> 00:42:38,599
+I don't know about,
+
+583
+00:42:38,599 --> 00:42:41,000
+it's not just semantic caching that you're looking at.
+
+584
+00:42:41,000 --> 00:42:44,199
+You're looking at a simple, an agent
+
+585
+00:42:44,199 --> 00:42:48,119
+which would do semantic caching for a generalized model.
+
+586
+00:42:48,119 --> 00:42:50,239
+That is your ambition.
+
+587
+00:42:50,239 --> 00:42:51,440
+If I'm getting it right.
+
+588
+00:42:51,440 --> 00:42:54,639
+You want to do a custom agent,
+
+589
+00:42:54,639 --> 00:42:56,239
+or you want to create,
+
+590
+00:42:56,239 --> 00:42:58,000
+what I've visualized so far is,
+
+591
+00:42:58,000 --> 00:43:01,199
+you want to create an MCP agent
+
+592
+00:43:01,199 --> 00:43:03,800
+that takes in any sort of input,
+
+593
+00:43:03,800 --> 00:43:05,440
+whether it be cloth skills,
+
+594
+00:43:05,440 --> 00:43:08,960
+or whether it be some sort of other agent understands it,
+
+595
+00:43:10,280 --> 00:43:12,639
+breaks it down into three different layers.
+
+596
+00:43:12,679 --> 00:43:16,239
+Governance, it is already something that Databricks offers.
+
+597
+00:43:16,239 --> 00:43:19,159
+So I would pass it off onto Databricks,
+
+598
+00:43:19,159 --> 00:43:21,320
+or creating a Databricks agent.
+
+599
+00:43:21,320 --> 00:43:22,840
+So Databricks agent builder program,
+
+600
+00:43:22,840 --> 00:43:24,480
+you can try that out.
+
+601
+00:43:24,480 --> 00:43:26,639
+The other factor is the layer second,
+
+602
+00:43:26,639 --> 00:43:28,800
+where you're looking to have a semantic
+
+603
+00:43:28,800 --> 00:43:31,480
+plus topographical search model.
+
+604
+00:43:31,480 --> 00:43:33,440
+That is a little bit of a complicated thing
+
+605
+00:43:33,440 --> 00:43:35,079
+to take a look at.
+
+606
+00:43:35,079 --> 00:43:37,480
+Once we get to it, then I would be able to say,
+
+607
+00:43:37,480 --> 00:43:39,119
+hey, this is the order of tender
+
+608
+00:43:39,119 --> 00:43:40,960
+we require for such a such thing.
+
+609
+00:43:40,960 --> 00:43:43,719
+And then finally repackage is the entire thing,
+
+610
+00:43:43,719 --> 00:43:47,480
+so that it can be offloaded as an agent to that user.
+
+611
+00:43:47,480 --> 00:43:49,599
+Hey, start using this as a user,
+
+612
+00:43:49,599 --> 00:43:51,400
+and you can start using it.
+
+613
+00:43:52,760 --> 00:43:54,639
+An agent that's, so a semantic,
+
+614
+00:43:54,639 --> 00:43:56,800
+you're telling me, okay, a semantic caching agent
+
+615
+00:43:56,800 --> 00:43:58,960
+is basically what you're talking.
+
+616
+00:43:58,960 --> 00:44:00,119
+Yeah.
+
+617
+00:44:00,119 --> 00:44:03,039
+Like an agent, so that it takes any agent
+
+618
+00:44:03,039 --> 00:44:05,000
+and semantically caches,
+
+619
+00:44:05,000 --> 00:44:07,400
+it gives it a semantic caching layer.
+
+620
+00:44:07,840 --> 00:44:08,679
+Yeah.
+
+621
+00:44:10,760 --> 00:44:12,599
+This is what I'm looking at.
+
+622
+00:44:12,599 --> 00:44:13,920
+This is what I'm looking at.
+
+623
+00:44:13,920 --> 00:44:17,320
+From your project, please tell me if I'm wrong.
+
+624
+00:44:17,320 --> 00:44:19,199
+Hey, you have completely misunderstood
+
+625
+00:44:19,199 --> 00:44:20,199
+what I am looking at.
+
+626
+00:44:20,199 --> 00:44:21,239
+You can say that to my face.
+
+627
+00:44:21,239 --> 00:44:22,679
+I would rather like to be clear about,
+
+628
+00:44:22,679 --> 00:44:24,559
+hey, this is what you are looking at.
+
+629
+00:44:24,559 --> 00:44:26,559
+But this is what I have understood.
+
+630
+00:44:31,559 --> 00:44:34,599
+Okay, I mean, here's what,
+
+631
+00:44:34,599 --> 00:44:36,599
+here's what I'm looking at.
+
+632
+00:44:37,840 --> 00:44:38,800
+Also needs to happen.
+
+633
+00:44:38,800 --> 00:44:43,440
+You are correct, is that if you could come up with an agent
+
+634
+00:44:43,440 --> 00:44:48,440
+that takes other agents and puts in that semantic caching layer
+
+635
+00:44:48,440 --> 00:44:49,800
+into that workflow,
+
+636
+00:44:51,159 --> 00:44:52,519
+and then spits it back out,
+
+637
+00:44:54,719 --> 00:44:57,559
+that that would, that that would,
+
+638
+00:44:59,079 --> 00:45:01,559
+the only one thing about that is if you're not doing
+
+639
+00:45:01,559 --> 00:45:04,480
+on data, but you do need to put in a governance layer.
+
+640
+00:45:05,480 --> 00:45:06,960
+Yeah, here's Sam.
+
+641
+00:45:09,280 --> 00:45:12,880
+Yeah, you would need to have a governance models put in this.
+
+642
+00:45:12,880 --> 00:45:13,719
+Right, and so-
+
+643
+00:45:13,719 --> 00:45:16,239
+But the database already has all of those built in.
+
+644
+00:45:16,239 --> 00:45:18,119
+So what you can instead do is you can create
+
+645
+00:45:18,119 --> 00:45:19,760
+Databricks agents.
+
+646
+00:45:19,760 --> 00:45:22,679
+So you take in any sort of stuff,
+
+647
+00:45:22,679 --> 00:45:25,920
+process it early, pump out a Databricks agent.
+
+648
+00:45:25,920 --> 00:45:27,199
+Hey, this is a Databricks agent
+
+649
+00:45:27,199 --> 00:45:29,800
+that you can take forward to start using.
+
+650
+00:45:29,800 --> 00:45:33,199
+So this can be plug and play solution for you going forwards.
+
+651
+00:45:33,280 --> 00:45:35,360
+So it outputs a data, it now puts it,
+
+652
+00:45:35,360 --> 00:45:40,360
+so they take an agent in and it puts in semantic caching
+
+653
+00:45:41,159 --> 00:45:43,920
+and outputs a Databricks agent.
+
+654
+00:45:44,920 --> 00:45:45,760
+That is all the same thing.
+
+655
+00:45:45,760 --> 00:45:47,480
+On Databricks.
+
+656
+00:45:47,480 --> 00:45:50,519
+So listen, but it would only function on Databricks then,
+
+657
+00:45:50,519 --> 00:45:52,000
+correct?
+
+658
+00:45:52,000 --> 00:45:53,079
+Yeah.
+
+659
+00:45:53,079 --> 00:45:56,039
+Now the one thing about this was I wanted to avoid login
+
+660
+00:45:56,039 --> 00:45:58,719
+because it's really an architecture that I'm,
+
+661
+00:45:58,719 --> 00:45:59,679
+this is the one thing, right?
+
+662
+00:45:59,679 --> 00:46:02,920
+It's really an architecture that I'm trying to push forward.
+
+663
+00:46:02,920 --> 00:46:06,159
+It's really a different idea of thinking about agents, right?
+
+664
+00:46:06,159 --> 00:46:09,400
+And so what was my point?
+
+665
+00:46:12,880 --> 00:46:14,400
+Creating ideologies is good,
+
+666
+00:46:14,400 --> 00:46:17,920
+but you need to have a recovery point as well, right?
+
+667
+00:46:19,039 --> 00:46:21,559
+Right, but if I do, what I'm trying to say is,
+
+668
+00:46:24,159 --> 00:46:27,639
+it's biological and the first things need to happen first,
+
+669
+00:46:27,639 --> 00:46:29,360
+that happened, are the most important.
+
+670
+00:46:29,360 --> 00:46:30,360
+That's what we're trying to say.
+
+671
+00:46:30,360 --> 00:46:32,039
+So the most important things that need to happen
+
+672
+00:46:32,039 --> 00:46:34,280
+is that you need to go through like the,
+
+673
+00:46:34,280 --> 00:46:38,360
+there's nothing that has governance
+
+674
+00:46:38,360 --> 00:46:40,039
+that's built in primitive, right?
+
+675
+00:46:40,039 --> 00:46:42,760
+I mean, right?
+
+676
+00:46:42,760 --> 00:46:46,599
+So the idea would be that it takes your agent,
+
+677
+00:46:46,599 --> 00:46:50,559
+it puts in the, it takes the Databricks governance
+
+678
+00:46:50,559 --> 00:46:53,599
+and it puts it in and it puts in the semantic caching
+
+679
+00:46:53,599 --> 00:46:55,000
+and then you can use it on Databricks
+
+680
+00:46:55,000 --> 00:46:56,599
+and it becomes lucrative for Databricks
+
+681
+00:46:56,599 --> 00:46:58,039
+and it becomes lucrative in that way.
+
+682
+00:46:58,039 --> 00:47:01,719
+But what happens is it becomes locked into that
+
+683
+00:47:01,719 --> 00:47:02,559
+and then people are like,
+
+684
+00:47:02,559 --> 00:47:06,000
+oh, we can use this same exact structure on other things.
+
+685
+00:47:06,000 --> 00:47:08,800
+But if you're saying just do this first
+
+686
+00:47:08,800 --> 00:47:09,639
+so that you have like a...
+
+687
+00:47:09,639 --> 00:47:11,880
+You need to start off somewhere.
+
+688
+00:47:14,000 --> 00:47:14,840
+Okay.
+
+689
+00:47:17,199 --> 00:47:18,519
+I wanna start off somewhere that...
+
+690
+00:47:18,519 --> 00:47:23,079
+I would say, do it right now, explore it a little bit,
+
+691
+00:47:23,079 --> 00:47:24,639
+think it over a little bit.
+
+692
+00:47:24,639 --> 00:47:28,320
+If it sounds good, maybe you can at least get a starting point,
+
+693
+00:47:28,320 --> 00:47:30,880
+hey, this at least gives me a starting point
+
+694
+00:47:30,880 --> 00:47:32,360
+so that at the end of the day,
+
+695
+00:47:32,360 --> 00:47:35,440
+you can start recovering your investment as well.
+
+696
+00:47:35,440 --> 00:47:37,280
+And you have someplace,
+
+697
+00:47:37,280 --> 00:47:39,840
+and it won't be possible to create a generalized model.
+
+698
+00:47:39,840 --> 00:47:42,239
+For example, even if we take an example of AI,
+
+699
+00:47:42,239 --> 00:47:43,400
+AI at this point of time,
+
+700
+00:47:43,400 --> 00:47:47,079
+it's not a complete autonomous thinking model.
+
+701
+00:47:47,079 --> 00:47:48,639
+It is a question of answer based model.
+
+702
+00:47:48,639 --> 00:47:51,360
+It is thinking on similarity models.
+
+703
+00:47:51,360 --> 00:47:55,280
+So take it step by step would be my recommendation.
+
+704
+00:47:55,280 --> 00:47:57,400
+Because you're saying like it's complicated,
+
+705
+00:47:57,400 --> 00:47:58,960
+you're saying it's complicated to create
+
+706
+00:47:58,960 --> 00:48:00,320
+a semantic caching agent.
+
+707
+00:48:00,320 --> 00:48:02,199
+I mean, you would have to do it and I would have to hurry you.
+
+708
+00:48:02,199 --> 00:48:06,000
+And I'm saying, well, I can just do it by doing it this way.
+
+709
+00:48:06,000 --> 00:48:07,719
+Do you understand?
+
+710
+00:48:07,719 --> 00:48:10,000
+Like I could just do it by...
+
+711
+00:48:10,000 --> 00:48:10,840
+Right?
+
+712
+00:48:10,840 --> 00:48:12,159
+I mean, do you understand?
+
+713
+00:48:12,159 --> 00:48:14,960
+Right, if it works, that's awesome.
+
+714
+00:48:14,960 --> 00:48:18,159
+I mean, because if you do it that way,
+
+715
+00:48:20,239 --> 00:48:23,519
+like what you're asking all the stuff that you need
+
+716
+00:48:25,000 --> 00:48:26,320
+other people won't need.
+
+717
+00:48:27,239 --> 00:48:29,480
+Like to hire a team to have...
+
+718
+00:48:29,880 --> 00:48:31,719
+You're saying it's complicated for one agent
+
+719
+00:48:31,719 --> 00:48:32,840
+to do all semantic caching.
+
+720
+00:48:32,840 --> 00:48:35,519
+Well, I'm saying that's the reason I didn't do it that way.
+
+721
+00:48:35,519 --> 00:48:38,039
+The reason I did it this way was the idea.
+
+722
+00:48:38,039 --> 00:48:40,199
+It's really the idea as we started with projects, right?
+
+723
+00:48:40,199 --> 00:48:41,719
+And we started with pattern matching,
+
+724
+00:48:41,719 --> 00:48:44,280
+but we were like, okay, what if we just spun it up
+
+725
+00:48:44,280 --> 00:48:48,480
+into like a neural net, right?
+
+726
+00:48:48,480 --> 00:48:50,000
+Like you have your own model, right?
+
+727
+00:48:50,000 --> 00:48:53,199
+Of your own actions that you would just be taking.
+
+728
+00:48:55,199 --> 00:48:56,039
+And then you could...
+
+729
+00:48:56,039 --> 00:48:58,920
+And then basically you'd have like a neural net
+
+730
+00:48:59,800 --> 00:49:01,440
+and that neural net would kind of looks like
+
+731
+00:49:01,440 --> 00:49:03,480
+at semantic caching, right?
+
+732
+00:49:03,480 --> 00:49:06,480
+And so you'd have a model to go back to to use.
+
+733
+00:49:08,039 --> 00:49:13,039
+So let's say, and so instead of just running your system now
+
+734
+00:49:14,119 --> 00:49:16,039
+and having and getting caching,
+
+735
+00:49:16,039 --> 00:49:17,280
+or you're just, you're running it,
+
+736
+00:49:17,280 --> 00:49:19,639
+you're making sure you're getting it.
+
+737
+00:49:19,639 --> 00:49:22,079
+Like every time you run it, it's going to get faster.
+
+738
+00:49:22,079 --> 00:49:23,239
+That's the...
+
+739
+00:49:23,239 --> 00:49:26,559
+Every time you run it, it realizes something else.
+
+740
+00:49:26,599 --> 00:49:29,039
+Every time you run it, you don't have to run it before.
+
+741
+00:49:29,039 --> 00:49:30,360
+Right? And I'm not saying...
+
+742
+00:49:30,360 --> 00:49:33,679
+If you start storing any amount of information,
+
+743
+00:49:33,679 --> 00:49:36,519
+it will inevitably start slowing down
+
+744
+00:49:36,519 --> 00:49:38,039
+because it needs to go through
+
+745
+00:49:38,039 --> 00:49:39,719
+that much more amount of information.
+
+746
+00:49:39,719 --> 00:49:41,960
+So that would be a fundamental difference
+
+747
+00:49:41,960 --> 00:49:43,480
+that would keep in...
+
+748
+00:49:43,480 --> 00:49:46,440
+If you start letting it learn a little bit more,
+
+749
+00:49:46,440 --> 00:49:49,039
+it would need to go through that knowledge.
+
+750
+00:49:49,039 --> 00:49:49,880
+Right, right.
+
+751
+00:49:49,880 --> 00:49:52,519
+So the idea, the beginning idea was, okay,
+
+752
+00:49:52,519 --> 00:49:54,960
+we'll run, create the agents, right?
+
+753
+00:49:54,960 --> 00:49:56,119
+And then run them a little bit,
+
+754
+00:49:56,800 --> 00:49:58,320
+put them through scenarios, right?
+
+755
+00:49:58,320 --> 00:49:59,719
+And then have them...
+
+756
+00:50:00,000 --> 00:50:04,559
+coming with a brain already, right? And then you could sell them a brain on top of that. Like,
+
+757
+00:50:04,559 --> 00:50:09,119
+here's a brain for all like solutions in, you know, farming or whatever, right? And then you
+
+758
+00:50:09,119 --> 00:50:13,360
+could be, then you could be making brains and selling brains. And then there's a whole other
+
+759
+00:50:13,360 --> 00:50:25,679
+bit there. Does that make sense? The more the idea is, is if the more you ran it, the more it was
+
+760
+00:50:25,760 --> 00:50:29,519
+trained and then you let it go and it was an intelligence system from the get go. Yes,
+
+761
+00:50:29,519 --> 00:50:36,239
+right? That's the point. But then you could also like have items where you could sell, you could
+
+762
+00:50:36,239 --> 00:50:42,000
+put brains together. Like that's a packet of skills together that would you could put in and
+
+763
+00:50:42,000 --> 00:50:47,599
+you understand like a trained model and then you would sell that model. It'd be like Laura or
+
+764
+00:50:48,320 --> 00:50:52,639
+as far as you don't know. So someone's, he's, he keeps nodding. So he knows what I'm talking about.
+
+765
+00:50:52,880 --> 00:50:58,480
+You understand what I'm talking about? You guess though. I'm following the example. No,
+
+766
+00:50:59,760 --> 00:51:03,039
+oh, sorry. Do you know,
+
+767
+00:51:05,039 --> 00:51:19,519
+like, if you're saying that an agent, a casting agent is very, then I'm saying, okay, then why,
+
+768
+00:51:20,480 --> 00:51:34,639
+why can't we try this simple idea of, of just saving in the way that you're moving it to memory?
+
+769
+00:51:37,840 --> 00:51:38,800
+Is it any different?
+
+770
+00:51:43,360 --> 00:51:47,920
+Moving it to memory. So you're looking at having a vector database in Databricks.
+
+771
+00:51:48,000 --> 00:51:52,480
+That is something I believe I got from the notes. So having a vector database for your
+
+772
+00:51:52,480 --> 00:52:01,119
+semantic search, that is the thing to have agreed on that point. Next. That's the point of it. The
+
+773
+00:52:01,119 --> 00:52:06,079
+point of it is to run it and to save your results so you just can run it back. That's all. And if
+
+774
+00:52:06,079 --> 00:52:13,760
+you're saying that's semantic, that's, that's, you're saying that's semantic caching. Yeah. Okay.
+
+775
+00:52:14,320 --> 00:52:18,320
+But you're saying to me, but I don't, but this is not in practice. People don't use this in
+
+776
+00:52:18,320 --> 00:52:28,239
+practice. Really? Correct. Number one, right? It's not widely used. Yeah, might be possible.
+
+777
+00:52:29,360 --> 00:52:35,599
+At least for, you know, people who start out with using their own, you know,
+
+778
+00:52:35,599 --> 00:52:39,199
+Gemini code or Claude code, they might not go forward with semantic
+
+779
+00:52:39,920 --> 00:52:45,119
+expressions as starting points because that is not a relevant point for them. But for enterprise
+
+780
+00:52:45,119 --> 00:52:51,199
+level deployments, where we are looking at saving every sort of a course, a set of different
+
+781
+00:52:51,199 --> 00:52:55,039
+intersections, yeah, you would consider semantic caching as a standard of practice.
+
+782
+00:52:57,760 --> 00:53:01,519
+For enterprise, I'm talking about for enterprise, we would consider that. Yes.
+
+783
+00:53:02,079 --> 00:53:07,920
+But you understand that a firm system ran without any of that?
+
+784
+00:53:10,079 --> 00:53:18,400
+Okay. Is that okay? Might be possible that they did not do it? Sounds surprising to me.
+
+785
+00:53:19,679 --> 00:53:24,239
+I mean, I'm just seeing, okay, I'm just seeing where I can make money with it. I mean, the idea
+
+786
+00:53:24,239 --> 00:53:29,039
+is to come up with a new kind of agent, right? A new kind of agent. So if it's a data breaks,
+
+787
+00:53:29,039 --> 00:53:35,760
+the hit breaks agent, and that's what I made, you can only operate on data breaks. Yeah.
+
+788
+00:53:35,760 --> 00:53:41,280
+Yeah. But then, since you're starting point to get, get this off of the ground.
+
+789
+00:53:42,480 --> 00:53:47,039
+Okay. And then I could talk about it like it was a three layer thing. So, and still go and still
+
+790
+00:53:47,039 --> 00:53:52,239
+talk about that architecture that way. So I'll give you an example. Databricks started off as
+
+791
+00:53:53,199 --> 00:54:00,239
+a, what they were primarily focused on. Back end. Yeah. Data lake creation and
+
+792
+00:54:00,239 --> 00:54:06,000
+ice park was the default language. You could not have ice park. But over the period of time,
+
+793
+00:54:06,000 --> 00:54:12,079
+they expanded into ice perks as well. So nothing stopped them from expanding into ice
+
+794
+00:54:12,079 --> 00:54:17,920
+perks. Nothing stopped them from making in the catalog freely available. So are you getting
+
+795
+00:54:17,920 --> 00:54:22,639
+the point that I'm trying to make? Yeah, I'm just trying to see where I can make the most money out
+
+796
+00:54:22,639 --> 00:54:27,360
+of it, where I can leverage it to make the most money, right? You either, you either create the
+
+797
+00:54:27,360 --> 00:54:32,079
+agent that does semantic caching for people already, right? And you do it that way. But that
+
+798
+00:54:32,079 --> 00:54:42,159
+seems to be a lot of money a lot of time or you, or you, or I mean, that's what you're saying is
+
+799
+00:54:42,159 --> 00:54:45,760
+you just, that's what you do. You put, you put it through. You need to have a final goal.
+
+800
+00:54:45,760 --> 00:54:49,599
+You need to have a final goal in mind as well. Cause if you are going to involve anybody else,
+
+801
+00:54:49,599 --> 00:54:56,960
+you need to also have an idea. The final goal is a more productive agent. Whatever your agent is,
+
+802
+00:54:56,960 --> 00:55:03,679
+this is more productive. Making, making agents more productive. That's it. That's it. An architecture
+
+803
+00:55:03,679 --> 00:55:07,599
+that makes it more productive and makes it easier to run. That makes it faster. That makes it smarter.
+
+804
+00:55:08,320 --> 00:55:14,159
+This I'm presenting architecture. It needs to be differential enough from the existing agents as
+
+805
+00:55:14,159 --> 00:55:20,239
+well that he, yes, it would make your agents run faster. They need to be a white paper, a white,
+
+806
+00:55:20,239 --> 00:55:24,400
+my white paper that I just published and I sent all this stuff to everybody. I put white paper
+
+807
+00:55:24,400 --> 00:55:31,519
+that I just sent that shows the numbers on this and shows how it works and shows that it increases
+
+808
+00:55:31,519 --> 00:55:35,119
+over time that this, you know, what I mean? Like, I don't, that's why I don't understand it. We ran
+
+809
+00:55:35,119 --> 00:55:41,360
+the experiments. I know this makes agents like tons of times, like a day faster, right? Because
+
+810
+00:55:41,360 --> 00:55:46,800
+if you're just sort of emails, it can be possible as a feasible study that can be taken up. So that
+
+811
+00:55:46,800 --> 00:55:50,800
+is what I do. It's done. It's done. It's published. That's what I'm trying to do. That's what I'm
+
+812
+00:55:50,800 --> 00:55:54,719
+trying to tell you. Our agent came out on. That's what I'm trying to tell you. All the numbers,
+
+813
+00:55:54,719 --> 00:56:00,400
+right? When I talk about accuracy, I'm very clear. It's 89 less, 89 less percent. You lose
+
+814
+00:56:00,400 --> 00:56:06,320
+89. It's, you lose it from like 99% to 89 if you do it this way, right? And I know because I've done
+
+815
+00:56:06,400 --> 00:56:13,119
+it this way. It differs among agents, you know, but doing it this way speeds up the agents. It stops.
+
+816
+00:56:13,119 --> 00:56:21,039
+I don't understand why, like, and no other agent does that. Only specialized agents, right? So it's
+
+817
+00:56:21,039 --> 00:56:26,880
+like releasing that to the market so people can do it. And if you're saying do it through Databricks
+
+818
+00:56:28,559 --> 00:56:33,920
+and do it that way and have your, and that's how you do it. You create a new agent.
+
+819
+00:56:34,719 --> 00:56:39,039
+It would be a different agent. That is one of the ways in which you can do it. I'm not saying that
+
+820
+00:56:39,039 --> 00:56:43,519
+is the only way you can do it. I'm just saying that that is one of the ways in which you can do it.
+
+821
+00:56:44,559 --> 00:56:47,440
+What would be like another, another way?
+
